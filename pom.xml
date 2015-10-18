@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>tech.sirwellington.alchemy</groupId>
+        <artifactId>alchemy</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>alchemy-generator</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
+
+    <url>https://github.com/SirWellington/alchemy-generator</url>
+    <description>
+        Part of the Alchemy collection.
+
+        Alchemy Generator makes it easier to test your code
+        by providing generators for common Data types and Objects.
+    </description>
+
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/SirWellington/alchemy-generator/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:SirWellington/alchemy-generator.git</connection>
+        <developerConnection>scm:git:git@github.com:SirWellington/alchemy-generator.git</developerConnection>
+        <url>git@github.com:SirWellington/alchemy-generator.git</url>
+    </scm>
+
+    <inceptionYear>2015</inceptionYear>
+
+    <prerequisites>
+        <maven>3.0.3</maven>
+    </prerequisites>
+
+    <!-- END OF POM METADATA -->
+
+
+    <dependencies>
+
+        <!--Test Libraries-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>alchemy-test</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Logging-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <!--Apache Commons-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+
+        <!--Alchemy Annotations-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>alchemy-annotations</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <!--Inherited from Parent-->
+    </build>
+
+</project>
