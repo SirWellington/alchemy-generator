@@ -21,6 +21,8 @@ import static java.time.temporal.ChronoUnit.HOURS;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.Date;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /*
  * TODO: This belongs in a seperate project.
@@ -127,4 +129,43 @@ public final class Dates
         return new Date(instant.toEpochMilli());
     }
 
+    /**
+     * Checks to see if the date is now, up to {@code 5 milliseconds} of delta.
+     *
+     * @param date
+     *
+     * @see #isNow(java.util.Date, long)
+     *
+     * @return True if the date is considered to be {@link #now() }, False otherwise.
+     */
+    public static boolean isNow(Date date)
+    {
+        return isNow(date, 5);
+    }
+
+    /**
+     * Checks to see if the date is now, up to the provided marginOfError in milliseconds.
+     * The date is now if:
+     * <br>
+     * {@code
+     *      now - marginOfError <= date <= now + marginOfError
+     * }
+     * @param date                The date to check.
+     * @param marginOfErrorMillis The margin of error in milliseconds.
+     *
+     * @return
+     */
+    public static boolean isNow(Date date, long marginOfErrorMillis)
+    {
+        Date now = now();
+        checkNotNull(date);
+        checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0");
+
+        long delta = marginOfErrorMillis;
+        long timeOfDate = date.getTime();
+        long timeOfNow = now.getTime();
+
+        return (timeOfDate >= timeOfNow - delta) &&
+               (timeOfDate <= timeOfNow + delta);
+    }
 }

@@ -22,6 +22,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.Date;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import org.junit.After;
 import static org.junit.Assert.assertThat;
@@ -30,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
+import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 
 /**
  *
@@ -148,6 +150,39 @@ public class DatesTest
 
         assertThat(result.getTime(), greaterThanOrEqualTo(left));
         assertThat(result.getTime(), lessThanOrEqualTo(right));
+    }
+
+    @Test
+    public void testIsNow_Date()
+    {
+        System.out.println("testIsNow_Date");
+
+        Date now = Dates.now();
+        assertThat(Dates.isNow(now), is(true));
+
+        Date notNow = Dates.daysAgo(1);
+        assertThat(Dates.isNow(notNow), is(false));
+
+        assertThrows(() -> Dates.isNow(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testIsNow_Date_long() throws InterruptedException
+    {
+        System.out.println("testIsNow_Date_long");
+
+        assertThrows(() -> Dates.isNow(null, 0))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        Date now = Dates.now();
+        assertThat(Dates.isNow(now, 10), is(true));
+        assertThrows(() -> Dates.isNow(now, -1))
+                .isInstanceOf(IllegalArgumentException.class);
+        
+        Thread.sleep(1);
+        assertThat(Dates.isNow(now, 0), is(false));
+
     }
 
 }
