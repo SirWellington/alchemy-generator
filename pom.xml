@@ -16,6 +16,8 @@
     <url>https://github.com/SirWellington/alchemy-generator</url>
     <description>
         Part of the Alchemy collection.
+        
+        More Data means better tests.
 
         Alchemy Generator makes it easier to test your code
         by providing generators for common Data types and Objects.

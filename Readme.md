@@ -1,18 +1,22 @@
-Alchemy Generator, for Unit generatoring
+Alchemy Generator
 ==============================================
+
+## "More Data => Better tests"
 
 [![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
 
 # Purpose
-Part of the Alchemy collection, this library makes it easier to test your code by providing generators of Data and common Objects.
+Part of the Alchemy collection, this library makes it easier to test your code by providing generators for common Objects and Data.
 
 Using randomly generated data sets helps improve test quality by assuring that your code can work over a wide range of data,
-and not just what you hard-code in. This library makes it painless to generate primitive types,
-and you can even supply your own Data Generators for use in conjunction with this library.
+and not just what you hard-code in.
+
+This library makes it painless to generate primitive types,
+and you can even supply your own Generators for use in conjunction with the ones in this library.
 
 # Requirements
 
-+ JDK 8
++ Java 8
 + Maven
 
 
@@ -20,8 +24,6 @@ and you can even supply your own Data Generators for use in conjunction with thi
 This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
 
 # Download
-
-> This library is not yet available on Maven Central
 
 To use, simply add the following maven dependency.
 
@@ -34,8 +36,16 @@ To use, simply add the following maven dependency.
 </dependency>
 ```
 
-```xml
 ## Snapshot
+>First add the Snapshot Repository
+```xml
+<repository>
+	<id>ossrh</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
+```
+
+```xml
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
@@ -45,62 +55,107 @@ To use, simply add the following maven dependency.
 
 ==============================================
 
-# Examples
+>Examples use static imports
 
->Examples assume static imports`
+# Numbers
 
-## Numbers
+## Integers
 
 ```java
 //A number in the range [-50, 50)
-int someNumber = integers(-50, 50).get();
+int anInteger = integers(-50, 50).get();
+```
 
+## Longs
+
+```java
 //Get any positive long
 long somePositiveNumber = positiveLongs().get();
 
 //alternative way to get a single value
 somePositiveNumber = one(positiveLongs());
+```
 
+## Doubles
+```java
 //A double in the range [0.1, 1999.0]
 AlchemyGenerator<Double> doubleGenerator = doubles(0.1, 1999.0);
 for(int i = 0; i < 100; ++i)
 {
 	LOG.info("Received double {}", doubleGenerator.get());
 }
-
-//A list of 30 randomly selected positive integers
-List<Integer> thirtyNumbers = listOf(positiveIntegers(), 30);
-
 ```
-## Strings
+
+# Strings
+These are all the same type: `AlchemyGenerator<String>`
+
+## Alphabetical
+Uses the Latin Alphabet, a-z | A-Z
+
 ```java
-//May have unicode characters as well
+String alphabetical = alphabeticString().get();
+```
+
+## Hexadecimal
+```java
+String hex = hexadecimalString(32).get();
+```
+
+## Any String
+These strings may have unicode characters as well
+
+```java
+
 String anyCharacterString = strings(30).get();
 assertThat(anyCharacterString.length(), is(30));
+```
+## UUIDs
+Guaranteed unique strings
 
-String hex = hexadecimalString(32).get();
-String alphabetical = alphabeticString(5).get();
+```java
+int amount = one(smallPositiveIntegers());
+AlchemyGenerator<String> uuids = uuids();
+Set<String> ids = new HashSet<>();
 
-List<String> uuids = Lists.newArrayList();
-for(int i = 0; i < 40; ++i)
+for(int i = 0; i < amount; ++i)
 {
-	uuids.add(uuids.get());
+	String id = one(uuids);
+	LOG.info("UUID : {}", id);
+	ids.add(id);
 }
-
-//Shorter way
-uuids = listOf(uuids, 20);
-List<String> strings = listOf(alphabeticString(20), 100);
-
+assertThat(ids.size(), is(amount));
+```
+## From Fixed Set
+Strings can be generated from a preselected set of String values.
+```java
 //The generated strings can only be one of the supplied ones.
 String stringFromList = stringsFromFixedList("one", "something else", "Java").get();
 ```
 
-## Collections
+# Collections
 
+## Lists
 
-## Enums
+```java
+List<String> randomStrings = listOf(alphabeticString(20), 100);
+List<Integer> ages = listOf(integers(1, 100));
+```
 
-Let's say you have an enum called Fruits defined as:
+## Maps
+```java
+AlchemyGenerator<String> names = alphabeticalStrings();
+AlchemyGenerator<Integer> ages = integers(1, 100);
+
+int numberOfPeople = 50;
+Map<String,Integer> ages = mapOf(names, ages, numberOfPeople);
+```
+
+# Enums
+
+Sometimes you have an `enum` and you want to randomly access a value from it.
+
+**Alchemy Generator** makes it simple:
+
 ```java
 enum Fruit
 {
@@ -110,8 +165,7 @@ enum Fruit
 	GUAVA
 }
 ```
-and you want to get one of the values at random. All you have to do is
-
+You want a fruit, but don't care which one?
 ```java
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
@@ -119,8 +173,10 @@ Fruit fruit = enumValueOf(Fruit.class).get();
 # Release Notes
 
 ## 1.0
-+ Initial Release
++ Initial Public Release
 
 # License
 
 This Software is licensed under the Apache 2.0 License
+
+http://www.apache.org/licenses/LICENSE-2.0
