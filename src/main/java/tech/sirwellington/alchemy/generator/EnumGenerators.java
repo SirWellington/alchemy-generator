@@ -18,7 +18,8 @@ package tech.sirwellington.alchemy.generator;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
@@ -47,9 +48,10 @@ public final class EnumGenerators
      *
      * @return A generator that produces values of the supplied enum type.
      */
-    static <E extends Enum> Supplier<E> enumValueOf(Class<E> enumClass)
+    public static <E extends Enum> Supplier<E> enumValueOf(Class<E> enumClass)
     {
-        Checks.Internal.checkNotNull(enumClass);
+        checkNotNull(enumClass);
+
         E[] constants = enumClass.getEnumConstants();
         checkThat(constants != null, "Class is not an Enum: " + enumClass.getName());
         checkThat(constants.length > 0, "Enum has no values");

@@ -21,11 +21,19 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkNotNull;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkThat;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
+ * {@linkplain AlchemyGenerator Alchemy Generators} for Java Collections. These generators are
+ * useful in conjuction with other {@linkplain AlchemyGenerator Generators}, such as those in
+ * {@link NumberGenerators} or {@link StringGenerators}.
+ *
+ * @see StringGenerators
+ * @see NumberGenerators
+ * @see BinaryGenerators
  *
  * @author SirWellington
  */
@@ -40,20 +48,20 @@ public final class CollectionGenerators
     }
 
     /**
-     * Returns a list of Data using the specified generator of varying size.
+     * Returns a list of Objects of varying size, using the supplied generator.
      *
      * @param <T>
      * @param generator The generator that produces values
      *
      * @return A list of random values, the length of which will vary.
      */
-    static <T> List<T> listOf(AlchemyGenerator<T> generator)
+    public static <T> List<T> listOf(AlchemyGenerator<T> generator)
     {
-        return listOf(generator, integers(5, 200).get());
+        return listOf(generator, one(integers(5, 200)));
     }
 
     /**
-     * Retrieves a list of Data using the specified generator.
+     * Returns a list of Objects using the supplied generator.
      *
      * @param <T>       The type to generate
      * @param generator The generator that produces values
@@ -63,7 +71,7 @@ public final class CollectionGenerators
      *
      * @throws IllegalArgumentException if size is less than 1.
      */
-    static <T> List<T> listOf(AlchemyGenerator<T> generator, int size)
+    public static <T> List<T> listOf(AlchemyGenerator<T> generator, int size)
     {
         checkThat(size > 0, "Size must be at least 1");
         checkNotNull(generator, "generator is null");
@@ -87,7 +95,7 @@ public final class CollectionGenerators
      *
      * @return Map generated from the parameters specified.Ï
      */
-    static <K, V> Map<K, V> mapOf(AlchemyGenerator<K> keyGenerator, AlchemyGenerator<V> valueGenerator, int size)
+    public static <K, V> Map<K, V> mapOf(AlchemyGenerator<K> keyGenerator, AlchemyGenerator<V> valueGenerator, int size)
     {
         checkThat(size > 0, "size must be at least 1");
         checkNotNull(keyGenerator);

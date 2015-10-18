@@ -13,52 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.sirwellington.alchemy.generator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.Internal;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
 /**
  * Used internally to perform argument checks.
- * 
+ *
  * @author SirWellington
  */
-@tech.sirwellington.alchemy.annotations.access.Internal
-public final class Checks
+@Internal
+@NonInstantiable
+class Checks
 {
-
+    
     private final static Logger LOG = LoggerFactory.getLogger(Checks.class);
-
-    @tech.sirwellington.alchemy.annotations.access.Internal
-    public static class Internal
+    
+    Checks() throws IllegalAccessException
     {
-
-        public static void checkNotNull(Object ref) throws IllegalArgumentException
+        throw new IllegalAccessException("cannot instantiate class");
+    }
+    
+    static void checkNotNull(Object ref) throws IllegalArgumentException
+    {
+        checkNotNull(ref, "");
+    }
+    
+    static void checkNotNull(Object ref, String message) throws IllegalArgumentException
+    {
+        if (ref == null)
         {
-            checkNotNull(ref, "");
-        }
-
-        public static void checkNotNull(Object ref, String message) throws IllegalArgumentException
-        {
-            if (ref == null)
-            {
-                throw new IllegalArgumentException(message);
-            }
-        }
-
-        public static void checkThat(boolean predicate) throws IllegalArgumentException
-        {
-            checkThat(predicate, "");
-        }
-
-        public static void checkThat(boolean predicate, String message) throws IllegalArgumentException
-        {
-            if (!predicate)
-            {
-                throw new IllegalArgumentException(message);
-            }
+            throw new IllegalArgumentException(message);
         }
     }
-
+    
+    static void checkThat(boolean predicate) throws IllegalArgumentException
+    {
+        checkThat(predicate, "");
+    }
+    
+    static void checkThat(boolean predicate, String message) throws IllegalArgumentException
+    {
+        if (!predicate)
+        {
+            throw new IllegalArgumentException(message);
+        }
+    }
+    
 }

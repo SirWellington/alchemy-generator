@@ -16,7 +16,9 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +27,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -52,6 +55,14 @@ public class StringGeneratorsTest
         iterations = RandomUtils.nextInt(500, 5000);
     }
 
+    private void doInLoop(Runnable function)
+    {
+        for (int i = 0; i < iterations; ++i)
+        {
+            function.run();
+        }
+    }
+
     @Test
     public void testStrings()
     {
@@ -59,11 +70,12 @@ public class StringGeneratorsTest
         int length = 59;
         AlchemyGenerator<String> instance = strings(length);
         assertNotNull(instance);
-        for (int i = 0; i < iterations; ++i)
+
+        doInLoop(() ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
-        }
+        });
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -82,11 +94,12 @@ public class StringGeneratorsTest
         System.out.println("testHexadecimalString");
         int length = 90;
         AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
-        for (int i = 0; i < iterations; ++i)
+
+        doInLoop(() ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
-        }
+        });
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -105,11 +118,12 @@ public class StringGeneratorsTest
         int length = one(integers(40, 100));
 
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
-        for (int i = 0; i < iterations; ++i)
+
+        doInLoop(() ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
-        }
+        });
     }
 
     @Test
@@ -117,11 +131,12 @@ public class StringGeneratorsTest
     {
         System.out.println("testAlphabeticString");
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString();
-        for (int i = 0; i < iterations; ++i)
+
+        doInLoop(() ->
         {
             String value = instance.get();
             assertThat(StringUtils.isEmpty(value), is(false));
-        }
+        });
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -138,6 +153,7 @@ public class StringGeneratorsTest
     {
         System.out.println("testStringsFromFixedList");
         List<String> values = new ArrayList<>();
+
         for (int i = 0; i < iterations; ++i)
         {
             values.add(RandomStringUtils.randomAlphabetic(i + 1));
@@ -164,10 +180,11 @@ public class StringGeneratorsTest
         values.add(three);
 
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(one, two, three);
-        for (int i = 0; i < iterations; ++i)
+
+        doInLoop(() ->
         {
             assertThat(instance.get(), org.hamcrest.Matchers.isIn(values));
-        }
+        });
     }
 
     @Test
@@ -181,11 +198,12 @@ public class StringGeneratorsTest
         };
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(values);
         assertThat(instance, notNullValue());
-        for (int i = 0; i < 50; ++i)
+
+        doInLoop(() ->
         {
             String result = instance.get();
             assertThat(result, Matchers.isIn(values));
-        }
+        });
     }
 
     @Test
@@ -196,13 +214,40 @@ public class StringGeneratorsTest
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString();
         assertThat(instance, notNullValue());
 
-        for (int i = 0; i < iterations; ++i)
+        doInLoop(() ->
         {
             String value = instance.get();
             assertThat(value, notNullValue());
             assertThat(value.length(), greaterThanOrEqualTo(5));
             assertThat(value.length(), lessThanOrEqualTo(20));
-        }
+        });
 
+    }
+
+    @Test
+    public void testUuids()
+    {
+        System.out.println("testUuids");
+
+        Set<String> uuids = new HashSet<>();
+
+        AlchemyGenerator<String> instance = StringGenerators.uuids;
+
+        doInLoop(() ->
+        {
+            String value = instance.get();
+            assertThat(value, notNullValue());
+            assertThat(value.isEmpty(), is(false));
+            uuids.add(value);
+        });
+        assertThat(uuids.size(), is(iterations));
+    }
+
+    @Test
+    public void testUuidsFunction()
+    {
+        System.out.println("testUuidsFunction");
+
+        assertThat(StringGenerators.uuids(), sameInstance(StringGenerators.uuids));
     }
 }

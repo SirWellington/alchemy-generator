@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
@@ -21,14 +20,24 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import java.util.Date;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
+/*
+ * TODO: This belongs in a seperate project.
+ */
 /**
  * Generation methods for {@code Date}s
  *
  * @author SirWellington
  */
-public class Dates
+@NonInstantiable
+public final class Dates
 {
+
+    Dates() throws IllegalAccessException
+    {
+        throw new IllegalAccessException("cannot instantiate class");
+    }
 
     /**
      * A Date representing now, when this method is called.

@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.RandomUtils;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -31,7 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author SirWellington
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BooleansGeneratorsTest
+public class BooleanGeneratorsTest
 {
 
     private int iterations;
@@ -46,6 +47,7 @@ public class BooleansGeneratorsTest
     public void testBooleans()
     {
         System.out.println("testBooleans");
+
         AlchemyGenerator<Boolean> instance = BooleanGenerators.booleans();
         assertNotNull(instance);
 
@@ -58,6 +60,24 @@ public class BooleansGeneratorsTest
         }
 
         assertThat(values.size(), is(2));
+    }
+
+    @Test
+    public void testAlternatingBooleans()
+    {
+        System.out.println("testAlternatingBooleans");
+
+        AlchemyGenerator<Boolean> instance = BooleanGenerators.alternatingBooleans();
+        
+        boolean value = instance.get();
+        boolean previous;
+        for (int i = 0; i < iterations; ++i)
+        {
+            previous = value;
+            value = instance.get();
+            
+            assertThat(value, is(not(previous)));
+        }
     }
 
 }

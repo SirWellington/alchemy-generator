@@ -19,10 +19,10 @@ import java.util.function.Supplier;
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 
 /**
- * A {@link AlchemyGenerator} generates Data or Objects for use in testing scenarios.
+ * An {@link AlchemyGenerator} generates Data or Objects, commonly used in testing scenarios.
  * <br>
  * Common generators exist for:
  * <pre>
@@ -46,7 +46,7 @@ import static tech.sirwellington.alchemy.generator.Checks.Internal.checkNotNull;
  * Get a positive integer:
  *
  * {@code
- *  int positive = oneOf(positiveIntegers());
+ *  int positive = one(positiveIntegers());
  * }
  * </pre>
  *
@@ -60,8 +60,8 @@ public interface AlchemyGenerator<T> extends Supplier<T>
 {
 
     /**
-     * Generate a non-null value of type {@code T}
-     * <p>
+     * Generate a non-null value of type {@code T}.
+     *
      * @return
      */
     @Override
@@ -76,7 +76,7 @@ public interface AlchemyGenerator<T> extends Supplier<T>
      *
      * @return Only one value from the generator.
      */
-    static <T> T one(@NonNull AlchemyGenerator<T> generator)
+    public static <T> T one(@NonNull AlchemyGenerator<T> generator)
     {
         checkNotNull(generator);
         return generator.get();

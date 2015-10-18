@@ -86,7 +86,8 @@ public class CollectionGeneratorsTest
     @Test
     public void testMapOf()
     {
-        System.out.println("mapOf");
+        System.out.println("testMapOf");
+        
         String string = strings(50).get();
         AlchemyGenerator<String> valueGenerator = () -> string;
         int size = integers(5, 100).get();

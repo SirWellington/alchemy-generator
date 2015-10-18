@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.BinaryGenerators.binary;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkNotNull;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
@@ -110,6 +110,16 @@ public final class StringGenerators
      * Generates random {@linkplain UUID UUIDs}.
      */
     public static AlchemyGenerator<String> uuids = () -> UUID.randomUUID().toString();
+
+    /**
+     * Just returns {@link #uuids}. This exists for consistency.
+     *
+     * @return
+     */
+    public static AlchemyGenerator<String> uuids()
+    {
+        return uuids;
+    }
 
     //==============================================================================================
     //From Fixed targets

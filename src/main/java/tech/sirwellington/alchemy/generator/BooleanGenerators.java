@@ -15,12 +15,13 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Generators for {@link BooleanGenerators Booleans}
+ * Generators for {@link BooleanGenerators Booleans}.
  *
  * @author SirWellington
  */
@@ -35,13 +36,33 @@ public final class BooleanGenerators
     }
 
     /**
-     * Generates a series of booleans.
+     * Generates a series of randomly selected booleans.
      *
      * @return
      */
     public static AlchemyGenerator<Boolean> booleans()
     {
         return () -> RandomUtils.nextInt(0, 2) == 1;
+    }
+
+    /**
+     * Generates a series of alternating booleans. Values alternate between {@code true} and
+     * {@code false}.
+     *
+     * @return
+     */
+    public static AlchemyGenerator<Boolean> alternatingBooleans()
+    {
+        AtomicInteger count = new AtomicInteger();
+        return () ->
+        {
+            return isEven(count.incrementAndGet());
+        };
+    }
+
+    private static boolean isEven(int number)
+    {
+        return number % 2 == 0;
     }
 
 }

@@ -23,8 +23,8 @@ import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.BooleanGenerators.booleans;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkNotNull;
-import static tech.sirwellington.alchemy.generator.Checks.Internal.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * Common {@linkplain AlchemyGenerator Generators} for NumberGenerators.
