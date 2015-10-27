@@ -1,5 +1,6 @@
 Alchemy Generator
 ==============================================
+<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">
 
 ## "More Data => Better tests"
 
@@ -14,14 +15,6 @@ and not just what you hard-code in.
 This library makes it painless to generate primitive types,
 and you can even supply your own Generators for use in conjunction with the ones in this library.
 
-# Requirements
-
-+ Java 8
-+ Maven
-
-
-# Building
-This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
 
 # Download
 
@@ -175,7 +168,20 @@ You want a fruit, but don't care which one?
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
 
+# Requirements
+
++ Java 8
++ Maven
+
+
+# Building
+This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
+
+
+
 # Release Notes
+
+## 1.1
 
 ## 1.0
 + Initial Public Release
