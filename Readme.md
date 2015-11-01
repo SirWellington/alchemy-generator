@@ -9,8 +9,8 @@ Alchemy Generator
 # Purpose
 Part of the Alchemy collection, this library makes it easier to test your code by providing generators for common Objects and Data.
 
-Using randomly generated data sets helps improve test quality by assuring that your code can work over a wide range of data,
-and not just what you hard-code in.
+Introducing randomly generated data to tests helps improve test quality by assuring that your code can work over a wide range of data,
+and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
 
 This library makes it painless to generate primitive types,
 and you can even supply your own Generators for use in conjunction with the ones in this library.

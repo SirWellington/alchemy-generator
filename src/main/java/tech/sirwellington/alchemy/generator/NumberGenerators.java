@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
+
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.BooleanGenerators.booleans;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -63,13 +64,13 @@ public final class NumberGenerators
     public static AlchemyGenerator<Integer> integers(int inclusiveLowerBound, int exclusiveUpperBound) throws IllegalArgumentException
     {
         checkThat(inclusiveLowerBound <= exclusiveUpperBound, "Upper Bound must be greater than Lower Bound");
-        final boolean negativeLowerBound = inclusiveLowerBound < 0;
-        final boolean negativeUpperBound = exclusiveUpperBound < 0;
+        final boolean isNegativeLowerBound = inclusiveLowerBound < 0;
+        final boolean isNegativeUpperBound = exclusiveUpperBound < 0;
 
         return () ->
         {
 
-            if (negativeLowerBound && negativeUpperBound)
+            if (isNegativeLowerBound && isNegativeUpperBound)
             {
                 int min = (-exclusiveUpperBound);
                 int max = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
@@ -78,7 +79,7 @@ public final class NumberGenerators
                 int valueAdjustedForInclusiveness = safeIncrement(dirtyValue);
                 return -valueAdjustedForInclusiveness;
             }
-            else if (negativeLowerBound)
+            else if (isNegativeLowerBound)
             {
                 boolean shouldProduceNegative = booleans().get();
                 if (shouldProduceNegative)
