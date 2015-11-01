@@ -31,6 +31,7 @@ import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 
 /**
  *
@@ -103,9 +104,15 @@ public class DateGeneratorsTest
     @Test
     public void testAsInstant()
     {
+        assertThrows(() -> DateGenerators.asInstant(null))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        //When the generator returns null
+        AlchemyGenerator<Instant> badInstance = DateGenerators.asInstant(() -> null);
+        assertThrows(() -> badInstance.get());
+
         doInLoop(i ->
         {
-
             Date date = DateGenerators.anyTime().get();
 
             AlchemyGenerator<Instant> instance = DateGenerators.asInstant(() -> date);
@@ -119,6 +126,13 @@ public class DateGeneratorsTest
     @Test
     public void testAsZonedDateTime()
     {
+        assertThrows(() -> DateGenerators.asZonedDateTime(null))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        //When the generator returns null
+        AlchemyGenerator<ZonedDateTime> badInstance = DateGenerators.asZonedDateTime(() -> null);
+        assertThrows(() -> badInstance.get());
+
         doInLoop(i ->
         {
             Date date = DateGenerators.anyTime().get();
