@@ -16,26 +16,36 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.DateGenerators.anyTime;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 
@@ -55,11 +65,11 @@ public class StringGeneratorsTest
         iterations = RandomUtils.nextInt(500, 5000);
     }
 
-    private void doInLoop(Runnable function)
+    private void doInLoop(Consumer<Integer> function)
     {
         for (int i = 0; i < iterations; ++i)
         {
-            function.run();
+            function.accept(i);
         }
     }
 
@@ -71,7 +81,7 @@ public class StringGeneratorsTest
         AlchemyGenerator<String> instance = strings(length);
         assertNotNull(instance);
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
@@ -95,7 +105,7 @@ public class StringGeneratorsTest
         int length = 90;
         AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
@@ -119,7 +129,7 @@ public class StringGeneratorsTest
 
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertTrue(value.length() == length);
@@ -132,7 +142,7 @@ public class StringGeneratorsTest
         System.out.println("testAlphabeticString");
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString();
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertThat(StringUtils.isEmpty(value), is(false));
@@ -181,7 +191,7 @@ public class StringGeneratorsTest
 
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(one, two, three);
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             assertThat(instance.get(), org.hamcrest.Matchers.isIn(values));
         });
@@ -199,7 +209,7 @@ public class StringGeneratorsTest
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(values);
         assertThat(instance, notNullValue());
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String result = instance.get();
             assertThat(result, Matchers.isIn(values));
@@ -214,7 +224,7 @@ public class StringGeneratorsTest
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString();
         assertThat(instance, notNullValue());
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertThat(value, notNullValue());
@@ -233,7 +243,7 @@ public class StringGeneratorsTest
 
         AlchemyGenerator<String> instance = StringGenerators.uuids;
 
-        doInLoop(() ->
+        doInLoop(i ->
         {
             String value = instance.get();
             assertThat(value, notNullValue());
@@ -249,5 +259,27 @@ public class StringGeneratorsTest
         System.out.println("testUuidsFunction");
 
         assertThat(StringGenerators.uuids(), sameInstance(StringGenerators.uuids));
+    }
+
+    @Test
+    public void testToString()
+    {
+        System.out.println("testToString");
+
+        AlchemyGenerator<Date> generator = mock(AlchemyGenerator.class);
+        
+        when(generator.get())
+                .thenReturn(one(anyTime()));
+
+        AlchemyGenerator<String> instance = StringGenerators.toString(generator);
+        assertThat(instance, notNullValue());
+
+        doInLoop(i ->
+        {
+            String result = instance.get();
+            assertThat(result, not(isEmptyOrNullString()));
+            verify(generator, times(i + 1)).get();
+        });
+
     }
 }

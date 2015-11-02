@@ -23,6 +23,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.BinaryGenerators.binary;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -154,6 +155,16 @@ public final class StringGenerators
         checkNotNull(values);
         checkThat(values.length != 0, "No values specified");
         return stringsFromFixedList(Arrays.asList(values));
+    }
+
+    public static <T> AlchemyGenerator<String> toString(AlchemyGenerator<T> generator) throws IllegalArgumentException
+    {
+        checkNotNull(generator, "generator missing");
+        return () ->
+        {
+            T value = generator.get();
+            return value != null ? value.toString() : "";
+        };
     }
 
 }
