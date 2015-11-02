@@ -183,6 +183,7 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 
 ## 1.1
 + New Java DateTime API Generators
++ Adding `asString()` String Generator
 
 ## 1.0
 + Initial Public Release
