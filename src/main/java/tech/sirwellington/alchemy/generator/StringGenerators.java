@@ -23,6 +23,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.BinaryGenerators.binary;
@@ -157,7 +158,18 @@ public final class StringGenerators
         return stringsFromFixedList(Arrays.asList(values));
     }
 
-    public static <T> AlchemyGenerator<String> toString(AlchemyGenerator<T> generator) throws IllegalArgumentException
+    /**
+     * Takes an existing {@linkplain AlchemyGenerator Generator} and transforms its values to a
+     * String using the {@link Object#toString() } method.
+     *
+     * @param <T>
+     * @param generator The backing Alchemy Generator.
+     *
+     * @return
+     *
+     * @throws IllegalArgumentException If the Generator is null.
+     */
+    public static <T> AlchemyGenerator<String> asString(@NonNull AlchemyGenerator<T> generator) throws IllegalArgumentException
     {
         checkNotNull(generator, "generator missing");
         return () ->

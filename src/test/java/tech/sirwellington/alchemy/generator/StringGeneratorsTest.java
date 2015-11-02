@@ -262,16 +262,16 @@ public class StringGeneratorsTest
     }
 
     @Test
-    public void testToString()
+    public void testAsString()
     {
-        System.out.println("testToString");
+        System.out.println("testAsString");
 
         AlchemyGenerator<Date> generator = mock(AlchemyGenerator.class);
         
         when(generator.get())
                 .thenReturn(one(anyTime()));
 
-        AlchemyGenerator<String> instance = StringGenerators.toString(generator);
+        AlchemyGenerator<String> instance = StringGenerators.asString(generator);
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
