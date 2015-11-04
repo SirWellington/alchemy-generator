@@ -23,7 +23,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 </dependency>
 ```
 
@@ -40,7 +40,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.2-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -98,7 +98,7 @@ String hex = hexadecimalString(32).get();
 ```
 
 ## Any String
-These strings may have unicode characters as well
+These strings may have unicode characters as well. These are great for testing against international character sets as well.
 
 ```java
 
