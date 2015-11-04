@@ -16,14 +16,16 @@
 package tech.sirwellington.alchemy.generator;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import org.mockito.runners.MockitoJUnitRunner;
-import static tech.sirwellington.alchemy.test.junit.ThrowableAssertion.assertThrows;
 
 /**
  *
@@ -55,14 +57,13 @@ public class AlchemyGeneratorTest
         verify(instance).get();
         assertEquals(expected, result);
     }
-    
-    @Test
+
+    @Test(expected = IllegalArgumentException.class)
     public void testOneWithBadArgs()
     {
         System.out.println("testOneWithBadArgs");
-        
-        assertThrows(() -> AlchemyGenerator.one(null))
-                .isInstanceOf(IllegalArgumentException.class);
+
+        AlchemyGenerator.one(null);
     }
 
 }

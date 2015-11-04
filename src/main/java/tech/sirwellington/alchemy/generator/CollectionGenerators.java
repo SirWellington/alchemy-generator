@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
@@ -37,6 +39,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  *
  * @author SirWellington
  */
+@NonInstantiable
 public final class CollectionGenerators
 {
 
@@ -111,4 +114,6 @@ public final class CollectionGenerators
 
         return map;
     }
+    
+    //TODO:  Add a [fromList] generator
 }

@@ -15,19 +15,23 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.function.Consumer;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -95,6 +99,63 @@ public class DateGeneratorsTest
             assertThat(value, notNullValue());
             assertThat(value.after(now()), is(true));
         });
+    }
+
+    @Test
+    public void testAsInstant()
+    {
+        assertThrows(() -> DateGenerators.asInstant(null))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        //When the generator returns null
+        AlchemyGenerator<Instant> badInstance = DateGenerators.asInstant(() -> null);
+        assertThrows(() -> badInstance.get());
+
+        doInLoop(i ->
+        {
+            Date date = DateGenerators.anyTime().get();
+
+            AlchemyGenerator<Instant> instance = DateGenerators.asInstant(() -> date);
+            assertThat(instance, notNullValue());
+
+            Instant result = instance.get();
+            assertThat(result.toEpochMilli(), is(date.getTime()));
+        });
+    }
+
+    @Test
+    public void testAsZonedDateTime()
+    {
+        assertThrows(() -> DateGenerators.asZonedDateTime(null))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        //When the generator returns null
+        AlchemyGenerator<ZonedDateTime> badInstance = DateGenerators.asZonedDateTime(() -> null);
+        assertThrows(() -> badInstance.get());
+
+        doInLoop(i ->
+        {
+            Date date = DateGenerators.anyTime().get();
+
+            AlchemyGenerator<ZonedDateTime> instance = DateGenerators.asZonedDateTime(() -> date);
+            assertThat(instance, notNullValue());
+
+            ZonedDateTime result = instance.get();
+            assertThat(result.toInstant().toEpochMilli(), is(date.getTime()));
+        });
+
+    }
+
+    @Test
+    public void testAnyTime()
+    {
+        doInLoop(i ->
+        {
+            AlchemyGenerator<Date> instance = DateGenerators.anyTime();
+            assertThat(instance, notNullValue());
+            assertThat(instance.get(), notNullValue());
+        });
+
     }
 
 }

@@ -1,27 +1,18 @@
 Alchemy Generator
 ==============================================
+<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">
 
 ## "More Data => Better tests"
 
 [![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
 
 # Purpose
-Part of the Alchemy collection, this library makes it easier to test your code by providing generators for common Objects and Data.
-
-Using randomly generated data sets helps improve test quality by assuring that your code can work over a wide range of data,
-and not just what you hard-code in.
-
-This library makes it painless to generate primitive types,
-and you can even supply your own Generators for use in conjunction with the ones in this library.
-
-# Requirements
-
-+ Java 8
-+ Maven
+Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
 
-# Building
-This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
+Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
+and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
+
 
 # Download
 
@@ -32,7 +23,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 </dependency>
 ```
 
@@ -49,10 +40,15 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.2-SNAPSHOT</version>
 </dependency>
 ```
 
+# Javadocs
+## [Latest](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)
+
+
+API
 ==============================================
 
 >Examples use static imports
@@ -102,7 +98,7 @@ String hex = hexadecimalString(32).get();
 ```
 
 ## Any String
-These strings may have unicode characters as well
+These strings may have unicode characters as well. These are great for testing against international character sets as well.
 
 ```java
 
@@ -170,7 +166,23 @@ You want a fruit, but don't care which one?
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
 
+# Requirements
+
++ Java 8
++ Maven
+
+
+# Building
+This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
+
+# Feature Requests
+Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
+
 # Release Notes
+
+## 1.1
++ New Java DateTime API Generators
++ Adding `asString()` String Generator
 
 ## 1.0
 + Initial Public Release
