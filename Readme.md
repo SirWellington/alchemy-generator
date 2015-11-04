@@ -7,13 +7,11 @@ Alchemy Generator
 [![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
 
 # Purpose
-Part of the Alchemy collection, this library makes it easier to test your code by providing generators for common Objects and Data.
+Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
-Introducing randomly generated data to tests helps improve test quality by assuring that your code can work over a wide range of data,
+
+Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
 and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
-
-This library makes it painless to generate primitive types,
-and you can even supply your own Generators for use in conjunction with the ones in this library.
 
 
 # Download
@@ -177,7 +175,8 @@ Fruit fruit = enumValueOf(Fruit.class).get();
 # Building
 This project builds with maven. Just run a `mvn clean install` to compile and install to your local maven repository
 
-
+# Feature Requests
+Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
 # Release Notes
 
