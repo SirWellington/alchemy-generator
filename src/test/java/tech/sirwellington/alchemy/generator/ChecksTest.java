@@ -43,13 +43,6 @@ public class ChecksTest
         Checks.class.newInstance();
     }
 
-    @Test(expected = IllegalAccessException.class)
-    public void testCannotInstantiateInnerClass() throws InstantiationException, IllegalAccessException
-    {
-        System.out.println("testCannotInstantiateInnerClass");
-        Checks.class.newInstance();
-    }
-
     @Test
     public void testCheckNotNull()
     {
