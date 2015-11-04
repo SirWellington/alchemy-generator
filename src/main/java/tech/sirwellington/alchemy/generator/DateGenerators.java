@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
@@ -51,7 +52,16 @@ public final class DateGenerators
     {
         return () -> Dates.now();
     }
-    
+ 
+     /**
+     * Returns Dates from the past.
+     * <br>
+     * <pre>
+     * Note that the current time depends on when it is called.
+     * </pre>
+     *
+     * @return
+     */
     public static AlchemyGenerator<Date> beforeNow()
     {
         return () ->
@@ -69,7 +79,16 @@ public final class DateGenerators
             }
         };
     }
-    
+
+    /**
+     * Returns Dates in the future.
+     * <br>
+     * <pre>
+     * Note that the current time depends on when it is called.
+     * </pre>
+     *
+     * @return
+     */
     public static AlchemyGenerator<Date> afterNow()
     {
         return () ->
@@ -87,7 +106,12 @@ public final class DateGenerators
             }
         };
     }
-    
+
+    /**
+     * Returns any date, can be in the future, past, or present.
+     *
+     * @return
+     */
     public static AlchemyGenerator<Date> anyTime()
     {
         return () ->
@@ -104,7 +128,21 @@ public final class DateGenerators
             }
         };
     }
-    
+
+    /**
+     * Takes an existing Date Generator to create {@linkplain Instant Instants}.
+     *
+     * @param dateGenerator
+     *
+     * @return
+     *
+     * @throws IllegalArgumentException
+     *
+     * @see #beforeNow()
+     * @see #afterNow()
+     * @see #anyTime()
+     * @see #asZonedDateTime(tech.sirwellington.alchemy.generator.AlchemyGenerator)
+     */
     public static AlchemyGenerator<Instant> asInstant(AlchemyGenerator<Date> dateGenerator) throws IllegalArgumentException
     {
         Checks.checkNotNull(dateGenerator);
@@ -116,7 +154,21 @@ public final class DateGenerators
             return Instant.ofEpochMilli(date.getTime());
         };
     }
-    
+
+    /**
+     * Takes an existing Date Generator to create {@linkplain ZonedDateTime Zoned Date Times}.
+     *
+     * @param dateGenerator
+     *
+     * @return
+     *
+     * @throws IllegalArgumentException
+     *
+     * @see #beforeNow()
+     * @see #afterNow()
+     * @see #anyTime()
+     * @see #asZonedDateTime(tech.sirwellington.alchemy.generator.AlchemyGenerator)
+     */
     public static AlchemyGenerator<ZonedDateTime> asZonedDateTime(AlchemyGenerator<Date> dateGenerator) throws IllegalArgumentException
     {
         Checks.checkNotNull(dateGenerator);
