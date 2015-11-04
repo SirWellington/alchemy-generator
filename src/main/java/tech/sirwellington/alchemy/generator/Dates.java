@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
+import java.util.Date;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static java.time.temporal.ChronoUnit.MINUTES;
-import java.util.Date;
-import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 

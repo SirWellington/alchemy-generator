@@ -19,12 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
 /**
  * Generators for {@link BooleanGenerators Booleans}.
  *
  * @author SirWellington
  */
+@NonInstantiable
 public final class BooleanGenerators
 {
 
