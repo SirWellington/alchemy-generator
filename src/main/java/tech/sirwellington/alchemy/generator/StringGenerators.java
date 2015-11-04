@@ -23,6 +23,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
@@ -35,6 +36,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  *
  * @author SirWellington
  */
+@NonInstantiable
 public final class StringGenerators
 {
 
@@ -43,6 +45,21 @@ public final class StringGenerators
     private StringGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
+    }
+
+    /**
+     * Generates a random string of a random length. Characters can include ASCII, Unicode, or
+     * International Characters.
+     *
+     * @return
+     */
+    public static AlchemyGenerator<String> strings()
+    {
+        return () ->
+        {
+            int size = one(integers(5, 1000));
+            return RandomStringUtils.random(size);
+        };
     }
 
     /**

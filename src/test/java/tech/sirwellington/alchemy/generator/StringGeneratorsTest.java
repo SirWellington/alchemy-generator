@@ -47,6 +47,8 @@ import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.DateGenerators.anyTime;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 
 /**
@@ -77,7 +79,19 @@ public class StringGeneratorsTest
     public void testStrings()
     {
         System.out.println("testStrings");
-        int length = 59;
+        
+        AlchemyGenerator<String> instance = strings();
+        assertThat(instance, notNullValue());
+        
+        doInLoop(i -> assertThat(instance.get(), not(isEmptyOrNullString())));
+    }
+
+    @Test
+    public void testStringsWithLength()
+    {
+        System.out.println("testStringsWithLength");
+
+        int length = one(smallPositiveIntegers());
         AlchemyGenerator<String> instance = strings(length);
         assertNotNull(instance);
 
@@ -92,7 +106,8 @@ public class StringGeneratorsTest
     public void testStringsWithBadSize()
     {
         System.out.println("testStringsWithBadSize");
-        int length = -59;
+
+        int length = one(negativeIntegers());
         AlchemyGenerator<String> instance = StringGenerators.strings(length);
         assertNotNull(instance);
         instance.get();
@@ -102,6 +117,7 @@ public class StringGeneratorsTest
     public void testHexadecimalString()
     {
         System.out.println("testHexadecimalString");
+
         int length = 90;
         AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
 
@@ -116,6 +132,7 @@ public class StringGeneratorsTest
     public void testHexadecimalStringWithBadSize()
     {
         System.out.println("testHexadecimalStringWithBadSize");
+
         int length = -90;
         AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
         instance.get();
@@ -125,6 +142,7 @@ public class StringGeneratorsTest
     public void testAlphabeticString_int()
     {
         System.out.println("testAlphabeticString");
+
         int length = one(integers(40, 100));
 
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
@@ -140,6 +158,7 @@ public class StringGeneratorsTest
     public void testAlphabeticString()
     {
         System.out.println("testAlphabeticString");
+
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString();
 
         doInLoop(i ->
@@ -153,6 +172,7 @@ public class StringGeneratorsTest
     public void testAlphabeticStringWithBadSize()
     {
         System.out.println("testAlphabeticStringWithBadSize");
+
         int length = 0;
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
         instance.get();
@@ -162,6 +182,7 @@ public class StringGeneratorsTest
     public void testStringsFromFixedList()
     {
         System.out.println("testStringsFromFixedList");
+
         List<String> values = new ArrayList<>();
 
         for (int i = 0; i < iterations; ++i)
@@ -181,6 +202,7 @@ public class StringGeneratorsTest
     public void testStringsFromFixedList_List()
     {
         System.out.println("testStringsFromFixedList_List");
+
         List<String> values = new ArrayList<>();
         String one = strings(10).get();
         String two = strings(10).get();
@@ -201,6 +223,7 @@ public class StringGeneratorsTest
     public void testStringsFromFixedList_StringArr()
     {
         System.out.println("testStringsFromFixedList_StringArr");
+
         AlchemyGenerator<String> alphabetic = StringGenerators.alphabeticString(10);
         String[] values = new String[]
         {
@@ -267,7 +290,7 @@ public class StringGeneratorsTest
         System.out.println("testAsString");
 
         AlchemyGenerator<Date> generator = mock(AlchemyGenerator.class);
-        
+
         when(generator.get())
                 .thenReturn(one(anyTime()));
 
@@ -282,4 +305,5 @@ public class StringGeneratorsTest
         });
 
     }
+
 }
