@@ -18,6 +18,7 @@ package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
 import java.util.Date;
+import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -34,8 +35,9 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  *
  * @author SirWellington
  */
+@Internal
 @NonInstantiable
-public final class Dates
+final class Dates
 {
 
     Dates() throws IllegalAccessException
