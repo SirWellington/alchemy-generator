@@ -18,7 +18,6 @@ package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +30,7 @@ import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
@@ -49,13 +49,7 @@ public class DateGeneratorsTest
         iterations = one(integers(100, 1000));
     }
 
-    private void doInLoop(Consumer<Integer> function)
-    {
-        for (int i = 0; i < iterations; ++i)
-        {
-            function.accept(i);
-        }
-    }
+   
 
     @Test
     public void testNow()

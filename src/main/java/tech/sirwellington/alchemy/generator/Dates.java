@@ -172,4 +172,19 @@ final class Dates
         return (timeOfDate >= timeOfNow - delta) &&
                (timeOfDate <= timeOfNow + delta);
     }
+
+    public static boolean isNow(Instant instant, long marginOfErrorMillies)
+    {
+        Instant now = Instant.now();
+        checkNotNull(instant);
+        checkNotNull(now);
+        checkThat(marginOfErrorMillies >= 0, "margin of error must be >= 0 ");
+
+        long delta = marginOfErrorMillies;
+        long timeOfDate = instant.toEpochMilli();
+        long timeOfNow = now.toEpochMilli();
+
+        return (timeOfDate >= timeOfNow - delta) &&
+               (timeOfDate <= timeOfNow + delta);
+    }
 }
