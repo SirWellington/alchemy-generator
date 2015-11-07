@@ -18,14 +18,16 @@ package tech.sirwellington.alchemy.generator;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.lang3.RandomUtils;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -41,6 +43,18 @@ public class BooleanGeneratorsTest
     public void setUp()
     {
         iterations = RandomUtils.nextInt(500, 5000);
+    }
+
+    @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new BooleanGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> BooleanGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test

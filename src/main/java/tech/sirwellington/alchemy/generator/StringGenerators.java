@@ -42,7 +42,7 @@ public final class StringGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(StringGenerators.class);
 
-    private StringGenerators() throws IllegalAccessException
+    StringGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }

@@ -27,6 +27,7 @@ import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -38,6 +39,18 @@ public class TimeGeneratorsTest
     @Before
     public void setUp()
     {
+    }
+
+    @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new TimeGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> TimeGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test

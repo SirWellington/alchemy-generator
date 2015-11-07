@@ -55,6 +55,18 @@ public class NumberGeneratorsTest
     }
 
     @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new NumberGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> NumberGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
+    }
+
+    @Test
     public void testIntegers()
     {
         System.out.println("testIntegers");

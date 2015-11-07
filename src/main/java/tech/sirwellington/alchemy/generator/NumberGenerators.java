@@ -46,7 +46,7 @@ public final class NumberGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(NumberGenerators.class);
 
-    private NumberGenerators() throws IllegalAccessException
+    NumberGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }

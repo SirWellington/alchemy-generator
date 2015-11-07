@@ -50,6 +50,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -74,6 +75,19 @@ public class StringGeneratorsTest
             function.accept(i);
         }
     }
+
+    @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new StringGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> StringGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
+    }
+
 
     @Test
     public void testStrings()

@@ -19,19 +19,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomUtils;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import org.junit.After;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import org.mockito.runners.MockitoJUnitRunner;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 import static tech.sirwellington.alchemy.generator.StringGenerators.uuids;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -49,9 +50,16 @@ public class CollectionGeneratorsTest
         iterations = RandomUtils.nextInt(500, 5000);
     }
 
-    @After
-    public void tearDown()
+    @Test
+    public void testCannotInstantiate()
     {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new CollectionGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> CollectionGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test

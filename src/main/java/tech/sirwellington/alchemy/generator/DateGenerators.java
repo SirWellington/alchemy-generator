@@ -35,6 +35,12 @@ public final class DateGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(DateGenerators.class);
 
+    DateGenerators() throws IllegalAccessException
+    {
+        throw new IllegalAccessException("cannot instantiate");
+    }
+
+
     /**
      * Always return the current time.
      * <br>

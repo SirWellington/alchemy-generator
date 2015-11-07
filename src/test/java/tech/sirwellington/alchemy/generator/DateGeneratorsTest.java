@@ -49,7 +49,17 @@ public class DateGeneratorsTest
         iterations = one(integers(100, 1000));
     }
 
-   
+    @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new DateGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> DateGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
+    }
 
     @Test
     public void testNow()

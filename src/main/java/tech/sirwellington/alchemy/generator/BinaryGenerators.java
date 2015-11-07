@@ -19,6 +19,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
@@ -30,7 +31,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 public final class BinaryGenerators
 {
 
-    private BinaryGenerators() throws IllegalAccessException
+    BinaryGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }

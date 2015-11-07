@@ -18,12 +18,14 @@ package tech.sirwellington.alchemy.generator;
 import java.util.function.Supplier;
 import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -39,6 +41,18 @@ public class EnumGeneratorsTest
     public void setUp()
     {
         iterations = RandomUtils.nextInt(500, 5000);
+    }
+
+    @Test
+    public void testCannotInstantiate()
+    {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new NumberGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> NumberGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test

@@ -45,7 +45,7 @@ public final class CollectionGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(CollectionGenerators.class);
 
-    private CollectionGenerators() throws IllegalAccessException
+    CollectionGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }
