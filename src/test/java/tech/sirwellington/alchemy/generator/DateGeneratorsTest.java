@@ -62,11 +62,11 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testNow()
+    public void testPresentDates()
     {
-        System.out.println("testNow");
+        System.out.println("testPresentDates");
 
-        AlchemyGenerator<Date> instance = DateGenerators.now();
+        AlchemyGenerator<Date> instance = DateGenerators.presentDates();
 
         doInLoop(i ->
         {
@@ -77,10 +77,10 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testBeforeNow()
+    public void testPastDates()
     {
-        System.out.println("testBeforeNow");
-        AlchemyGenerator<Date> instance = DateGenerators.beforeNow();
+        System.out.println("testPastDates");
+        AlchemyGenerator<Date> instance = DateGenerators.pastDates();
 
         doInLoop(i ->
         {
@@ -91,11 +91,11 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testAfterNow()
+    public void testFutureDates()
     {
-        System.out.println("testAfterNow");
+        System.out.println("testFutureDates");
 
-        AlchemyGenerator<Date> instance = DateGenerators.afterNow();
+        AlchemyGenerator<Date> instance = DateGenerators.futureDates();
 
         doInLoop(i ->
         {

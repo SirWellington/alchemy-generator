@@ -54,11 +54,11 @@ public class TimeGeneratorsTest
     }
 
     @Test
-    public void testNow()
+    public void testPresentInstants()
     {
-        System.out.println("testNow");
+        System.out.println("testPresentInstants");
 
-        AlchemyGenerator<Instant> instance = TimeGenerators.now();
+        AlchemyGenerator<Instant> instance = TimeGenerators.presentInstants();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -70,10 +70,11 @@ public class TimeGeneratorsTest
     }
 
     @Test
-    public void testBeforeNow()
+    public void testPastInstants()
     {
-        System.out.println("testBeforeNow");
-        AlchemyGenerator<Instant> instance = TimeGenerators.beforeNow();
+        System.out.println("testPastInstants");
+
+        AlchemyGenerator<Instant> instance = TimeGenerators.pastInstants();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -87,11 +88,11 @@ public class TimeGeneratorsTest
     }
 
     @Test
-    public void testAfterNow()
+    public void testFutureInstants()
     {
-        System.out.println("testAfterNow");
+        System.out.println("testFutureInstants");
 
-        AlchemyGenerator<Instant> instance = TimeGenerators.afterNow();
+        AlchemyGenerator<Instant> instance = TimeGenerators.futureInstants();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->

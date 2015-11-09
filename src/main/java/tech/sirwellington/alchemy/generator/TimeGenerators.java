@@ -32,6 +32,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
+ * Generators for {@linkplain Instant Java Instants}.
  *
  * @author SirWellington
  */
@@ -47,36 +48,37 @@ public final class TimeGenerators
     }
 
     /**
-     * Produces {@linkplain Instant Instants} representing right <i>now</i>. Note that 'now' depends on when the
-     * Generator is {@linkplain AlchemyGenerator#get() called}.
+     * Produces {@linkplain Instant Instants} representing the <i>present</i>, i.e <i>now</i>. Note that
+     * the 'present'
+     * depends on when the Generator is {@linkplain AlchemyGenerator#get() called}.
      */
-    public static AlchemyGenerator<Instant> now()
+    public static AlchemyGenerator<Instant> presentInstants()
     {
         return Instant::now;
     }
 
     /**
-     * Produces {@linkplain Instant Instants} that are always in the past.
+     * Produces {@linkplain Instant Instants} that are always in the past, i.e. before the present.
      */
-    public static AlchemyGenerator<Instant> beforeNow()
+    public static AlchemyGenerator<Instant> pastInstants()
     {
         /*
-         * There is no need to recalculate now per-call. We simply freeze now, and supply dates before that reference
-         * point. They will all be in the past.
+         * There is no need to recalculate the present instant per-call. We simply capture the present Instant, and
+         * supply dates before that reference point. They will always be in the past.
          */
         return before(Instant.now());
     }
 
     /**
-     * Produces {@linkplain Instant Instants} that are always in the future.
+     * Produces {@linkplain Instant Instants} that are always in the future, i.e. after the present.
      */
-    public static AlchemyGenerator<Instant> afterNow()
+    public static AlchemyGenerator<Instant> futureInstants()
     {
-        // In order to stay in the future, "now" must be continuously recalculated.
+        // In order to stay in the future, the "present" must be continuously recalculated.
         return () ->
         {
-            Instant now = Instant.now();
-            return after(now).get();
+            Instant present = Instant.now();
+            return after(present).get();
         };
     }
 
@@ -135,7 +137,7 @@ public final class TimeGenerators
     }
 
     /**
-     * Produces {@linkplain Instant Instants} from any time, past, present, or future..
+     * Produces {@linkplain Instant Instants} from any time, past, present, or future.
      */
     public static AlchemyGenerator<Instant> anytime()
     {
@@ -146,11 +148,11 @@ public final class TimeGenerators
             switch (choice)
             {
                 case 0:
-                    return beforeNow().get();
+                    return pastInstants().get();
                 case 1:
-                    return afterNow().get();
+                    return futureInstants().get();
                 default:
-                    return now().get();
+                    return presentInstants().get();
             }
         };
     }

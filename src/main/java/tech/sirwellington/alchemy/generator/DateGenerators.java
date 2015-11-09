@@ -40,9 +40,8 @@ public final class DateGenerators
         throw new IllegalAccessException("cannot instantiate");
     }
 
-
     /**
-     * Always return the current time.
+     * Always returns the current time, i.e. the present.
      * <br>
      * <pre>
      * Note that the current time depends on when it is called.
@@ -50,13 +49,13 @@ public final class DateGenerators
      *
      * @return
      */
-    public static AlchemyGenerator<Date> now()
+    public static AlchemyGenerator<Date> presentDates()
     {
         return Dates::now;
     }
 
     /**
-     * Returns Dates from the past.
+     * Returns Dates from the past, i.e. before now.
      * <br>
      * <pre>
      * Note that the current time depends on when it is called.
@@ -64,43 +63,57 @@ public final class DateGenerators
      *
      * @return
      */
-    public static AlchemyGenerator<Date> beforeNow()
+    public static AlchemyGenerator<Date> pastDates()
     {
-        return toDate(TimeGenerators.beforeNow());
+        return toDate(TimeGenerators.pastInstants());
     }
 
-    public static AlchemyGenerator<Date> before(@NonNull Date expected) throws IllegalArgumentException
+    /**
+     * Returns Dates in the future, i.e. after now.
+     * <br>
+     * <pre>
+     * Note that the current time depends on when it is called.
+     * </pre>
+     *
+     * @return
+     */
+    public static AlchemyGenerator<Date> futureDates()
     {
-        checkNotNull(expected, "date cannot be null");
+        return toDate(TimeGenerators.futureInstants());
+    }
 
-        Instant instant = expected.toInstant();
+    /**
+     * Returns dates before the specified reference date.
+     *
+     * @param referenceDate
+     *
+     * @throws IllegalArgumentException
+     */
+    public static AlchemyGenerator<Date> before(@NonNull Date referenceDate) throws IllegalArgumentException
+    {
+        checkNotNull(referenceDate, "referenceDate cannot be null");
+
+        Instant instant = referenceDate.toInstant();
         return toDate(TimeGenerators.before(instant));
     }
 
     /**
-     * Returns Dates in the future.
-     * <br>
-     * <pre>
-     * Note that the current time depends on when it is called.
-     * </pre>
+     * Returns dates after the specified reference date.
      *
-     * @return
+     * @param referenceDate
+     *
+     * @throws IllegalArgumentException
      */
-    public static AlchemyGenerator<Date> afterNow()
+    public static AlchemyGenerator<Date> after(@NonNull Date referenceDate) throws IllegalArgumentException
     {
-        return toDate(TimeGenerators.afterNow());
-    }
+        checkNotNull(referenceDate, "referenceDate cannot be null");
 
-    public static AlchemyGenerator<Date> after(@NonNull Date expected) throws IllegalArgumentException
-    {
-        checkNotNull(expected, "date cannot be null");
-
-        Instant instant = expected.toInstant();
+        Instant instant = referenceDate.toInstant();
         return toDate(TimeGenerators.after(instant));
     }
 
     /**
-     * Returns any date, can be in the future, past, or present.
+     * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
      *
      * @return
      */
@@ -109,11 +122,18 @@ public final class DateGenerators
         return toDate(TimeGenerators.anytime());
     }
 
+    /**
+     * Converts {@linkplain Instant Instants} to {@linkplain Date Dates} using the supplied {@link  AlchemyGenerator}.
+     *
+     * @param generator
+     *
+     * @throws IllegalArgumentException
+     */
     public static AlchemyGenerator<Date> toDate(@NonNull AlchemyGenerator<Instant> generator) throws IllegalArgumentException
     {
         checkNotNull(generator, "generator cannot be null");
         checkNotNull(generator.get(), "generator produced null");
-        
+
         return () ->
         {
             return Date.from(generator.get());
