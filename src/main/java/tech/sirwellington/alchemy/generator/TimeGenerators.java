@@ -60,6 +60,10 @@ public final class TimeGenerators
      */
     public static AlchemyGenerator<Instant> beforeNow()
     {
+        /*
+         * There is no need to recalculate now per-call. We simply freeze now, and supply dates before that reference
+         * point. They will all be in the past.
+         */
         return before(Instant.now());
     }
 
