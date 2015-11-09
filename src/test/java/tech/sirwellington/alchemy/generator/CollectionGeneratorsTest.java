@@ -35,6 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 import static tech.sirwellington.alchemy.generator.StringGenerators.uuids;
@@ -131,7 +132,7 @@ public class CollectionGeneratorsTest
                 .thenAnswer(invk -> one(strings()));
 
         when(valueGenerator.get())
-                .thenAnswer(invk -> one(strings()));
+                .thenAnswer(invk -> one(positiveIntegers()));
 
         Map result = CollectionGenerators.mapOf(keyGenerator, valueGenerator);
         assertThat(result, notNullValue());
