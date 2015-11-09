@@ -48,10 +48,10 @@ public class EnumGeneratorsTest
     {
         System.out.println("testCannotInstantiate");
 
-        assertThrows(() -> new NumberGenerators())
+        assertThrows(() -> new EnumGenerators())
                 .isInstanceOf(IllegalAccessException.class);
 
-        assertThrows(() -> NumberGenerators.class.newInstance())
+        assertThrows(() -> EnumGenerators.class.newInstance())
                 .isInstanceOf(IllegalAccessException.class);
     }
 

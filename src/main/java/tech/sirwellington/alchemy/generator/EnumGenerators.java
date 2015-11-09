@@ -18,6 +18,8 @@ package tech.sirwellington.alchemy.generator;
 import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
@@ -26,10 +28,17 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  *
  * @author SirWellington
  */
+@NonInstantiable
 public final class EnumGenerators
 {
 
     private final static Logger LOG = LoggerFactory.getLogger(EnumGenerators.class);
+    
+    EnumGenerators() throws IllegalAccessException
+    {
+        throw new IllegalAccessException("cannot instantiate");
+    }
+
 
     /**
      * Returns sequence of Enum values from the supplied arguments.
