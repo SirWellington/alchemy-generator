@@ -46,21 +46,41 @@ public final class TimeGenerators
         throw new IllegalAccessException("cannot instantiate");
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} representing right <i>now</i>. Note that 'now' depends on when the
+     * Generator is {@linkplain AlchemyGenerator#get() called}.
+     */
     public static AlchemyGenerator<Instant> now()
     {
         return Instant::now;
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} that are always in the past.
+     */
     public static AlchemyGenerator<Instant> beforeNow()
     {
         return before(Instant.now());
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} that are always in the future.
+     */
     public static AlchemyGenerator<Instant> afterNow()
     {
-        return after(Instant.now());
+        // In order to stay in the future, "now" must be continuously recalculated.
+        return () ->
+        {
+            Instant now = Instant.now();
+            return after(now).get();
+        };
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} that are always before the specified time.
+     *
+     * @throws IllegalArgumentException
+     */
     public static AlchemyGenerator<Instant> before(@NonNull Instant instant) throws IllegalArgumentException
     {
         checkNotNull(instant, "instant cannot be null");
@@ -83,6 +103,11 @@ public final class TimeGenerators
 
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} that are always after the specified time.
+     *
+     * @throws IllegalArgumentException
+     */
     public static AlchemyGenerator<Instant> after(@NonNull Instant instant) throws IllegalArgumentException
     {
         checkNotNull(instant, "instant cannot be null");
@@ -105,13 +130,16 @@ public final class TimeGenerators
         };
     }
 
+    /**
+     * Produces {@linkplain Instant Instants} from any time, past, present, or future..
+     */
     public static AlchemyGenerator<Instant> anytime()
     {
         return () ->
         {
-            int decidingFactor = one(integers(0, 3));
+            int choice = one(integers(0, 3));
 
-            switch (decidingFactor)
+            switch (choice)
             {
                 case 0:
                     return beforeNow().get();
