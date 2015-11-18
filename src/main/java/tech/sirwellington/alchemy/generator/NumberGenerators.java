@@ -161,12 +161,16 @@ public final class NumberGenerators
 
             if (negativeLowerBound && negativeUpperBound)
             {
+                //Reverse the min and max
                 long min = (-exclusiveUpperBound);
                 long max = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
 
-                long dirtyValue = RandomUtils.nextLong(min, max);
-                long valueAdjustedForInclusiveness = safeIncrement(dirtyValue);
-                return -valueAdjustedForInclusiveness;
+                //Adjust by one, for inclusivity
+                long minAdjustedForInclusivity = safeIncrement(min);
+                long maxAdjustedForInclusivity = safeIncrement(max);
+
+                long value = RandomUtils.nextLong(minAdjustedForInclusivity, maxAdjustedForInclusivity);
+                return -value;
             }
             else if (negativeLowerBound)
             {
@@ -175,9 +179,11 @@ public final class NumberGenerators
                 if (shouldProduceNegative)
                 {
                     long min = 0L;
-                    long dirtyMax = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
-                    long maxAdjustedForInclusiveness = safeIncrement(dirtyMax);
-                    return -RandomUtils.nextLong(min, maxAdjustedForInclusiveness);
+                    long max = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
+                    long maxAdjustedForInclusivity = safeIncrement(max);
+
+                    long value = -RandomUtils.nextLong(min, maxAdjustedForInclusivity);
+                    return value;
                 }
                 else
                 {
