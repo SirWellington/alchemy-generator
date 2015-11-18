@@ -63,7 +63,8 @@ public final class NumberGenerators
      */
     public static AlchemyGenerator<Integer> integers(int inclusiveLowerBound, int exclusiveUpperBound) throws IllegalArgumentException
     {
-        checkThat(inclusiveLowerBound <= exclusiveUpperBound, "Upper Bound must be greater than Lower Bound");
+        checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
+
         final boolean isNegativeLowerBound = inclusiveLowerBound < 0;
         final boolean isNegativeUpperBound = exclusiveUpperBound < 0;
 
@@ -150,7 +151,8 @@ public final class NumberGenerators
      */
     public static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException
     {
-        checkThat(inclusiveLowerBound <= exclusiveUpperBound, "Upper Bound must be greater than Lower Bound");
+        checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
+        
         final boolean negativeLowerBound = inclusiveLowerBound < 0;
         final boolean negativeUpperBound = exclusiveUpperBound < 0;
 
