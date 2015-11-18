@@ -16,13 +16,15 @@
 
 package tech.sirwellington.alchemy.generator;
 
-import com.google.common.base.CharMatcher;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.Matchers.either;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
@@ -30,6 +32,9 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static tech.sirwellington.alchemy.generator.CollectionGenerators.listOf;
+import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticString;
 import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
@@ -65,13 +70,14 @@ public class PeopleGeneratorsTest
 
         AlchemyGenerator<String> instance = PeopleGenerators.name();
         assertThat(instance, notNullValue());
-
+        
+        Pattern upperCasePattern = Pattern.compile("[A-Z]{1}[a-z]+");
         doInLoop(i -> 
         {
             String name = instance.get();
             assertThat(name, not(isEmptyString()));
             assertThat(name.length(), greaterThanOrEqualTo(2));
-            assertThat(CharMatcher.JAVA_UPPER_CASE.matches(name.charAt(0)), is(true));
+            assertThat(upperCasePattern.asPredicate().test(name), is(true));
         });
     }
 
@@ -147,13 +153,89 @@ public class PeopleGeneratorsTest
         AlchemyGenerator<String> instance = PeopleGenerators.phoneNumberString();
         assertThat(instance, notNullValue());
 
+        Pattern phoneNumberPattern = Pattern.compile("\\d{3}\\-\\d{3}\\-\\d{4}");
         doInLoop(i ->
         {
             String phoneNumber = instance.get();
             assertThat(phoneNumber, not(isEmptyString()));
-            Pattern pattern = Pattern.compile("\\d{3}\\-\\d{3}\\-\\d{4}");
-            assertThat(pattern.asPredicate().test(phoneNumber), is(true));
+            assertThat(phoneNumberPattern.asPredicate().test(phoneNumber), is(true));
         });
+    }
+
+     @Test
+    public void testPopularEmailDomains()
+    {
+        System.out.println("testPopularEmailDomains");
+
+        AlchemyGenerator<String> instance = PeopleGenerators.popularEmailDomains();
+        assertThat(instance, notNullValue());
+
+        doInLoop(i ->
+        {
+            String domain = instance.get();
+            assertThat(domain, not(isEmptyString()));
+            assertThat(domain, either(endsWith(".com")).or(endsWith(".tech")));
+        });
+    }
+
+    @Test
+    public void testEmails()
+    {
+        System.out.println("testEmails");
+
+        AlchemyGenerator<String> instance = PeopleGenerators.emails();
+        assertThat(instance, notNullValue());
+
+        doInLoop(i ->
+        {
+            String email = instance.get();
+            assertThat(email, not(isEmptyString()));
+            assertThat(email.contains("@"), is(true));
+        });
+    }
+
+    @Test
+    public void testEmailsWithCustomDomains()
+    {
+        System.out.println("testEmailsWithCustomDomains");
+
+        List<String> domains = listOf(alphabeticString(), 10);
+        AlchemyGenerator<String> domainGenerator = StringGenerators.stringsFromFixedList(domains);
+
+        AlchemyGenerator<String> instance = PeopleGenerators.emails(domainGenerator);
+        assertThat(instance, notNullValue());
+
+        doInLoop(i ->
+        {
+            String email = instance.get();
+            assertThat(email, not(isEmptyString()));
+            assertEndsWithOneOfTheDomains(email, domains);
+        });
+    }
+
+    private void assertEndsWithOneOfTheDomains(String email, List<String> domains)
+    {
+        boolean anyMatch = domains.stream()
+        .anyMatch(domain -> email.endsWith(domain));
+
+        if (!anyMatch)
+        {
+            fail("Expected email " + email + " to end with one of these domains: " + domains);
+        }
+
+    }
+
+    @Test
+    public void testEmailsWithCustomDomainsEdgeCases()
+    {
+        assertThrows(() -> PeopleGenerators.emails(null))
+            .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> PeopleGenerators.emails(() -> null))
+            .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> PeopleGenerators.emails(() -> ""))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
 }
