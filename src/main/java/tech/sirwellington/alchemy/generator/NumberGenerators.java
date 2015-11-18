@@ -66,7 +66,7 @@ public final class NumberGenerators
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
 
         final boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        final boolean isNegativeUpperBound = exclusiveUpperBound < 0;
+        final boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
         {
@@ -76,18 +76,21 @@ public final class NumberGenerators
                 int min = (-exclusiveUpperBound);
                 int max = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
 
-                int dirtyValue = RandomUtils.nextInt(min, max);
-                int valueAdjustedForInclusiveness = safeIncrement(dirtyValue);
-                return -valueAdjustedForInclusiveness;
+                //Adjust by one, for inclusivity
+                int minAdjustedForInclusivity = safeIncrement(min);
+                int maxAdjustedForInclusivity = safeIncrement(max);
+
+                int value = RandomUtils.nextInt(minAdjustedForInclusivity, maxAdjustedForInclusivity);
+                return -value;
             }
             else if (isNegativeLowerBound)
             {
                 boolean shouldProduceNegative = booleans().get();
                 if (shouldProduceNegative)
                 {
-                    int dirtyMax = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
-                    int maxAdjustedForInclusiveness = safeIncrement(dirtyMax);
-                    return -RandomUtils.nextInt(0, maxAdjustedForInclusiveness);
+                    int max = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
+                    int maxAdjustedForInclusivity = safeIncrement(max);
+                    return -RandomUtils.nextInt(0, maxAdjustedForInclusivity);
                 }
                 else
                 {
@@ -154,7 +157,7 @@ public final class NumberGenerators
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
         
         final boolean negativeLowerBound = inclusiveLowerBound < 0;
-        final boolean negativeUpperBound = exclusiveUpperBound < 0;
+        final boolean negativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
         {

@@ -71,8 +71,8 @@ public class NumberGeneratorsTest
     {
         System.out.println("testIntegers");
 
-        int lowerBound = 0;
-        int upperBound = 49506;
+        int lowerBound = RandomUtils.nextInt(0, Integer.MAX_VALUE / 2);
+        int upperBound = RandomUtils.nextInt(lowerBound, Integer.MAX_VALUE);
         AlchemyGenerator<Integer> instance = NumberGenerators.integers(lowerBound, upperBound);
         for (int i = 0; i < iterations; ++i)
         {
@@ -143,6 +143,16 @@ public class NumberGeneratorsTest
             assertThat(value, greaterThanOrEqualTo(lowerBound));
             assertThat(value, lessThan(upperBound));
         }
+
+        lowerBound = Integer.MIN_VALUE;
+        upperBound = 0;
+        instance = NumberGenerators.integers(lowerBound, upperBound);
+        for (int i = 0; i < iterations; ++i)
+        {
+            int value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
+        }
     }
 
     @Test
@@ -170,8 +180,9 @@ public class NumberGeneratorsTest
     public void testLongs()
     {
         System.out.println("testLongs");
-        long lowerBound = 10;
-        long upperBound = 134_355_532_554_545L;
+        
+        long lowerBound = RandomUtils.nextLong(0L, Long.MAX_VALUE / 2);
+        long upperBound = RandomUtils.nextLong(lowerBound, Long.MAX_VALUE);
         AlchemyGenerator<Long> instance = NumberGenerators.longs(lowerBound, upperBound);
         for (int i = 0; i < iterations; ++i)
         {
@@ -207,6 +218,16 @@ public class NumberGeneratorsTest
 
         lowerBound = Long.MIN_VALUE;
         upperBound = -1L;
+        instance = NumberGenerators.longs(lowerBound, upperBound);
+        for (int i = 0; i < iterations; ++i)
+        {
+            long value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
+        }
+
+        lowerBound = Long.MIN_VALUE;
+        upperBound = 0L;
         instance = NumberGenerators.longs(lowerBound, upperBound);
         for (int i = 0; i < iterations; ++i)
         {
