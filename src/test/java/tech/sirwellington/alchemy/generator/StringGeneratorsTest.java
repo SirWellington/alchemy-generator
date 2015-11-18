@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -116,15 +116,14 @@ public class StringGeneratorsTest
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testStringsWithBadSize()
     {
         System.out.println("testStringsWithBadSize");
 
         int length = one(negativeIntegers());
-        AlchemyGenerator<String> instance = StringGenerators.strings(length);
-        assertNotNull(instance);
-        instance.get();
+        assertThrows(() -> StringGenerators.strings(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -153,9 +152,9 @@ public class StringGeneratorsTest
     }
 
     @Test
-    public void testAlphabeticString_int()
+    public void testAlphabeticStringWithLength()
     {
-        System.out.println("testAlphabeticString");
+        System.out.println("testAlphabeticStringWithLength");
 
         int length = one(integers(40, 100));
 
@@ -164,7 +163,7 @@ public class StringGeneratorsTest
         doInLoop(i ->
         {
             String value = instance.get();
-            assertTrue(value.length() == length);
+            assertThat(value.length(), is(length));
         });
     }
 
@@ -178,7 +177,7 @@ public class StringGeneratorsTest
         doInLoop(i ->
         {
             String value = instance.get();
-            assertThat(StringUtils.isEmpty(value), is(false));
+            assertThat(value, not(isEmptyString()));
         });
     }
 
@@ -190,6 +189,41 @@ public class StringGeneratorsTest
         int length = 0;
         AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
         instance.get();
+    }
+
+    @Test
+    public void testAlphanumericString()
+    {
+        System.out.println("testAlphanumericString");
+
+        AlchemyGenerator<String> instance = StringGenerators.alphanumericString();
+
+        doInLoop(i ->
+        {
+            String value = instance.get();
+            assertThat(value, not(isEmptyString()));
+            assertThat(value.length(), greaterThanOrEqualTo(10));
+            assertThat(value.length(), lessThanOrEqualTo(100));
+        });
+    }
+
+    @Test
+    public void testAlphanumericStringWithLength()
+    {
+        System.out.println("testAlphanumericStringWithLength");
+
+        int length = one(integers(10, 100));
+        AlchemyGenerator<String> instance = StringGenerators.alphanumericString(length);
+
+        doInLoop(i ->
+        {
+            String value = instance.get();
+            assertThat(value.length(), is(length));
+        });
+
+        //Edge cases
+        assertThrows(() -> StringGenerators.alphabeticString(one(negativeIntegers())))
+        .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -265,8 +299,8 @@ public class StringGeneratorsTest
         {
             String value = instance.get();
             assertThat(value, notNullValue());
-            assertThat(value.length(), greaterThanOrEqualTo(5));
-            assertThat(value.length(), lessThanOrEqualTo(20));
+            assertThat(value.length(), greaterThanOrEqualTo(10));
+            assertThat(value.length(), lessThanOrEqualTo(100));
         });
 
     }
