@@ -149,6 +149,7 @@ public class NumberGeneratorsTest
     public void testIntegersWithBadBounds()
     {
         System.out.println("testIntegersWithBadBounds");
+        
         assertThrows(() -> NumberGenerators.integers(7, 3))
                 .isInstanceOf(IllegalArgumentException.class);
 
@@ -157,6 +158,12 @@ public class NumberGeneratorsTest
 
         assertThrows(() -> NumberGenerators.integers(50, -600))
                 .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> NumberGenerators.integers(10, 10))
+            .isInstanceOf(IllegalArgumentException.class);
+
+         assertThrows(() -> NumberGenerators.integers(-10, -10))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -220,6 +227,12 @@ public class NumberGeneratorsTest
                 .isInstanceOf(IllegalArgumentException.class);
 
         assertThrows(() -> NumberGenerators.longs(50L, -600L))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> NumberGenerators.longs(50L, 50L))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> NumberGenerators.longs(-50L, -50L))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
