@@ -51,7 +51,7 @@ public class NumberGeneratorsTest
     @Before
     public void setUp()
     {
-        iterations = RandomUtils.nextInt(500, 5000);
+        iterations = RandomUtils.nextInt(5000, 50_000);
     }
 
     @Test
