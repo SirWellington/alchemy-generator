@@ -15,10 +15,13 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -92,5 +95,42 @@ public class ChecksTest
         System.out.println("testCheckThatExpectingWithMessage");
 
         Checks.checkThat(false, message);
+    }
+
+    @Test
+    public void testCheckNotEmptyString()
+    {
+        System.out.println("testCheckNotEmptyString");
+        
+        String string = RandomStringUtils.randomAlphanumeric(10);
+        Checks.checkNotEmpty(string);
+        
+        String nullString = null;
+        assertThrows(() -> Checks.checkNotEmpty(nullString))
+            .isInstanceOf(IllegalArgumentException.class);
+        
+        String emptyString = "";
+        assertThrows(() -> Checks.checkNotEmpty(emptyString))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testCheckNotEmptyStringWithMessage()
+    {
+        System.out.println("testCheckNotEmptyStringWithMessage");
+
+        String message = RandomStringUtils.randomAlphabetic(100);
+        String string = RandomStringUtils.randomAscii(10);
+        Checks.checkNotEmpty(string, message);
+        Checks.checkNotEmpty(string, null);
+        Checks.checkNotEmpty(string, "");
+
+        String nullString = null;
+        assertThrows(() -> Checks.checkNotEmpty(nullString, message))
+            .isInstanceOf(IllegalArgumentException.class);
+
+        String emptyString = "";
+        assertThrows(() -> Checks.checkNotEmpty(emptyString, message))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -63,4 +63,14 @@ class Checks
         }
     }
     
+    static void checkNotEmpty(String string) throws IllegalArgumentException
+    {
+        checkNotEmpty(string, "");
+    }
+    
+    static void checkNotEmpty(String string, String message) throws IllegalArgumentException
+    {
+        checkThat(string != null && !string.isEmpty(), message);
+    }
+    
 }
