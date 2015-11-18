@@ -20,9 +20,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +49,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
+import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
@@ -60,20 +60,10 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 public class StringGeneratorsTest
 {
 
-    private int iterations;
 
     @Before
     public void setUp()
     {
-        iterations = RandomUtils.nextInt(500, 5000);
-    }
-
-    private void doInLoop(Consumer<Integer> function)
-    {
-        for (int i = 0; i < iterations; ++i)
-        {
-            function.accept(i);
-        }
     }
 
     @Test
@@ -141,14 +131,14 @@ public class StringGeneratorsTest
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testHexadecimalStringWithBadSize()
     {
         System.out.println("testHexadecimalStringWithBadSize");
 
         int length = -90;
-        AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
-        instance.get();
+        assertThrows(() -> StringGenerators.hexadecimalString(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -181,14 +171,14 @@ public class StringGeneratorsTest
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAlphabeticStringWithBadSize()
     {
         System.out.println("testAlphabeticStringWithBadSize");
 
         int length = 0;
-        AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
-        instance.get();
+        assertThrows(() -> StringGenerators.alphabeticString(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -233,17 +223,17 @@ public class StringGeneratorsTest
 
         List<String> values = new ArrayList<>();
 
-        for (int i = 0; i < iterations; ++i)
+        doInLoop(i ->
         {
             values.add(RandomStringUtils.randomAlphabetic(i + 1));
-        }
+        });
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(values);
 
-        for (int i = 0; i < iterations; ++i)
+        doInLoop(i ->
         {
             String value = instance.get();
             assertTrue(values.contains(value));
-        }
+        });
     }
 
     @Test
@@ -314,14 +304,17 @@ public class StringGeneratorsTest
 
         AlchemyGenerator<String> instance = StringGenerators.uuids;
 
+        AtomicInteger iterations = new AtomicInteger();
         doInLoop(i ->
         {
             String value = instance.get();
             assertThat(value, notNullValue());
             assertThat(value.isEmpty(), is(false));
             uuids.add(value);
+            iterations.incrementAndGet();
         });
-        assertThat(uuids.size(), is(iterations));
+        
+        assertThat(uuids.size(), is(iterations.get()));
     }
 
     @Test
