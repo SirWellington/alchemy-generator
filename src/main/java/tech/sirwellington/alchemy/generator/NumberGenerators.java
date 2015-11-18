@@ -66,6 +66,7 @@ public final class NumberGenerators
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
 
         final boolean isNegativeLowerBound = inclusiveLowerBound < 0;
+        // <= because of the fact that 0 would be the *exclusive* upper bound.
         final boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
@@ -157,6 +158,7 @@ public final class NumberGenerators
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
         
         final boolean negativeLowerBound = inclusiveLowerBound < 0;
+        // <= because of the fact that 0 would be the *exclusive* upper bound.
         final boolean negativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
