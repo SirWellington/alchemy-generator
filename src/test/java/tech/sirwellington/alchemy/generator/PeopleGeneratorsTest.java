@@ -38,6 +38,7 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticSt
 import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
+
 /**
  *
  * @author SirWellington
@@ -64,11 +65,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testName()
+    public void testNames()
     {
-        System.out.println("testName");
+        System.out.println("testNames");
 
-        AlchemyGenerator<String> instance = PeopleGenerators.name();
+        AlchemyGenerator<String> instance = PeopleGenerators.names();
         assertThat(instance, notNullValue());
         
         Pattern upperCasePattern = Pattern.compile("[A-Z]{1}[a-z]+");
@@ -82,11 +83,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testAge()
+    public void testAges()
     {
-        System.out.println("testAge");
+        System.out.println("testAges");
 
-        AlchemyGenerator<Integer> instance = PeopleGenerators.age();
+        AlchemyGenerator<Integer> instance = PeopleGenerators.ages();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -98,11 +99,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testAdultAge()
+    public void testAdultAges()
     {
-        System.out.println("testAdultAge");
+        System.out.println("testAdultAges");
 
-        AlchemyGenerator<Integer> instance = PeopleGenerators.adultAge();
+        AlchemyGenerator<Integer> instance = PeopleGenerators.adultAges();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -114,11 +115,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testChildAge()
+    public void testChildAges()
     {
-        System.out.println("testChildAge");
+        System.out.println("testChildAges");
 
-        AlchemyGenerator<Integer> instance = PeopleGenerators.childAge();
+        AlchemyGenerator<Integer> instance = PeopleGenerators.childAges();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -130,11 +131,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testPhoneNumber()
+    public void testPhoneNumbers()
     {
-        System.out.println("testPhoneNumber");
+        System.out.println("testPhoneNumbers");
 
-        AlchemyGenerator<Long> instance = PeopleGenerators.phoneNumber();
+        AlchemyGenerator<Long> instance = PeopleGenerators.phoneNumbers();
         assertThat(instance, notNullValue());
 
         doInLoop(i ->
@@ -146,11 +147,11 @@ public class PeopleGeneratorsTest
     }
 
     @Test
-    public void testPhoneNumberString()
+    public void testPhoneNumberStrings()
     {
-        System.out.println("testPhoneNumberString");
+        System.out.println("testPhoneNumberStrings");
 
-        AlchemyGenerator<String> instance = PeopleGenerators.phoneNumberString();
+        AlchemyGenerator<String> instance = PeopleGenerators.phoneNumberStrings();
         assertThat(instance, notNullValue());
 
         Pattern phoneNumberPattern = Pattern.compile("\\d{3}\\-\\d{3}\\-\\d{4}");
