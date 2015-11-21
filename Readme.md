@@ -13,25 +13,25 @@ Alchemy Generator
   - [Snapshot](#snapshot)
 - [[Javadocs](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)](#javadocshttpwwwjavadociodoctechsirwellingtonalchemyalchemy-generator)
 - [API](#api)
-- [Numbers](#numbers)
-  - [Integers](#integers)
+  - [Numbers](#numbers)
+    - [Integers](#integers)
   - [Longs](#longs)
-  - [Doubles](#doubles)
-- [Strings](#strings)
-  - [Alphabetical](#alphabetical)
-  - [Alphanumeric](#alphanumeric)
-  - [Hexadecimal](#hexadecimal)
-  - [Any String](#any-string)
-  - [UUIDs](#uuids)
-  - [From Fixed Set](#from-fixed-set)
-- [Collections](#collections)
-  - [Lists](#lists)
-  - [Maps](#maps)
-- [Dates and Times](#dates-and-times)
-  - [Generators for `Instant` type:](#generators-for-instant-type)
-  - [Generators for `Date` type:](#generators-for-date-type)
-- [Enums](#enums)
-- [People](#people)
+    - [Doubles](#doubles)
+  - [Strings](#strings)
+    - [Alphabetical](#alphabetical)
+    - [Alphanumeric](#alphanumeric)
+    - [Hexadecimal](#hexadecimal)
+    - [Any String](#any-string)
+    - [UUIDs](#uuids)
+    - [From Fixed Set](#from-fixed-set)
+  - [Collections](#collections)
+    - [Lists](#lists)
+    - [Maps](#maps)
+  - [Dates and Times](#dates-and-times)
+    - [Generators for `Instant` type:](#generators-for-instant-type)
+    - [Generators for `Date` type:](#generators-for-date-type)
+  - [Enums](#enums)
+  - [People](#people)
 - [Requirements](#requirements)
 - [Building](#building)
 - [Feature Requests](#feature-requests)
@@ -86,10 +86,10 @@ API
 
 >Examples use static imports
 
-# Numbers
+## Numbers
 `tech.sirwellington.alchemy.generator.NumberGenerators`
 
-## Integers
+### Integers
 
 ```java
 //A number in the range [-50, 50)
@@ -106,7 +106,7 @@ long somePositiveNumber = positiveLongs().get();
 somePositiveNumber = one(positiveLongs());
 ```
 
-## Doubles
+### Doubles
 ```java
 //A double in the range [0.1, 1999.0]
 AlchemyGenerator<Double> doubleGenerator = doubles(0.1, 1999.0);
@@ -116,27 +116,27 @@ for(int i = 0; i < 100; ++i)
 }
 ```
 
-# Strings
+## Strings
 `tech.sirwellington.alchemy.generator.StringGenerators`
 
-## Alphabetical
+### Alphabetical
 Uses the Latin Alphabet, a-z | A-Z
 
 ```java
 String alphabetical = alphabeticString().get();
 ```
 
-## Alphanumeric
+### Alphanumeric
 Uses the Latin Alphabet, and numbers 1-9.
 ```java
 String alphanumeric = one(alphanumericString());
 ```
-## Hexadecimal
+### Hexadecimal
 ```java
 String hex = hexadecimalString(32).get();
 ```
 
-## Any String
+### Any String
 These strings may have unicode characters as well. These are great for testing against international character sets as well.
 
 ```java
@@ -144,7 +144,7 @@ These strings may have unicode characters as well. These are great for testing a
 String anyCharacterString = strings(30).get();
 assertThat(anyCharacterString.length(), is(30));
 ```
-## UUIDs
+### UUIDs
 Guaranteed unique strings
 
 ```java
@@ -160,24 +160,24 @@ for(int i = 0; i < amount; ++i)
 }
 assertThat(ids.size(), is(amount));
 ```
-## From Fixed Set
+### From Fixed Set
 Strings can be generated from a preselected set of String values.
 ```java
 //The generated strings can only be one of the supplied ones.
 String stringFromList = stringsFromFixedList("one", "something else", "Java").get();
 ```
 
-# Collections
+## Collections
 `tech.sirwellington.alchemy.generator.CollectionGenerators`
 
-## Lists
+### Lists
 
 ```java
 List<String> randomStrings = listOf(alphabeticString(20), 100);
 List<Integer> ages = listOf(integers(1, 100));
 ```
 
-## Maps
+### Maps
 ```java
 AlchemyGenerator<String> names = alphabeticalStrings();
 AlchemyGenerator<Integer> ages = integers(1, 100);
@@ -186,9 +186,9 @@ int numberOfPeople = 50;
 Map<String,Integer> ages = mapOf(names, ages, numberOfPeople);
 ```
 
-# Dates and Times
+## Dates and Times
 
-## Generators for `Instant` type:
+### Generators for `Instant` type:
 <br>
 `tech.sirwellington.alchemy.generator.TimeGenerators`
 
@@ -198,7 +198,7 @@ Instant timeInThePast = pastInstants().get();
 Instant timeInTheFuture = futureInstants().get();
 ```
 
-## Generators for `Date` type:
+### Generators for `Date` type:
 <br>
 `tech.sirwellington.alchemy.generator.DateGenerators`
 ```java
@@ -208,7 +208,7 @@ Date dateInTheFuture = one(futureDates());
 ```
 
 
-# Enums
+## Enums
 `tech.sirwellington.alchemy.generator.EnumGenerators`
 
 Sometimes you have an `enum` and you want to randomly access a value from it.
@@ -229,7 +229,7 @@ You want a fruit, but don't care which one?
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
 
-# People
+## People
 
 Our code very often works people, and information about them
 `tech.sirwellington.alchemy.generator.PeopleGenerators`
