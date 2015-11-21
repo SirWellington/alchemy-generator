@@ -47,11 +47,11 @@ public final class PeopleGenerators
     }
 
     /**
-     * Generates a "name". There are no guarantees on the name except that it is an
-     * {@linkplain StringGenerators#alphabeticString() Alphabetic String} where the first letter
+     * Generates a "names". There are no guarantees on the names except that it is an
+ {@linkplain StringGenerators#alphabeticString() Alphabetic String} where the first letter
      * is capitalized.
      */
-    public static AlchemyGenerator<String> name()
+    public static AlchemyGenerator<String> names()
     {
         //TODO: It may be better to use an actual dictionary resource file for names instead of generating them.
         return () ->
@@ -65,25 +65,25 @@ public final class PeopleGenerators
     }
 
     /**
-     * Generates a human age, from 1 to 100.
+     * Generates a human ages, from 1 to 100.
      */
-    public static AlchemyGenerator<Integer> age()
+    public static AlchemyGenerator<Integer> ages()
     {
         return integers(1, 100);
     }
 
     /**
-     * Generates an "Adult" age, from 18 to 100.
+     * Generates an "Adult" ages, from 18 to 100.
      */
-    public static AlchemyGenerator<Integer> adultAge()
+    public static AlchemyGenerator<Integer> adultAges()
     {
         return integers(18, 100);
     }
 
     /**
-     * Generates a "Child" age, from 1 to 17.
+     * Generates a "Child" ages, from 1 to 17.
      */
-    public static AlchemyGenerator<Integer> childAge()
+    public static AlchemyGenerator<Integer> childAges()
     {
         return integers(1, 18);
     }
@@ -92,7 +92,7 @@ public final class PeopleGenerators
      * Returns a US-based phone number in Long form, without the leading country code.
      * For example, "7545185179".
      */
-    public static AlchemyGenerator<Long> phoneNumber()
+    public static AlchemyGenerator<Long> phoneNumbers()
     {
         return () ->
         {
@@ -109,7 +109,7 @@ public final class PeopleGenerators
      * dashes "-", to separate the phone number parts, although that may change in the future.
      * For example, "547-412-4578".
      */
-    public static AlchemyGenerator<String> phoneNumberString()
+    public static AlchemyGenerator<String> phoneNumberStrings()
     {
         return () ->
         {
