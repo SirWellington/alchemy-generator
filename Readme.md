@@ -1,9 +1,12 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+Alchemy Generator
+==============================================
 
-- [Alchemy Generator](#alchemy-generator)
-  - ["More Data => Better tests"](#more-data--better-tests)
+[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">](https://github.com/SirWellington/alchemy)
+
+## "More Data => Better tests"
+
+[![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
+
 - [Purpose](#purpose)
 - [Download](#download)
   - [Release](#release)
@@ -37,17 +40,6 @@
   - [1.1](#11)
   - [1.0](#10)
 - [License](#license)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-Alchemy Generator
-==============================================
-
-[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">](https://github.com/SirWellington/alchemy)
-
-## "More Data => Better tests"
-
-[![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
 
 # Purpose
 Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
