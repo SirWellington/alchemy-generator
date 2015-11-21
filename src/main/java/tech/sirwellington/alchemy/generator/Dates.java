@@ -18,6 +18,7 @@ package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
 import java.util.Date;
+import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -34,8 +35,9 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  *
  * @author SirWellington
  */
+@Internal
 @NonInstantiable
-public final class Dates
+final class Dates
 {
 
     Dates() throws IllegalAccessException
@@ -166,6 +168,21 @@ public final class Dates
         long delta = marginOfErrorMillis;
         long timeOfDate = date.getTime();
         long timeOfNow = now.getTime();
+
+        return (timeOfDate >= timeOfNow - delta) &&
+               (timeOfDate <= timeOfNow + delta);
+    }
+
+    public static boolean isNow(Instant instant, long marginOfErrorMillies)
+    {
+        Instant now = Instant.now();
+        checkNotNull(instant);
+        checkNotNull(now);
+        checkThat(marginOfErrorMillies >= 0, "margin of error must be >= 0 ");
+
+        long delta = marginOfErrorMillies;
+        long timeOfDate = instant.toEpochMilli();
+        long timeOfNow = now.toEpochMilli();
 
         return (timeOfDate >= timeOfNow - delta) &&
                (timeOfDate <= timeOfNow + delta);

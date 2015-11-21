@@ -46,7 +46,7 @@ public final class NumberGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(NumberGenerators.class);
 
-    private NumberGenerators() throws IllegalAccessException
+    NumberGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }
@@ -63,9 +63,11 @@ public final class NumberGenerators
      */
     public static AlchemyGenerator<Integer> integers(int inclusiveLowerBound, int exclusiveUpperBound) throws IllegalArgumentException
     {
-        checkThat(inclusiveLowerBound <= exclusiveUpperBound, "Upper Bound must be greater than Lower Bound");
+        checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
+
         final boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        final boolean isNegativeUpperBound = exclusiveUpperBound < 0;
+        // <= because of the fact that 0 would be the *exclusive* upper bound.
+        final boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
         {
@@ -75,18 +77,21 @@ public final class NumberGenerators
                 int min = (-exclusiveUpperBound);
                 int max = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
 
-                int dirtyValue = RandomUtils.nextInt(min, max);
-                int valueAdjustedForInclusiveness = safeIncrement(dirtyValue);
-                return -valueAdjustedForInclusiveness;
+                //Adjust by one, for inclusivity
+                int minAdjustedForInclusivity = safeIncrement(min);
+                int maxAdjustedForInclusivity = safeIncrement(max);
+
+                int value = RandomUtils.nextInt(minAdjustedForInclusivity, maxAdjustedForInclusivity);
+                return -value;
             }
             else if (isNegativeLowerBound)
             {
                 boolean shouldProduceNegative = booleans().get();
                 if (shouldProduceNegative)
                 {
-                    int dirtyMax = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
-                    int maxAdjustedForInclusiveness = safeIncrement(dirtyMax);
-                    return -RandomUtils.nextInt(0, maxAdjustedForInclusiveness);
+                    int max = inclusiveLowerBound == Integer.MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
+                    int maxAdjustedForInclusivity = safeIncrement(max);
+                    return -RandomUtils.nextInt(0, maxAdjustedForInclusivity);
                 }
                 else
                 {
@@ -150,21 +155,27 @@ public final class NumberGenerators
      */
     public static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException
     {
-        checkThat(inclusiveLowerBound <= exclusiveUpperBound, "Upper Bound must be greater than Lower Bound");
+        checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound");
+        
         final boolean negativeLowerBound = inclusiveLowerBound < 0;
-        final boolean negativeUpperBound = exclusiveUpperBound < 0;
+        // <= because of the fact that 0 would be the *exclusive* upper bound.
+        final boolean negativeUpperBound = exclusiveUpperBound <= 0;
 
         return () ->
         {
 
             if (negativeLowerBound && negativeUpperBound)
             {
+                //Reverse the min and max
                 long min = (-exclusiveUpperBound);
                 long max = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
 
-                long dirtyValue = RandomUtils.nextLong(min, max);
-                long valueAdjustedForInclusiveness = safeIncrement(dirtyValue);
-                return -valueAdjustedForInclusiveness;
+                //Adjust by one, for inclusivity
+                long minAdjustedForInclusivity = safeIncrement(min);
+                long maxAdjustedForInclusivity = safeIncrement(max);
+
+                long value = RandomUtils.nextLong(minAdjustedForInclusivity, maxAdjustedForInclusivity);
+                return -value;
             }
             else if (negativeLowerBound)
             {
@@ -173,9 +184,11 @@ public final class NumberGenerators
                 if (shouldProduceNegative)
                 {
                     long min = 0L;
-                    long dirtyMax = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
-                    long maxAdjustedForInclusiveness = safeIncrement(dirtyMax);
-                    return -RandomUtils.nextLong(min, maxAdjustedForInclusiveness);
+                    long max = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
+                    long maxAdjustedForInclusivity = safeIncrement(max);
+
+                    long value = -RandomUtils.nextLong(min, maxAdjustedForInclusivity);
+                    return value;
                 }
                 else
                 {

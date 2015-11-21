@@ -33,7 +33,13 @@ class Throwables
 
     private final static Logger LOG = LoggerFactory.getLogger(Throwables.class);
 
-    static Assertion assertThrows(Runnable operation)
+    interface ExceptionOperation
+    {
+
+        void run() throws Throwable;
+    }
+
+    static Assertion assertThrows(ExceptionOperation operation)
     {
         Throwable ex = null;
 

@@ -42,7 +42,7 @@ public final class StringGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(StringGenerators.class);
 
-    private StringGenerators() throws IllegalAccessException
+    StringGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }
@@ -101,25 +101,51 @@ public final class StringGenerators
      *
      * @param length The length of the String, must be at least 1.
      *
-     * @return
+     * @throws IllegalArgumentException If {@code length < 0}
+     *
      * @see #alphabeticString()
      */
-    public static AlchemyGenerator<String> alphabeticString(int length)
+    public static AlchemyGenerator<String> alphabeticString(int length) throws IllegalArgumentException
     {
-        checkThat(length > 0, "Length must be at least 1");
+        checkThat(length > 0, "length must be > 0");
         return () -> RandomStringUtils.randomAlphabetic(length);
     }
 
     /**
-     * Generates a random alphabetic string anywhere between {@code 5 - 20} characters. Well suited
-     * for the case when you don't really care for the size of the string returned.
+     * Generates a random alphabetic string anywhere between {@code 10 - 100} characters. Well suited for the case when
+     * you don't really care for the size of the string returned.
      *
-     * @return
      * @see #alphabeticString(int)
      */
     public static AlchemyGenerator<String> alphabeticString()
     {
-        return alphabeticString(one(integers(5, 20)));
+        int length = one(integers(10, 100));
+        return alphabeticString(length);
+    }
+
+    /**
+     * Generates a random alphanumeric string anywhere between {@code 10 - 100} characters. Well suited for the case
+     * when you don't really care what the size of the string returned.
+     *
+     * @see #alphanumericString(int)
+     */
+    public static AlchemyGenerator<String> alphanumericString()
+    {
+        int length = one(integers(10, 100));
+        return alphabeticString(length);
+    }
+
+    /**
+     *
+     * @param length The length of the Generated Strings.
+     *
+     * @throws IllegalArgumentException If {@code length < 0}
+     */
+    public static AlchemyGenerator<String> alphanumericString(int length) throws IllegalArgumentException
+    {
+        checkThat(length > 0, "length must be > 0");
+
+        return () -> RandomStringUtils.randomAlphanumeric(length);
     }
 
     //==============================================================================================

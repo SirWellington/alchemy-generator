@@ -1,6 +1,49 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Alchemy Generator](#alchemy-generator)
+  - ["More Data => Better tests"](#more-data--better-tests)
+- [Purpose](#purpose)
+- [Download](#download)
+  - [Release](#release)
+  - [Snapshot](#snapshot)
+- [[Javadocs](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)](#javadocshttpwwwjavadociodoctechsirwellingtonalchemyalchemy-generator)
+- [API](#api)
+- [Numbers](#numbers)
+  - [Integers](#integers)
+  - [Longs](#longs)
+  - [Doubles](#doubles)
+- [Strings](#strings)
+  - [Alphabetical](#alphabetical)
+  - [Alphanumeric](#alphanumeric)
+  - [Hexadecimal](#hexadecimal)
+  - [Any String](#any-string)
+  - [UUIDs](#uuids)
+  - [From Fixed Set](#from-fixed-set)
+- [Collections](#collections)
+  - [Lists](#lists)
+  - [Maps](#maps)
+- [Dates and Times](#dates-and-times)
+  - [Generators for `Instant` type:](#generators-for-instant-type)
+  - [Generators for `Date` type:](#generators-for-date-type)
+- [Enums](#enums)
+- [People](#people)
+- [Requirements](#requirements)
+- [Building](#building)
+- [Feature Requests](#feature-requests)
+- [Release Notes](#release-notes)
+  - [1.2](#12)
+  - [1.1](#11)
+  - [1.0](#10)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Alchemy Generator
 ==============================================
-<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">
+
+[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">](https://github.com/SirWellington/alchemy)
 
 ## "More Data => Better tests"
 
@@ -8,7 +51,6 @@ Alchemy Generator
 
 # Purpose
 Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
-
 
 Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
 and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
@@ -23,7 +65,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 </dependency>
 ```
 
@@ -40,12 +82,11 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.3-SNAPSHOT</version>
 </dependency>
 ```
 
-# Javadocs
-## [Latest](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)
+# [Javadocs](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)
 
 
 API
@@ -54,6 +95,7 @@ API
 >Examples use static imports
 
 # Numbers
+`tech.sirwellington.alchemy.generator.NumberGenerators`
 
 ## Integers
 
@@ -83,7 +125,7 @@ for(int i = 0; i < 100; ++i)
 ```
 
 # Strings
-These are all the same type: `AlchemyGenerator<String>`
+`tech.sirwellington.alchemy.generator.StringGenerators`
 
 ## Alphabetical
 Uses the Latin Alphabet, a-z | A-Z
@@ -92,6 +134,11 @@ Uses the Latin Alphabet, a-z | A-Z
 String alphabetical = alphabeticString().get();
 ```
 
+## Alphanumeric
+Uses the Latin Alphabet, and numbers 1-9.
+```java
+String alphanumeric = one(alphanumericString());
+```
 ## Hexadecimal
 ```java
 String hex = hexadecimalString(32).get();
@@ -129,6 +176,7 @@ String stringFromList = stringsFromFixedList("one", "something else", "Java").ge
 ```
 
 # Collections
+`tech.sirwellington.alchemy.generator.CollectionGenerators`
 
 ## Lists
 
@@ -146,7 +194,30 @@ int numberOfPeople = 50;
 Map<String,Integer> ages = mapOf(names, ages, numberOfPeople);
 ```
 
+# Dates and Times
+
+## Generators for `Instant` type:
+<br>
+`tech.sirwellington.alchemy.generator.TimeGenerators`
+
+```java
+AlchemyGenerator<Instant> alwaysNow = presentInstants();
+Instant timeInThePast = pastInstants().get();
+Instant timeInTheFuture = futureInstants().get();
+```
+
+## Generators for `Date` type:
+<br>
+`tech.sirwellington.alchemy.generator.DateGenerators`
+```java
+AlchemyGenerator<Date> alwaysNow = presentDates();
+Date dateInThePast = one(pastDates());
+Date dateInTheFuture = one(futureDates());
+```
+
+
 # Enums
+`tech.sirwellington.alchemy.generator.EnumGenerators`
 
 Sometimes you have an `enum` and you want to randomly access a value from it.
 
@@ -166,6 +237,18 @@ You want a fruit, but don't care which one?
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
 
+# People
+
+Our code very often works people, and information about them
+`tech.sirwellington.alchemy.generator.PeopleGenerators`
+
+```java
+String name = names().get();
+int age = one(adultAges());
+String phoneNumber = one(phoneNumberStrings());
+String email = one(emails());
+```
+
 # Requirements
 
 + Java 8
@@ -179,6 +262,27 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
 # Release Notes
+
+## 1.2
++ Added Alphanumeric Strings
++ New People Information Generators
+	+ `popularEmailDomains()`
+	+ `emails()`
+	+ `name()`
+	+ `age()`
+	+ `phoneNumber()`
++ New Collection Generators
+	+ `fromList()`
+	+ `mapOf()`
++ New Date Generators
+	+ `presentDates()`
+	+ `pastDates()`
+	+ `futureDates()`
++ New Time Generators
+	+ `presentInstants()`
+	+ `pastInstants()`
+	+ `futureInstants()`
++ Bugfixes
 
 ## 1.1
 + New Java DateTime API Generators

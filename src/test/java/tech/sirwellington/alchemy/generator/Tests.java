@@ -13,42 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
-import org.apache.commons.lang3.RandomUtils;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
-import static tech.sirwellington.alchemy.generator.Checks.checkThat;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
- * {@linkplain AlchemyGenerator Alchemy Generators} for raw binary ({@code byte[]}).
- * 
+ *
  * @author SirWellington
  */
+@Internal
 @NonInstantiable
-public final class BinaryGenerators
+class Tests
 {
 
-    BinaryGenerators() throws IllegalAccessException
+    private final static Logger LOG = LoggerFactory.getLogger(Tests.class);
+
+    private Tests()
     {
-        throw new IllegalAccessException("cannot instantiate this class");
     }
 
-    private final static Logger LOG = LoggerFactory.getLogger(BinaryGenerators.class);
-
-    /**
-     * Generates binary of the specified length
-     *
-     * @param bytes The size of the byte arrays created.
-     *
-     * @return A binary generator
-     */
-    public static AlchemyGenerator<byte[]> binary(int bytes)
+    static void doInLoop(Consumer<Integer> function)
     {
-        checkThat(bytes > 0, "bytes must be at least 1");
-        return () -> RandomUtils.nextBytes(bytes);
-    }
+        int iterations = one(integers(100, 1_000));
 
+        for (int i = 0; i < iterations; ++i)
+        {
+            function.accept(i);
+        }
+    }
 }

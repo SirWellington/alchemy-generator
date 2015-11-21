@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +30,7 @@ import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
@@ -49,20 +49,24 @@ public class DateGeneratorsTest
         iterations = one(integers(100, 1000));
     }
 
-    private void doInLoop(Consumer<Integer> function)
+    @Test
+    public void testCannotInstantiate()
     {
-        for (int i = 0; i < iterations; ++i)
-        {
-            function.accept(i);
-        }
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new DateGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> DateGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
-    public void testNow()
+    public void testPresentDates()
     {
-        System.out.println("testNow");
+        System.out.println("testPresentDates");
 
-        AlchemyGenerator<Date> instance = DateGenerators.now();
+        AlchemyGenerator<Date> instance = DateGenerators.presentDates();
 
         doInLoop(i ->
         {
@@ -73,10 +77,10 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testBeforeNow()
+    public void testPastDates()
     {
-        System.out.println("testBeforeNow");
-        AlchemyGenerator<Date> instance = DateGenerators.beforeNow();
+        System.out.println("testPastDates");
+        AlchemyGenerator<Date> instance = DateGenerators.pastDates();
 
         doInLoop(i ->
         {
@@ -87,11 +91,11 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testAfterNow()
+    public void testFutureDates()
     {
-        System.out.println("testAfterNow");
+        System.out.println("testFutureDates");
 
-        AlchemyGenerator<Date> instance = DateGenerators.afterNow();
+        AlchemyGenerator<Date> instance = DateGenerators.futureDates();
 
         doInLoop(i ->
         {
@@ -102,53 +106,10 @@ public class DateGeneratorsTest
     }
 
     @Test
-    public void testAsInstant()
-    {
-        assertThrows(() -> DateGenerators.asInstant(null))
-                .isInstanceOf(IllegalArgumentException.class);
-
-        //When the generator returns null
-        AlchemyGenerator<Instant> badInstance = DateGenerators.asInstant(() -> null);
-        assertThrows(() -> badInstance.get());
-
-        doInLoop(i ->
-        {
-            Date date = DateGenerators.anyTime().get();
-
-            AlchemyGenerator<Instant> instance = DateGenerators.asInstant(() -> date);
-            assertThat(instance, notNullValue());
-
-            Instant result = instance.get();
-            assertThat(result.toEpochMilli(), is(date.getTime()));
-        });
-    }
-
-    @Test
-    public void testAsZonedDateTime()
-    {
-        assertThrows(() -> DateGenerators.asZonedDateTime(null))
-                .isInstanceOf(IllegalArgumentException.class);
-
-        //When the generator returns null
-        AlchemyGenerator<ZonedDateTime> badInstance = DateGenerators.asZonedDateTime(() -> null);
-        assertThrows(() -> badInstance.get());
-
-        doInLoop(i ->
-        {
-            Date date = DateGenerators.anyTime().get();
-
-            AlchemyGenerator<ZonedDateTime> instance = DateGenerators.asZonedDateTime(() -> date);
-            assertThat(instance, notNullValue());
-
-            ZonedDateTime result = instance.get();
-            assertThat(result.toInstant().toEpochMilli(), is(date.getTime()));
-        });
-
-    }
-
-    @Test
     public void testAnyTime()
     {
+        System.out.println("testAnyTime");
+
         doInLoop(i ->
         {
             AlchemyGenerator<Date> instance = DateGenerators.anyTime();
@@ -156,6 +117,76 @@ public class DateGeneratorsTest
             assertThat(instance.get(), notNullValue());
         });
 
+    }
+
+    @Test
+    public void testBefore()
+    {
+        System.out.println("testBefore");
+
+        doInLoop(i ->
+        {
+            Date referenceDate = Dates.now();
+
+            AlchemyGenerator<Date> instance = DateGenerators.before(referenceDate);
+            assertThat(instance, notNullValue());
+
+            Date result = instance.get();
+            assertThat(result, notNullValue());
+            assertThat(result.before(referenceDate), is(true));
+        });
+
+        //Edge case
+        assertThrows(() -> DateGenerators.before(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testAfter()
+    {
+        System.out.println("testAfter");
+
+        doInLoop(i ->
+        {
+            Date referenceDate = Dates.now();
+
+            AlchemyGenerator<Date> instance = DateGenerators.after(referenceDate);
+            assertThat(instance, notNullValue());
+
+            Date result = instance.get();
+            assertThat(result, notNullValue());
+            assertThat(result.after(referenceDate), is(true));
+        });
+
+        //Edge case
+        assertThrows(() -> DateGenerators.after(null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testToDate()
+    {
+        System.out.println("testToDate");
+
+        doInLoop(i ->
+        {
+            Instant now = Instant.now();
+            AlchemyGenerator<Instant> generator = () -> now;
+            
+            AlchemyGenerator<Date> instance = DateGenerators.toDate(generator);
+            assertThat(instance, notNullValue());
+            
+            Date result = instance.get();
+            assertThat(result, notNullValue());
+            assertThat(result.toInstant(), is(now));
+        });
+
+        //Edge cases
+        assertThrows(() -> DateGenerators.toDate(null))
+                .isInstanceOf(IllegalArgumentException.class);
+        
+        assertThrows(() -> DateGenerators.toDate(() -> null))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }

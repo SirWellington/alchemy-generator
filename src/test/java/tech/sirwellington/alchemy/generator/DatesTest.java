@@ -31,6 +31,8 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
@@ -174,7 +176,7 @@ public class DatesTest
     {
         System.out.println("testIsNow_Date_long");
 
-        assertThrows(() -> Dates.isNow(null, 0))
+        assertThrows(() -> Dates.isNow((Date) null, 0))
                 .isInstanceOf(IllegalArgumentException.class);
 
         Date now = Dates.now();
@@ -185,6 +187,24 @@ public class DatesTest
         Thread.sleep(1);
         assertThat(Dates.isNow(now, 0), is(false));
 
+    }
+
+    @Test
+    public void testIsNow_Instant_long() throws Exception
+    {
+        System.out.println("testIsNow_Instant_long");
+
+        assertThrows(() -> Dates.isNow((Instant) null, 0))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(() -> Dates.isNow(Instant.now(), one(negativeIntegers())))
+                .isInstanceOf(IllegalArgumentException.class);
+
+        Instant now = Instant.now();
+        assertThat(Dates.isNow(now, 10), is(true));
+        
+        Thread.sleep(1);
+        assertThat(Dates.isNow(now, 0), is(false));
     }
 
 }

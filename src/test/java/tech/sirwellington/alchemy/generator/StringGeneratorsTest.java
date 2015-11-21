@@ -20,10 +20,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +31,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -50,6 +49,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
+import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -59,21 +60,24 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 public class StringGeneratorsTest
 {
 
-    private int iterations;
 
     @Before
     public void setUp()
     {
-        iterations = RandomUtils.nextInt(500, 5000);
     }
 
-    private void doInLoop(Consumer<Integer> function)
+    @Test
+    public void testCannotInstantiate()
     {
-        for (int i = 0; i < iterations; ++i)
-        {
-            function.accept(i);
-        }
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new StringGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> StringGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
+
 
     @Test
     public void testStrings()
@@ -102,15 +106,14 @@ public class StringGeneratorsTest
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testStringsWithBadSize()
     {
         System.out.println("testStringsWithBadSize");
 
         int length = one(negativeIntegers());
-        AlchemyGenerator<String> instance = StringGenerators.strings(length);
-        assertNotNull(instance);
-        instance.get();
+        assertThrows(() -> StringGenerators.strings(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -128,20 +131,20 @@ public class StringGeneratorsTest
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testHexadecimalStringWithBadSize()
     {
         System.out.println("testHexadecimalStringWithBadSize");
 
         int length = -90;
-        AlchemyGenerator<String> instance = StringGenerators.hexadecimalString(length);
-        instance.get();
+        assertThrows(() -> StringGenerators.hexadecimalString(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testAlphabeticString_int()
+    public void testAlphabeticStringWithLength()
     {
-        System.out.println("testAlphabeticString");
+        System.out.println("testAlphabeticStringWithLength");
 
         int length = one(integers(40, 100));
 
@@ -150,7 +153,7 @@ public class StringGeneratorsTest
         doInLoop(i ->
         {
             String value = instance.get();
-            assertTrue(value.length() == length);
+            assertThat(value.length(), is(length));
         });
     }
 
@@ -164,18 +167,53 @@ public class StringGeneratorsTest
         doInLoop(i ->
         {
             String value = instance.get();
-            assertThat(StringUtils.isEmpty(value), is(false));
+            assertThat(value, not(isEmptyString()));
         });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testAlphabeticStringWithBadSize()
     {
         System.out.println("testAlphabeticStringWithBadSize");
 
         int length = 0;
-        AlchemyGenerator<String> instance = StringGenerators.alphabeticString(length);
-        instance.get();
+        assertThrows(() -> StringGenerators.alphabeticString(length))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testAlphanumericString()
+    {
+        System.out.println("testAlphanumericString");
+
+        AlchemyGenerator<String> instance = StringGenerators.alphanumericString();
+
+        doInLoop(i ->
+        {
+            String value = instance.get();
+            assertThat(value, not(isEmptyString()));
+            assertThat(value.length(), greaterThanOrEqualTo(10));
+            assertThat(value.length(), lessThanOrEqualTo(100));
+        });
+    }
+
+    @Test
+    public void testAlphanumericStringWithLength()
+    {
+        System.out.println("testAlphanumericStringWithLength");
+
+        int length = one(integers(10, 100));
+        AlchemyGenerator<String> instance = StringGenerators.alphanumericString(length);
+
+        doInLoop(i ->
+        {
+            String value = instance.get();
+            assertThat(value.length(), is(length));
+        });
+
+        //Edge cases
+        assertThrows(() -> StringGenerators.alphabeticString(one(negativeIntegers())))
+        .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -185,17 +223,17 @@ public class StringGeneratorsTest
 
         List<String> values = new ArrayList<>();
 
-        for (int i = 0; i < iterations; ++i)
+        doInLoop(i ->
         {
             values.add(RandomStringUtils.randomAlphabetic(i + 1));
-        }
+        });
         AlchemyGenerator<String> instance = StringGenerators.stringsFromFixedList(values);
 
-        for (int i = 0; i < iterations; ++i)
+        doInLoop(i ->
         {
             String value = instance.get();
             assertTrue(values.contains(value));
-        }
+        });
     }
 
     @Test
@@ -251,8 +289,8 @@ public class StringGeneratorsTest
         {
             String value = instance.get();
             assertThat(value, notNullValue());
-            assertThat(value.length(), greaterThanOrEqualTo(5));
-            assertThat(value.length(), lessThanOrEqualTo(20));
+            assertThat(value.length(), greaterThanOrEqualTo(10));
+            assertThat(value.length(), lessThanOrEqualTo(100));
         });
 
     }
@@ -266,14 +304,17 @@ public class StringGeneratorsTest
 
         AlchemyGenerator<String> instance = StringGenerators.uuids;
 
+        AtomicInteger iterations = new AtomicInteger();
         doInLoop(i ->
         {
             String value = instance.get();
             assertThat(value, notNullValue());
             assertThat(value.isEmpty(), is(false));
             uuids.add(value);
+            iterations.incrementAndGet();
         });
-        assertThat(uuids.size(), is(iterations));
+        
+        assertThat(uuids.size(), is(iterations.get()));
     }
 
     @Test

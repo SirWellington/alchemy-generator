@@ -13,25 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomUtils;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import org.junit.After;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
+import static tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 import static tech.sirwellington.alchemy.generator.StringGenerators.uuids;
+import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -49,15 +58,22 @@ public class CollectionGeneratorsTest
         iterations = RandomUtils.nextInt(500, 5000);
     }
 
-    @After
-    public void tearDown()
+    @Test
+    public void testCannotInstantiate()
     {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new CollectionGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> CollectionGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
-    public void testListOf_DataGenerator()
+    public void testListOf_AlchemyGenerator()
     {
-        System.out.println("testListOf_DataGenerator");
+        System.out.println("testListOf_AlchemyGenerator");
 
         Object value = new Object();
         AlchemyGenerator generator = mock(AlchemyGenerator.class);
@@ -69,9 +85,9 @@ public class CollectionGeneratorsTest
     }
 
     @Test
-    public void testListOf_DataGenerator_int()
+    public void testListOf_AlchemyGenerator_int()
     {
-        System.out.println("testListOf_DataGenerator_int");
+        System.out.println("testListOf_AlchemyGenerator_int");
 
         Object value = new Object();
         int size = 50;
@@ -84,10 +100,10 @@ public class CollectionGeneratorsTest
     }
 
     @Test
-    public void testMapOf()
+    public void testMapOfWithInt()
     {
-        System.out.println("testMapOf");
-        
+        System.out.println("testMapOfWithInt");
+
         String string = strings(50).get();
         AlchemyGenerator<String> valueGenerator = () -> string;
         int size = integers(5, 100).get();
@@ -102,6 +118,52 @@ public class CollectionGeneratorsTest
             assertThat(entry.getValue(), is(string));
         }
 
+    }
+
+    @Test
+    public void testConvenienceMapOf()
+    {
+        System.out.println("testConvenienceMapOf");
+
+        AlchemyGenerator<String> keyGenerator = mock(AlchemyGenerator.class);
+        AlchemyGenerator<Integer> valueGenerator = mock(AlchemyGenerator.class);
+
+        when(keyGenerator.get())
+                .thenAnswer(invk -> one(strings()));
+
+        when(valueGenerator.get())
+                .thenAnswer(invk -> one(positiveIntegers()));
+
+        Map result = CollectionGenerators.mapOf(keyGenerator, valueGenerator);
+        assertThat(result, notNullValue());
+        assertThat(result.isEmpty(), is(false));
+
+        //'At least', in case duplicate entries were generated
+        verify(keyGenerator, atLeast(result.size())).get();
+        verify(valueGenerator, atLeast(result.size())).get();
+    }
+
+    @Test
+    public void testFromList()
+    {
+        System.out.println("testFromList");
+
+        List<String> list = new ArrayList<>();
+
+        int size = one(integers(10, 100));
+        for (int i = 0; i < size; ++i)
+        {
+            list.add(one(hexadecimalString(15)));
+        }
+
+        AlchemyGenerator<String> instance = CollectionGenerators.fromList(list);
+        assertThat(instance, notNullValue());
+        
+        doInLoop(i ->
+        {
+            String value = instance.get();
+            assertThat(list.contains(value), is(true));
+        });
     }
 
 }

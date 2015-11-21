@@ -16,15 +16,17 @@
 package tech.sirwellington.alchemy.generator;
 
 import org.apache.commons.lang3.RandomUtils;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -43,8 +45,15 @@ public class BinaryGeneratorsTest
     }
 
     @Test
-    public void testSomeMethod()
+    public void testCannotInstantiate()
     {
+        System.out.println("testCannotInstantiate");
+
+        assertThrows(() -> new BinaryGenerators())
+                .isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(() -> BinaryGenerators.class.newInstance())
+                .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test

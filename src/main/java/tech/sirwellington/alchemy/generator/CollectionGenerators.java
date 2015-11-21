@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package tech.sirwellington.alchemy.generator;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -29,9 +31,9 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
- * {@linkplain AlchemyGenerator Alchemy Generators} for Java Collections. These generators are
- * useful in conjuction with other {@linkplain AlchemyGenerator Generators}, such as those in
- * {@link NumberGenerators} or {@link StringGenerators}.
+ * {@linkplain AlchemyGenerator Alchemy Generators} for Java Collections. These generators are useful in conjuction with
+ * other {@linkplain AlchemyGenerator Generators}, such as those in {@link NumberGenerators} or
+ * {@link StringGenerators}.
  *
  * @see StringGenerators
  * @see NumberGenerators
@@ -45,7 +47,7 @@ public final class CollectionGenerators
 
     private final static Logger LOG = LoggerFactory.getLogger(CollectionGenerators.class);
 
-    private CollectionGenerators() throws IllegalAccessException
+    CollectionGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }
@@ -58,7 +60,7 @@ public final class CollectionGenerators
      *
      * @return A list of random values, the length of which will vary.
      */
-    public static <T> List<T> listOf(AlchemyGenerator<T> generator)
+    public static <T> List<T> listOf(@NonNull AlchemyGenerator<T> generator)
     {
         return listOf(generator, one(integers(5, 200)));
     }
@@ -74,7 +76,7 @@ public final class CollectionGenerators
      *
      * @throws IllegalArgumentException if size is less than 1.
      */
-    public static <T> List<T> listOf(AlchemyGenerator<T> generator, int size)
+    public static <T> List<T> listOf(@NonNull AlchemyGenerator<T> generator, int size)
     {
         checkThat(size > 0, "Size must be at least 1");
         checkNotNull(generator, "generator is null");
@@ -84,6 +86,46 @@ public final class CollectionGenerators
             list.add(generator.get());
         }
         return list;
+    }
+
+    /**
+     * An {@link AlchemyGenerator} that returns values from a fixed list.
+     *
+     * @param <T>
+     * @param list
+     *
+     * @throws IllegalArgumentException
+     */
+    public static <T> AlchemyGenerator<T> fromList(@NonNull List<T> list) throws IllegalArgumentException
+    {
+        checkNotNull(list, "list cannot be null");
+        checkThat(!list.isEmpty(), "list has no elements");
+
+        return () ->
+        {
+            int index = one(integers(0, list.size()));
+            return list.get(index);
+        };
+
+    }
+
+    /**
+     * Convenience method for 
+     * {@link #mapOf(tech.sirwellington.alchemy.generator.AlchemyGenerator, tech.sirwellington.alchemy.generator.AlchemyGenerator, int) }.
+     * Maps returned will vary in size.
+     *
+     * @param <K>
+     * @param <V>
+     * @param keyGenerator
+     * @param valueGenerator
+     *
+     * @return
+     * @throws IllegalArgumentException
+     */
+    public static <K, V> Map<K, V> mapOf(@NonNull AlchemyGenerator<K> keyGenerator, @NonNull AlchemyGenerator<V> valueGenerator) throws IllegalArgumentException
+    {
+        int size = one(integers(5, 100));
+        return mapOf(keyGenerator, valueGenerator, size);
     }
 
     /**
@@ -97,12 +139,14 @@ public final class CollectionGenerators
      * @param size           The exact size of the created map
      *
      * @return Map generated from the parameters specified.Ï
+     * @throws IllegalArgumentException
      */
-    public static <K, V> Map<K, V> mapOf(AlchemyGenerator<K> keyGenerator, AlchemyGenerator<V> valueGenerator, int size)
+    public static <K, V> Map<K, V> mapOf(@NonNull AlchemyGenerator<K> keyGenerator, @NonNull AlchemyGenerator<V> valueGenerator, int size) throws IllegalArgumentException
     {
         checkThat(size > 0, "size must be at least 1");
         checkNotNull(keyGenerator);
         checkNotNull(valueGenerator);
+
         Map<K, V> map = new HashMap<>(size);
 
         for (int i = 0; i < size; ++i)
@@ -114,6 +158,6 @@ public final class CollectionGenerators
 
         return map;
     }
-    
+
     //TODO:  Add a [fromList] generator
 }
