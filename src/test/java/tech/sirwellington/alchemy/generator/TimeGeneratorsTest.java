@@ -64,8 +64,7 @@ public class TimeGeneratorsTest
         doInLoop(i ->
         {
             Instant result = instance.get();
-            assertThat(result, notNullValue());
-            assertThat(Dates.isNow(result, 15), is(true));
+            assertThat(Dates.isNow(result, 20), is(true));
         });
     }
 
