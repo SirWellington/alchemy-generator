@@ -51,8 +51,7 @@ public final class PeopleGenerators
 
     /**
      * Generates a "names". There are no guarantees on the names except that it is an
- {@linkplain StringGenerators#alphabeticString() Alphabetic String} where the first letter
-     * is capitalized.
+     * {@linkplain StringGenerators#alphabeticString() Alphabetic String} where the first letter is capitalized.
      */
     public static AlchemyGenerator<String> names()
     {
