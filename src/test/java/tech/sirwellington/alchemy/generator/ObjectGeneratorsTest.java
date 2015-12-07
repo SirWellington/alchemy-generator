@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package tech.sirwellington.alchemy.generator;
 
 import java.time.Instant;
@@ -105,11 +104,11 @@ public class ObjectGeneratorsTest
         AlchemyGenerator<CityBlock> generator = ObjectGenerators.pojos(CityBlock.class);
         assertThat(generator, notNullValue());
         
-//        Tests.doInLoop(i ->
-//        {
+        Tests.doInLoop(i ->
+        {
             CityBlock result = generator.get();
             checkCityBlock(result);
-//        });
+        });
     }
     
     @Test
@@ -125,15 +124,15 @@ public class ObjectGeneratorsTest
         primitives.add(String.class);
         primitives.add(Date.class);
         primitives.add(Instant.class);
-
+        
         primitives.forEach(p ->
-            {
-                assertThrows(() -> ObjectGenerators.pojos(p))
-                    .isInstanceOf(IllegalArgumentException.class);
-            });
-
+        {
+            assertThrows(() -> ObjectGenerators.pojos(p))
+                .isInstanceOf(IllegalArgumentException.class);
+        });
+        
     }
-
+    
     @Test
     public void testPojosRejectsNonInstantiables()
     {
@@ -150,7 +149,7 @@ public class ObjectGeneratorsTest
         assertThrows(() -> ObjectGenerators.pojos(ExampleNonInstantiable.class))
             .isInstanceOf(IllegalArgumentException.class);
     }
-
+    
     @Test
     public void testPojosCustom()
     {
@@ -211,6 +210,7 @@ public class ObjectGeneratorsTest
     
     private static class Computer
     {
+        
         private String name;
         private String model;
         private int year;
@@ -231,10 +231,9 @@ public class ObjectGeneratorsTest
         private static String staticField = ObjectGeneratorsTest.staticField;
     }
     
-    
-    
     private static class Building
     {
+        
         private List<Person> people;
         private String address;
         private int age;
