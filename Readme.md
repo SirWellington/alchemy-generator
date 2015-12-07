@@ -5,7 +5,7 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-[![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
+[![Build Status](http://jenkins.sirwellington.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.sirwellington.tech/job/Alchemy%20Generator/)
 
 - [Purpose](#purpose)
 - [Download](#download)
