@@ -101,13 +101,13 @@ public class ObjectGeneratorsTest
     {
         System.out.println("testPojosWithMap");
         
-        AlchemyGenerator<CityBlock> generator = ObjectGenerators.pojos(CityBlock.class);
+        AlchemyGenerator<AddressBook> generator = ObjectGenerators.pojos(AddressBook.class);
         assertThat(generator, notNullValue());
         
         Tests.doInLoop(i ->
         {
-            CityBlock result = generator.get();
-            checkCityBlock(result);
+            AddressBook result = generator.get();
+            checkAddressBook(result);
         });
     }
     
@@ -188,24 +188,16 @@ public class ObjectGeneratorsTest
         building.people.forEach(this::checkPerson);
     }
     
-    private void checkCityBlock(CityBlock cityBlock)
+    private void checkAddressBook(AddressBook addressBook)
     {
-        assertThat(cityBlock, notNullValue());
-        assertThat(cityBlock.name, not(isEmptyOrNullString()));
-        assertThat(cityBlock.distance, greaterThan(0));
-        
-        assertThat(cityBlock.homes, notNullValue());
-        assertThat(cityBlock.stores, notNullValue());
-        assertThat(cityBlock.computerMap, notNullValue());
-        
-        assertThat(cityBlock.homes.size(), greaterThan(0));
-        assertThat(cityBlock.stores.size(), greaterThan(0));
-        assertThat(cityBlock.computerMap.size(), greaterThan(0));
-        
-        cityBlock.homes.forEach(this::checkBuilding);
-        cityBlock.stores.forEach(this::checkBuilding);
-        cityBlock.computerMap.keySet().forEach(s -> assertThat(s, not(isEmptyOrNullString())));
-        cityBlock.computerMap.values().forEach(this::checkComputer);
+        assertThat(addressBook, notNullValue());
+        assertThat(addressBook.directory, notNullValue());
+        assertThat(addressBook.directory.size(), greaterThan(0));
+        addressBook.directory.keySet().forEach(key -> 
+        {
+            assertThat(key, not(isEmptyOrNullString()));
+        });
+        addressBook.directory.values().forEach(this::checkBuilding);
     }
     
     private static class Computer
@@ -240,15 +232,10 @@ public class ObjectGeneratorsTest
         private int floors;
     }
     
-    private static class CityBlock
+    private static class AddressBook
     {
-        
-        private List<Building> stores;
-        private List<Building> homes;
-        private Map<String, Computer> computerMap;
-        private int distance;
-        private String name;
-        
+
+        private Map<String, Building> directory;
     }
     
 }
