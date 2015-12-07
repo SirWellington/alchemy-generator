@@ -255,6 +255,10 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
 # Release Notes
 
+# 1.3
++ Added Automatic POJO Generation.
+    This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
+
 ## 1.2
 + Added Alphanumeric Strings
 + New People Information Generators
