@@ -112,6 +112,18 @@ public class ObjectGeneratorsTest
     }
     
     @Test
+    public void testComplexPojo()
+    {
+        System.out.println("testComplexPojo");
+        
+        AlchemyGenerator<CityBlock> generator = ObjectGenerators.pojos(CityBlock.class);
+        assertThat(generator, notNullValue());
+
+        CityBlock result = generator.get();
+        checkCityBlock(result);
+    }
+    
+    @Test
     public void testPojosRejectsPrimitives()
     {
         System.out.println("testPojosRejectsPrimitives");
@@ -193,11 +205,31 @@ public class ObjectGeneratorsTest
         assertThat(addressBook, notNullValue());
         assertThat(addressBook.directory, notNullValue());
         assertThat(addressBook.directory.size(), greaterThan(0));
-        addressBook.directory.keySet().forEach(key -> 
+        addressBook.directory.keySet().forEach(key ->
         {
             assertThat(key, not(isEmptyOrNullString()));
         });
         addressBook.directory.values().forEach(this::checkBuilding);
+    }
+    
+    private void checkCityBlock(CityBlock cityBlock)
+    {
+        assertThat(cityBlock, notNullValue());
+        assertThat(cityBlock.name, not(isEmptyOrNullString()));
+        assertThat(cityBlock.distance, greaterThan(0));
+        
+        assertThat(cityBlock.homes, notNullValue());
+        assertThat(cityBlock.stores, notNullValue());
+        assertThat(cityBlock.internetUsers, notNullValue());
+        
+        assertThat(cityBlock.homes.size(), greaterThan(0));
+        assertThat(cityBlock.stores.size(), greaterThan(0));
+        assertThat(cityBlock.internetUsers.size(), greaterThan(0));
+        
+        cityBlock.homes.forEach(this::checkBuilding);
+        cityBlock.stores.forEach(this::checkBuilding);
+        cityBlock.internetUsers.keySet().forEach(this::checkPerson);
+        cityBlock.internetUsers.values().forEach(this::checkComputer);
     }
     
     private static class Computer
@@ -234,8 +266,16 @@ public class ObjectGeneratorsTest
     
     private static class AddressBook
     {
-
+        
         private Map<String, Building> directory;
     }
     
+    private static class CityBlock
+    {
+        private String name;
+        private int distance;
+        private List<Building> homes;
+        private List<Building> stores;
+        private Map<Person, Computer> internetUsers;
+    }
 }
