@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,8 @@ public final class ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(Integer.class, NumberGenerators.smallPositiveIntegers());
         DEFAULT_GENERATOR_MAPPINGS.put(Long.class, NumberGenerators.positiveLongs());
         DEFAULT_GENERATOR_MAPPINGS.put(Double.class, NumberGenerators.positiveDoubles());
+        DEFAULT_GENERATOR_MAPPINGS.put(Date.class, DateGenerators.anyTime());
+        DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anytime());
     }
 
     ObjectGenerators() throws IllegalAccessException
@@ -74,7 +77,8 @@ public final class ObjectGenerators
 
     /**
      * Use at your own risk! This {@link AlchemyGenerator } Inflates a Basic POJO
-     * Object with randomly generated values. 
+     * Object with randomly generated values.  Do not use this to generate Primitive types;
+     * use instead the Alchemy Generators carefully designed and crafted for Primitives.
      * <p>
      * The basic rules for the POJO are the following.
      * Each field must be:
@@ -91,10 +95,49 @@ public final class ObjectGenerators
      * <li> A {@link Set} with a Type Parameter matching the above.
      * <li> A {@link Map} with Type Parameters matching the above conditions.
      * </ul>
+     * <p>
+     * Valid Examples:
+     * <pre>
+     * {@code
      * 
+     * private class Computer
+     * {
+     *      private Date releaseDate;
+     *      private String name;
+     *      private String manufacturer;
+     *      private double cost;
+     * }
+     * 
+     * private class Person
+     * {
+     *      private String name;
+     *      private int age;
+     *      private double money;
+     *      private Computer computer;
+     * }
+     * 
+     * private class Company
+     * {
+     * 
+     *      private String name;
+     *      private int numberOfEmployees;
+     *      private List<Person> employees;
+     * }
+     * 
+     * private class CompanyIndex
+     * {
+     *      private String indexName;
+     *      private Map<String, Company> index;
+     * }
+     * }
+     * </pre>
      * @param <T>
      * @param classOfPojo
      * @return 
+     * @see StringGenerators
+     * @see NumberGenerators
+     * @see DateGenerators
+     * @see TimeGenerators
      */
     public static <T> AlchemyGenerator<T> pojos(Class<T> classOfPojo)
     {
@@ -112,35 +155,31 @@ public final class ObjectGenerators
         List<Field> validFields = Arrays.asList(classOfPojo.getDeclaredFields())
             .stream()
             .filter(f -> !isStatic(f))
+            .filter(f -> !isFinal(f))
             .collect(Collectors.toList());
 
         return () ->
+        {
+            
+            T instance;
+            try
             {
-                T instance;
-                try
-                {
-                    instance = instantiate(classOfPojo);
-                }
-                catch (Exception ex)
-                {
-                    LOG.error("Failed to instantiate {}", classOfPojo.getName(), ex);
-                    return null;
-                }
+                instance = instantiate(classOfPojo);
+            }
+            catch (Exception ex)
+            {
+                LOG.error("Failed to instantiate {}", classOfPojo.getName(), ex);
+                return null;
+            }
+            
+            for (Field field : validFields)
+            {
+                tryInjectField(instance, field, customMappings);
+            }
+            
+            return instance;
+        };
 
-                for (Field field : validFields)
-                {
-                    tryInjectField(instance, field, customMappings);
-                }
-
-                return instance;
-            };
-
-    }
-
-    private static boolean isStatic(Field field)
-    {
-        int modifiers = field.getModifiers();
-        return Modifier.isStatic(modifiers);
     }
 
     private static <T> boolean canInstantiate(Class<T> classOfPojo)
@@ -155,6 +194,18 @@ public final class ObjectGenerators
             LOG.warn("cannot instatiate {}", classOfPojo, ex);
             return false;
         }
+    }
+
+    private static boolean isStatic(Field field)
+    {
+        int modifiers = field.getModifiers();
+        return Modifier.isStatic(modifiers);
+    }
+
+    private static boolean isFinal(Field field)
+    {
+        int modifiers = field.getModifiers();
+        return Modifier.isFinal(modifiers);
     }
 
     private static <T> T instantiate(Class<T> classOfT) throws NoSuchMethodException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
@@ -206,32 +257,17 @@ public final class ObjectGenerators
 
     private static void injectField(Object pojo, Field field, Map<Class<?>, AlchemyGenerator<?>> generatorMappings) throws IllegalArgumentException, IllegalAccessException
     {
-        Class<?> type = field.getType();
-        type = ClassUtils.primitiveToWrapper(type);
+        Class<?> typeOfField = field.getType();
+        typeOfField = ClassUtils.primitiveToWrapper(typeOfField);
 
-        AlchemyGenerator<?> generator = generatorMappings.get(type);
+        AlchemyGenerator<?> generator = determineGeneratorFor(typeOfField, field, generatorMappings);
+
         if (generator == null)
         {
-            if (isCollectionType(type))
-            {
-
-                if (lacksGenericTypeArguments(field))
-                {
-                    LOG.warn("POJO {} contains collection field {} which is not type-parametrized. Cannot inject.",
-                             pojo,
-                             field);
-                    return;
-                }
-
-                generator = determineGeneratorForCollectionField(field, type, generatorMappings);
-            }
-            else
-            {
-                //Assume Pojo and recurse
-                generator = pojos(type);
-            }
+            LOG.warn("Could not find a suitable AlchemyGenerator for field {} with type {}", field, typeOfField);
+            return;
         }
-
+        
         Object value = generator.get();
 
         boolean originalAccessibility = field.isAccessible();
@@ -247,11 +283,62 @@ public final class ObjectGenerators
         }
     }
 
+
+    private static AlchemyGenerator<?> determineGeneratorFor(Class<?> typeOfField, Field field, Map<Class<?>, AlchemyGenerator<?>> generatorMappings)
+    {
+        AlchemyGenerator<?> generator = generatorMappings.get(typeOfField);
+        
+        if (generator != null)
+        {
+            //Already found it
+            return generator;
+        }
+
+        if (isCollectionType(typeOfField))
+        {
+
+            if (lacksGenericTypeArguments(field))
+            {
+                LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
+                         field.getDeclaringClass(),
+                         field);
+                
+                return null;
+            }
+
+            generator = determineGeneratorForCollectionField(field, typeOfField, generatorMappings);
+        }
+        else
+        {
+            //Assume Pojo and recurse
+            generator = pojos(typeOfField);
+        }
+        
+        return generator;
+    }
+    
     private static boolean isCollectionType(Class<?> type)
     {
-        return List.class.isAssignableFrom(type) ||
-               Set.class.isAssignableFrom(type);
+        return isListType(type) ||
+               isSetType(type) ||
+               isMapType(type);
     }
+
+    private static boolean isListType(Class<?> type)
+    {
+        return List.class.isAssignableFrom(type);
+    }
+
+    private static boolean isSetType(Class<?> type)
+    {
+        return Set.class.isAssignableFrom(type);
+    }
+
+    private static boolean isMapType(Class<?> type)
+    {
+        return Map.class.isAssignableFrom(type);
+    }
+
 
     private static boolean lacksGenericTypeArguments(Field field)
     {
@@ -260,28 +347,60 @@ public final class ObjectGenerators
         return !(genericType instanceof ParameterizedType);
     }
 
-    private static AlchemyGenerator<?>  determineGeneratorForCollectionField(Field collectionField, Class<?> collectionType, Map<Class<?>, AlchemyGenerator<?>> generatorMappings)
+    private static AlchemyGenerator<?> determineGeneratorForCollectionField(Field collectionField,
+                                                                            Class<?> collectionType,
+                                                                            Map<Class<?>, AlchemyGenerator<?>> generatorMappings)
     {
+        if (isMapType(collectionType))
+        {
+            return determineGeneratorForMapField(collectionField, collectionType, generatorMappings);
+        }
+
         ParameterizedType parameterizedType = (ParameterizedType) collectionField.getGenericType();
         Class<?> valueType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
 
-        AlchemyGenerator<?> generator = generatorMappings.getOrDefault(valueType, pojos(valueType));
+        AlchemyGenerator<?> generator = generatorMappings.getOrDefault(valueType, 
+                                                                       determineGeneratorFor(valueType, collectionField, generatorMappings));
 
         List<Object> list = new ArrayList<>();
         int size = one(integers(10, 100));
-        
-        for(int i = 0; i < size; ++i)
+
+        for (int i = 0; i < size; ++i)
         {
             list.add(generator.get());
         }
-        
+
         if (Set.class.isAssignableFrom(collectionType))
         {
             Set set = new HashSet<>(list);
             return () -> set;
         }
-        
+
         return () -> list;
+    }
+    
+    private static AlchemyGenerator<?> determineGeneratorForMapField(Field mapField,
+                                                                     Class<?> mapType,
+                                                                     Map<Class<?>, AlchemyGenerator<?>> generatorMappings)
+    {
+        ParameterizedType parameterizedType = (ParameterizedType) mapField.getGenericType();
+        Class<?> keyType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+        Class<?> valueType = (Class<?>) parameterizedType.getActualTypeArguments()[1];
+
+        AlchemyGenerator<?> keyGenerator = generatorMappings.getOrDefault(keyType, 
+                                                                          determineGeneratorFor(keyType, mapField, generatorMappings));
+        AlchemyGenerator<?> valueGenerator = generatorMappings.getOrDefault(valueType, 
+                                                                            determineGeneratorFor(valueType, mapField, generatorMappings));
+
+        Map<Object, Object> map = new HashMap<>();
+        int size = one(integers(10, 100));
+
+        for (int i = 0; i < size; ++i)
+        {
+            map.put(keyGenerator.get(), valueGenerator.get());
+        }
+
+        return () -> map;
     }
 
 }

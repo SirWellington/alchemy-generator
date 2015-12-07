@@ -17,7 +17,12 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import java.time.Instant;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,6 +35,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  *
@@ -37,22 +43,22 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
  */
 public class ObjectGeneratorsTest
 {
-
+    
     private static final String staticField = one(strings());
-
+    
     @Before
     public void setUp()
     {
     }
-
+    
     @Test
     public void testWithSimplePojo()
     {
         System.out.println("testWithSimplePojo");
-
+        
         AlchemyGenerator<Person> generator = ObjectGenerators.pojos(Person.class);
         assertThat(generator, notNullValue());
-
+        
         Tests.doInLoop(i ->
         {
             Person result = generator.get();
@@ -68,7 +74,7 @@ public class ObjectGeneratorsTest
         AlchemyGenerator<Computer> generator = ObjectGenerators.pojos(Computer.class);
         assertThat(generator, notNullValue());
         
-        Tests.doInLoop(i -> 
+        Tests.doInLoop(i ->
         {
             Computer computer = generator.get();
             checkComputer(computer);
@@ -83,11 +89,66 @@ public class ObjectGeneratorsTest
         AlchemyGenerator<Building> generator = ObjectGenerators.pojos(Building.class);
         assertThat(generator, notNullValue());
         
-        Tests.doInLoop(i -> 
+        Tests.doInLoop(i ->
         {
             Building result = generator.get();
             checkBuilding(result);
         });
+        
+    }
+    
+    @Test
+    public void testPojosWithMap()
+    {
+        System.out.println("testPojosWithMap");
+        
+        AlchemyGenerator<CityBlock> generator = ObjectGenerators.pojos(CityBlock.class);
+        assertThat(generator, notNullValue());
+        
+//        Tests.doInLoop(i ->
+//        {
+            CityBlock result = generator.get();
+            checkCityBlock(result);
+//        });
+    }
+    
+    @Test
+    public void testPojosRejectsPrimitives()
+    {
+        System.out.println("testPojosRejectsPrimitives");
+        
+        Set<Class<?>> primitives = new HashSet<>();
+        primitives.add(Integer.class);
+        primitives.add(Double.class);
+        primitives.add(Long.class);
+        primitives.add(Character.class);
+        primitives.add(String.class);
+        primitives.add(Date.class);
+        primitives.add(Instant.class);
+
+        primitives.forEach(p ->
+            {
+                assertThrows(() -> ObjectGenerators.pojos(p))
+                    .isInstanceOf(IllegalArgumentException.class);
+            });
+
+    }
+
+    @Test
+    public void testPojosRejectsNonInstantiables()
+    {
+        System.out.println("testPojosRejectsNonInstantiables");
+        
+        class ExampleNonInstantiable
+        {
+            
+            public ExampleNonInstantiable(String argument)
+            {
+            }
+        }
+        
+        assertThrows(() -> ObjectGenerators.pojos(ExampleNonInstantiable.class))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -95,7 +156,7 @@ public class ObjectGeneratorsTest
     {
         System.out.println("testPojosCustom");
     }
-
+    
     private void checkPerson(Person person)
     {
         assertThat(person, notNullValue());
@@ -103,10 +164,10 @@ public class ObjectGeneratorsTest
         assertThat(person.middleName, not(isEmptyOrNullString()));
         assertThat(person.age, not(0));
         assertThat(person.money, not(0.0));
-        assertThat(valueOf(staticField), is(ObjectGeneratorsTest.staticField));
+        assertThat(valueOf(Person.staticField), is(ObjectGeneratorsTest.staticField));
         checkComputer(person.computer);
     }
-
+    
     private void checkComputer(Computer computer)
     {
         assertThat(computer, notNullValue());
@@ -116,7 +177,7 @@ public class ObjectGeneratorsTest
         assertThat(computer.year, greaterThan(0));
         assertThat(computer.cost, greaterThan(0.0));
     }
-
+    
     private void checkBuilding(Building building)
     {
         assertThat(building, notNullValue());
@@ -127,7 +188,27 @@ public class ObjectGeneratorsTest
         assertThat(building.people.size(), greaterThan(0));
         building.people.forEach(this::checkPerson);
     }
-
+    
+    private void checkCityBlock(CityBlock cityBlock)
+    {
+        assertThat(cityBlock, notNullValue());
+        assertThat(cityBlock.name, not(isEmptyOrNullString()));
+        assertThat(cityBlock.distance, greaterThan(0));
+        
+        assertThat(cityBlock.homes, notNullValue());
+        assertThat(cityBlock.stores, notNullValue());
+        assertThat(cityBlock.computerMap, notNullValue());
+        
+        assertThat(cityBlock.homes.size(), greaterThan(0));
+        assertThat(cityBlock.stores.size(), greaterThan(0));
+        assertThat(cityBlock.computerMap.size(), greaterThan(0));
+        
+        cityBlock.homes.forEach(this::checkBuilding);
+        cityBlock.stores.forEach(this::checkBuilding);
+        cityBlock.computerMap.keySet().forEach(s -> assertThat(s, not(isEmptyOrNullString())));
+        cityBlock.computerMap.values().forEach(this::checkComputer);
+    }
+    
     private static class Computer
     {
         private String name;
@@ -135,22 +216,22 @@ public class ObjectGeneratorsTest
         private int year;
         private String manufacturer;
         private double cost;
-
+        
     }
-
+    
     private static class Person
     {
-
+        
         public String name;
         public int age;
         private double money;
         private String middleName;
         private Computer computer;
-
+        
         private static String staticField = ObjectGeneratorsTest.staticField;
     }
     
-
+    
     
     private static class Building
     {
@@ -159,5 +240,16 @@ public class ObjectGeneratorsTest
         private int age;
         private int floors;
     }
-
+    
+    private static class CityBlock
+    {
+        
+        private List<Building> stores;
+        private List<Building> homes;
+        private Map<String, Computer> computerMap;
+        private int distance;
+        private String name;
+        
+    }
+    
 }
