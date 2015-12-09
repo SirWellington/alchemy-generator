@@ -241,6 +241,85 @@ String phoneNumber = one(phoneNumberStrings());
 String email = one(emails());
 ```
 
+## POJOs
+
+POJOs are dumb data objects, that is they tend to contain no functionality other than getters/setters and value methods
+like `equals()`, `hashCode()`, and `toString()`. Alchemy Generator provides Automatic Generation of POJOs.
+
+`tech.sirwellington.alchemy.generator.ObjectGenerators`
+
+Let's say you have a class like
+
+```java
+class Computer
+{
+    private int yearReleased;
+    private String modelName;
+    private double cost;
+    private String manufacturer;
+    private String operatingSystem;
+}
+```
+
+Rather than creating Boiler Plate generation code for each pojo, just use the `pojos()` generator.
+
+```
+@Test
+public void testPurchaseOrder()
+{
+    Computer computer = one(pojos(Computer.class));
+    shoppingCart.add(computer);
+    shoppingCart.order();
+    ...
+}
+```
+### Nested POJOs
+
+The POJO generator contains a sophisticated recursive algorithm to generate complex hierarchies of POJOs,
+as long as it all eventually boils to down to primitive types (Integer, String, Double, Long, Date, etc).
+
+```java
+class Developer
+{
+    private String name;
+    private String alias;
+    private int age;
+    private Computer developerMachine;
+    private Computer serverMachine;
+}
+
+Developer developer = one(pojos(Developer.class));
+
+assertThat(developer, notNullValue());
+assertThat(developer.name, not(isEmptyOrNullString()));
+assertThat(developer.age, greaterThan(0));
+assertThat(developer.developerMachine, notNullValue());
+...
+```
+
+> IMPORTANT: There can be NO circular references. A Computer cannot contain a Developer at the same time that Developer contains Computer.
+> This would cause a StackOverflow.
+
+### Collections
+
+The POJO Generator also handles Generic `List`, `Set`, and `Map` types that contain either Primitive Types, or other POJOs.
+```java
+class City
+{
+    private String name;
+    private long population;
+    private List<Developer> developersInTown;
+    private Map<String, Building> addressDirectory;
+}
+
+City sampleCity = one(pojos(City.class));
+```
+
+> IMPORTANT: Complicated and nested data structures increase the amount of time of Object Generation, since for each
+> Collection, the algorithm must recurse to generate more POJOs for the collection.
+> This library was for Unit Testing purposes, however, and so performance is less important.
+
+
 # Requirements
 
 + Java 8
@@ -258,6 +337,17 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 # 1.3
 + Added Automatic POJO Generation.
     This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
+    ```java
+    class City
+    {
+        private String name;
+        private long population;
+        private List<Developer> developersInTown;
+        private Map<String, Building> addressDirectory;
+    }
+
+    City sampleCity = one(pojos(City.class));
+    ```
 
 ## 1.2
 + Added Alphanumeric Strings
