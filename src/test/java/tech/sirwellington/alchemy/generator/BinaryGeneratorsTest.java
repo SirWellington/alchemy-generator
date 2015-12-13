@@ -15,6 +15,7 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.nio.ByteBuffer;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,9 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
@@ -57,20 +60,70 @@ public class BinaryGeneratorsTest
     }
 
     @Test
-    public void testBinaryGenerator()
+    public void testBinary()
     {
-        System.out.println("binaryGenerator");
+        System.out.println("testBinary");
+        
         int bytes = integers(50, 5000).get();
         AlchemyGenerator<byte[]> instance = BinaryGenerators.binary(bytes);
 
         assertNotNull(instance);
 
-        for (int i = 0; i < iterations; ++i)
+        Tests.doInLoop(i -> 
         {
             byte[] value = instance.get();
             assertThat(value, notNullValue());
             assertThat(value.length, is(bytes));
-        }
+        });
+    }
+    
+    @Test
+    public void testBinaryEdgeCases()
+    {
+        System.out.println("testBinaryGeneratorEdgeCases");
+        
+        
+        AlchemyGenerator<byte[]> instance = BinaryGenerators.binary(0);
+        assertThat(instance, notNullValue());
+        byte[] result = instance.get();
+        assertThat(result, notNullValue());
+        assertThat(result.length, is(0));
+        
+        int length = one(negativeIntegers());
+        assertThrows(() -> BinaryGenerators.binary(length))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testByteBuffers()
+    {
+        System.out.println("testByteBuffers");
+        
+        int size = one(integers(10, 1_000));
+        AlchemyGenerator<ByteBuffer> instance = BinaryGenerators.byteBuffers(size);
+        assertThat(instance, notNullValue());
+        
+        Tests.doInLoop(i ->
+        {
+            ByteBuffer result = instance.get();
+            assertThat(result, notNullValue());
+            assertThat(result.limit(), is(size));
+            assertThat(result.array().length, is(size));
+        });
+    }
+    
+    @Test
+    public void testByteBuffersEdgeCases()
+    {
+        System.out.println("testByteBuffersEdgeCases");
+        
+        int size = one(negativeIntegers());
+        assertThrows(() -> BinaryGenerators.byteBuffers(size))
+            .isInstanceOf(IllegalArgumentException.class);
+        
+        ByteBuffer result = BinaryGenerators.byteBuffers(0).get();
+        assertThat(result, notNullValue());
+        assertThat(result.limit(), is(0));
     }
 
 }

@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +69,7 @@ public final class ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(Double.class, NumberGenerators.positiveDoubles());
         DEFAULT_GENERATOR_MAPPINGS.put(Date.class, DateGenerators.anyTime());
         DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anytime());
+        DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.binary(0));
     }
 
     ObjectGenerators() throws IllegalAccessException

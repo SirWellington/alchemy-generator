@@ -5,9 +5,16 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-[![Build Status](http://jenkins.sirwellington.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.sirwellington.tech/job/Alchemy%20Generator/)
+# Purpose
+Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
-- [Purpose](#purpose)
+Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
+and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
 - [Download](#download)
   - [Release](#release)
   - [Snapshot](#snapshot)
@@ -24,6 +31,9 @@ Alchemy Generator
     - [Any String](#any-string)
     - [UUIDs](#uuids)
     - [From Fixed Set](#from-fixed-set)
+  - [Binary](#binary)
+    - [byte[]](#byte)
+    - [ByteBuffer](#bytebuffer)
   - [Collections](#collections)
     - [Lists](#lists)
     - [Maps](#maps)
@@ -32,20 +42,20 @@ Alchemy Generator
     - [Generators for `Date` type:](#generators-for-date-type)
   - [Enums](#enums)
   - [People](#people)
+  - [POJOs](#pojos)
+    - [Nested POJOs](#nested-pojos)
+    - [Collections](#collections-1)
 - [Requirements](#requirements)
 - [Building](#building)
 - [Feature Requests](#feature-requests)
 - [Release Notes](#release-notes)
+- [1.3](#13)
   - [1.2](#12)
   - [1.1](#11)
   - [1.0](#10)
 - [License](#license)
 
-# Purpose
-Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
-
-Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
-and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 # Download
@@ -165,6 +175,21 @@ Strings can be generated from a preselected set of String values.
 ```java
 //The generated strings can only be one of the supplied ones.
 String stringFromList = stringsFromFixedList("one", "something else", "Java").get();
+```
+
+## Binary
+`tech.sirwellington.alchemy.generator.BinaryGenerators`
+
+### byte[]
+```java
+byte[] someBinary = one(BinaryGenerators.binary(10_000));
+assertThat(someBinary.length, is(10_000));
+```
+
+### ByteBuffer
+```java
+ByteBuffer buffer = one(BinaryGenerators.byteBuffers(1_000));
+assertThat(buffer, notNullValue());
 ```
 
 ## Collections
