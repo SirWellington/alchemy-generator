@@ -69,7 +69,7 @@ public final class ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(Double.class, NumberGenerators.positiveDoubles());
         DEFAULT_GENERATOR_MAPPINGS.put(Date.class, DateGenerators.anyTime());
         DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anytime());
-        DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.binary(0));
+        DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.byteBuffers(333));
     }
 
     ObjectGenerators() throws IllegalAccessException

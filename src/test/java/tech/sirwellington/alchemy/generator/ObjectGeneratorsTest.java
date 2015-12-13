@@ -16,6 +16,7 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashSet;
@@ -218,6 +219,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.name, not(isEmptyOrNullString()));
         assertThat(cityBlock.distance, greaterThan(0));
         assertThat(cityBlock.state, notNullValue());
+        assertThat(cityBlock.memory, notNullValue());
         
         assertThat(cityBlock.homes, notNullValue());
         assertThat(cityBlock.stores, notNullValue());
@@ -226,6 +228,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.homes.size(), greaterThan(0));
         assertThat(cityBlock.stores.size(), greaterThan(0));
         assertThat(cityBlock.internetUsers.size(), greaterThan(0));
+        assertThat(cityBlock.memory.limit(), greaterThan(0));
         
         cityBlock.homes.forEach(this::checkBuilding);
         cityBlock.stores.forEach(this::checkBuilding);
@@ -286,5 +289,6 @@ public class ObjectGeneratorsTest
         private List<Building> stores;
         private Map<Person, Computer> internetUsers;
         private State state;
+        private ByteBuffer memory;
     }
 }
