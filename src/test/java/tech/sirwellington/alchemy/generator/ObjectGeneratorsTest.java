@@ -217,6 +217,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock, notNullValue());
         assertThat(cityBlock.name, not(isEmptyOrNullString()));
         assertThat(cityBlock.distance, greaterThan(0));
+        assertThat(cityBlock.state, notNullValue());
         
         assertThat(cityBlock.homes, notNullValue());
         assertThat(cityBlock.stores, notNullValue());
@@ -270,6 +271,13 @@ public class ObjectGeneratorsTest
         private Map<String, Building> directory;
     }
     
+    private static enum State
+    {
+        NY,
+        NJ,
+        CA
+    }
+    
     private static class CityBlock
     {
         private String name;
@@ -277,5 +285,6 @@ public class ObjectGeneratorsTest
         private List<Building> homes;
         private List<Building> stores;
         private Map<Person, Computer> internetUsers;
+        private State state;
     }
 }

@@ -302,7 +302,7 @@ assertThat(developer.developerMachine, notNullValue());
 
 ### Collections
 
-The POJO Generator also handles Generic `List`, `Set`, and `Map` types that contain either Primitive Types, or other POJOs.
+The POJO Generator also handles Generic  `enum`, `List`, `Set`, and `Map` types that contain either Primitive Types, or other POJOs.
 ```java
 class City
 {

@@ -87,9 +87,10 @@ public final class ObjectGenerators
      * <li> Non-Final
      * <li> Primitive type: Integer, Double, etc
      * <li> {@link String} Type
+     * <li> {@linkplain Enum enum} Type
      * <li> {@link Date} Type
      * <li> {@link Instant} Type
-     * <li> Another {@code POJO} That satisfies these rules (embbeded Object)
+     * <li> Another {@code POJO} That satisfies these rules (embedded Object)
      * <li> Non-Circular (Cannot contain circular references). A Stack Overflow will occur otherwise.
      * <li> A {@link List} with a Type Parameter matching the above.
      * <li> A {@link Set} with a Type Parameter matching the above.
@@ -308,6 +309,22 @@ public final class ObjectGenerators
 
             generator = determineGeneratorForCollectionField(field, typeOfField, generatorMappings);
         }
+        else if (isEnumType(typeOfField))
+        {
+            Object[] enumValues = typeOfField.getEnumConstants();
+
+            if (enumValues == null)
+            {
+                LOG.warn("Enum Class {} has no Enum Values: " + typeOfField);
+                return null;
+            }
+         
+            generator = () ->
+            {
+                int position = one(integers(0, enumValues.length));
+                return enumValues[position];
+            };
+        }
         else
         {
             //Assume Pojo and recurse
@@ -401,6 +418,11 @@ public final class ObjectGenerators
         }
 
         return () -> map;
+    }
+
+    private static boolean isEnumType(Class<?> typeOfField)
+    {
+        return typeOfField.isEnum();
     }
 
 }
