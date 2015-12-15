@@ -23,7 +23,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
@@ -223,8 +225,8 @@ public class DateGeneratorsTest
 
             //Check the resulting date
             Date result = instance.get();
-            assertThat(startDate.before(result), is(true));
-            assertThat(endDate.after(result), is(true));
+            assertThat(result.getTime(), greaterThanOrEqualTo(startDate.getTime()));
+            assertThat(result.getTime(), lessThan(endDate.getTime()));
         });
         
     }
