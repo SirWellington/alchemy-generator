@@ -75,7 +75,7 @@ public class DateGeneratorsTest
         {
             Date value = instance.get();
             assertThat(value, notNullValue());
-            assertThat(isNow(value, 15), is(true));
+            assertThat(isNow(value, 50), is(true));
         });
     }
 
