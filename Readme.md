@@ -373,6 +373,11 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
     City sampleCity = one(pojos(City.class));
     ```
++ New Date Generators
+    + `datesBetween()`
++ New Time Generators
+    + `timesBetween()`
+
 
 ## 1.2
 + Added Alphanumeric Strings
