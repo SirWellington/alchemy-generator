@@ -22,14 +22,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
+import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  *
  * @author SirWellington
  */
 @NonInstantiable
+@StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class DateGenerators
 {
 
@@ -86,7 +90,8 @@ public final class DateGenerators
      * Returns dates before the specified reference date.
      *
      * @param referenceDate
-     *
+     * 
+     * @return 
      * @throws IllegalArgumentException
      */
     public static AlchemyGenerator<Date> before(@NonNull Date referenceDate) throws IllegalArgumentException
@@ -102,6 +107,7 @@ public final class DateGenerators
      *
      * @param referenceDate
      *
+     * @return
      * @throws IllegalArgumentException
      */
     public static AlchemyGenerator<Date> after(@NonNull Date referenceDate) throws IllegalArgumentException
@@ -127,6 +133,7 @@ public final class DateGenerators
      *
      * @param generator
      *
+     * @return
      * @throws IllegalArgumentException
      */
     public static AlchemyGenerator<Date> toDate(@NonNull AlchemyGenerator<Instant> generator) throws IllegalArgumentException
@@ -140,4 +147,31 @@ public final class DateGenerators
         };
     }
 
+    
+    /**
+     * Generates Dates between the specified Times.
+     * 
+     * @param startDate Dates produced will be at or after this date.
+     * @param endDate Dates produced will be before this date.
+     * 
+     * @return
+     * @throws IllegalArgumentException If either date is null, or startDate is not before endDate
+     */
+    public static AlchemyGenerator<Date> datesBetween(@NonNull Date startDate, @NonNull Date endDate) throws IllegalArgumentException
+    {
+        checkNotNull(startDate, "startDate is null");
+        checkNotNull(endDate, "endDate is null");
+        checkThat(startDate.before(endDate), "endDate must be after startDate");
+        
+        long startTime = startDate.getTime();
+        long endtime = endDate.getTime();
+        AlchemyGenerator<Long> timestampGenerator = NumberGenerators.longs(startTime, endtime);
+        
+        return () -> 
+        {
+            long timestamp = timestampGenerator.get();
+            return new Date(timestamp);
+        };
+    }
+    
 }

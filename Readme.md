@@ -1,45 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Alchemy Generator](#alchemy-generator)
-  - ["More Data => Better tests"](#more-data--better-tests)
-- [Purpose](#purpose)
-- [Download](#download)
-  - [Release](#release)
-  - [Snapshot](#snapshot)
-- [[Javadocs](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)](#javadocshttpwwwjavadociodoctechsirwellingtonalchemyalchemy-generator)
-- [API](#api)
-- [Numbers](#numbers)
-  - [Integers](#integers)
-  - [Longs](#longs)
-  - [Doubles](#doubles)
-- [Strings](#strings)
-  - [Alphabetical](#alphabetical)
-  - [Alphanumeric](#alphanumeric)
-  - [Hexadecimal](#hexadecimal)
-  - [Any String](#any-string)
-  - [UUIDs](#uuids)
-  - [From Fixed Set](#from-fixed-set)
-- [Collections](#collections)
-  - [Lists](#lists)
-  - [Maps](#maps)
-- [Dates and Times](#dates-and-times)
-  - [Generators for `Instant` type:](#generators-for-instant-type)
-  - [Generators for `Date` type:](#generators-for-date-type)
-- [Enums](#enums)
-- [People](#people)
-- [Requirements](#requirements)
-- [Building](#building)
-- [Feature Requests](#feature-requests)
-- [Release Notes](#release-notes)
-  - [1.2](#12)
-  - [1.1](#11)
-  - [1.0](#10)
-- [License](#license)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Alchemy Generator
 ==============================================
 
@@ -47,13 +5,57 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-[![Build Status](https://travis-ci.org/SirWellington/alchemy-generator.svg)](https://travis-ci.org/SirWellington/alchemy-generator)
-
 # Purpose
 Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
 Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
 and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Download](#download)
+  - [Release](#release)
+  - [Snapshot](#snapshot)
+- [[Javadocs](http://www.javadoc.io/doc/tech.sirwellington.alchemy/alchemy-generator/)](#javadocshttpwwwjavadociodoctechsirwellingtonalchemyalchemy-generator)
+- [API](#api)
+  - [Numbers](#numbers)
+    - [Integers](#integers)
+  - [Longs](#longs)
+    - [Doubles](#doubles)
+  - [Strings](#strings)
+    - [Alphabetical](#alphabetical)
+    - [Alphanumeric](#alphanumeric)
+    - [Hexadecimal](#hexadecimal)
+    - [Any String](#any-string)
+    - [UUIDs](#uuids)
+    - [From Fixed Set](#from-fixed-set)
+  - [Binary](#binary)
+    - [byte[]](#byte)
+    - [ByteBuffer](#bytebuffer)
+  - [Collections](#collections)
+    - [Lists](#lists)
+    - [Maps](#maps)
+  - [Dates and Times](#dates-and-times)
+    - [Generators for `Instant` type:](#generators-for-instant-type)
+    - [Generators for `Date` type:](#generators-for-date-type)
+  - [Enums](#enums)
+  - [People](#people)
+  - [POJOs](#pojos)
+    - [Nested POJOs](#nested-pojos)
+    - [Collections](#collections-1)
+- [Requirements](#requirements)
+- [Building](#building)
+- [Feature Requests](#feature-requests)
+- [Release Notes](#release-notes)
+- [1.3](#13)
+  - [1.2](#12)
+  - [1.1](#11)
+  - [1.0](#10)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
 # Download
@@ -65,7 +67,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.2</version>
+	<version>1.3</version>
 </dependency>
 ```
 
@@ -82,7 +84,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.4-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -94,10 +96,10 @@ API
 
 >Examples use static imports
 
-# Numbers
+## Numbers
 `tech.sirwellington.alchemy.generator.NumberGenerators`
 
-## Integers
+### Integers
 
 ```java
 //A number in the range [-50, 50)
@@ -114,7 +116,7 @@ long somePositiveNumber = positiveLongs().get();
 somePositiveNumber = one(positiveLongs());
 ```
 
-## Doubles
+### Doubles
 ```java
 //A double in the range [0.1, 1999.0]
 AlchemyGenerator<Double> doubleGenerator = doubles(0.1, 1999.0);
@@ -124,27 +126,27 @@ for(int i = 0; i < 100; ++i)
 }
 ```
 
-# Strings
+## Strings
 `tech.sirwellington.alchemy.generator.StringGenerators`
 
-## Alphabetical
+### Alphabetical
 Uses the Latin Alphabet, a-z | A-Z
 
 ```java
 String alphabetical = alphabeticString().get();
 ```
 
-## Alphanumeric
+### Alphanumeric
 Uses the Latin Alphabet, and numbers 1-9.
 ```java
 String alphanumeric = one(alphanumericString());
 ```
-## Hexadecimal
+### Hexadecimal
 ```java
 String hex = hexadecimalString(32).get();
 ```
 
-## Any String
+### Any String
 These strings may have unicode characters as well. These are great for testing against international character sets as well.
 
 ```java
@@ -152,7 +154,7 @@ These strings may have unicode characters as well. These are great for testing a
 String anyCharacterString = strings(30).get();
 assertThat(anyCharacterString.length(), is(30));
 ```
-## UUIDs
+### UUIDs
 Guaranteed unique strings
 
 ```java
@@ -168,24 +170,39 @@ for(int i = 0; i < amount; ++i)
 }
 assertThat(ids.size(), is(amount));
 ```
-## From Fixed Set
+### From Fixed Set
 Strings can be generated from a preselected set of String values.
 ```java
 //The generated strings can only be one of the supplied ones.
 String stringFromList = stringsFromFixedList("one", "something else", "Java").get();
 ```
 
-# Collections
+## Binary
+`tech.sirwellington.alchemy.generator.BinaryGenerators`
+
+### byte[]
+```java
+byte[] someBinary = one(BinaryGenerators.binary(10_000));
+assertThat(someBinary.length, is(10_000));
+```
+
+### ByteBuffer
+```java
+ByteBuffer buffer = one(BinaryGenerators.byteBuffers(1_000));
+assertThat(buffer, notNullValue());
+```
+
+## Collections
 `tech.sirwellington.alchemy.generator.CollectionGenerators`
 
-## Lists
+### Lists
 
 ```java
 List<String> randomStrings = listOf(alphabeticString(20), 100);
 List<Integer> ages = listOf(integers(1, 100));
 ```
 
-## Maps
+### Maps
 ```java
 AlchemyGenerator<String> names = alphabeticalStrings();
 AlchemyGenerator<Integer> ages = integers(1, 100);
@@ -194,9 +211,9 @@ int numberOfPeople = 50;
 Map<String,Integer> ages = mapOf(names, ages, numberOfPeople);
 ```
 
-# Dates and Times
+## Dates and Times
 
-## Generators for `Instant` type:
+### Generators for `Instant` type:
 <br>
 `tech.sirwellington.alchemy.generator.TimeGenerators`
 
@@ -206,7 +223,7 @@ Instant timeInThePast = pastInstants().get();
 Instant timeInTheFuture = futureInstants().get();
 ```
 
-## Generators for `Date` type:
+### Generators for `Date` type:
 <br>
 `tech.sirwellington.alchemy.generator.DateGenerators`
 ```java
@@ -216,7 +233,7 @@ Date dateInTheFuture = one(futureDates());
 ```
 
 
-# Enums
+## Enums
 `tech.sirwellington.alchemy.generator.EnumGenerators`
 
 Sometimes you have an `enum` and you want to randomly access a value from it.
@@ -237,7 +254,7 @@ You want a fruit, but don't care which one?
 Fruit fruit = enumValueOf(Fruit.class).get();
 ```
 
-# People
+## People
 
 Our code very often works people, and information about them
 `tech.sirwellington.alchemy.generator.PeopleGenerators`
@@ -248,6 +265,85 @@ int age = one(adultAges());
 String phoneNumber = one(phoneNumberStrings());
 String email = one(emails());
 ```
+
+## POJOs
+
+POJOs are dumb data objects, that is they tend to contain no functionality other than getters/setters and value methods
+like `equals()`, `hashCode()`, and `toString()`. Alchemy Generator provides Automatic Generation of POJOs.
+
+`tech.sirwellington.alchemy.generator.ObjectGenerators`
+
+Let's say you have a class like
+
+```java
+class Computer
+{
+    private int yearReleased;
+    private String modelName;
+    private double cost;
+    private String manufacturer;
+    private String operatingSystem;
+}
+```
+
+Rather than creating Boiler Plate generation code for each pojo, just use the `pojos()` generator.
+
+```
+@Test
+public void testPurchaseOrder()
+{
+    Computer computer = one(pojos(Computer.class));
+    shoppingCart.add(computer);
+    shoppingCart.order();
+    ...
+}
+```
+### Nested POJOs
+
+The POJO generator contains a sophisticated recursive algorithm to generate complex hierarchies of POJOs,
+as long as it all eventually boils to down to primitive types (Integer, String, Double, Long, Date, etc).
+
+```java
+class Developer
+{
+    private String name;
+    private String alias;
+    private int age;
+    private Computer developerMachine;
+    private Computer serverMachine;
+}
+
+Developer developer = one(pojos(Developer.class));
+
+assertThat(developer, notNullValue());
+assertThat(developer.name, not(isEmptyOrNullString()));
+assertThat(developer.age, greaterThan(0));
+assertThat(developer.developerMachine, notNullValue());
+...
+```
+
+> IMPORTANT: There can be NO circular references. A Computer cannot contain a Developer at the same time that Developer contains Computer.
+> This would cause a StackOverflow.
+
+### Collections
+
+The POJO Generator also handles Generic  `enum`, `List`, `Set`, and `Map` types that contain either Primitive Types, or other POJOs.
+```java
+class City
+{
+    private String name;
+    private long population;
+    private List<Developer> developersInTown;
+    private Map<String, Building> addressDirectory;
+}
+
+City sampleCity = one(pojos(City.class));
+```
+
+> IMPORTANT: Complicated and nested data structures increase the amount of time of Object Generation, since for each
+> Collection, the algorithm must recurse to generate more POJOs for the collection.
+> This library was for Unit Testing purposes, however, and so performance is less important.
+
 
 # Requirements
 
@@ -262,6 +358,28 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
 # Release Notes
+
+# 1.4
+
+# 1.3
++ Added Automatic POJO Generation.
+    This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
+    ```java
+    class City
+    {
+        private String name;
+        private long population;
+        private List<Developer> developersInTown;
+        private Map<String, Building> addressDirectory;
+    }
+
+    City sampleCity = one(pojos(City.class));
+    ```
++ New Date Generators
+    + `datesBetween()`
++ New Time Generators
+    + `timesBetween()`
+
 
 ## 1.2
 + Added Alphanumeric Strings

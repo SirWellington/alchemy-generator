@@ -21,15 +21,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.HOURS;
 import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.time.temporal.ChronoUnit.SECONDS;
+import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 
 /**
  * Generators for {@linkplain Instant Java Instants}.
@@ -37,6 +41,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  * @author SirWellington
  */
 @NonInstantiable
+@StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class TimeGenerators
 {
 
@@ -51,6 +56,8 @@ public final class TimeGenerators
      * Produces {@linkplain Instant Instants} representing the <i>present</i>, i.e <i>now</i>. Note that
      * the 'present'
      * depends on when the Generator is {@linkplain AlchemyGenerator#get() called}.
+     * 
+     * @return 
      */
     public static AlchemyGenerator<Instant> presentInstants()
     {
@@ -59,6 +66,8 @@ public final class TimeGenerators
 
     /**
      * Produces {@linkplain Instant Instants} that are always in the past, i.e. before the present.
+     * 
+     * @return 
      */
     public static AlchemyGenerator<Instant> pastInstants()
     {
@@ -71,6 +80,8 @@ public final class TimeGenerators
 
     /**
      * Produces {@linkplain Instant Instants} that are always in the future, i.e. after the present.
+     * 
+     * @return 
      */
     public static AlchemyGenerator<Instant> futureInstants()
     {
@@ -85,6 +96,9 @@ public final class TimeGenerators
     /**
      * Produces {@linkplain Instant Instants} that are always before the specified time.
      *
+     * @param instant
+     * 
+     * @return 
      * @throws IllegalArgumentException
      */
     public static AlchemyGenerator<Instant> before(@NonNull Instant instant) throws IllegalArgumentException
@@ -112,6 +126,9 @@ public final class TimeGenerators
     /**
      * Produces {@linkplain Instant Instants} that are always after the specified time.
      *
+     * @param instant
+     * 
+     * @return 
      * @throws IllegalArgumentException
      */
     public static AlchemyGenerator<Instant> after(@NonNull Instant instant) throws IllegalArgumentException
@@ -138,6 +155,8 @@ public final class TimeGenerators
 
     /**
      * Produces {@linkplain Instant Instants} from any time, past, present, or future.
+     * 
+     * @return 
      */
     public static AlchemyGenerator<Instant> anytime()
     {
@@ -155,6 +174,33 @@ public final class TimeGenerators
                     return presentInstants().get();
             }
         };
+    }
+    
+    /**
+     * Generates {@linkplain Instant Instants} between the specified times.
+     * 
+     * @param startTime Times produced will come at or after this time.
+     * @param endTime Times produced will come before this time.
+     * 
+     * @return
+     * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
+     */
+    public static AlchemyGenerator<Instant> timesBetween(@NonNull Instant startTime, @NonNull Instant endTime) throws IllegalArgumentException
+    {
+        checkNotNull(startTime, "startTime is null");
+        checkNotNull(endTime, "endTime is null");
+        checkThat(startTime.isBefore(endTime), "startTime must be before endTime");
+        
+        long epochOfStart = startTime.toEpochMilli();
+        long epochOfEnd = endTime.toEpochMilli();
+        AlchemyGenerator<Long> timestampGenerator = longs(epochOfStart, epochOfEnd);
+        
+        return () ->
+        {
+            long timestamp = timestampGenerator.get();
+            return Instant.ofEpochMilli(timestamp);
+        };
+        
     }
 
 }

@@ -23,13 +23,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
@@ -72,7 +75,7 @@ public class DateGeneratorsTest
         {
             Date value = instance.get();
             assertThat(value, notNullValue());
-            assertThat(isNow(value, 15), is(true));
+            assertThat(isNow(value, 30), is(true));
         });
     }
 
@@ -187,6 +190,45 @@ public class DateGeneratorsTest
         
         assertThrows(() -> DateGenerators.toDate(() -> null))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void testDatesBetween()
+    {
+        System.out.println("testDatesBetween");
+        
+        Date startDate = Dates.daysAgo(4);
+        Date endDate = Dates.daysAhead(5);
+        
+        //Edge Cases
+        assertThrows(() -> DateGenerators.datesBetween(null, endDate))
+            .isInstanceOf(IllegalArgumentException.class);
+        
+        assertThrows(() -> DateGenerators.datesBetween(startDate, null))
+            .isInstanceOf(IllegalArgumentException.class);
+        //Dates swapped
+        assertThrows(() -> DateGenerators.datesBetween(endDate, startDate))
+            .isInstanceOf(IllegalArgumentException.class);
+        
+        
+        doInLoop(i -> 
+        {
+            //Pick a start and end time
+            long begin = one(longs(1, Long.MAX_VALUE / 2));
+            long end = one(longs(begin + 1, Long.MAX_VALUE));
+            
+            startDate.setTime(begin);
+            endDate.setTime(end);
+            
+            AlchemyGenerator<Date> instance = DateGenerators.datesBetween(startDate, endDate);
+            assertThat(instance, notNullValue());
+
+            //Check the resulting date
+            Date result = instance.get();
+            assertThat(result.getTime(), greaterThanOrEqualTo(startDate.getTime()));
+            assertThat(result.getTime(), lessThan(endDate.getTime()));
+        });
+        
     }
 
 }

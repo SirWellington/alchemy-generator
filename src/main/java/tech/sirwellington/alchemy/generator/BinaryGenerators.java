@@ -15,11 +15,14 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.nio.ByteBuffer;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
+import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
@@ -28,6 +31,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  * @author SirWellington
  */
 @NonInstantiable
+@StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class BinaryGenerators
 {
 
@@ -41,14 +45,34 @@ public final class BinaryGenerators
     /**
      * Generates binary of the specified length
      *
-     * @param bytes The size of the byte arrays created.
+     * @param length The size of the byte arrays created.
      *
      * @return A binary generator
+     * @throws IllegalArgumentException If {@code length < 0}.
      */
-    public static AlchemyGenerator<byte[]> binary(int bytes)
+    public static AlchemyGenerator<byte[]> binary(int length) throws IllegalArgumentException
     {
-        checkThat(bytes > 0, "bytes must be at least 1");
-        return () -> RandomUtils.nextBytes(bytes);
+        checkThat(length >= 0, "length must be >= 0");
+        return () -> RandomUtils.nextBytes(length);
+    }
+    
+    /**
+     * Generates a {@link ByteBuffer} of the specified length. 
+     * 
+     * @param size The desired size of the Byte Buffer.
+     * @return
+     * @throws IllegalArgumentException If {@code size < 0}.
+     */
+    public static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException
+    {
+        checkThat(size >= 0, "size must be at least 0");
+        
+        final AlchemyGenerator<byte[]> delegate = binary(size);
+        return () ->
+        {
+            byte[] binary = delegate.get();
+            return ByteBuffer.wrap(binary);
+        };
     }
 
 }

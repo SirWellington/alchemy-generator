@@ -20,6 +20,9 @@ import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
+
+import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 
 /**
  * Generators for {@link BooleanGenerators Booleans}.
@@ -27,6 +30,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
  * @author SirWellington
  */
 @NonInstantiable
+@StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class BooleanGenerators
 {
 
