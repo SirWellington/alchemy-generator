@@ -67,7 +67,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.2</version>
+	<version>1.3</version>
 </dependency>
 ```
 
@@ -84,7 +84,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.4-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -358,6 +358,8 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
 # Release Notes
+
+# 1.4
 
 # 1.3
 + Added Automatic POJO Generation.
