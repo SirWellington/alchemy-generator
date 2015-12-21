@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -35,6 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
@@ -93,9 +95,12 @@ public class CollectionGeneratorsTest
         int size = 50;
         AlchemyGenerator generator = mock(AlchemyGenerator.class);
         when(generator.get()).thenReturn(value);
+        
         List result = CollectionGenerators.listOf(generator, 50);
+        
         assertThat(result, notNullValue());
         assertThat(result.size(), is(size));
+        
         result.forEach(i -> assertThat(i, is(value)));
     }
 
@@ -150,7 +155,7 @@ public class CollectionGeneratorsTest
 
         List<String> list = new ArrayList<>();
 
-        int size = one(integers(10, 100));
+        int size = one(integers(0, 100));
         for (int i = 0; i < size; ++i)
         {
             list.add(one(hexadecimalString(15)));
@@ -166,4 +171,19 @@ public class CollectionGeneratorsTest
         });
     }
 
+    
+    @Test
+    public void testListOfEdgeCases()
+    {
+        System.out.println("testListOfEdgeCases");
+        
+        int badSize = one(negativeIntegers());
+        assertThrows(() -> CollectionGenerators.listOf(uuids, badSize))
+            .isInstanceOf(IllegalArgumentException.class);
+        
+        List<String> result = CollectionGenerators.listOf(uuids, 0);
+        assertThat(result, notNullValue());
+        assertThat(result, is(empty()));
+        
+    }
 }
