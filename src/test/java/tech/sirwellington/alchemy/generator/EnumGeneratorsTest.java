@@ -15,7 +15,6 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import java.util.function.Supplier;
 import org.apache.commons.lang3.RandomUtils;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -59,7 +58,7 @@ public class EnumGeneratorsTest
     public void testEnumValueOf()
     {
         System.out.println("testEnumValueOf");
-        Supplier<Fruit> fruits = EnumGenerators.enumValueOf(Fruit.class);
+        AlchemyGenerator<Fruit> fruits = EnumGenerators.enumValueOf(Fruit.class);
         assertThat(fruits, notNullValue());
         for (int i = 0; i < iterations; ++i)
         {
