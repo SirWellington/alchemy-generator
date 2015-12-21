@@ -77,7 +77,7 @@ public final class CollectionGenerators
      *
      * @return A list of random values with length {code size}
      *
-     * @throws IllegalArgumentException if size is less than 1.
+     * @throws IllegalArgumentException if size is less than 0.
      */
     public static <T> List<T> listOf(@NonNull AlchemyGenerator<T> generator, int size)
     {
