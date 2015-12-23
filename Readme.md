@@ -359,7 +359,8 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
 # Release Notes
 
-# 1.4
+# 1.3.1
++ Minor Behavioral Changes
 
 # 1.3
 + Added Automatic POJO Generation.
