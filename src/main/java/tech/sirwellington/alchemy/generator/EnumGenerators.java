@@ -15,7 +15,6 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import java.util.function.Supplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
@@ -60,7 +59,7 @@ public final class EnumGenerators
      *
      * @return A generator that produces values of the supplied enum type.
      */
-    public static <E extends Enum> Supplier<E> enumValueOf(Class<E> enumClass)
+    public static <E extends Enum> AlchemyGenerator<E> enumValueOf(Class<E> enumClass)
     {
         checkNotNull(enumClass);
 

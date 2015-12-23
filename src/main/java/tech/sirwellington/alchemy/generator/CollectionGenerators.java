@@ -77,12 +77,13 @@ public final class CollectionGenerators
      *
      * @return A list of random values with length {code size}
      *
-     * @throws IllegalArgumentException if size is less than 1.
+     * @throws IllegalArgumentException if size is less than 0.
      */
     public static <T> List<T> listOf(@NonNull AlchemyGenerator<T> generator, int size)
     {
-        checkThat(size > 0, "Size must be at least 1");
+        checkThat(size >= 0, "Size must be at least 0");
         checkNotNull(generator, "generator is null");
+        
         List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; ++i)
         {
@@ -96,7 +97,8 @@ public final class CollectionGenerators
      *
      * @param <T>
      * @param list
-     *
+     * 
+     * @return 
      * @throws IllegalArgumentException
      */
     public static <T> AlchemyGenerator<T> fromList(@NonNull List<T> list) throws IllegalArgumentException
