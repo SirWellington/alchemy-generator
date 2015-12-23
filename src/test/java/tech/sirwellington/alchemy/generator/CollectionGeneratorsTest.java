@@ -155,7 +155,7 @@ public class CollectionGeneratorsTest
 
         List<String> list = new ArrayList<>();
 
-        int size = one(integers(0, 100));
+        int size = one(integers(1, 100));
         for (int i = 0; i < size; ++i)
         {
             list.add(one(hexadecimalString(15)));
