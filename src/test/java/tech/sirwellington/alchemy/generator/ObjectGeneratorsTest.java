@@ -221,6 +221,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.state, notNullValue());
         assertThat(cityBlock.memory, notNullValue());
         assertThat(cityBlock.isNearOcean, notNullValue());
+        assertThat(cityBlock.code, notNullValue());
         
         assertThat(cityBlock.homes, notNullValue());
         assertThat(cityBlock.stores, notNullValue());
@@ -292,5 +293,6 @@ public class ObjectGeneratorsTest
         private State state;
         private ByteBuffer memory;
         private Boolean isNearOcean;
+        private Byte code;
     }
 }
