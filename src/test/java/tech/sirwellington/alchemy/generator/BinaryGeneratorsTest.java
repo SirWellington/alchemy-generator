@@ -16,7 +16,6 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.nio.ByteBuffer;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,12 +38,9 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 public class BinaryGeneratorsTest
 {
 
-    private int iterations;
-
     @Before
     public void setUp()
     {
-        iterations = RandomUtils.nextInt(500, 5000);
     }
 
     @Test
