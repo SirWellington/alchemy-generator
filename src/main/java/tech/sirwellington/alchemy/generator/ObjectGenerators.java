@@ -194,7 +194,7 @@ public final class ObjectGenerators
         }
         catch (Exception ex)
         {
-            LOG.warn("cannot instatiate {}", classOfPojo, ex);
+            LOG.warn("cannot instatiate type {}", classOfPojo);
             return false;
         }
     }
