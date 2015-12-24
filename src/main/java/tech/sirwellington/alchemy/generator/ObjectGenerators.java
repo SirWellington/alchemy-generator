@@ -71,6 +71,7 @@ public final class ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anytime());
         DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.byteBuffers(333));
         DEFAULT_GENERATOR_MAPPINGS.put(Boolean.class, BooleanGenerators.booleans());
+        DEFAULT_GENERATOR_MAPPINGS.put(Byte.class, BinaryGenerators.bytes());
     }
 
     ObjectGenerators() throws IllegalAccessException
