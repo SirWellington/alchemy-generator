@@ -74,5 +74,18 @@ public final class BinaryGenerators
             return ByteBuffer.wrap(binary);
         };
     }
+    
+    public static AlchemyGenerator<Byte> bytes()
+    {
+        final AlchemyGenerator<byte[]> delegate = binary(1);
+        
+        return () ->
+        {
+            byte[] array = delegate.get();
+            checkThat(array != null && array.length != 0, "no Byte available to return.");
+            
+            return array[0];
+        };
+    }
 
 }

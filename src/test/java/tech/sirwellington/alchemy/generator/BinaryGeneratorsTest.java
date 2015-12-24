@@ -126,4 +126,19 @@ public class BinaryGeneratorsTest
         assertThat(result.limit(), is(0));
     }
 
+    @Test
+    public void testBytes()
+    {
+        System.out.println("testBytes");
+        
+        AlchemyGenerator<Byte> generator = BinaryGenerators.bytes();
+        assertThat(generator, notNullValue());
+        
+        Tests.doInLoop(i -> 
+        {
+            Byte result = generator.get();
+            assertThat(result, notNullValue());
+        });
+    }
+
 }
