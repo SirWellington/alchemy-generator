@@ -220,6 +220,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.distance, greaterThan(0));
         assertThat(cityBlock.state, notNullValue());
         assertThat(cityBlock.memory, notNullValue());
+        assertThat(cityBlock.isNearOcean, notNullValue());
         
         assertThat(cityBlock.homes, notNullValue());
         assertThat(cityBlock.stores, notNullValue());
@@ -290,5 +291,6 @@ public class ObjectGeneratorsTest
         private Map<Person, Computer> internetUsers;
         private State state;
         private ByteBuffer memory;
+        private Boolean isNearOcean;
     }
 }
