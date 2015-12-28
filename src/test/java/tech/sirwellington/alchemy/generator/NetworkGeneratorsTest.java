@@ -39,7 +39,7 @@ public class NetworkGeneratorsTest
     }
 
     @Test
-    public void testUrls()
+    public void testHttpUrls()
     {
         AlchemyGenerator<URL> generator = NetworkGenerators.httpUrls();
         assertThat(generator, notNullValue());
@@ -78,6 +78,22 @@ public class NetworkGeneratorsTest
             assertThat(result, notNullValue());
             assertThat(result.toString(), startsWith(scheme));
         });
+    }
+
+
+    @Test
+    public void testPorts()
+    {
+        AlchemyGenerator<Integer> generator = NetworkGenerators.ports();
+        assertThat(generator, notNullValue());
+        
+        Tests.doInLoop(i ->
+        {
+            Integer port = generator.get();
+            assertThat(port, greaterThanOrEqualTo(22));
+            assertThat(port, lessThan((int) Short.MAX_VALUE));
+        });
+        
     }
     
 

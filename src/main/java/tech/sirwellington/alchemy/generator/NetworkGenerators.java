@@ -28,6 +28,7 @@ import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import static java.lang.String.format;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.PeopleGenerators.popularEmailDomains;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphanumericString;
 
@@ -108,6 +109,14 @@ public final class NetworkGenerators
                 return FALLBACK_URL;
             }
         };
+    }
+    
+    /**
+     * @return Ports from 22 to {@linkplain Short#MAX_VALUE 32767}.
+     */
+    public static AlchemyGenerator<Integer> ports()
+    {
+        return integers(22, Short.MAX_VALUE);
     }
 
 }
