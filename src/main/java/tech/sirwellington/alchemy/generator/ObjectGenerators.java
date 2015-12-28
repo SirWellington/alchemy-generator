@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public final class ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.byteBuffers(333));
         DEFAULT_GENERATOR_MAPPINGS.put(Boolean.class, BooleanGenerators.booleans());
         DEFAULT_GENERATOR_MAPPINGS.put(Byte.class, BinaryGenerators.bytes());
+        DEFAULT_GENERATOR_MAPPINGS.put(URL.class, NetworkGenerators.httpUrls());
     }
 
     ObjectGenerators() throws IllegalAccessException
