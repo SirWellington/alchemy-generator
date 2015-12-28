@@ -68,12 +68,12 @@ public class NetworkGeneratorsTest
     @Test
     public void testUrlsWithProtocol()
     {
-        String scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp", "ssh").get();
-        AlchemyGenerator<URL> generator = NetworkGenerators.urlsWithProtocol(scheme);
-        assertThat(generator, notNullValue());
-
         Tests.doInLoop(i ->
         {
+            String scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp").get();
+            AlchemyGenerator<URL> generator = NetworkGenerators.urlsWithProtocol(scheme);
+            assertThat(generator, notNullValue());
+
             URL result = generator.get();
             assertThat(result, notNullValue());
             assertThat(result.toString(), startsWith(scheme));
