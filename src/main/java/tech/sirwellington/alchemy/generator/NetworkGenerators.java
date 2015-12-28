@@ -56,8 +56,8 @@ public final class NetworkGenerators
         }
     }
 
-    private static final List<String> VALID_PROTOCOLS = Arrays.asList("http", "https", "ftp", "ssh");
-    
+    private static final List<String> VALID_PROTOCOLS = Arrays.asList("http", "https", "ftp", "file", "ssh");
+
     private NetworkGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate");
