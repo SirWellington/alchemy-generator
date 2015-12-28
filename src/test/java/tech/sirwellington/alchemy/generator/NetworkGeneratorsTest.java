@@ -68,7 +68,7 @@ public class NetworkGeneratorsTest
     @Test
     public void testUrlsWithProtocol()
     {
-        String scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp", "tcp", "ssh", "ssl").get();
+        String scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp", "ssh").get();
         AlchemyGenerator<URL> generator = NetworkGenerators.urlsWithProtocol(scheme);
         assertThat(generator, notNullValue());
 

@@ -20,6 +20,8 @@ package tech.sirwellington.alchemy.generator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
@@ -54,6 +56,8 @@ public final class NetworkGenerators
         }
     }
 
+    private static final List<String> VALID_PROTOCOLS = Arrays.asList("http", "https", "ftp", "ssh");
+    
     private NetworkGenerators() throws IllegalAccessException
     {
         throw new IllegalAccessException("cannot instantiate");
@@ -92,7 +96,7 @@ public final class NetworkGenerators
         }
         catch (MalformedURLException ex)
         {
-            throw new IllegalArgumentException("Unknown protocol", ex);
+            throw new IllegalArgumentException("Unknown protocol: " + protocol, ex);
         }
         
         return () ->
