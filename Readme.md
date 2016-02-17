@@ -54,8 +54,9 @@ and not just what you hard-code in. It also increases confidence that code will 
 - [Building](#building)
 - [Feature Requests](#feature-requests)
 - [Release Notes](#release-notes)
-- [1.3.1](#131)
-- [1.3](#13)
+  - [1.4](#14)
+  - [1.3.1](#131)
+  - [1.3](#13)
   - [1.2](#12)
   - [1.1](#11)
   - [1.0](#10)
@@ -73,7 +74,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.3.1</version>
+	<version>1.4</version>
 </dependency>
 ```
 
@@ -90,7 +91,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -166,14 +167,9 @@ Guaranteed unique strings
 ```java
 int amount = one(smallPositiveIntegers());
 AlchemyGenerator<String> uuids = uuids();
-Set<String> ids = new HashSet<>();
+Set<String> ids = listOf(uuids, amount);
 
-for(int i = 0; i < amount; ++i)
-{
-	String id = one(uuids);
-	LOG.info("UUID : {}", id);
-	ids.add(id);
-}
+//Check for uniqueness
 assertThat(ids.size(), is(amount));
 ```
 ### From Fixed Set
@@ -395,16 +391,17 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
 # Release Notes
 
-# 1.4
+## 1.4
 + Adding `NetworkGenerators`
     + URLs
     + Ports
     + Hostnames
++ Bugfixes and Improvements
 
-# 1.3.1
+## 1.3.1
 + Minor Behavioral Changes
 
-# 1.3
+## 1.3
 + Added Automatic POJO Generation.
     This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
     ```java
