@@ -16,7 +16,6 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.nio.ByteBuffer;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,12 +38,9 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 public class BinaryGeneratorsTest
 {
 
-    private int iterations;
-
     @Before
     public void setUp()
     {
-        iterations = RandomUtils.nextInt(500, 5000);
     }
 
     @Test
@@ -124,6 +120,21 @@ public class BinaryGeneratorsTest
         ByteBuffer result = BinaryGenerators.byteBuffers(0).get();
         assertThat(result, notNullValue());
         assertThat(result.limit(), is(0));
+    }
+
+    @Test
+    public void testBytes()
+    {
+        System.out.println("testBytes");
+        
+        AlchemyGenerator<Byte> generator = BinaryGenerators.bytes();
+        assertThat(generator, notNullValue());
+        
+        Tests.doInLoop(i -> 
+        {
+            Byte result = generator.get();
+            assertThat(result, notNullValue());
+        });
     }
 
 }

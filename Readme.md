@@ -1,7 +1,7 @@
 Alchemy Generator
 ==============================================
 
-[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v3-name.png" width="200">](https://github.com/SirWellington/alchemy)
+[<img src="https://raw.githubusercontent.com/SirWellington/alchemy/develop/Graphics/Logo/Alchemy-Logo-v7-name.png" width="200">](https://github.com/SirWellington/alchemy)
 
 ## "More Data => Better tests"
 
@@ -45,11 +45,18 @@ and not just what you hard-code in. It also increases confidence that code will 
   - [POJOs](#pojos)
     - [Nested POJOs](#nested-pojos)
     - [Collections](#collections-1)
+- [Networking](#networking)
+  - [URLs](#urls)
+  - [Hostnames](#hostnames)
+  - [Ports](#ports)
+  - [MAC Addresses](#mac-addresses)
 - [Requirements](#requirements)
 - [Building](#building)
 - [Feature Requests](#feature-requests)
 - [Release Notes](#release-notes)
-- [1.3](#13)
+  - [1.4](#14)
+  - [1.3.1](#131)
+  - [1.3](#13)
   - [1.2](#12)
   - [1.1](#11)
   - [1.0](#10)
@@ -67,7 +74,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.3</version>
+	<version>1.4</version>
 </dependency>
 ```
 
@@ -84,7 +91,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -160,14 +167,9 @@ Guaranteed unique strings
 ```java
 int amount = one(smallPositiveIntegers());
 AlchemyGenerator<String> uuids = uuids();
-Set<String> ids = new HashSet<>();
+Set<String> ids = listOf(uuids, amount);
 
-for(int i = 0; i < amount; ++i)
-{
-	String id = one(uuids);
-	LOG.info("UUID : {}", id);
-	ids.add(id);
-}
+//Check for uniqueness
 assertThat(ids.size(), is(amount));
 ```
 ### From Fixed Set
@@ -327,6 +329,8 @@ assertThat(developer.developerMachine, notNullValue());
 
 ### Collections
 
+`tech.sirwellington.alchemy.generator.CollectionGenerators`
+
 The POJO Generator also handles Generic  `enum`, `List`, `Set`, and `Map` types that contain either Primitive Types, or other POJOs.
 ```java
 class City
@@ -342,7 +346,35 @@ City sampleCity = one(pojos(City.class));
 
 > IMPORTANT: Complicated and nested data structures increase the amount of time of Object Generation, since for each
 > Collection, the algorithm must recurse to generate more POJOs for the collection.
-> This library was for Unit Testing purposes, however, and so performance is less important.
+> This library was designed for Unit Testing purposes, however, and so performance is less important.
+
+# Networking
+`tech.sirwellington.alchemy.generator.NetworkGenerators`
+
+`NetworkGenerators` contains generation code for Networking related concepts and data, such as URLs, hostnames, ports, etc.
+
+## URLs
+```java
+URL httpUrl = one(httpUrls());
+URL httpsUrl = one(httpsUrls());
+URL tcpUrl = one(urlsWithProtocol("tcp"));
+```
+
+## Hostnames
+Create Network names in accordance to standards.
+
+```java
+String hostname = one(localNetworkNames());
+hostname = one(fullyQualifiedDomainNames());
+```
+
+## Ports
+```java
+int port = one(ports());
+```
+
+## MAC Addresses
+> Coming Soon.
 
 
 # Requirements
@@ -359,10 +391,17 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
 # Release Notes
 
-# 1.3.1
+## 1.4
++ Adding `NetworkGenerators`
+    + URLs
+    + Ports
+    + Hostnames
++ Bugfixes and Improvements
+
+## 1.3.1
 + Minor Behavioral Changes
 
-# 1.3
+## 1.3
 + Added Automatic POJO Generation.
     This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
     ```java

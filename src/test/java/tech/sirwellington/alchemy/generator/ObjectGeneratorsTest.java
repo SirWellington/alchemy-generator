@@ -16,6 +16,7 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.Date;
@@ -32,6 +33,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertThat;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
@@ -176,6 +178,8 @@ public class ObjectGeneratorsTest
         assertThat(person.middleName, not(isEmptyOrNullString()));
         assertThat(person.age, not(0));
         assertThat(person.money, not(0.0));
+        assertThat(person.website, notNullValue());
+        assertThat(person.website.toString(), startsWith("http"));
         assertThat(valueOf(Person.staticField), is(ObjectGeneratorsTest.staticField));
         checkComputer(person.computer);
     }
@@ -220,6 +224,8 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.distance, greaterThan(0));
         assertThat(cityBlock.state, notNullValue());
         assertThat(cityBlock.memory, notNullValue());
+        assertThat(cityBlock.isNearOcean, notNullValue());
+        assertThat(cityBlock.code, notNullValue());
         
         assertThat(cityBlock.homes, notNullValue());
         assertThat(cityBlock.stores, notNullValue());
@@ -255,6 +261,7 @@ public class ObjectGeneratorsTest
         private double money;
         private String middleName;
         private Computer computer;
+        private URL website;
         
         private static String staticField = ObjectGeneratorsTest.staticField;
     }
@@ -290,5 +297,7 @@ public class ObjectGeneratorsTest
         private Map<Person, Computer> internetUsers;
         private State state;
         private ByteBuffer memory;
+        private Boolean isNearOcean;
+        private Byte code;
     }
 }
