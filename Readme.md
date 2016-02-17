@@ -73,7 +73,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.3.1</version>
+	<version>1.4</version>
 </dependency>
 ```
 
@@ -90,7 +90,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.4-SNAPSHOT</version>
+	<version>1.5-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -395,16 +395,16 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 
 # Release Notes
 
-# 1.4
+## 1.4
 + Adding `NetworkGenerators`
     + URLs
     + Ports
     + Hostnames
 
-# 1.3.1
+## 1.3.1
 + Minor Behavioral Changes
 
-# 1.3
+## 1.3
 + Added Automatic POJO Generation.
     This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
     ```java
