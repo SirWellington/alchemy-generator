@@ -5,6 +5,8 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
+[![Build Status](http://jenkins.redroma.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.redroma.tech/job/Alchemy%20Generator/)
+
 # Purpose
 Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
