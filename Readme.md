@@ -8,9 +8,9 @@ Alchemy Generator
 [![Build Status](http://jenkins.redroma.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.redroma.tech/job/Alchemy%20Generator/)
 
 # Purpose
-Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
+Part of the [Alchemy Series](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
 
-Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
+Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data values,
 and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
