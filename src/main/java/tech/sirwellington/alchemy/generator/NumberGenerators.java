@@ -55,6 +55,7 @@ public final class NumberGenerators
 
     /**
      * Creates a series of integer values.
+     * Creates a series of integer values within the specified bounds.
      *
      * @param inclusiveLowerBound The inclusive lower bound
      * @param exclusiveUpperBound The exclusive upper bound
@@ -106,6 +107,17 @@ public final class NumberGenerators
             }
         };
 
+    }
+
+    /**
+     * Creates a series of integer values, negative and positive.
+     * The range is {@code Integer.MIN_VALUE...Integer.MAX_VALUE}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<Integer> anyIntegers()
+    {
+        return integers(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     /**
