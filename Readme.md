@@ -56,6 +56,7 @@ and not just what you hard-code in. It also increases confidence that code will 
 - [Building](#building)
 - [Feature Requests](#feature-requests)
 - [Release Notes](#release-notes)
+  - [1.5](#15)
   - [1.4](#14)
   - [1.3.1](#131)
   - [1.3](#13)
@@ -394,6 +395,10 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 # Release Notes
 
 ## 1.5
++ Adding `NumberGenerators`
+    + `anyIntegers()`
+    + `anyLongs()`
+    + `anyDoubles()`
 
 ## 1.4
 + Adding `NetworkGenerators`
