@@ -54,7 +54,7 @@ public final class NumberGenerators
     }
 
     /**
-     * Creates a series of integer values.
+     * Creates a series of integer values within the specified bounds.
      *
      * @param inclusiveLowerBound The inclusive lower bound
      * @param exclusiveUpperBound The exclusive upper bound
@@ -106,6 +106,17 @@ public final class NumberGenerators
             }
         };
 
+    }
+
+    /**
+     * Creates a series of integer values, negative and positive.
+     * The range is {@code Integer.MIN_VALUE...Integer.MAX_VALUE}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<Integer> anyIntegers()
+    {
+        return integers(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     /**
@@ -205,6 +216,17 @@ public final class NumberGenerators
     }
 
     /**
+     * Creates a series of Longs, both negative and positive.
+     * The range is {@code Long.MIN_VALUE...Long.MAX_VALUE}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<Long> anyLongs()
+    {
+        return longs(Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+    
+    /**
      * Produces a series of positive values from {@code 1} to {@code Long.MAX_VALUE}
      *
      * @return
@@ -268,6 +290,17 @@ public final class NumberGenerators
                 return RandomUtils.nextDouble(inclusiveLowerBound, inclusiveUpperBound);
             }
         };
+    }
+    
+    /**
+     * Creates a series of doubles, both negative and positive.
+     * The range is {@code -Double.MAX_VALUE...Double.MAX_VALUE}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<Double> anyDoubles()
+    {
+        return doubles(-Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
     /**

@@ -547,4 +547,25 @@ public class NumberGeneratorsTest
         assertThat(result, is(value - 1));
     }
 
+    @Test
+    public void testAnyIntegers()
+    {
+        AlchemyGenerator<Integer> generator = NumberGenerators.anyIntegers();
+        int value = generator.get();
+    }
+
+    @Test
+    public void testAnyLongs()
+    {
+        AlchemyGenerator<Long> generator = NumberGenerators.anyLongs();
+        long value = generator.get();
+    }
+
+    @Test
+    public void testAnyDoubles()
+    {
+        AlchemyGenerator<Double> generator = NumberGenerators.anyDoubles();
+        double value = generator.get();
+    }
+
 }

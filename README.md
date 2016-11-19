@@ -5,10 +5,12 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-# Purpose
-Part of the [Alchemy Collection](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
+[![Build Status](http://jenkins.redroma.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.redroma.tech/job/Alchemy%20Generator/)
 
-Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data calues,
+# Purpose
+Part of the [Alchemy Series](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
+
+Introducing randomized data to tests helps improve test quality by assuring that your code can work over a wide range of data values,
 and not just what you hard-code in. It also increases confidence that code will work in a variety of circumstances.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -54,6 +56,7 @@ and not just what you hard-code in. It also increases confidence that code will 
 - [Building](#building)
 - [Feature Requests](#feature-requests)
 - [Release Notes](#release-notes)
+  - [1.5](#15)
   - [1.4](#14)
   - [1.3.1](#131)
   - [1.3](#13)
@@ -74,7 +77,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.4</version>
+	<version>1.5</version>
 </dependency>
 ```
 
@@ -91,7 +94,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.5-SNAPSHOT</version>
+	<version>1.6-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -390,6 +393,12 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
 # Release Notes
+
+## 1.5
++ Adding `NumberGenerators`
+    + `anyIntegers()`
+    + `anyLongs()`
+    + `anyDoubles()`
 
 ## 1.4
 + Adding `NetworkGenerators`
