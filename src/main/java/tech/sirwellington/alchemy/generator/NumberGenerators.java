@@ -291,6 +291,17 @@ public final class NumberGenerators
             }
         };
     }
+    
+    /**
+     * Creates a series of doubles, both negative and positive.
+     * The range is {@code -Double.MAX_VALUE...Double.MAX_VALUE}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<Double> anyDoubles()
+    {
+        return doubles(-Double.MAX_VALUE, Double.MAX_VALUE);
+    }
 
     /**
      * Creates a series of positive double values from 0 to Double.MAX_VALUE.
