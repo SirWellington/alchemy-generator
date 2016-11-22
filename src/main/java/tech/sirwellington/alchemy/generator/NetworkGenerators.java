@@ -123,4 +123,21 @@ public final class NetworkGenerators
         return integers(22, Short.MAX_VALUE);
     }
 
+    /**
+     * Generates IPV4 addresses in the form {@code xxx.xx.xxx.xx}.
+     * @return An IPV4 address
+     */
+    public static AlchemyGenerator<String> ip4Addresses()
+    {
+        AlchemyGenerator<Integer> integers = integers(10, 1000);
+        
+        return () ->
+        {
+            return String.format("%d.%d.%d.%d", 
+                                 integers.get(),
+                                 integers.get(),
+                                 integers.get(),
+                                 integers.get());
+        };
+    }
 }

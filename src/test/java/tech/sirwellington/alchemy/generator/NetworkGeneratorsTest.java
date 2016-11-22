@@ -95,6 +95,42 @@ public class NetworkGeneratorsTest
         });
         
     }
+
+    @Test
+    public void testIp4Addresses()
+    {
+        AlchemyGenerator<String> generator = NetworkGenerators.ip4Addresses();
+        assertThat(generator, notNullValue());
+        
+        String max = "999.999.999.999";
+        String min = "11.11.11.11";
+        int expectedPeriods = 3;
+        
+        Tests.doInLoop(i -> 
+        {
+            String address = generator.get();
+            
+            int periodAppearences = numberOfAppearencesOfCharInString('.', address);
+            assertThat(periodAppearences, is(expectedPeriods));
+            
+            assertThat(address.length(), is(lessThanOrEqualTo(max.length())));
+            assertThat(address.length(), is(greaterThanOrEqualTo(min.length())));
+        });
+    }
     
+    private int numberOfAppearencesOfCharInString(char character, String string)
+    {
+        int appearences = 0;
+        
+        for (Character c : string.toCharArray())
+        {
+            if (c == character)
+            {
+                appearences += 1;
+            }
+        }
+    
+        return appearences;
+    }
 
 }
