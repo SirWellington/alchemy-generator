@@ -23,7 +23,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.doubles;
 
 /**
- * Generators for creation Geo-Coordinates.
+ * Generators for creating Geo-Coordinates.
  * 
  * @author SirWellington
  */
