@@ -395,6 +395,8 @@ Feature Requests are definitely welcomed! **Please drop a note in [Issues](https
 # Release Notes
 
 ## 1.6
++ Adds `GeolocationGenerators`
++ Adds IP Address Generators
 
 ## 1.5
 + Adding `NumberGenerators`
