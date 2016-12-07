@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>alchemy-generator</artifactId>
-    <version>1.6-SNAPSHOT</version>
+    <version>1.6</version>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
