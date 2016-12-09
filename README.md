@@ -6,6 +6,7 @@ Alchemy Generator
 ## "More Data => Better tests"
 
 [![Build Status](http://jenkins.redroma.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.redroma.tech/job/Alchemy%20Generator/)
+![Maven Central Version](http://img.shields.io/maven-central/v/tech.sirwellington.alchemy/alchemy-generator.svg)
 
 # Purpose
 Part of the [Alchemy Series](https://github.com/SirWellington/alchemy), this library makes it easier to test your code by providing generators for common Objects and Data.
