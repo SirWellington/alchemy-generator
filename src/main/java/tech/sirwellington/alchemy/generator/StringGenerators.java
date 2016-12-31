@@ -158,6 +158,52 @@ public final class StringGenerators
 
         return () -> RandomStringUtils.randomAlphanumeric(length);
     }
+    
+    /**
+     * Creates a numeric integer-based String. The sizes of the Strings will vary across instances.
+     * <p>
+     * Each resulting string will be directly {@linkplain Integer#parseInt(java.lang.String) parsable into an Integer}.
+     * 
+     * @return 
+     */
+    public static AlchemyGenerator<String> numericString() 
+    {
+        int length = one(integers(4, 25));
+        return numericString(length);
+    }
+     
+    /**
+     * Creates a numeric integer-based String.
+     * <p>
+     * For Example:
+     * <pre>
+     *  String result = numericString(5).get();
+     *  //49613
+     * </pre>
+     * 
+     * @param length 
+     * @return
+     * @throws IllegalArgumentException 
+     */
+    public static AlchemyGenerator<String> numericString(int length) throws IllegalArgumentException
+    {
+        checkThat(length > 0, "lengt must be > 0");
+        
+        AlchemyGenerator<Integer> digits = integers(0, 10);
+        
+        return () ->
+        {
+            StringBuilder builder = new StringBuilder();
+            
+            while (builder.length() < length)
+            {
+                builder.append(digits.get());
+            }
+            
+            return builder.toString();
+        };
+        
+    }
 
     //==============================================================================================
     //UUIDs

@@ -204,7 +204,7 @@ public class StringGeneratorsTest
 
         int length = one(integers(10, 100));
         AlchemyGenerator<String> instance = StringGenerators.alphanumericString(length);
-
+        
         doInLoop(i ->
         {
             String value = instance.get();
@@ -213,8 +213,45 @@ public class StringGeneratorsTest
 
         //Edge cases
         assertThrows(() -> StringGenerators.alphabeticString(one(negativeIntegers())))
-        .isInstanceOf(IllegalArgumentException.class);
+            .isInstanceOf(IllegalArgumentException.class);
     }
+    
+
+
+    @Test
+    public void testNumericString()
+    {
+        System.out.println("testNumericString");
+        
+        AlchemyGenerator<String> instance = StringGenerators.numericString();
+        assertThat(instance, notNullValue());
+        
+        doInLoop(i -> 
+        {
+            String value = instance.get();
+            assertThat(value, not(isEmptyOrNullString()));
+            assertAllDigits(value);
+        });
+    }
+    
+    @Test
+    public void testNumericStringWithLength() throws Exception
+    {
+        System.out.println("testNumericStringWithLength");
+        
+        int length = one(integers(1, 100));
+        AlchemyGenerator<String>instance = StringGenerators.numericString(length);
+        assertThat(instance, notNullValue());
+        
+        doInLoop(i -> 
+        {
+            String value = instance.get();
+            assertThat(value, not(isEmptyOrNullString()));
+            assertThat(value.length(), is(length));
+            assertAllDigits(value);
+        });
+    }
+
 
     @Test
     public void testStringsFromFixedList()
@@ -345,6 +382,14 @@ public class StringGeneratorsTest
             verify(generator, times(i + 1)).get();
         });
 
+    }
+
+    private void assertAllDigits(String value)
+    {
+        for (Character c : value.toCharArray())
+        {
+            assertThat(Character.isDigit(c), is(true));
+        }
     }
 
 }
