@@ -136,9 +136,10 @@ public final class StringGenerators
      * Generates a random alphanumeric string anywhere between {@code 10 - 100} characters. Well suited for the case
      * when you don't really care what the size of the string returned.
      *
+     * @return 
      * @see #alphanumericString(int)
      */
-    private static AlchemyGenerator<String> alphanumericString()
+    public static AlchemyGenerator<String> alphanumericString()
     {
         int length = one(integers(10, 100));
         return alphabeticString(length);
