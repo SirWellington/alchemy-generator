@@ -49,6 +49,10 @@ public final class StringGenerators
     {
         throw new IllegalAccessException("cannot instantiate this class");
     }
+    
+    //==============================================================================================
+    //BASIC STRINGS
+    //==============================================================================================
 
     /**
      * Generates a random string of a random length. Characters can include ASCII, Unicode, or
@@ -103,6 +107,7 @@ public final class StringGenerators
      * Generates a random alphabetic string.
      *
      * @param length The length of the String, must be at least 1.
+     * @return 
      *
      * @throws IllegalArgumentException If {@code length < 0}
      *
@@ -118,6 +123,7 @@ public final class StringGenerators
      * Generates a random alphabetic string anywhere between {@code 10 - 100} characters. Well suited for the case when
      * you don't really care for the size of the string returned.
      *
+     * @return 
      * @see #alphabeticString(int)
      */
     public static AlchemyGenerator<String> alphabeticString()
@@ -132,7 +138,7 @@ public final class StringGenerators
      *
      * @see #alphanumericString(int)
      */
-    public static AlchemyGenerator<String> alphanumericString()
+    private static AlchemyGenerator<String> alphanumericString()
     {
         int length = one(integers(10, 100));
         return alphabeticString(length);
@@ -141,6 +147,7 @@ public final class StringGenerators
     /**
      *
      * @param length The length of the Generated Strings.
+     * @return 
      *
      * @throws IllegalArgumentException If {@code length < 0}
      */
@@ -154,6 +161,7 @@ public final class StringGenerators
     //==============================================================================================
     //UUIDs
     //==============================================================================================
+    
     /**
      * Generates random {@linkplain UUID UUIDs}.
      */
@@ -172,6 +180,7 @@ public final class StringGenerators
     //==============================================================================================
     //From Fixed targets
     //==============================================================================================
+    
     /**
      * Generates a string value from the specified set.
      *
