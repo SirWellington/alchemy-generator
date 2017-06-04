@@ -16,18 +16,13 @@
 
 package tech.sirwellington.alchemy.generator
 
-import java.time.Instant
-import java.util.Date
-
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonNull
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
-
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
-import tech.sirwellington.alchemy.generator.Checks.checkNotNull
-import tech.sirwellington.alchemy.generator.Checks.checkThat
+import java.time.Instant
+import java.util.*
 
 /**
  * @author SirWellington
