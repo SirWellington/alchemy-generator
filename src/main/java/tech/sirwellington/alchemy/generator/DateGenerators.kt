@@ -49,8 +49,9 @@ internal constructor()
          * <br></br>
          * <pre>
          * Note that the current time depends on when it is called.
-        </pre> *
-
+         * </pre>
+         *
+         *
          * @return
          */
         fun presentDates(): AlchemyGenerator<Date>
@@ -63,8 +64,9 @@ internal constructor()
          * <br></br>
          * <pre>
          * Note that the current time depends on when it is called.
-        </pre> *
-
+         * </pre>
+         *
+         *
          * @return
          */
         fun pastDates(): AlchemyGenerator<Date>
@@ -77,8 +79,8 @@ internal constructor()
          * <br></br>
          * <pre>
          * Note that the current time depends on when it is called.
-        </pre> *
-
+         * </pre>
+         *
          * @return
          */
         fun futureDates(): AlchemyGenerator<Date>
@@ -88,7 +90,7 @@ internal constructor()
 
         /**
          * Returns dates before the specified reference date.
-
+         *
          * @param referenceDate
          *
          * @return
@@ -106,7 +108,7 @@ internal constructor()
 
         /**
          * Returns dates after the specified reference date.
-
+         *
          * @param referenceDate
          *
          * @return
@@ -124,7 +126,7 @@ internal constructor()
 
         /**
          * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
-
+         *
          * @return
          */
         fun anyTime(): AlchemyGenerator<Date>
@@ -134,7 +136,7 @@ internal constructor()
 
         /**
          * Converts [Instants][Instant] to [Dates][Date] using the supplied [AlchemyGenerator].
-
+         *
          * @param generator
          *
          * @return
@@ -153,9 +155,8 @@ internal constructor()
 
         /**
          * Generates Dates between the specified Times.
-
-         * @param startDate Dates produced will be at or after this date.
          *
+         * @param startDate Dates produced will be at or after this date.
          * @param endDate   Dates produced will be before this date.
          *
          * @return

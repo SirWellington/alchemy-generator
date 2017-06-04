@@ -42,7 +42,7 @@ import kotlin.collections.set
 /**
  * Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).
  * Use at your own risk.
-
+ *
  * @author SirWellington
  */
 @NonInstantiable

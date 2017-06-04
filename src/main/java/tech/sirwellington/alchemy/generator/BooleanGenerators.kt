@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Generators for [Booleans][BooleanGenerators].
-
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -46,7 +46,7 @@ internal constructor()
 
         /**
          * Generates a series of randomly selected booleans.
-
+         *
          * @return
          */
         @JvmStatic
@@ -58,7 +58,7 @@ internal constructor()
         /**
          * Generates a series of alternating booleans. Values alternate between `true` and
          * `false`.
-
+         *
          * @return
          */
         @JvmStatic

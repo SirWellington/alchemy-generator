@@ -54,7 +54,7 @@ internal constructor()
 
         /**
          * Creates a series of integer values within the specified bounds.
-
+         *
          * @param inclusiveLowerBound The inclusive lower bound
          *
          * @param exclusiveUpperBound The exclusive upper bound
@@ -116,7 +116,7 @@ internal constructor()
         /**
          * Creates a series of integer values, negative and positive.
          * The range is `Integer.MIN_VALUE...Integer.MAX_VALUE`.
-
+         *
          * @return
          */
         @JvmStatic
@@ -141,7 +141,7 @@ internal constructor()
 
         /**
          * Creates a series of small positive integers from 1 to 1000.
-
+         *
          * @return
          *
          * @see .positiveIntegers
@@ -234,7 +234,7 @@ internal constructor()
         /**
          * Creates a series of Longs, both negative and positive.
          * The range is `Long.MIN_VALUE...Long.MAX_VALUE`.
-
+         *
          * @return
          */
         @JvmStatic
@@ -322,7 +322,7 @@ internal constructor()
         /**
          * Creates a series of doubles, both negative and positive.
          * The range is `-Double.MAX_VALUE...Double.MAX_VALUE`.
-
+         *
          * @return
          */
         @JvmStatic
@@ -333,7 +333,7 @@ internal constructor()
 
         /**
          * Creates a series of positive double values from 0 to Double.MAX_VALUE.
-
+         *
          * @return
          *
          * @see .smallPositiveDoubles
@@ -362,7 +362,7 @@ internal constructor()
 
         /**
          * Generates an integer value from the specified set.
-
+         *
          * @param values
          *
          *
@@ -381,7 +381,7 @@ internal constructor()
 
         /**
          * Generates a double value from the specified set.
-
+         *
          * @param values
          *
          *
@@ -419,7 +419,7 @@ internal constructor()
 
         /**
          * Attempts to decrement the value without potentially circling back to [Long.MAX_VALUE].
-
+         *
          * @param value
          *
          *
@@ -450,7 +450,7 @@ internal constructor()
         /**
          * Attempts to decrement the value without potentially circling back to
          * [Integer.MAX_VALUE].
-
+         *
          * @param value
          *
          * @return

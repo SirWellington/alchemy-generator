@@ -32,7 +32,7 @@ import java.time.temporal.ChronoUnit.SECONDS
 
 /**
  * Generators for [Java Instants][Instant].
-
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -56,7 +56,7 @@ internal constructor()
          * Produces [Instants][Instant] representing the *present*, i.e *now*. Note that
          * the 'present'
          * depends on when the Generator is [called][AlchemyGenerator.get].
-
+         *
          * @return
          */
         fun presentInstants(): AlchemyGenerator<Instant>
@@ -66,7 +66,7 @@ internal constructor()
 
         /**
          * Produces [Instants][Instant] that are always in the past, i.e. before the present.
-
+         *
          * @return
          */
         fun pastInstants(): AlchemyGenerator<Instant>
@@ -80,7 +80,7 @@ internal constructor()
 
         /**
          * Produces [Instants][Instant] that are always in the future, i.e. after the present.
-
+         *
          * @return
          */
         fun futureInstants(): AlchemyGenerator<Instant>
@@ -94,7 +94,7 @@ internal constructor()
 
         /**
          * Produces [Instants][Instant] that are always before the specified time.
-
+         *
          * @param instant
          *
          *
@@ -115,17 +115,17 @@ internal constructor()
                 val millisecondsBefore = one(integers(0, 1000))
 
                 instant.minus(daysBefore.toLong(), DAYS)
-                       .minus(hoursBefore.toLong(), HOURS)
-                       .minus(minutesBefore.toLong(), MINUTES)
-                       .minus(secondsBefore.toLong(), SECONDS)
-                       .minus(millisecondsBefore.toLong(), MILLIS)
+                        .minus(hoursBefore.toLong(), HOURS)
+                        .minus(minutesBefore.toLong(), MINUTES)
+                        .minus(secondsBefore.toLong(), SECONDS)
+                        .minus(millisecondsBefore.toLong(), MILLIS)
             }
 
         }
 
         /**
          * Produces [Instants][Instant] that are always after the specified time.
-
+         *
          * @param instant
          *
          *
@@ -147,17 +147,17 @@ internal constructor()
                 val millisecondsAhead = one(integers(0, 1000))
 
                 instant.plus(daysAhead.toLong(), DAYS)
-                       .plus(hoursAhead.toLong(), HOURS)
-                       .plus(minutesAhead.toLong(), MINUTES)
-                       .plus(secondsAhead.toLong(), SECONDS)
-                       .plus(millisecondsAhead.toLong(), MILLIS)
+                        .plus(hoursAhead.toLong(), HOURS)
+                        .plus(minutesAhead.toLong(), MINUTES)
+                        .plus(secondsAhead.toLong(), SECONDS)
+                        .plus(millisecondsAhead.toLong(), MILLIS)
 
             }
         }
 
         /**
          * Produces [Instants][Instant] from any time, past, present, or future.
-
+         *
          * @return
          */
         fun anytime(): AlchemyGenerator<Instant>
@@ -168,16 +168,16 @@ internal constructor()
 
                 when (choice)
                 {
-                    0    ->  pastInstants().get()
-                    1    ->  futureInstants().get()
-                    else ->  presentInstants().get()
+                    0    -> pastInstants().get()
+                    1    -> futureInstants().get()
+                    else -> presentInstants().get()
                 }
             }
         }
 
         /**
          * Generates [Instants][Instant] between the specified times.
-
+         *
          * @param startTime Times produced will come at or after this time.
          *
          * @param endTime Times produced will come before this time.

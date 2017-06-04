@@ -24,7 +24,7 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.doubles
 
 /**
  * Generators for creating Geo-Coordinates.
-
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -52,7 +52,7 @@ internal constructor()
 
         /**
          * Creates valid longitudes from -180...180 degrees.
-
+         *
          * @return
          */
         fun longitudes(): AlchemyGenerator<Double>

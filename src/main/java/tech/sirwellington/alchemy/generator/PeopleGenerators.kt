@@ -28,7 +28,7 @@ import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFr
 
 /**
  * Generators for common information about People: names, addresses, phone numbers, emails.
-
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -148,7 +148,7 @@ internal constructor()
 
         /**
          * Generates email addresses using the Supplied Domain Generator.
-
+         *
          * @param domainGenerator
          *
          *
@@ -171,7 +171,7 @@ internal constructor()
 }
 /**
  * Generates email addresses using the [Popular Email Domains][.popularEmailDomains].
-
+ *
  * @see .popularEmailDomains
  * @see .emails
  */

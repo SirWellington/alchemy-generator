@@ -50,13 +50,11 @@ internal constructor()
          * `enum Fruit {APPLE, ORANGE, PEAR}
          *
          * Fruit someFruit = enumValueOf(Fruit.class).get();
-        ` *
-        </pre> *
-
+         *
+         * </pre>
+         *
          * @param <E>       The type of the Enum
-         *
          * @param enumClass The `class` of the Enum.
-         *
          *
          * @return A generator that produces values of the supplied enum type.
         </E> */

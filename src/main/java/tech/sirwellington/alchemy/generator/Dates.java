@@ -29,6 +29,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 /*
  * TODO: This belongs in a seperate project.
  */
+
 /**
  * Generation methods for {@code Date}s
  *
@@ -58,7 +59,6 @@ final class Dates
      * A date representing an instant in the past
      *
      * @param days The days ago from now
-     *
      * @return
      */
     static Date daysAgo(int days)
@@ -71,7 +71,6 @@ final class Dates
      * A date representing an instant in the future
      *
      * @param days The days ahead from now
-     *
      * @return
      */
     static Date daysAhead(int days)
@@ -84,7 +83,6 @@ final class Dates
      * A date representing an instant in the past
      *
      * @param hours The hours ago from now
-     *
      * @return
      */
     static Date hoursAgo(int hours)
@@ -97,7 +95,6 @@ final class Dates
      * A date representing an instant in the future
      *
      * @param hours The hours ahead from now
-     *
      * @return
      */
     static Date hoursAhead(int hours)
@@ -110,7 +107,6 @@ final class Dates
      * A date representing an instant in the past
      *
      * @param minutes The minutes ago from now
-     *
      * @return
      */
     static Date minutesAgo(int minutes)
@@ -123,7 +119,6 @@ final class Dates
      * A date representing an instant in the future
      *
      * @param minutes the minutes ago ahead from now
-     *
      * @return
      */
     static Date minutesAhead(int minutes)
@@ -136,10 +131,8 @@ final class Dates
      * Checks to see if the date is now, up to {@code 5 milliseconds} of delta.
      *
      * @param date
-     *
-     * @see #isNow(java.util.Date, long)
-     *
      * @return True if the date is considered to be {@link #now() }, False otherwise.
+     * @see #isNow(java.util.Date, long)
      */
     static boolean isNow(Date date)
     {
@@ -151,11 +144,11 @@ final class Dates
      * The date is now if:
      * <br>
      * {@code
-     *      now - marginOfError <= date <= now + marginOfError
+     * now - marginOfError <= date <= now + marginOfError
      * }
+     *
      * @param date                The date to check.
      * @param marginOfErrorMillis The margin of error in milliseconds.
-     *
      * @return
      */
     static boolean isNow(Date date, long marginOfErrorMillis)
@@ -169,7 +162,7 @@ final class Dates
         long timeOfNow = now.getTime();
 
         return (timeOfDate >= timeOfNow - delta) &&
-               (timeOfDate <= timeOfNow + delta);
+                (timeOfDate <= timeOfNow + delta);
     }
 
     static boolean isNow(Instant instant, long marginOfErrorMillies)
@@ -184,6 +177,6 @@ final class Dates
         long timeOfNow = now.toEpochMilli();
 
         return (timeOfDate >= timeOfNow - delta) &&
-               (timeOfDate <= timeOfNow + delta);
+                (timeOfDate <= timeOfNow + delta);
     }
 }

@@ -22,7 +22,7 @@ package tech.sirwellington.alchemy.generator
 
 /**
  * Used internally to perform argument checks.
-
+ *
  * @author SirWellington
  */
 
