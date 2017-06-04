@@ -43,8 +43,6 @@ internal constructor()
     companion object
     {
 
-        private val LOG = LoggerFactory.getLogger(BinaryGenerators::class.java)
-
         /**
          * Generates binary of the specified length
          *
@@ -93,10 +91,10 @@ internal constructor()
             val delegate = binary(1)
 
             return AlchemyGenerator {
+
                 val array = delegate.get()
                 checkThat(array != null && array.isNotEmpty(), "no Byte available to return.")
-
-                array!![0]
+                array[0]
             }
         }
     }

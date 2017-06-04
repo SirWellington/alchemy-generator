@@ -68,7 +68,8 @@ internal constructor()
         @JvmStatic
         fun <T> listOf(@Required generator: AlchemyGenerator<T>): List<T>
         {
-            return listOf(generator, one(integers(5, 200)))
+            val size = one(integers(5, 200))
+            return listOf(generator, size)
         }
 
         /**
@@ -92,11 +93,10 @@ internal constructor()
             checkThat(size >= 0, "Size must be at least 0")
             checkNotNull(generator, "generator is null")
 
-            val list = ArrayList<T>(size)
-            for (i in 0..size - 1)
-            {
-                list.add(generator.get())
+            val list = List(size) {
+                generator.get()
             }
+
             return list
         }
 
@@ -117,7 +117,7 @@ internal constructor()
         fun <T> fromList(@Required list: List<T>): AlchemyGenerator<T>
         {
             checkNotNull(list, "list cannot be null")
-            checkThat(!list.isEmpty(), "list has no elements")
+            checkThat(list.isNotEmpty(), "list has no elements")
 
             return AlchemyGenerator {
                 val index = one(integers(0, list.size))
@@ -171,11 +171,10 @@ internal constructor()
 
             val map = HashMap<K, V>(size)
 
-            for (i in 0..size - 1)
-            {
+            (0..size - 1).forEach {
                 val key = keyGenerator.get()
-                val vaue = valueGenerator.get()
-                map.put(key, vaue)
+                val value = valueGenerator.get()
+                map.put(key, value)
             }
 
             return map

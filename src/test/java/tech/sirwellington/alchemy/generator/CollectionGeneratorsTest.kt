@@ -16,6 +16,7 @@
 
 package tech.sirwellington.alchemy.generator
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.apache.commons.lang3.RandomUtils
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
@@ -24,7 +25,6 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.atLeast
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
@@ -73,7 +73,7 @@ class CollectionGeneratorsTest
 
         val value = Any()
         val generator = mock(AlchemyGenerator::class.java)
-        `when`(generator.get()).thenReturn(value)
+        whenever(generator.get()).thenReturn(value)
 
         val result = CollectionGenerators.listOf(generator)
         assertThat(result.isEmpty(), `is`(false))
@@ -88,7 +88,7 @@ class CollectionGeneratorsTest
         val value = Any()
         val size = 50
         val generator = mock(AlchemyGenerator::class.java)
-        `when`(generator.get()).thenReturn(value)
+        whenever(generator.get()).thenReturn(value)
 
         val result = CollectionGenerators.listOf(generator, 50)
 
@@ -127,10 +127,10 @@ class CollectionGeneratorsTest
         val keyGenerator = mock(AlchemyGenerator::class.java)
         val valueGenerator = mock(AlchemyGenerator::class.java)
 
-        `when`(keyGenerator.get())
+        whenever(keyGenerator.get())
                 .thenAnswer { invk -> one(strings()) }
 
-        `when`(valueGenerator.get())
+        whenever(valueGenerator.get())
                 .thenAnswer { invk -> one(positiveIntegers()) }
 
         val result = CollectionGenerators.mapOf(keyGenerator, valueGenerator)

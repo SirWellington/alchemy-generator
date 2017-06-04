@@ -42,8 +42,6 @@ internal constructor()
     companion object
     {
 
-        private val LOG = LoggerFactory.getLogger(BooleanGenerators::class.java)
-
         /**
          * Generates a series of randomly selected booleans.
          *
@@ -65,12 +63,12 @@ internal constructor()
         fun alternatingBooleans(): AlchemyGenerator<Boolean>
         {
             val count = AtomicInteger()
-            return AlchemyGenerator { isEven(count.incrementAndGet()) }
+            return AlchemyGenerator { count.incrementAndGet().isEven() }
         }
 
-        private fun isEven(number: Int): Boolean
+        private fun Int.isEven(): Boolean
         {
-            return number % 2 == 0
+            return this % 2 == 0
         }
     }
 
