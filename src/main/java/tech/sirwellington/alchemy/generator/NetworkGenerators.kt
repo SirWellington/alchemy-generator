@@ -24,7 +24,6 @@ import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.PeopleGenerators.Companion.popularEmailDomains
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericString
-import java.lang.Short
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*

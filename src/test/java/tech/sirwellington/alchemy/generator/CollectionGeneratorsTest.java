@@ -38,9 +38,7 @@ import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
-import static tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString;
-import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
-import static tech.sirwellington.alchemy.generator.StringGenerators.uuids;
+import static tech.sirwellington.alchemy.generator.StringGenerators.*;
 import static tech.sirwellington.alchemy.generator.Tests.doInLoop;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
@@ -113,7 +111,7 @@ public class CollectionGeneratorsTest
         AlchemyGenerator<String> valueGenerator = () -> string;
         int size = integers(5, 100).get();
 
-        Map<String, String> result = CollectionGenerators.mapOf(uuids, valueGenerator, size);
+        Map<String, String> result = CollectionGenerators.mapOf(StringGenerators.uuids, valueGenerator, size);
         assertThat(result, notNullValue());
         assertThat(result.size(), is(size));
 
@@ -178,10 +176,10 @@ public class CollectionGeneratorsTest
         System.out.println("testListOfEdgeCases");
         
         int badSize = one(negativeIntegers());
-        assertThrows(() -> CollectionGenerators.listOf(uuids, badSize))
+        assertThrows(() -> CollectionGenerators.listOf(StringGenerators.uuids(), badSize))
             .isInstanceOf(IllegalArgumentException.class);
         
-        List<String> result = CollectionGenerators.listOf(uuids, 0);
+        List<String> result = CollectionGenerators.listOf(StringGenerators.uuids, 0);
         assertThat(result, notNullValue());
         assertThat(result, is(empty()));
         

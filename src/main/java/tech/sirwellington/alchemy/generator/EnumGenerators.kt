@@ -39,9 +39,6 @@ internal constructor()
     companion object
     {
 
-        private val LOG = LoggerFactory.getLogger(EnumGenerators::class.java)
-
-
         /**
          * Returns sequence of Enum values from the supplied arguments.
          * <pre>
@@ -57,12 +54,18 @@ internal constructor()
          * @param enumClass The `class` of the Enum.
          *
          * @return A generator that produces values of the supplied enum type.
-        </E> */
+         */
         @JvmStatic
         inline fun <reified E : Enum<*>> enumValueOf(): AlchemyGenerator<E>
         {
             val klass = E::class.java
-            val constants = klass.enumConstants ?: throw IllegalArgumentException("Class is not an Enum type: [${klass.name}]")
+            return secondEnumValue(klass)
+        }
+
+        @JvmStatic
+        fun <E: Enum<*>> secondEnumValue(enumClass: Class<E>): AlchemyGenerator<E>
+        {
+            val constants = enumClass.enumConstants ?: throw IllegalArgumentException("Class is not an Enum type: [${enumClass.name}]")
 
             if (constants.isEmpty())
             {
@@ -74,5 +77,6 @@ internal constructor()
                 constants[index]
             }
         }
+
     }
 }

@@ -239,7 +239,8 @@ internal constructor()
         /**
          * Generates random [UUIDs][UUID].
          */
-        @JvmStatic var uuids = AlchemyGenerator { UUID.randomUUID().toString() }
+        @JvmField
+        val uuids = AlchemyGenerator { UUID.randomUUID().toString() }
 
         /**
          * Just returns [.uuids]. This exists for consistency.

@@ -58,7 +58,7 @@ public class EnumGeneratorsTest
     public void testEnumValueOf()
     {
         System.out.println("testEnumValueOf");
-        AlchemyGenerator<Fruit> fruits = EnumGenerators.enumValueOf(Fruit.class);
+        AlchemyGenerator<Fruit> fruits = EnumGenerators.secondEnumValue(Fruit.class);
         assertThat(fruits, notNullValue());
         for (int i = 0; i < iterations; ++i)
         {

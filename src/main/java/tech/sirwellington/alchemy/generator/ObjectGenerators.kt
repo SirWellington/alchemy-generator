@@ -385,7 +385,7 @@ internal constructor()
         {
             if (isMapType(collectionType))
             {
-                return determineGeneratorForMapField(collectionField, collectionType, generatorMappings)
+                return determineGeneratorForMapField(collectionField, generatorMappings)
             }
 
             val parameterizedType = collectionField.genericType as ParameterizedType
@@ -411,7 +411,6 @@ internal constructor()
         }
 
         private fun determineGeneratorForMapField(mapField: Field,
-                                                  mapType: Class<*>,
                                                   generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
         {
             val parameterizedType = mapField.genericType as ParameterizedType
