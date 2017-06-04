@@ -21,9 +21,6 @@ import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
-import tech.sirwellington.alchemy.generator.DateGenerators.*
-import tech.sirwellington.alchemy.generator.NumberGenerators.*
-import tech.sirwellington.alchemy.generator.StringGenerators.*
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -33,7 +30,13 @@ import java.nio.ByteBuffer
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.stream.Collectors
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.Set
+import kotlin.collections.filter
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toList
 
 /**
  * Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).

@@ -18,20 +18,12 @@
 package tech.sirwellington.alchemy.generator
 
 
-import java.net.MalformedURLException
-import java.net.URL
-import java.util.Arrays
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
-
-import java.lang.String.format
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.one
-import tech.sirwellington.alchemy.generator.Checks.checkNotEmpty
-import tech.sirwellington.alchemy.generator.NumberGenerators.integers
-import tech.sirwellington.alchemy.generator.PeopleGenerators.popularEmailDomains
-import tech.sirwellington.alchemy.generator.StringGenerators.alphanumericString
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.*
 
 /**
 
