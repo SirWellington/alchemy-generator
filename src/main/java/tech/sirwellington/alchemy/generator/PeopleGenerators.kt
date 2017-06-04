@@ -52,6 +52,7 @@ internal constructor()
          * Generates a "names". There are no guarantees on the names except that it is an
          * [Alphabetic String][StringGenerators.alphabeticString] where the first letter is capitalized.
          */
+        @JvmStatic
         fun names(): AlchemyGenerator<String>
         {
             //TODO: It may be better to use an actual dictionary resource file for names instead of generating them.
@@ -67,6 +68,7 @@ internal constructor()
         /**
          * Generates a human ages, from 1 to 100.
          */
+        @JvmStatic
         fun ages(): AlchemyGenerator<Int>
         {
             return integers(1, 100)
@@ -75,6 +77,7 @@ internal constructor()
         /**
          * Generates an "Adult" ages, from 18 to 100.
          */
+        @JvmStatic
         fun adultAges(): AlchemyGenerator<Int>
         {
             return integers(18, 100)
@@ -83,6 +86,7 @@ internal constructor()
         /**
          * Generates a "Child" ages, from 1 to 17.
          */
+        @JvmStatic
         fun childAges(): AlchemyGenerator<Int>
         {
             return integers(1, 18)
@@ -92,6 +96,7 @@ internal constructor()
          * Returns a US-based phone number in Long form, without the leading country code.
          * For example, "7545185179".
          */
+        @JvmStatic
         fun phoneNumbers(): AlchemyGenerator<Long>
         {
             return AlchemyGenerator {
@@ -111,6 +116,7 @@ internal constructor()
          * dashes "-", to separate the phone number parts, although that may change in the future.
          * For example, "547-412-4578".
          */
+        @JvmStatic
         fun phoneNumberStrings(): AlchemyGenerator<String>
         {
             return AlchemyGenerator {
@@ -135,6 +141,7 @@ internal constructor()
          *  1.  sirwellington.tech
          *
          */
+        @JvmStatic
         fun popularEmailDomains(): AlchemyGenerator<String>
         {
             return stringsFromFixedList("yahoo.com",
@@ -151,11 +158,12 @@ internal constructor()
          *
          * @param domainGenerator
          *
-         *
          * @throws IllegalArgumentException If the Domain generator is null, or returns an empty domain.
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
-        @JvmOverloads fun emails(@Required domainGenerator: AlchemyGenerator<String> = popularEmailDomains()): AlchemyGenerator<String>
+        @JvmOverloads
+        fun emails(@Required domainGenerator: AlchemyGenerator<String> = popularEmailDomains()): AlchemyGenerator<String>
         {
             checkNotNull(domainGenerator, "domainGenerator missing")
             checkNotEmpty(domainGenerator.get(), "Email Domain Generator returned empty String")
@@ -169,9 +177,3 @@ internal constructor()
         }
     }
 }
-/**
- * Generates email addresses using the [Popular Email Domains][.popularEmailDomains].
- *
- * @see .popularEmailDomains
- * @see .emails
- */

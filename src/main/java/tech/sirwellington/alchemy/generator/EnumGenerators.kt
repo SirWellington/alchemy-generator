@@ -58,6 +58,7 @@ internal constructor()
          *
          * @return A generator that produces values of the supplied enum type.
         </E> */
+        @JvmStatic
         inline fun <reified E : Enum<*>> enumValueOf(): AlchemyGenerator<E>
         {
             val klass = E::class.java

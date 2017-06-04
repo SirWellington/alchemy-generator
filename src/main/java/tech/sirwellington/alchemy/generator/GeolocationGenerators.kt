@@ -45,6 +45,7 @@ internal constructor()
          * Creates valid latitudes from -90...90 degrees.
          * @return
          */
+        @JvmStatic
         fun latitudes(): AlchemyGenerator<Double>
         {
             return doubles(-90.0, 90.0)
@@ -55,6 +56,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun longitudes(): AlchemyGenerator<Double>
         {
             return doubles(-180.0, 180.0)

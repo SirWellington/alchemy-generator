@@ -149,11 +149,13 @@ internal constructor()
          *
          * @see TimeGenerators
          */
+        @JvmStatic
         fun <T : Any> pojos(classOfPojo: Class<T>): AlchemyGenerator<T?>
         {
             return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS)
         }
 
+        @JvmStatic
         fun <T : Any> pojos(classOfPojo: Class<T>, customMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<T?>
         {
             checkNotNull(classOfPojo, "missing class of POJO")

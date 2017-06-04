@@ -59,6 +59,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun presentInstants(): AlchemyGenerator<Instant>
         {
             return AlchemyGenerator { Instant.now() }
@@ -69,6 +70,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun pastInstants(): AlchemyGenerator<Instant>
         {
             /*
@@ -83,6 +85,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun futureInstants(): AlchemyGenerator<Instant>
         {
             // In order to stay in the future, the "present" must be continuously recalculated.
@@ -102,6 +105,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun before(@Required instant: Instant): AlchemyGenerator<Instant>
         {
@@ -133,6 +137,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun after(@Required instant: Instant): AlchemyGenerator<Instant>
         {
@@ -160,6 +165,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun anytime(): AlchemyGenerator<Instant>
         {
             return AlchemyGenerator {
@@ -187,6 +193,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun timesBetween(@Required startTime: Instant, @Required endTime: Instant): AlchemyGenerator<Instant>
         {

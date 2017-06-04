@@ -68,6 +68,7 @@ private constructor()
         /**
          * @return URLs beginning with `http://`
          */
+        @JvmStatic
         fun httpUrls(): AlchemyGenerator<URL>
         {
             return urlsWithProtocol("http")
@@ -77,6 +78,7 @@ private constructor()
          *
          * @return URLs beginning with `https://`
          */
+        @JvmStatic
         fun httpsUrls(): AlchemyGenerator<URL>
         {
             return urlsWithProtocol("https")
@@ -88,6 +90,7 @@ private constructor()
          *
          * @return  URLs beginning with the `protocol`
          */
+        @JvmStatic
         fun urlsWithProtocol(@NonEmpty protocol: String): AlchemyGenerator<URL>
         {
             checkNotEmpty(protocol, "missing protocol")
@@ -121,6 +124,7 @@ private constructor()
         /**
          * @return Ports from 22 to [32767][Short.MAX_VALUE].
          */
+        @JvmStatic
         fun ports(): AlchemyGenerator<Int>
         {
             return integers(22, Short.MAX_VALUE.toInt())
@@ -130,6 +134,7 @@ private constructor()
          * Generates IPV4 addresses in the form `xxx.xx.xxx.xx`.
          * @return An IPV4 address
          */
+        @JvmStatic
         fun ip4Addresses(): AlchemyGenerator<String>
         {
             val integers = integers(10, 1000)
