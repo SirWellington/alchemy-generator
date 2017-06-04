@@ -61,7 +61,7 @@ public class TimeGeneratorsTest
     {
         System.out.println("testPresentInstants");
         
-        AlchemyGenerator<Instant> instance = TimeGenerators.Companion.presentInstants();
+        AlchemyGenerator<Instant> instance = TimeGenerators.presentInstants();
         assertThat(instance, notNullValue());
         
         doInLoop(i ->
@@ -76,7 +76,7 @@ public class TimeGeneratorsTest
     {
         System.out.println("testPastInstants");
         
-        AlchemyGenerator<Instant> instance = TimeGenerators.Companion.pastInstants();
+        AlchemyGenerator<Instant> instance = TimeGenerators.pastInstants();
         assertThat(instance, notNullValue());
         
         doInLoop(i ->
@@ -94,7 +94,7 @@ public class TimeGeneratorsTest
     {
         System.out.println("testFutureInstants");
         
-        AlchemyGenerator<Instant> instance = TimeGenerators.Companion.futureInstants();
+        AlchemyGenerator<Instant> instance = TimeGenerators.futureInstants();
         assertThat(instance, notNullValue());
         
         doInLoop(i ->
@@ -117,7 +117,7 @@ public class TimeGeneratorsTest
             int daysBefore = one(smallPositiveIntegers());
             
             Instant referenceTime = Instant.now().minus(daysBefore, DAYS);
-            AlchemyGenerator<Instant> instance = TimeGenerators.Companion.before(referenceTime);
+            AlchemyGenerator<Instant> instance = TimeGenerators.before(referenceTime);
             assertThat(instance, notNullValue());
             
             Instant result = instance.get();
@@ -136,7 +136,7 @@ public class TimeGeneratorsTest
             int daysAhead = one(smallPositiveIntegers());
             
             Instant referenceTime = Instant.now().plus(daysAhead, DAYS);
-            AlchemyGenerator<Instant> instance = TimeGenerators.Companion.after(referenceTime);
+            AlchemyGenerator<Instant> instance = TimeGenerators.after(referenceTime);
             assertThat(instance, notNullValue());
             
             Instant result = instance.get();
@@ -152,7 +152,7 @@ public class TimeGeneratorsTest
         
         doInLoop(i ->
         {
-            AlchemyGenerator<Instant> instance = TimeGenerators.Companion.anytime();
+            AlchemyGenerator<Instant> instance = TimeGenerators.anytime();
             assertThat(instance, notNullValue());
             
             Instant result = instance.get();
@@ -169,13 +169,13 @@ public class TimeGeneratorsTest
         Instant startTime = Instant.now();
         Instant endTime = startTime.plus(4, DAYS);
         
-        assertThrows(() -> TimeGenerators.Companion.timesBetween(startTime, null))
+        assertThrows(() -> TimeGenerators.timesBetween(startTime, null))
             .isInstanceOf(IllegalArgumentException.class);
         
-        assertThrows(() -> TimeGenerators.Companion.timesBetween(null, endTime))
+        assertThrows(() -> TimeGenerators.timesBetween(null, endTime))
             .isInstanceOf(IllegalArgumentException.class);
         
-        assertThrows(() -> TimeGenerators.Companion.timesBetween(endTime, startTime))
+        assertThrows(() -> TimeGenerators.timesBetween(endTime, startTime))
             .isInstanceOf(IllegalArgumentException.class);
         
         
@@ -187,7 +187,7 @@ public class TimeGeneratorsTest
             Instant start = Instant.ofEpochMilli(startTimestamp);
             Instant end = Instant.ofEpochMilli(endTimestamp);
             
-            AlchemyGenerator<Instant> instance = TimeGenerators.Companion.timesBetween(start, end);
+            AlchemyGenerator<Instant> instance = TimeGenerators.timesBetween(start, end);
             assertThat(instance, notNullValue());
             
             Instant result = instance.get();
