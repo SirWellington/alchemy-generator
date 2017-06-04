@@ -137,7 +137,7 @@ private constructor()
         {
             val integers = integers(10, 1000)
 
-            return AlchemyGenerator { "${integers.get()}.${integers.get()}.${integers.get()}.${integers.get()} }
+            return AlchemyGenerator { "${integers.get()}.${integers.get()}.${integers.get()}.${integers.get()}" }
         }
     }
 }
