@@ -27,10 +27,10 @@ import org.junit.runner.RunWith
 import org.mockito.runners.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.Dates.Companion.isNow
-import tech.sirwellington.alchemy.generator.Dates.Companion.now
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
+import java.lang.Long
 import java.time.Instant
 
 /**
@@ -79,12 +79,13 @@ class DateGeneratorsTest
     fun testPastDates()
     {
         println("testPastDates")
+        
         val instance = DateGenerators.pastDates()
 
         doInLoop { i ->
             val value = instance.get()
             assertThat(value, notNullValue())
-            assertThat(value.before(now()), `is`(true))
+            assertThat(value.before(Dates.now()), `is`(true))
         }
     }
 
@@ -98,7 +99,7 @@ class DateGeneratorsTest
         doInLoop { i ->
             val value = instance.get()
             assertThat(value, notNullValue())
-            assertThat(value.after(now()), `is`(true))
+            assertThat(value.after(Dates.now()), `is`(true))
         }
     }
 
@@ -195,7 +196,7 @@ class DateGeneratorsTest
 
         doInLoop { i ->
             //Pick a start and end time
-            val begin = one(longs(1, java.lang.Long.MAX_VALUE / 2))
+            val begin = one(longs(1, Long.MAX_VALUE / 2))
             val end = one(longs(begin + 1, java.lang.Long.MAX_VALUE))
 
             startDate.time = begin
