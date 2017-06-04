@@ -228,7 +228,7 @@ internal constructor()
         @Throws(NoSuchMethodException::class, InstantiationException::class, IllegalAccessException::class, IllegalArgumentException::class, InvocationTargetException::class)
         private fun <T : Any> instantiate(classOfT: Class<T>): T
         {
-            val defaultConstructor = classOfT.constructors.first()
+            val defaultConstructor = classOfT.constructors.firstOrNull() ?: classOfT.getDeclaredConstructor()
             val originalAccessibility = defaultConstructor.isAccessible
             val args = defaultConstructor.parameterTypes
             val values = createValuesFor(args).toTypedArray()

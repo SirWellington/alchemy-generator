@@ -34,7 +34,7 @@ import java.util.*
 import java.util.function.Consumer
 
 /**
-
+ *
  * @author SirWellington
  */
 class ObjectGeneratorsTest
@@ -138,14 +138,18 @@ class ObjectGeneratorsTest
     }
 
     @Test
-    fun testPojosRejectsNonInstantiables()
+    fun testPojosHandlesNonDefaultConstructor()
     {
-        println("testPojosRejectsNonInstantiables")
+        println("testPojosHandlesNonDefaultConstructor")
 
-        class ExampleNonInstantiable(argument: String)
+        class ExampleNonDefaultConstructor(val argument: String)
 
-        assertThrows { ObjectGenerators.pojos(ExampleNonInstantiable::class.java) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        val generator = ObjectGenerators.pojos(ExampleNonDefaultConstructor::class.java)
+
+        val instance = generator.get()
+
+        assertThat(instance, notNullValue())
+        assertThat(instance.argument, not(isEmptyOrNullString()))
     }
 
     @Test
