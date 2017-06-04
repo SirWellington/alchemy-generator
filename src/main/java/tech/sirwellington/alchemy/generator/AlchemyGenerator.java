@@ -16,6 +16,7 @@
 package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
+import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
@@ -61,7 +62,7 @@ public interface AlchemyGenerator<T>
      *
      * @return
      */
-    @NonNull
+    @Required
     T get();
 
     class Get
@@ -74,7 +75,7 @@ public interface AlchemyGenerator<T>
          * @param generator
          * @return Only one value from the generator.
          */
-        public static <T> T one(@NonNull AlchemyGenerator<T> generator)
+        public static <T> T one(@Required AlchemyGenerator<T> generator)
         {
             Checks.checkNotNull(generator);
             return generator.get();

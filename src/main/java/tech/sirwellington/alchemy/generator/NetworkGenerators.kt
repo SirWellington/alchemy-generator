@@ -21,6 +21,10 @@ package tech.sirwellington.alchemy.generator
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
+import tech.sirwellington.alchemy.generator.PeopleGenerators.Companion.popularEmailDomains
+import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericString
+import java.lang.Short
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -99,6 +103,7 @@ private constructor()
             }
 
             return AlchemyGenerator {
+
                 val url = "$cleanProtocol://${alphanumericString().get()}.${popularEmailDomains().get()}"
 
                 try
@@ -118,7 +123,7 @@ private constructor()
          */
         fun ports(): AlchemyGenerator<Int>
         {
-            return integers(22, java.lang.Short.MAX_VALUE.toInt())
+            return integers(22, Short.MAX_VALUE.toInt())
         }
 
         /**

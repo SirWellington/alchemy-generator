@@ -22,6 +22,9 @@ import tech.sirwellington.alchemy.annotations.arguments.NonNull
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFromFixedList
 
 /**
  * Generators for common information about People: names, addresses, phone numbers, emails.

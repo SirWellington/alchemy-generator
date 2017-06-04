@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
+import tech.sirwellington.alchemy.generator.NumberGenerators.Companion
 
 /**
 
@@ -71,7 +72,7 @@ internal constructor()
             }
 
             return AlchemyGenerator {
-                val index = integers(0, constants.size).get()
+                val index = NumberGenerators.integers(0, constants.size).get()
                 constants[index]
             }
         }
