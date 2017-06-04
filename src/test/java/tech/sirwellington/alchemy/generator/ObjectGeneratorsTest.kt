@@ -149,9 +149,16 @@ class ObjectGeneratorsTest
     }
 
     @Test
-    fun testPojosCustom()
+    fun testWithJavaCode()
     {
-        println("testPojosCustom")
+        println("testWithJavaCode")
+
+        val generator = ObjectGenerators.pojos(JavaCode.Person::class.java)
+
+        doInLoop {
+            val result = generator.get()
+            JavaCode.Person.check(result)
+        }
     }
 
     private fun checkPerson(person: Person)
