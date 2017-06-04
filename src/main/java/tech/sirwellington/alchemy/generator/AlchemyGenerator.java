@@ -16,8 +16,10 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.util.function.Supplier;
+
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
+
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 
@@ -39,9 +41,9 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
  * + Lists of the above
  * + Maps of the above
  * </pre>
- *
+ * <p>
  * Examples:
- *
+ * <p>
  * <pre>
  * Get a positive integer:
  *
@@ -50,13 +52,11 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
  * }
  * </pre>
  *
- * @author SirWellington
- *
  * @param <T> The type of the Object to generate.
+ * @author SirWellington
  */
-@FunctionalInterface
 @StrategyPattern(role = INTERFACE)
-public interface AlchemyGenerator<T> extends Supplier<T>
+public interface AlchemyGenerator<T>
 {
 
     /**
@@ -64,21 +64,24 @@ public interface AlchemyGenerator<T> extends Supplier<T>
      *
      * @return
      */
-    @Override
     @NonNull
     T get();
 
-    /**
-     * Calls the generator once to get the ones of its values.
-     *
-     * @param <T>
-     * @param generator
-     *
-     * @return Only one value from the generator.
-     */
-    public static <T> T one(@NonNull AlchemyGenerator<T> generator)
+    class Get
     {
-        checkNotNull(generator);
-        return generator.get();
+
+        /**
+         * Calls the generator once to get the ones of its values.
+         *
+         * @param <T>
+         * @param generator
+         * @return Only one value from the generator.
+         */
+        public static <T> T one(@NonNull AlchemyGenerator<T> generator)
+        {
+            checkNotNull(generator);
+            return generator.get();
+        }
     }
 }
+
