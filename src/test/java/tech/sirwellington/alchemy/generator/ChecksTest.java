@@ -39,7 +39,7 @@ public class ChecksTest
         message = "some message";
     }
 
-    @Test(expected = IllegalAccessException.class)
+    @Test(expected = InstantiationException.class)
     public void testCannotInstantiate() throws InstantiationException, IllegalAccessException
     {
         System.out.println("testCannotInstantiate");

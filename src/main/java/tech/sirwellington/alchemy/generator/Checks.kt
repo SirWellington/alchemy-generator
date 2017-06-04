@@ -48,7 +48,7 @@ internal fun checkThat(predicate: Boolean, message: String = "")
 
 @Throws(IllegalArgumentException::class)
 @JvmOverloads
-internal fun checkNotEmpty(string: String?, message: String = "")
+internal fun checkNotEmpty(string: String?, message: String? = "")
 {
-    checkThat(string != null && !string.isEmpty(), message)
+    checkThat(string != null && !string.isEmpty(), message ?: "")
 }
