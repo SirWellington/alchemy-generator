@@ -54,6 +54,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun presentDates(): AlchemyGenerator<Date>
         {
             return AlchemyGenerator { Date() }
@@ -69,6 +70,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun pastDates(): AlchemyGenerator<Date>
         {
             return toDate(TimeGenerators.pastInstants())
@@ -83,6 +85,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun futureDates(): AlchemyGenerator<Date>
         {
             return toDate(TimeGenerators.futureInstants())
@@ -97,6 +100,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun before(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
@@ -115,6 +119,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun after(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
@@ -129,6 +134,7 @@ internal constructor()
          *
          * @return
          */
+        @JvmStatic
         fun anyTime(): AlchemyGenerator<Date>
         {
             return toDate(TimeGenerators.anytime())
@@ -143,6 +149,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun toDate(@Required generator: AlchemyGenerator<Instant>): AlchemyGenerator<Date>
         {
@@ -163,6 +170,7 @@ internal constructor()
          *
          * @throws IllegalArgumentException If either date is null, or startDate is not before endDate
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun datesBetween(@Required startDate: Date, @Required endDate: Date): AlchemyGenerator<Date>
         {
