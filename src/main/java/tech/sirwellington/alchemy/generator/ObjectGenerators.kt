@@ -157,13 +157,13 @@ internal constructor()
          * @see TimeGenerators
          */
         @JvmStatic
-        fun <T : Any> pojos(classOfPojo: Class<T>): AlchemyGenerator<T?>
+        fun <T : Any> pojos(classOfPojo: Class<T>): AlchemyGenerator<T>
         {
             return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS)
         }
 
         @JvmStatic
-        fun <T : Any> pojos(classOfPojo: Class<T>, customMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<T?>
+        fun <T : Any> pojos(classOfPojo: Class<T>, customMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<T>
         {
             checkNotNull(classOfPojo, "missing class of POJO")
             checkThat(canInstantiate(classOfPojo), "cannot instantiate class: " + classOfPojo)
@@ -174,7 +174,7 @@ internal constructor()
                     .filter { f -> !isFinal(f) }
                     .toList()
 
-            return AlchemyGenerator result@ {
+            return AlchemyGenerator<T> result@ {
 
                 val instance: T
 
