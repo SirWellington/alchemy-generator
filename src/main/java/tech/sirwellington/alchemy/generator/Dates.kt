@@ -35,7 +35,8 @@ import java.time.temporal.ChronoUnit.*
  */
 @Internal
 @NonInstantiable
-internal class Dates @Throws(IllegalAccessException::class)
+internal class Dates
+@Throws(IllegalAccessException::class)
 constructor()
 {
 
@@ -111,6 +112,7 @@ constructor()
         fun hoursAhead(hours: Int): Date
         {
             val instant = Instant.now().plus(hours.toLong(), HOURS)
+
             return Date(instant.toEpochMilli())
         }
 
@@ -125,6 +127,7 @@ constructor()
         fun minutesAgo(minutes: Int): Date
         {
             val instant = Instant.now().minus(minutes.toLong(), MINUTES)
+
             return Date(instant.toEpochMilli())
         }
 
@@ -139,6 +142,7 @@ constructor()
         fun minutesAhead(minutes: Int): Date
         {
             val instant = Instant.now().plus(minutes.toLong(), MINUTES)
+
             return Date(instant.toEpochMilli())
         }
 
@@ -172,14 +176,15 @@ constructor()
 
         @JvmStatic
         @JvmOverloads
-        fun isNow(instant: Instant, marginOfErrorMillies: Long = 5): Boolean
+        fun isNow(instant: Instant, marginOfErrorMillis: Long = 5): Boolean
         {
             val now = Instant.now()
+
             checkNotNull(instant)
             checkNotNull(now)
-            checkThat(marginOfErrorMillies >= 0, "margin of error must be >= 0 ")
+            checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0 ")
 
-            val delta = marginOfErrorMillies
+            val delta = marginOfErrorMillis
             val timeOfDate = instant.toEpochMilli()
             val timeOfNow = now.toEpochMilli()
 

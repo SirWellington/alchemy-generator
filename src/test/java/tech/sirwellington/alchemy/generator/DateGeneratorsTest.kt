@@ -26,8 +26,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.runners.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.Dates.isNow
-import tech.sirwellington.alchemy.generator.Dates.now
+import tech.sirwellington.alchemy.generator.Dates.Companion.isNow
+import tech.sirwellington.alchemy.generator.Dates.Companion.now
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows

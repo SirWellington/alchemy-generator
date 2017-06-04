@@ -59,6 +59,7 @@ class DatesTest
     fun testNow()
     {
         println("testNow")
+
         val result = Dates.now()
         val after = Date()
         assertThat(after.time, greaterThanOrEqualTo(result.time))
@@ -83,6 +84,7 @@ class DatesTest
     fun testDaysAhead()
     {
         println("testDaysAhead")
+
         val days = positiveIntegers().get()
 
         val left = now().toEpochMilli()
@@ -98,6 +100,7 @@ class DatesTest
     fun testHoursAgo()
     {
         println("testHoursAgo")
+
         val hours = positiveIntegers().get()
 
         val left = now().minus(hours.toLong(), ChronoUnit.HOURS).toEpochMilli()
@@ -113,6 +116,7 @@ class DatesTest
     fun testHoursAhead()
     {
         println("testHoursAhead")
+
         val hours = positiveIntegers().get()
 
         val left = Instant.now().toEpochMilli()
@@ -129,6 +133,7 @@ class DatesTest
     fun testMinutesAgo()
     {
         println("testMinutesAgo")
+
         val minutes = positiveIntegers().get()
 
         val left = now().minus(minutes.toLong(), MINUTES).toEpochMilli()
@@ -144,6 +149,7 @@ class DatesTest
     fun testMinutesAhead()
     {
         println("testMinutesAhead")
+
         val minutes = positiveIntegers().get()
 
         val left = now().toEpochMilli()
@@ -166,8 +172,7 @@ class DatesTest
         val notNow = Dates.daysAgo(1)
         assertThat(Dates.isNow(notNow), `is`(false))
 
-        assertThrows { Dates.isNow(null) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        assertThrows { Dates.isNow(null!! as Date) }
     }
 
     @Test
@@ -176,8 +181,7 @@ class DatesTest
     {
         println("testIsNow_Date_long")
 
-        assertThrows { Dates.isNow(null as Date?, 0) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        assertThrows { Dates.isNow(null as Date, 0) }
 
         val now = Dates.now()
         assertThat(Dates.isNow(now, 10), `is`(true))
@@ -195,8 +199,7 @@ class DatesTest
     {
         println("testIsNow_Instant_long")
 
-        assertThrows { Dates.isNow(null as Instant?, 0) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        assertThrows { Dates.isNow(null as Instant, 0) }
 
         assertThrows { Dates.isNow(Instant.now(), one(negativeIntegers()).toLong()) }
                 .isInstanceOf(IllegalArgumentException::class.java)
