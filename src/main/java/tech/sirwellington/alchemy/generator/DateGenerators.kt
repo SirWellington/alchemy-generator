@@ -18,7 +18,7 @@ package tech.sirwellington.alchemy.generator
 
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
-import tech.sirwellington.alchemy.annotations.arguments.NonNull
+import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import java.time.Instant
