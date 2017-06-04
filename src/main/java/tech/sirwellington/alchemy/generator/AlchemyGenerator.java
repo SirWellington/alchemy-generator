@@ -15,8 +15,6 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import java.util.function.Supplier;
-
 import tech.sirwellington.alchemy.annotations.arguments.NonNull;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
@@ -79,7 +77,7 @@ public interface AlchemyGenerator<T>
          */
         public static <T> T one(@NonNull AlchemyGenerator<T> generator)
         {
-            checkNotNull(generator);
+            Checks.checkNotNull(generator);
             return generator.get();
         }
     }
