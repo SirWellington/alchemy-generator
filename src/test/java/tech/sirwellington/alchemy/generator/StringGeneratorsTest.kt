@@ -15,6 +15,7 @@
  */
 package tech.sirwellington.alchemy.generator
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
@@ -31,7 +32,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -342,7 +342,7 @@ class StringGeneratorsTest
 
         val generator = mock(AlchemyGenerator::class.java)
 
-        `when`(generator.get())
+        whenever(generator.get())
                 .thenReturn(one(anyTime()))
 
         val instance = StringGenerators.asString(generator)

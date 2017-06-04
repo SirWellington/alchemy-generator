@@ -15,11 +15,11 @@
  */
 package tech.sirwellington.alchemy.generator
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.runners.MockitoJUnitRunner
@@ -49,7 +49,7 @@ class AlchemyGeneratorTest
 
         val instance = mock(AlchemyGenerator::class.java)
         val expected = mock(Any::class.java)
-        `when`(instance.get()).thenReturn(expected)
+        whenever(instance.get()).thenReturn(expected)
         val result = AlchemyGenerator.Get.one(instance)
         verify(instance).get()
         assertEquals(expected, result)
