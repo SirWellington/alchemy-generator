@@ -25,7 +25,7 @@ import java.nio.ByteBuffer
 
 /**
  * [Alchemy Generators][AlchemyGenerator] for raw binary (`byte[]`).
-
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -47,12 +47,12 @@ internal constructor()
 
         /**
          * Generates binary of the specified length
-
+         *
          * @param length The size of the byte arrays created.
-         * *
-         * *
+         *
+         *
          * @return A binary generator
-         * *
+         *
          * @throws IllegalArgumentException If `length < 0`.
          */
         @JvmStatic
@@ -61,16 +61,16 @@ internal constructor()
         {
             checkThat(length >= 0, "length must be >= 0")
 
-            return AlchemyGenerator{ RandomUtils.nextBytes(length) }
+            return AlchemyGenerator { RandomUtils.nextBytes(length) }
         }
 
         /**
          * Generates a [ByteBuffer] of the specified length.
-
+         *
          * @param size The desired size of the Byte Buffer.
-         * *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException If `size < 0`.
          */
         @Throws(IllegalArgumentException::class)
@@ -92,7 +92,7 @@ internal constructor()
         {
             val delegate = binary(1)
 
-            return AlchemyGenerator{
+            return AlchemyGenerator {
                 val array = delegate.get()
                 checkThat(array != null && array.isNotEmpty(), "no Byte available to return.")
 

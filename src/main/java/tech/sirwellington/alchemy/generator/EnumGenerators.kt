@@ -54,10 +54,10 @@ internal constructor()
         </pre> *
 
          * @param <E>       The type of the Enum
-         * *
+         *
          * @param enumClass The `class` of the Enum.
-         * *
-         * *
+         *
+         *
          * @return A generator that produces values of the supplied enum type.
         </E> */
         inline fun <reified E : Enum<*>> enumValueOf(): AlchemyGenerator<E>

@@ -85,7 +85,7 @@ private constructor()
         /**
 
          * @param protocol The protocol to use for the URLs created. Do not include the "://".
-         * *
+         *
          * @return  URLs beginning with the `protocol`
          */
         fun urlsWithProtocol(@NonEmpty protocol: String): AlchemyGenerator<URL>

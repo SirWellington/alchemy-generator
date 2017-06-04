@@ -150,8 +150,8 @@ internal constructor()
          * Generates email addresses using the Supplied Domain Generator.
 
          * @param domainGenerator
-         * *
-         * *
+         *
+         *
          * @throws IllegalArgumentException If the Domain generator is null, or returns an empty domain.
          */
         @Throws(IllegalArgumentException::class)

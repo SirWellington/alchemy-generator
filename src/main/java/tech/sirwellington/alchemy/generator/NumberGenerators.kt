@@ -56,13 +56,13 @@ internal constructor()
          * Creates a series of integer values within the specified bounds.
 
          * @param inclusiveLowerBound The inclusive lower bound
-         * *
+         *
          * @param exclusiveUpperBound The exclusive upper bound
-         * *
-         * *
+         *
+         *
          * @return
-         * *
-         * *
+         *
+         *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
         @Throws(IllegalArgumentException::class)
@@ -129,7 +129,7 @@ internal constructor()
          * Creates a series of positive integer values from 1 to Integer.MAX_VALUE
 
          * @return
-         * *
+         *
          * @see .smallPositiveIntegers
          * @see .positiveLongs
          */
@@ -143,7 +143,7 @@ internal constructor()
          * Creates a series of small positive integers from 1 to 1000.
 
          * @return
-         * *
+         *
          * @see .positiveIntegers
          */
         @JvmStatic
@@ -171,13 +171,13 @@ internal constructor()
          * Produces long values within the specified Range
 
          * @param inclusiveLowerBound inclusive lower bound
-         * *
+         *
          * @param exclusiveUpperBound exclusive upper bound
-         * *
-         * *
+         *
+         *
          * @return
-         * *
-         * *
+         *
+         *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
         @JvmStatic
@@ -247,7 +247,7 @@ internal constructor()
          * Produces a series of positive values from `1` to `Long.MAX_VALUE`
 
          * @return
-         * *
+         *
          * @see .smallPositiveLongs
          * @see .positiveIntegers
          */
@@ -261,8 +261,8 @@ internal constructor()
          * Produces a series of positive values from 1 to 10,000
 
          * @return
-         * *
-         * *
+         *
+         *
          * @see .positiveLongs
          * @see .positiveLongs
          */
@@ -276,13 +276,13 @@ internal constructor()
          * Creates a series of double values within the specified range
 
          * @param inclusiveLowerBound The inclusive lower bound
-         * *
+         *
          * @param inclusiveUpperBound The inclusive upper bound
-         * *
-         * *
+         *
+         *
          * @return
-         * *
-         * *
+         *
+         *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
         @JvmStatic
@@ -335,7 +335,7 @@ internal constructor()
          * Creates a series of positive double values from 0 to Double.MAX_VALUE.
 
          * @return
-         * *
+         *
          * @see .smallPositiveDoubles
          * @see .positiveIntegers
          */
@@ -349,8 +349,8 @@ internal constructor()
          * Creates a series of positive doubles from 0.1 to 1000.0
 
          * @return
-         * *
-         * *
+         *
+         *
          * @see .positiveDoubles
          * @see .positiveIntegers
          */
@@ -364,8 +364,8 @@ internal constructor()
          * Generates an integer value from the specified set.
 
          * @param values
-         * *
-         * *
+         *
+         *
          * @return
          */
         @JvmStatic
@@ -383,8 +383,8 @@ internal constructor()
          * Generates a double value from the specified set.
 
          * @param values
-         * *
-         * *
+         *
+         *
          * @return
          */
         @JvmStatic
@@ -406,8 +406,8 @@ internal constructor()
          * Attempts to increment the value without potentially circling back to [Long.MIN_VALUE]
 
          * @param value
-         * *
-         * *
+         *
+         *
          * @return
          */
         @JvmStatic
@@ -421,8 +421,8 @@ internal constructor()
          * Attempts to decrement the value without potentially circling back to [Long.MAX_VALUE].
 
          * @param value
-         * *
-         * *
+         *
+         *
          * @return
          */
         @JvmStatic
@@ -437,7 +437,7 @@ internal constructor()
          * [Integer.MIN_VALUE]
 
          * @param value
-         * *
+         *
          * @return
          */
         @JvmStatic
@@ -452,7 +452,7 @@ internal constructor()
          * [Integer.MAX_VALUE].
 
          * @param value
-         * *
+         *
          * @return
          */
         @JvmStatic

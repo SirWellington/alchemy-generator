@@ -28,14 +28,14 @@ import java.util.*
  * [Alchemy Generators][AlchemyGenerator] for Java Collections. These generators are useful in conjuction with
  * other [Generators][AlchemyGenerator], such as those in [NumberGenerators] or
  * [StringGenerators].
-
+ *
  * @see StringGenerators
-
+ *
  * @see NumberGenerators
-
+ *
  * @see BinaryGenerators
-
-
+ *
+ *
  * @author SirWellington
  */
 @NonInstantiable
@@ -59,10 +59,10 @@ internal constructor()
          * Returns a list of Objects of varying size, using the supplied generator.
 
          * @param <T>
-         * *
+         *
          * @param generator The generator that produces values
-         * *
-         * *
+         *
+         *
          * @return A list of random values, the length of which will vary.
          */
         @JvmStatic
@@ -75,15 +75,15 @@ internal constructor()
          * Returns a list of Objects using the supplied generator.
 
          * @param <T>       The type to generate
-         * *
+         *
          * @param generator The generator that produces values
-         * *
+         *
          * @param size      The size of the list
-         * *
-         * *
+         *
+         *
          * @return A list of random values with length {code size}
-         * *
-         * *
+         *
+         *
          * @throws IllegalArgumentException if size is less than 0.
          */
         @JvmStatic
@@ -104,12 +104,12 @@ internal constructor()
          * An [AlchemyGenerator] that returns values from a fixed list.
          *
          * @param <T>
-         * *
+         *
          * @param list
-         * *
-         * *
+         *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @JvmStatic
@@ -131,16 +131,16 @@ internal constructor()
          * Maps returned will vary in size.
          *
          * @param <K>
-         * *
+         *
          * @param <V>
-         * *
+         *
          * @param keyGenerator
-         * *
+         *
          * @param valueGenerator
-         * *
-         * *
+         *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @JvmStatic

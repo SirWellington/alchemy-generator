@@ -87,18 +87,18 @@ internal constructor()
          * The basic rules for the POJO are the following.
          * Each field must be:
          *
-         *  *  Non-Static
-         *  *  Non-Final
-         *  *  Primitive type: Integer, Double, etc
-         *  *  [String] Type
-         *  *  [enum][Enum] Type
-         *  *  [Date] Type
-         *  *  [Instant] Type
-         *  *  Another `POJO` That satisfies these rules (embedded Object)
-         *  *  Non-Circular (Cannot contain circular references). A Stack Overflow will occur otherwise.
-         *  *  A [List] with a Type Parameter matching the above.
-         *  *  A [Set] with a Type Parameter matching the above.
-         *  *  A [Map] with Type Parameters matching the above conditions.
+         *  Non-Static
+         *  Non-Final
+         *  Primitive type: Integer, Double, etc
+         *  [String] Type
+         *  [enum][Enum] Type
+         *  [Date] Type
+         *  [Instant] Type
+         *  Another `POJO` That satisfies these rules (embedded Object)
+         *  Non-Circular (Cannot contain circular references). A Stack Overflow will occur otherwise.
+         *  A [List] with a Type Parameter matching the above.
+         *  A [Set] with a Type Parameter matching the above.
+         *  A [Map] with Type Parameters matching the above conditions.
          *
          *
          *
@@ -136,11 +136,11 @@ internal constructor()
         ` *
         </pre> *
          * @param <T>
-         * *
+         *
          * @param classOfPojo
-         * *
+         *
          * @return
-         * *
+         *
          * @see StringGenerators
 
          * @see NumberGenerators

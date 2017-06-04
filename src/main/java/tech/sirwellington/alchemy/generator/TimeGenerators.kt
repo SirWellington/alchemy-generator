@@ -96,10 +96,10 @@ internal constructor()
          * Produces [Instants][Instant] that are always before the specified time.
 
          * @param instant
-         * *
-         * *
+         *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
@@ -127,10 +127,10 @@ internal constructor()
          * Produces [Instants][Instant] that are always after the specified time.
 
          * @param instant
-         * *
-         * *
+         *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
@@ -179,12 +179,12 @@ internal constructor()
          * Generates [Instants][Instant] between the specified times.
 
          * @param startTime Times produced will come at or after this time.
-         * *
+         *
          * @param endTime Times produced will come before this time.
-         * *
-         * *
+         *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
          */
         @Throws(IllegalArgumentException::class)

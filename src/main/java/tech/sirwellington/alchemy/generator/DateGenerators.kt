@@ -90,9 +90,9 @@ internal constructor()
          * Returns dates before the specified reference date.
 
          * @param referenceDate
-         * *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
@@ -108,9 +108,9 @@ internal constructor()
          * Returns dates after the specified reference date.
 
          * @param referenceDate
-         * *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
@@ -136,9 +136,9 @@ internal constructor()
          * Converts [Instants][Instant] to [Dates][Date] using the supplied [AlchemyGenerator].
 
          * @param generator
-         * *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
@@ -155,11 +155,11 @@ internal constructor()
          * Generates Dates between the specified Times.
 
          * @param startDate Dates produced will be at or after this date.
-         * *
+         *
          * @param endDate   Dates produced will be before this date.
-         * *
+         *
          * @return
-         * *
+         *
          * @throws IllegalArgumentException If either date is null, or startDate is not before endDate
          */
         @Throws(IllegalArgumentException::class)
