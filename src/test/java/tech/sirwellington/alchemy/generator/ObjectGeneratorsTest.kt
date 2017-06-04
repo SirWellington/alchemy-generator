@@ -81,7 +81,7 @@ class ObjectGeneratorsTest
         println("testWithCollectionInPojo")
 
         val generator = ObjectGenerators.pojos(Building::class.java)
-        assertThat<AlchemyGenerator<Building>>(generator, notNullValue())
+        assertThat(generator, notNullValue())
 
         doInLoop { i ->
             val result = generator.get()
@@ -110,7 +110,7 @@ class ObjectGeneratorsTest
         println("testComplexPojo")
 
         val generator = ObjectGenerators.pojos(CityBlock::class.java)
-        assertThat<AlchemyGenerator<CityBlock>>(generator, notNullValue())
+        assertThat(generator, notNullValue())
 
         val result = generator.get()
         checkCityBlock(result)
@@ -161,7 +161,7 @@ class ObjectGeneratorsTest
         assertThat(person.middleName, not(isEmptyOrNullString()))
         assertThat(person.age, not(0))
         assertThat(person.money, not(0.0))
-        assertThat<URL>(person.website, notNullValue())
+        assertThat(person.website, notNullValue())
         assertThat(person.website!!.toString(), startsWith("http"))
         assertThat(Person.staticField.toString(), `is`(ObjectGeneratorsTest.staticField))
         checkComputer(person.computer!!)
@@ -170,31 +170,31 @@ class ObjectGeneratorsTest
     private fun checkComputer(computer: Computer)
     {
         assertThat(computer, notNullValue())
-        assertThat<String>(computer.name, not(isEmptyOrNullString()))
-        assertThat<String>(computer.model, not(isEmptyOrNullString()))
-        assertThat<String>(computer.manufacturer, not(isEmptyOrNullString()))
+        assertThat(computer.name, not(isEmptyOrNullString()))
+        assertThat(computer.model, not(isEmptyOrNullString()))
+        assertThat(computer.manufacturer, not(isEmptyOrNullString()))
         assertThat(computer.year, greaterThan(0))
         assertThat(computer.cost, greaterThan(0.0))
 
-        assertThat<ByteArray>(computer.data, notNullValue())
+        assertThat(computer.data, notNullValue())
         assertThat(computer.data!!.size, greaterThan(0))
     }
 
     private fun checkBuilding(building: Building)
     {
         assertThat(building, notNullValue())
-        assertThat<String>(building.address, not(isEmptyOrNullString()))
+        assertThat(building.address, not(isEmptyOrNullString()))
         assertThat(building.age, greaterThan(0))
         assertThat(building.floors, greaterThan(0))
-        assertThat<List<Person>>(building.people, notNullValue())
+        assertThat(building.people, notNullValue())
         assertThat(building.people!!.size, greaterThan(0))
-        building.people.forEach(Consumer<Person> { this.checkPerson(it) })
+        building.people.forEach { this.checkPerson(it) }
     }
 
     private fun checkAddressBook(addressBook: AddressBook)
     {
         assertThat(addressBook, notNullValue())
-        assertThat<Map<String, Building>>(addressBook.directory, notNullValue())
+        assertThat(addressBook.directory, notNullValue())
         assertThat(addressBook.directory!!.size, greaterThan(0))
         addressBook.directory.keys.forEach { key -> assertThat(key, not(isEmptyOrNullString())) }
         addressBook.directory.values.forEach(Consumer<Building> { this.checkBuilding(it) })
@@ -203,48 +203,47 @@ class ObjectGeneratorsTest
     private fun checkCityBlock(cityBlock: CityBlock)
     {
         assertThat(cityBlock, notNullValue())
-        assertThat<String>(cityBlock.name, not(isEmptyOrNullString()))
+        assertThat(cityBlock.name, not(isEmptyOrNullString()))
         assertThat(cityBlock.distance, greaterThan(0))
-        assertThat<State>(cityBlock.state, notNullValue())
-        assertThat<ByteBuffer>(cityBlock.memory, notNullValue())
-        assertThat<Boolean>(cityBlock.isNearOcean, notNullValue())
-        assertThat<Byte>(cityBlock.code, notNullValue())
+        assertThat(cityBlock.state, notNullValue())
+        assertThat(cityBlock.memory, notNullValue())
+        assertThat(cityBlock.isNearOcean, notNullValue())
+        assertThat(cityBlock.code, notNullValue())
 
-        assertThat<List<Building>>(cityBlock.homes, notNullValue())
-        assertThat<List<Building>>(cityBlock.stores, notNullValue())
-        assertThat<Map<Person, Computer>>(cityBlock.internetUsers, notNullValue())
+        assertThat(cityBlock.homes, notNullValue())
+        assertThat(cityBlock.stores, notNullValue())
+        assertThat(cityBlock.internetUsers, notNullValue())
 
         assertThat(cityBlock.homes!!.size, greaterThan(0))
         assertThat(cityBlock.stores!!.size, greaterThan(0))
         assertThat(cityBlock.internetUsers!!.size, greaterThan(0))
         assertThat(cityBlock.memory!!.limit(), greaterThan(0))
 
-        cityBlock.homes.forEach(Consumer<Building> { this.checkBuilding(it) })
-        cityBlock.stores.forEach(Consumer<Building> { this.checkBuilding(it) })
-        cityBlock.internetUsers.keys.forEach(Consumer<Person> { this.checkPerson(it) })
-        cityBlock.internetUsers.values.forEach(Consumer<Computer> { this.checkComputer(it) })
+        cityBlock.homes.forEach { this.checkBuilding(it) }
+        cityBlock.stores.forEach { this.checkBuilding(it) }
+        cityBlock.internetUsers.keys.forEach { this.checkPerson(it) }
+        cityBlock.internetUsers.values.forEach { this.checkComputer(it) }
     }
 
     private class Computer
     {
-
-        val name: String? = null
-        val model: String? = null
-        val year: Int = 0
-        val manufacturer: String? = null
-        val cost: Double = 0.toDouble()
-        val data: ByteArray? = null
+        lateinit var name: String
+        lateinit var model: String
+        var year: Int = 0
+        lateinit var manufacturer: String
+        var cost: Double = 0.0
+        lateinit var data: ByteArray
 
     }
 
     private class Person
     {
-        var name: String? = null
+        lateinit var name: String
         var age: Int = 0
-        val money: Double = 0.toDouble()
-        val middleName: String? = null
-        val computer: Computer? = null
-        val website: URL? = null
+        var money: Double = 0.toDouble()
+        lateinit var middleName: String
+        lateinit var computer: Computer
+        lateinit var website: URL
 
         companion object
         {
@@ -256,16 +255,16 @@ class ObjectGeneratorsTest
     private class Building
     {
 
-        val people: List<Person>? = null
-        val address: String? = null
-        val age: Int = 0
-        val floors: Int = 0
+        lateinit var people: List<Person>
+        lateinit var address: String
+        var age: Int = 0
+        var floors: Int = 0
     }
 
     private class AddressBook
     {
 
-        val directory: Map<String, Building>? = null
+        lateinit var directory: Map<String, Building>
     }
 
     private enum class State
@@ -277,15 +276,15 @@ class ObjectGeneratorsTest
 
     private class CityBlock
     {
-        val name: String? = null
-        val distance: Int = 0
-        val homes: List<Building>? = null
-        val stores: List<Building>? = null
-        val internetUsers: Map<Person, Computer>? = null
-        val state: State? = null
-        val memory: ByteBuffer? = null
-        val isNearOcean: Boolean? = null
-        val code: Byte? = null
+        lateinit var name: String
+        var distance: Int = 0
+        lateinit var homes: List<Building>
+        lateinit var stores: List<Building>
+        lateinit var internetUsers: Map<Person, Computer>
+        lateinit var state: State
+        lateinit var memory: ByteBuffer
+        var isNearOcean: Boolean? = null
+        var code: Byte? = null
     }
 
     companion object

@@ -217,13 +217,8 @@ class PeopleGeneratorsTest
     fun testEmailsWithCustomDomainsEdgeCases()
     {
         assertThrows { PeopleGenerators.emails(null!!) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
         assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { null }) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
         assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { "" }) }
-                .isInstanceOf(IllegalArgumentException::class.java)
     }
 
 }

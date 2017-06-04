@@ -40,14 +40,6 @@ class ChecksTest
         message = "some message"
     }
 
-    @Test(expected = InstantiationException::class)
-    @Throws(InstantiationException::class, IllegalAccessException::class)
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
-        Checks::class.java!!.newInstance()
-    }
-
     @Test
     fun testCheckNotNull()
     {

@@ -162,13 +162,8 @@ class TimeGeneratorsTest
         val endTime = startTime.plus(4, DAYS)
 
         assertThrows { TimeGenerators.timesBetween(startTime, null!!) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
         assertThrows { TimeGenerators.timesBetween(null!!, endTime) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
         assertThrows { TimeGenerators.timesBetween(endTime, startTime) }
-                .isInstanceOf(IllegalArgumentException::class.java)
 
 
         doInLoop { i ->
