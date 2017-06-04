@@ -75,7 +75,7 @@ internal constructor()
             // <= because of the fact that 0 would be the *exclusive* upper bound.
             val isNegativeUpperBound = exclusiveUpperBound <= 0
 
-            return AlchemyGenerator result@ {
+            return AlchemyGenerator {
 
                 if (isNegativeLowerBound && isNegativeUpperBound)
                 {
@@ -86,8 +86,7 @@ internal constructor()
                     val minAdjustedForInclusivity = safeIncrement(min)
                     val maxAdjustedForInclusivity = safeIncrement(max)
 
-                    val value = RandomUtils.nextInt(minAdjustedForInclusivity, maxAdjustedForInclusivity)
-                    return@result -value
+                    -RandomUtils.nextInt(minAdjustedForInclusivity, maxAdjustedForInclusivity)
                 }
                 else if (isNegativeLowerBound)
                 {
@@ -97,17 +96,17 @@ internal constructor()
                     {
                         val max = if (inclusiveLowerBound == Integer.MIN_VALUE) Integer.MAX_VALUE else -inclusiveLowerBound
                         val maxAdjustedForInclusivity = safeIncrement(max)
-                        return@result -RandomUtils.nextInt(0, maxAdjustedForInclusivity)
+                        -RandomUtils.nextInt(0, maxAdjustedForInclusivity)
                     }
                     else
                     {
-                        return@result RandomUtils.nextInt(0, exclusiveUpperBound)
+                        RandomUtils.nextInt(0, exclusiveUpperBound)
                     }
                 }
                 else
                 //Positive bounds
                 {
-                    return@result RandomUtils.nextInt(inclusiveLowerBound, exclusiveUpperBound)
+                    RandomUtils.nextInt(inclusiveLowerBound, exclusiveUpperBound)
                 }
             }
 
@@ -130,8 +129,8 @@ internal constructor()
          *
          * @return
          *
-         * @see .smallPositiveIntegers
-         * @see .positiveLongs
+         * @see [smallPositiveLongs]
+         * @see [smallPositiveIntegers]
          */
         @JvmStatic
         fun positiveIntegers(): AlchemyGenerator<Int>
@@ -144,7 +143,7 @@ internal constructor()
          *
          * @return
          *
-         * @see .positiveIntegers
+         * @see [positiveIntegers]
          */
         @JvmStatic
         fun smallPositiveIntegers(): AlchemyGenerator<Int>
@@ -160,10 +159,10 @@ internal constructor()
         @JvmStatic
         fun negativeIntegers(): AlchemyGenerator<Int>
         {
-            return AlchemyGenerator result@ {
+            return AlchemyGenerator {
                 val value = positiveIntegers().get()
 
-                return@result if (value < 0) value else -value
+                if (value < 0) value else -value
             }
         }
 
@@ -171,12 +170,9 @@ internal constructor()
          * Produces long values within the specified Range
          *
          * @param inclusiveLowerBound inclusive lower bound
-         *
          * @param exclusiveUpperBound exclusive upper bound
          *
-         *
          * @return
-         *
          *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
@@ -190,7 +186,7 @@ internal constructor()
             // <= because of the fact that 0 would be the *exclusive* upper bound.
             val negativeUpperBound = exclusiveUpperBound <= 0
 
-            return AlchemyGenerator result@ {
+            return AlchemyGenerator {
 
                 if (negativeLowerBound && negativeUpperBound)
                 {
@@ -202,8 +198,7 @@ internal constructor()
                     val minAdjustedForInclusivity = safeIncrement(min)
                     val maxAdjustedForInclusivity = safeIncrement(max)
 
-                    val value = RandomUtils.nextLong(minAdjustedForInclusivity, maxAdjustedForInclusivity)
-                    return@result -value
+                    -RandomUtils.nextLong(minAdjustedForInclusivity, maxAdjustedForInclusivity)
                 }
                 else if (negativeLowerBound)
                 {
@@ -215,18 +210,17 @@ internal constructor()
                         val max = if (inclusiveLowerBound == java.lang.Long.MIN_VALUE) java.lang.Long.MAX_VALUE else -inclusiveLowerBound
                         val maxAdjustedForInclusivity = safeIncrement(max)
 
-                        val value = -RandomUtils.nextLong(min, maxAdjustedForInclusivity)
-                        return@result value
+                        -RandomUtils.nextLong(min, maxAdjustedForInclusivity)
                     }
                     else
                     {
-                        return@result RandomUtils.nextLong(0, exclusiveUpperBound)
+                        RandomUtils.nextLong(0, exclusiveUpperBound)
                     }
                 }
                 else
                 //Positive bounds
                 {
-                    return@result RandomUtils.nextLong(inclusiveLowerBound, exclusiveUpperBound)
+                    RandomUtils.nextLong(inclusiveLowerBound, exclusiveUpperBound)
                 }
             }
         }
@@ -263,8 +257,8 @@ internal constructor()
          * @return
          *
          *
-         * @see .positiveLongs
-         * @see .positiveLongs
+         * @see [positiveLongs]
+         * @see [smallPositiveIntegers]
          */
         @JvmStatic
         fun smallPositiveLongs(): AlchemyGenerator<Long>
@@ -276,12 +270,9 @@ internal constructor()
          * Creates a series of double values within the specified range
          *
          * @param inclusiveLowerBound The inclusive lower bound
-         *
          * @param inclusiveUpperBound The inclusive upper bound
          *
-         *
          * @return
-         *
          *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
@@ -290,13 +281,14 @@ internal constructor()
         fun doubles(inclusiveLowerBound: Double, inclusiveUpperBound: Double): AlchemyGenerator<Double>
         {
             checkThat(inclusiveLowerBound <= inclusiveUpperBound, "Upper Bound must be greater than Lower Bound")
+
             val negativeLowerBound = inclusiveLowerBound < 0
             val negativeUpperBound = inclusiveUpperBound < 0
 
-            return AlchemyGenerator result@ {
+            return AlchemyGenerator {
                 if (negativeLowerBound && negativeUpperBound)
                 {
-                    return@result -RandomUtils.nextDouble(-inclusiveUpperBound, -inclusiveLowerBound)
+                    -RandomUtils.nextDouble(-inclusiveUpperBound, -inclusiveLowerBound)
                 }
                 else if (negativeLowerBound)
                 {
@@ -304,17 +296,17 @@ internal constructor()
 
                     if (shouldProduceNegative)
                     {
-                        return@result -RandomUtils.nextDouble(0.0, -inclusiveLowerBound)
+                        -RandomUtils.nextDouble(0.0, -inclusiveLowerBound)
                     }
                     else
                     {
-                        return@result RandomUtils.nextDouble(0.0, inclusiveUpperBound)
+                        RandomUtils.nextDouble(0.0, inclusiveUpperBound)
                     }
                 }
                 else
                 //Positive bounds
                 {
-                    return@result RandomUtils.nextDouble(inclusiveLowerBound, inclusiveUpperBound)
+                    RandomUtils.nextDouble(inclusiveLowerBound, inclusiveUpperBound)
                 }
             }
         }
@@ -328,7 +320,7 @@ internal constructor()
         @JvmStatic
         fun anyDoubles(): AlchemyGenerator<Double>
         {
-            return doubles(-java.lang.Double.MAX_VALUE, java.lang.Double.MAX_VALUE)
+            return doubles(-Double.MAX_VALUE, Double.MAX_VALUE)
         }
 
         /**
@@ -342,7 +334,7 @@ internal constructor()
         @JvmStatic
         fun positiveDoubles(): AlchemyGenerator<Double>
         {
-            return doubles(0.1, java.lang.Double.MAX_VALUE)
+            return doubles(0.1, Double.MAX_VALUE)
         }
 
         /**
@@ -351,8 +343,10 @@ internal constructor()
          * @return
          *
          *
-         * @see .positiveDoubles
-         * @see .positiveIntegers
+         * @see positiveDoubles
+         * @see positiveLongs
+         * @see smallPositiveIntegers
+         * @see smallPositiveLongs
          */
         @JvmStatic
         fun smallPositiveDoubles(): AlchemyGenerator<Double>
@@ -371,8 +365,8 @@ internal constructor()
         @JvmStatic
         fun integersFromFixedList(values: List<Int>): AlchemyGenerator<Int>
         {
-            checkNotNull(values)
-            checkThat(!values.isEmpty(), "No values specified")
+            checkThat(values.isNotEmpty(), "No values specified")
+
             return AlchemyGenerator {
                 val index = integers(0, values.size).get()
                 values[index]
@@ -390,8 +384,7 @@ internal constructor()
         @JvmStatic
         fun doublesFromFixedList(values: List<Double>): AlchemyGenerator<Double>
         {
-            checkNotNull(values)
-            checkThat(!values.isEmpty(), "No values specified")
+            checkThat(values.isNotEmpty(), "No values specified")
 
             return AlchemyGenerator {
                 val index = integers(0, values.size).get()
@@ -414,7 +407,7 @@ internal constructor()
         @Internal
         internal fun safeIncrement(value: Long): Long
         {
-            return if (value == java.lang.Long.MAX_VALUE) value else value + 1
+            return if (value == Long.MAX_VALUE) value else value + 1
         }
 
         /**
@@ -429,7 +422,7 @@ internal constructor()
         @Internal
         internal fun safeDecrement(value: Long): Long
         {
-            return if (value == java.lang.Long.MIN_VALUE) value else value - 1
+            return if (value == Long.MIN_VALUE) value else value - 1
         }
 
         /**
