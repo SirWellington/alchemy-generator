@@ -21,6 +21,9 @@ import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
+import tech.sirwellington.alchemy.generator.DateGenerators.*
+import tech.sirwellington.alchemy.generator.NumberGenerators.*
+import tech.sirwellington.alchemy.generator.StringGenerators.*
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -59,10 +62,10 @@ internal constructor()
 
         init
         {
-            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, StringGenerators.alphabeticString())
-            DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, NumberGenerators.smallPositiveIntegers())
-            DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, NumberGenerators.positiveLongs())
-            DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, NumberGenerators.positiveDoubles())
+            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticString())
+            DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
+            DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
+            DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
             DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
             DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
             DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer::class.java, BinaryGenerators.byteBuffers(333))
@@ -413,7 +416,7 @@ internal constructor()
             val valueGenerator = generatorMappings[valueType] ?: determineGeneratorFor(valueType, mapField, generatorMappings) ?: return null
 
             val map = mutableMapOf<Any, Any>()
-            val size = one(NumberGenerators.integers(10, 100))
+            val size = one(integers(10, 100))
 
             for (i in 0..size - 1)
             {
