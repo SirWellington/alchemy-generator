@@ -42,7 +42,7 @@ class Tests
 
     static void doInLoop(Consumer<Integer> function)
     {
-        int iterations = one(integers(100, 1_000));
+        int iterations = one(integers(50, 250));
 
         for (int i = 0; i < iterations; ++i)
         {

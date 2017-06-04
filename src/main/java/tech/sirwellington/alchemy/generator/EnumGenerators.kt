@@ -59,11 +59,11 @@ internal constructor()
         inline fun <reified E : Enum<*>> enumValueOf(): AlchemyGenerator<E>
         {
             val klass = E::class.java
-            return secondEnumValue(klass)
+            return enumValueOf(klass)
         }
 
         @JvmStatic
-        fun <E: Enum<*>> secondEnumValue(enumClass: Class<E>): AlchemyGenerator<E>
+        fun <E: Enum<*>> enumValueOf(enumClass: Class<E>): AlchemyGenerator<E>
         {
             val constants = enumClass.enumConstants ?: throw IllegalArgumentException("Class is not an Enum type: [${enumClass.name}]")
 

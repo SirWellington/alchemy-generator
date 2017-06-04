@@ -66,16 +66,23 @@ internal constructor()
 
         init
         {
-            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticString())
-            DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
-            DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
-            DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
-            DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
-            DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
-            DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer::class.java, BinaryGenerators.byteBuffers(333))
             DEFAULT_GENERATOR_MAPPINGS.put(Boolean::class.java, BooleanGenerators.booleans())
             DEFAULT_GENERATOR_MAPPINGS.put(Byte::class.java, BinaryGenerators.bytes())
+            DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer::class.java, BinaryGenerators.byteBuffers(333))
+            DEFAULT_GENERATOR_MAPPINGS.put(ByteArray::class.java, BinaryGenerators.binary(333))
+            DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
+            DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
+            DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
+            DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
+            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticString())
+            DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
             DEFAULT_GENERATOR_MAPPINGS.put(URL::class.java, NetworkGenerators.httpUrls())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Boolean::class.java, BooleanGenerators.booleans())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Double::class.java, positiveDoubles())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Integer::class.java, smallPositiveIntegers())
+            DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Long::class.java, positiveLongs())
         }
 
         /**
@@ -299,7 +306,6 @@ internal constructor()
                 field.isAccessible = originalAccessibility
             }
         }
-
 
         private fun determineGeneratorFor(typeOfField: Class<*>, field: Field, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
         {

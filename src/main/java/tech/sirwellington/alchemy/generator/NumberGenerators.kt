@@ -412,7 +412,7 @@ internal constructor()
          */
         @JvmStatic
         @Internal
-        internal fun safeIncrement(value: Long): Long
+        public fun safeIncrement(value: Long): Long
         {
             return if (value == java.lang.Long.MAX_VALUE) value else value + 1
         }
@@ -427,7 +427,7 @@ internal constructor()
          */
         @JvmStatic
         @Internal
-        internal fun safeDecrement(value: Long): Long
+        public fun safeDecrement(value: Long): Long
         {
             return if (value == java.lang.Long.MIN_VALUE) value else value - 1
         }
@@ -442,7 +442,7 @@ internal constructor()
          */
         @JvmStatic
         @Internal
-        internal fun safeIncrement(value: Int): Int
+        public fun safeIncrement(value: Int): Int
         {
             return if (value == Integer.MAX_VALUE) value else value + 1
         }
@@ -457,7 +457,7 @@ internal constructor()
          */
         @JvmStatic
         @Internal
-        internal fun safeDecrement(value: Int): Int
+        public fun safeDecrement(value: Int): Int
         {
             return if (value == Integer.MIN_VALUE) value else value - 1
         }

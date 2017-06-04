@@ -57,30 +57,32 @@ public class ObjectGeneratorsTest
     public void testWithSimplePojo()
     {
         System.out.println("testWithSimplePojo");
-        
-        AlchemyGenerator<Person> generator = ObjectGenerators.pojos(Person.class);
+
+        AlchemyGenerator<Computer> generator = ObjectGenerators.pojos(Computer.class);
         assertThat(generator, notNullValue());
-        
+
         Tests.doInLoop(i ->
-        {
-            Person result = generator.get();
-            checkPerson(result);
-        });
+                       {
+                           Computer computer = generator.get();
+                           checkComputer(computer);
+                       });
+
+
     }
-    
+
     @Test
     public void testWithNestedPojo()
     {
         System.out.println("testWithNestedPojo");
-        
-        AlchemyGenerator<Computer> generator = ObjectGenerators.pojos(Computer.class);
+
+        AlchemyGenerator<Person> generator = ObjectGenerators.pojos(Person.class);
         assertThat(generator, notNullValue());
-        
+
         Tests.doInLoop(i ->
-        {
-            Computer computer = generator.get();
-            checkComputer(computer);
-        });
+                       {
+                           Person result = generator.get();
+                           checkPerson(result);
+                       });
     }
     
     @Test
@@ -192,6 +194,9 @@ public class ObjectGeneratorsTest
         assertThat(computer.manufacturer, not(isEmptyOrNullString()));
         assertThat(computer.year, greaterThan(0));
         assertThat(computer.cost, greaterThan(0.0));
+
+        assertThat(computer.data, notNullValue());
+        assertThat(computer.data.length, greaterThan(0));
     }
     
     private void checkBuilding(Building building)
@@ -235,7 +240,7 @@ public class ObjectGeneratorsTest
         assertThat(cityBlock.stores.size(), greaterThan(0));
         assertThat(cityBlock.internetUsers.size(), greaterThan(0));
         assertThat(cityBlock.memory.limit(), greaterThan(0));
-        
+
         cityBlock.homes.forEach(this::checkBuilding);
         cityBlock.stores.forEach(this::checkBuilding);
         cityBlock.internetUsers.keySet().forEach(this::checkPerson);
@@ -250,6 +255,7 @@ public class ObjectGeneratorsTest
         private int year;
         private String manufacturer;
         private double cost;
+        private byte[] data;
         
     }
     
@@ -262,7 +268,7 @@ public class ObjectGeneratorsTest
         private String middleName;
         private Computer computer;
         private URL website;
-        
+
         private static String staticField = ObjectGeneratorsTest.staticField;
     }
     
