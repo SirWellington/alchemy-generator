@@ -96,7 +96,7 @@ internal constructor()
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
-        fun before(@NonNull referenceDate: Date): AlchemyGenerator<Date>
+        fun before(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
             checkNotNull(referenceDate, "referenceDate cannot be null")
 
@@ -114,7 +114,7 @@ internal constructor()
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
-        fun after(@NonNull referenceDate: Date): AlchemyGenerator<Date>
+        fun after(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
             checkNotNull(referenceDate, "referenceDate cannot be null")
 
@@ -142,7 +142,7 @@ internal constructor()
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
-        fun toDate(@NonNull generator: AlchemyGenerator<Instant>): AlchemyGenerator<Date>
+        fun toDate(@Required generator: AlchemyGenerator<Instant>): AlchemyGenerator<Date>
         {
             checkNotNull(generator, "generator cannot be null")
             checkNotNull(generator.get(), "generator produced null")
@@ -163,7 +163,7 @@ internal constructor()
          * @throws IllegalArgumentException If either date is null, or startDate is not before endDate
          */
         @Throws(IllegalArgumentException::class)
-        fun datesBetween(@NonNull startDate: Date, @NonNull endDate: Date): AlchemyGenerator<Date>
+        fun datesBetween(@Required startDate: Date, @Required endDate: Date): AlchemyGenerator<Date>
         {
             checkNotNull(startDate, "startDate is null")
             checkNotNull(endDate, "endDate is null")

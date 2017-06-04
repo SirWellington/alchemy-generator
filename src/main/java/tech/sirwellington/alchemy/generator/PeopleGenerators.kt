@@ -155,7 +155,7 @@ internal constructor()
          * @throws IllegalArgumentException If the Domain generator is null, or returns an empty domain.
          */
         @Throws(IllegalArgumentException::class)
-        @JvmOverloads fun emails(@NonNull domainGenerator: AlchemyGenerator<String> = popularEmailDomains()): AlchemyGenerator<String>
+        @JvmOverloads fun emails(@Required domainGenerator: AlchemyGenerator<String> = popularEmailDomains()): AlchemyGenerator<String>
         {
             checkNotNull(domainGenerator, "domainGenerator missing")
             checkNotEmpty(domainGenerator.get(), "Email Domain Generator returned empty String")

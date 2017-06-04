@@ -103,7 +103,7 @@ internal constructor()
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
-        fun before(@NonNull instant: Instant): AlchemyGenerator<Instant>
+        fun before(@Required instant: Instant): AlchemyGenerator<Instant>
         {
             checkNotNull(instant, "instant cannot be null")
 
@@ -134,7 +134,7 @@ internal constructor()
          * @throws IllegalArgumentException
          */
         @Throws(IllegalArgumentException::class)
-        fun after(@NonNull instant: Instant): AlchemyGenerator<Instant>
+        fun after(@Required instant: Instant): AlchemyGenerator<Instant>
         {
             checkNotNull(instant, "instant cannot be null")
 
@@ -188,7 +188,7 @@ internal constructor()
          * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
          */
         @Throws(IllegalArgumentException::class)
-        fun timesBetween(@NonNull startTime: Instant, @NonNull endTime: Instant): AlchemyGenerator<Instant>
+        fun timesBetween(@Required startTime: Instant, @Required endTime: Instant): AlchemyGenerator<Instant>
         {
             checkNotNull(startTime, "startTime is null")
             checkNotNull(endTime, "endTime is null")

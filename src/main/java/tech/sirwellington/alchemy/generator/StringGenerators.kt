@@ -296,7 +296,7 @@ internal constructor()
          * @throws IllegalArgumentException If the Generator is null.
         </T> */
         @Throws(IllegalArgumentException::class)
-        fun <T> asString(@NonNull generator: AlchemyGenerator<T>): AlchemyGenerator<String>
+        fun <T> asString(@Required generator: AlchemyGenerator<T>): AlchemyGenerator<String>
         {
             checkNotNull(generator, "generator missing")
 
