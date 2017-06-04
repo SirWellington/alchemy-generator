@@ -38,7 +38,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.Map
 import kotlin.collections.Set
 import kotlin.collections.set
-import kotlin.reflect.KClass
 
 /**
  * Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).
@@ -199,7 +198,7 @@ internal constructor()
 
         }
 
-        private fun <T: Any> canInstantiate(classOfPojo: Class<T>): Boolean
+        private fun <T : Any> canInstantiate(classOfPojo: Class<T>): Boolean
         {
             try
             {
@@ -227,7 +226,7 @@ internal constructor()
         }
 
         @Throws(NoSuchMethodException::class, InstantiationException::class, IllegalAccessException::class, IllegalArgumentException::class, InvocationTargetException::class)
-        private fun <T: Any> instantiate(classOfT: Class<T>): T
+        private fun <T : Any> instantiate(classOfT: Class<T>): T
         {
             val defaultConstructor = classOfT.constructors.first()
             val originalAccessibility = defaultConstructor.isAccessible
@@ -264,7 +263,7 @@ internal constructor()
             return result.toList()
         }
 
-        private fun <T: Any> determineValueFor(klass: Class<T>): T?
+        private fun <T : Any> determineValueFor(klass: Class<T>): T?
         {
             val key = ClassUtils.primitiveToWrapper(klass) ?: return null
             val generator = DEFAULT_GENERATOR_MAPPINGS[key] ?: return null
