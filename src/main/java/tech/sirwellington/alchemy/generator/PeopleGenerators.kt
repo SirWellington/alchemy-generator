@@ -165,7 +165,6 @@ internal constructor()
         @JvmOverloads
         fun emails(@Required domainGenerator: AlchemyGenerator<String> = popularEmailDomains()): AlchemyGenerator<String>
         {
-            checkNotNull(domainGenerator, "domainGenerator missing")
             checkNotEmpty(domainGenerator.get(), "Email Domain Generator returned empty String")
 
             return AlchemyGenerator {
