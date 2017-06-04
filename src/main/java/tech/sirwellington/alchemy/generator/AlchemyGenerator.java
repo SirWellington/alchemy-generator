@@ -76,7 +76,11 @@ public interface AlchemyGenerator<T>
          */
         public static <T> T one(@Required AlchemyGenerator<T> generator)
         {
-            Checks.checkNotNull(generator);
+            if (generator == null)
+            {
+                throw new IllegalArgumentException("Generator cannot be null");
+            }
+
             return generator.get();
         }
     }
