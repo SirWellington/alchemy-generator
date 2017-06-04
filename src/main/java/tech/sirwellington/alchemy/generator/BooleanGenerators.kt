@@ -49,6 +49,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun booleans(): AlchemyGenerator<Boolean>
         {
             return AlchemyGenerator { RandomUtils.nextInt(0, 2) == 1 }
@@ -60,6 +61,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun alternatingBooleans(): AlchemyGenerator<Boolean>
         {
             val count = AtomicInteger()

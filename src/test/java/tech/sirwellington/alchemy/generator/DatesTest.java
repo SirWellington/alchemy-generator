@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;

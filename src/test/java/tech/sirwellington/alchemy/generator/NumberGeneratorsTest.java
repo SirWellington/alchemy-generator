@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.safeDecrement;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.safeIncrement;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;

@@ -74,6 +74,7 @@ internal constructor()
          * @throws IllegalArgumentException If `size < 0`.
          */
         @Throws(IllegalArgumentException::class)
+        @JvmStatic
         fun byteBuffers(size: Int): AlchemyGenerator<ByteBuffer>
         {
             checkThat(size >= 0, "size must be at least 0")
@@ -86,6 +87,7 @@ internal constructor()
             }
         }
 
+        @JvmStatic
         fun bytes(): AlchemyGenerator<Byte>
         {
             val delegate = binary(1)

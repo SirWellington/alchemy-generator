@@ -34,7 +34,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;

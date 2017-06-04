@@ -55,9 +55,10 @@ internal constructor()
         /**
          * Generates a random string of a random length. Characters can include ASCII, Unicode, or
          * International Characters.
-
+         *
          * @return
          */
+        @JvmStatic
         fun strings(): AlchemyGenerator<String>
         {
             return AlchemyGenerator {
@@ -74,6 +75,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun strings(length: Int): AlchemyGenerator<String>
         {
             checkThat(length > 0, "Length must be at least 1")
@@ -89,6 +91,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun hexadecimalString(length: Int): AlchemyGenerator<String>
         {
             checkThat(length > 0, "Length must be at least 1")
@@ -117,6 +120,7 @@ internal constructor()
          * *
          * @see .alphabeticString
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun alphabeticString(length: Int): AlchemyGenerator<String>
         {
@@ -133,6 +137,7 @@ internal constructor()
          * *
          * @see .alphabeticString
          */
+        @JvmStatic
         fun alphabeticString(): AlchemyGenerator<String>
         {
             val length = one(integers(10, 100))
@@ -148,6 +153,7 @@ internal constructor()
          * *
          * @see .alphanumericString
          */
+        @JvmStatic
         fun alphanumericString(): AlchemyGenerator<String>
         {
             val length = one(integers(10, 100))
@@ -164,6 +170,7 @@ internal constructor()
          * *
          * @throws IllegalArgumentException If `length < 0`
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun alphanumericString(length: Int): AlchemyGenerator<String>
         {
@@ -180,6 +187,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun numericString(): AlchemyGenerator<String>
         {
             val length = one(integers(4, 25))
@@ -203,6 +211,7 @@ internal constructor()
          * *
          * @throws IllegalArgumentException
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun numericString(length: Int): AlchemyGenerator<String>
         {
@@ -237,6 +246,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun uuids(): AlchemyGenerator<String>
         {
             return uuids
@@ -254,6 +264,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun stringsFromFixedList(values: List<String>): AlchemyGenerator<String>
         {
             checkNotNull(values)
@@ -273,6 +284,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun stringsFromFixedList(vararg values: String): AlchemyGenerator<String>
         {
             checkNotNull(values)
@@ -295,6 +307,7 @@ internal constructor()
          * *
          * @throws IllegalArgumentException If the Generator is null.
         </T> */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun <T> asString(@Required generator: AlchemyGenerator<T>): AlchemyGenerator<String>
         {

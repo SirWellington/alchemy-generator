@@ -66,6 +66,7 @@ internal constructor()
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
         @Throws(IllegalArgumentException::class)
+        @JvmStatic
         fun integers(inclusiveLowerBound: Int, exclusiveUpperBound: Int): AlchemyGenerator<Int>
         {
             checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound")
@@ -118,6 +119,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun anyIntegers(): AlchemyGenerator<Int>
         {
             return integers(Integer.MIN_VALUE, Integer.MAX_VALUE)
@@ -131,6 +133,7 @@ internal constructor()
          * @see .smallPositiveIntegers
          * @see .positiveLongs
          */
+        @JvmStatic
         fun positiveIntegers(): AlchemyGenerator<Int>
         {
             return integers(1, Integer.MAX_VALUE)
@@ -143,6 +146,7 @@ internal constructor()
          * *
          * @see .positiveIntegers
          */
+        @JvmStatic
         fun smallPositiveIntegers(): AlchemyGenerator<Int>
         {
             return integers(1, 1000)
@@ -153,6 +157,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun negativeIntegers(): AlchemyGenerator<Int>
         {
             return AlchemyGenerator result@ {
@@ -175,6 +180,7 @@ internal constructor()
          * *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun longs(inclusiveLowerBound: Long, exclusiveUpperBound: Long): AlchemyGenerator<Long>
         {
@@ -231,6 +237,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun anyLongs(): AlchemyGenerator<Long>
         {
             return longs(java.lang.Long.MIN_VALUE, java.lang.Long.MAX_VALUE)
@@ -244,6 +251,7 @@ internal constructor()
          * @see .smallPositiveLongs
          * @see .positiveIntegers
          */
+        @JvmStatic
         fun positiveLongs(): AlchemyGenerator<Long>
         {
             return longs(1L, java.lang.Long.MAX_VALUE)
@@ -258,6 +266,7 @@ internal constructor()
          * @see .positiveLongs
          * @see .positiveLongs
          */
+        @JvmStatic
         fun smallPositiveLongs(): AlchemyGenerator<Long>
         {
             return longs(1L, 10_000L)
@@ -276,6 +285,7 @@ internal constructor()
          * *
          * @throws IllegalArgumentException If `lowerBound >= upperBound`
          */
+        @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun doubles(inclusiveLowerBound: Double, inclusiveUpperBound: Double): AlchemyGenerator<Double>
         {
@@ -315,6 +325,7 @@ internal constructor()
 
          * @return
          */
+        @JvmStatic
         fun anyDoubles(): AlchemyGenerator<Double>
         {
             return doubles(-java.lang.Double.MAX_VALUE, java.lang.Double.MAX_VALUE)
@@ -328,6 +339,7 @@ internal constructor()
          * @see .smallPositiveDoubles
          * @see .positiveIntegers
          */
+        @JvmStatic
         fun positiveDoubles(): AlchemyGenerator<Double>
         {
             return doubles(0.1, java.lang.Double.MAX_VALUE)
@@ -342,6 +354,7 @@ internal constructor()
          * @see .positiveDoubles
          * @see .positiveIntegers
          */
+        @JvmStatic
         fun smallPositiveDoubles(): AlchemyGenerator<Double>
         {
             return doubles(0.1, 1000.0)
@@ -355,6 +368,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun integersFromFixedList(values: List<Int>): AlchemyGenerator<Int>
         {
             checkNotNull(values)
@@ -373,6 +387,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         fun doublesFromFixedList(values: List<Double>): AlchemyGenerator<Double>
         {
             checkNotNull(values)
@@ -395,6 +410,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         @Internal
         internal fun safeIncrement(value: Long): Long
         {
@@ -409,6 +425,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         @Internal
         internal fun safeDecrement(value: Long): Long
         {
@@ -423,6 +440,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         @Internal
         internal fun safeIncrement(value: Int): Int
         {
@@ -437,6 +455,7 @@ internal constructor()
          * *
          * @return
          */
+        @JvmStatic
         @Internal
         internal fun safeDecrement(value: Int): Int
         {

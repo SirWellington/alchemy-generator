@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.Dates.isNow;
 import static tech.sirwellington.alchemy.generator.Dates.now;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
