@@ -161,6 +161,19 @@ class ObjectGeneratorsTest
         }
     }
 
+    @Test
+    fun testWithDataClass()
+    {
+        println("testWithDataClass")
+
+        val generator = ObjectGenerators.pojos(Band::class.java)
+
+        doInLoop {
+            val result = generator.get()
+            result.check()
+        }
+    }
+
     private fun checkPerson(person: Person)
     {
         assertThat(person, notNullValue())
@@ -298,5 +311,22 @@ class ObjectGeneratorsTest
     {
 
         val staticField = one(strings())
+    }
+
+    data class Band(val name: String,
+                    val fans: Int,
+                    val money: Double,
+                    val city: String,
+                    val data: ByteArray,
+                    val onTour: Boolean)
+
+    private fun Band?.check()
+    {
+        assertThat(this, notNullValue())
+        if (this == null) return
+
+        assertThat(name, not(isEmptyOrNullString()))
+        assertThat(fans, greaterThan(0))
+
     }
 }
