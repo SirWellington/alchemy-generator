@@ -78,7 +78,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.6</version>
+	<version>1.7</version>
 </dependency>
 ```
 
@@ -95,7 +95,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.7-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -393,75 +393,6 @@ This project builds with maven. Just run a `mvn clean install` to compile and in
 # Feature Requests
 Feature Requests are definitely welcomed! **Please drop a note in [Issues](https://github.com/SirWellington/alchemy-generator/issues).**
 
-# Release Notes
-
-## 1.6
-+ Adds `GeolocationGenerators`
-+ Adds IP Address Generators
-
-## 1.5
-+ Adding `NumberGenerators`
-    + `anyIntegers()`
-    + `anyLongs()`
-    + `anyDoubles()`
-
-## 1.4
-+ Adding `NetworkGenerators`
-    + URLs
-    + Ports
-    + Hostnames
-+ Bugfixes and Improvements
-
-## 1.3.1
-+ Minor Behavioral Changes
-
-## 1.3
-+ Added Automatic POJO Generation.
-    This allows very quick generation of Simple POJOs for Unit Testing and other Verification purposes.
-    ```java
-    class City
-    {
-        private String name;
-        private long population;
-        private List<Developer> developersInTown;
-        private Map<String, Building> addressDirectory;
-    }
-
-    City sampleCity = one(pojos(City.class));
-    ```
-+ New Date Generators
-    + `datesBetween()`
-+ New Time Generators
-    + `timesBetween()`
-
-
-## 1.2
-+ Added Alphanumeric Strings
-+ New People Information Generators
-	+ `popularEmailDomains()`
-	+ `emails()`
-	+ `name()`
-	+ `age()`
-	+ `phoneNumber()`
-+ New Collection Generators
-	+ `fromList()`
-	+ `mapOf()`
-+ New Date Generators
-	+ `presentDates()`
-	+ `pastDates()`
-	+ `futureDates()`
-+ New Time Generators
-	+ `presentInstants()`
-	+ `pastInstants()`
-	+ `futureInstants()`
-+ Bugfixes
-
-## 1.1
-+ New Java DateTime API Generators
-+ Adding `asString()` String Generator
-
-## 1.0
-+ Initial Public Release
 
 # License
 
