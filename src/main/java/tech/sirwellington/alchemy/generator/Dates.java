@@ -50,7 +50,7 @@ final class Dates
      *
      * @return
      */
-    public static Date now()
+    static Date now()
     {
         return new Date();
     }
@@ -62,7 +62,7 @@ final class Dates
      *
      * @return
      */
-    public static Date daysAgo(int days)
+    static Date daysAgo(int days)
     {
         Instant instant = Instant.now().minus(days, DAYS);
         return new Date(instant.toEpochMilli());
@@ -75,7 +75,7 @@ final class Dates
      *
      * @return
      */
-    public static Date daysAhead(int days)
+    static Date daysAhead(int days)
     {
         Instant instant = Instant.now().plus(days, DAYS);
         return new Date(instant.toEpochMilli());
@@ -88,7 +88,7 @@ final class Dates
      *
      * @return
      */
-    public static Date hoursAgo(int hours)
+    static Date hoursAgo(int hours)
     {
         Instant instant = Instant.now().minus(hours, HOURS);
         return new Date(instant.toEpochMilli());
@@ -101,7 +101,7 @@ final class Dates
      *
      * @return
      */
-    public static Date hoursAhead(int hours)
+    static Date hoursAhead(int hours)
     {
         Instant instant = Instant.now().plus(hours, HOURS);
         return new Date(instant.toEpochMilli());
@@ -114,7 +114,7 @@ final class Dates
      *
      * @return
      */
-    public static Date minutesAgo(int minutes)
+    static Date minutesAgo(int minutes)
     {
         Instant instant = Instant.now().minus(minutes, MINUTES);
         return new Date(instant.toEpochMilli());
@@ -127,7 +127,7 @@ final class Dates
      *
      * @return
      */
-    public static Date minutesAhead(int minutes)
+    static Date minutesAhead(int minutes)
     {
         Instant instant = Instant.now().plus(minutes, MINUTES);
         return new Date(instant.toEpochMilli());
@@ -142,7 +142,7 @@ final class Dates
      *
      * @return True if the date is considered to be {@link #now() }, False otherwise.
      */
-    public static boolean isNow(Date date)
+    static boolean isNow(Date date)
     {
         return isNow(date, 5);
     }
@@ -159,7 +159,7 @@ final class Dates
      *
      * @return
      */
-    public static boolean isNow(Date date, long marginOfErrorMillis)
+    static boolean isNow(Date date, long marginOfErrorMillis)
     {
         Date now = now();
         checkNotNull(date);
@@ -173,7 +173,7 @@ final class Dates
                (timeOfDate <= timeOfNow + delta);
     }
 
-    public static boolean isNow(Instant instant, long marginOfErrorMillies)
+    static boolean isNow(Instant instant, long marginOfErrorMillies)
     {
         Instant now = Instant.now();
         checkNotNull(instant);
