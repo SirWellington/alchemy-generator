@@ -24,7 +24,7 @@ package tech.sirwellington.alchemy.generator
  *
  * @author SirWellington
  */
-internal fun <T> one(generator: AlchemyGenerator<T>): T
+public fun <T> one(generator: AlchemyGenerator<T>): T
 {
     return generator.get()
 }

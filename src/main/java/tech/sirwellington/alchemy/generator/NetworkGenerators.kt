@@ -136,7 +136,7 @@ private constructor()
         @JvmStatic
         fun ip4Addresses(): AlchemyGenerator<String>
         {
-            val integers = integers(10, 1000)
+            val integers = integers(1, 1000)
 
             return AlchemyGenerator { "${integers.get()}.${integers.get()}.${integers.get()}.${integers.get()}" }
         }

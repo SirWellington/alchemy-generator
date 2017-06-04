@@ -42,8 +42,6 @@ internal constructor()
     companion object
     {
 
-        private val LOG = LoggerFactory.getLogger(DateGenerators::class.java)
-
         /**
          * Always returns the current time, i.e. the present.
          * <br></br>
@@ -104,8 +102,6 @@ internal constructor()
         @Throws(IllegalArgumentException::class)
         fun before(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
-            checkNotNull(referenceDate, "referenceDate cannot be null")
-
             val instant = referenceDate.toInstant()
             return toDate(TimeGenerators.before(instant))
         }
@@ -123,8 +119,6 @@ internal constructor()
         @Throws(IllegalArgumentException::class)
         fun after(@Required referenceDate: Date): AlchemyGenerator<Date>
         {
-            checkNotNull(referenceDate, "referenceDate cannot be null")
-
             val instant = referenceDate.toInstant()
             return toDate(TimeGenerators.after(instant))
         }
@@ -153,7 +147,6 @@ internal constructor()
         @Throws(IllegalArgumentException::class)
         fun toDate(@Required generator: AlchemyGenerator<Instant>): AlchemyGenerator<Date>
         {
-            checkNotNull(generator, "generator cannot be null")
             checkNotNull(generator.get(), "generator produced null")
 
             return AlchemyGenerator { Date.from(generator.get()) }
@@ -174,8 +167,6 @@ internal constructor()
         @Throws(IllegalArgumentException::class)
         fun datesBetween(@Required startDate: Date, @Required endDate: Date): AlchemyGenerator<Date>
         {
-            checkNotNull(startDate, "startDate is null")
-            checkNotNull(endDate, "endDate is null")
             checkThat(startDate.before(endDate), "endDate must be after startDate")
 
             val startTime = startDate.time

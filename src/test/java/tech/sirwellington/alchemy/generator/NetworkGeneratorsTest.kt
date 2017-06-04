@@ -47,7 +47,7 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.httpUrls()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             assertThat(result, notNullValue())
         }
@@ -59,7 +59,7 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.httpsUrls()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             assertThat(result, notNullValue())
             assertThat(result.toString(), startsWith("https://"))
@@ -69,7 +69,7 @@ class NetworkGeneratorsTest
     @Test
     fun testUrlsWithProtocol()
     {
-        doInLoop { i ->
+        doInLoop {
             val scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp").get()
             val generator = NetworkGenerators.urlsWithProtocol(scheme)
             assertThat(generator, notNullValue())
@@ -87,7 +87,7 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.ports()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val port = generator.get()
             assertThat(port, greaterThanOrEqualTo(22))
             assertThat(port, lessThan(java.lang.Short.MAX_VALUE.toInt()))
@@ -105,7 +105,7 @@ class NetworkGeneratorsTest
         val min = "11.11.11.11"
         val expectedPeriods = 3
 
-        doInLoop { i ->
+        doInLoop {
             val address = generator.get()
 
             val periodAppearences = numberOfAppearencesOfCharInString('.', address)
@@ -118,17 +118,9 @@ class NetworkGeneratorsTest
 
     private fun numberOfAppearencesOfCharInString(character: Char, string: String): Int
     {
-        var appearences = 0
+        return string.toCharArray()
+                .count { it == character }
 
-        for (c in string.toCharArray())
-        {
-            if (c === character)
-            {
-                appearences += 1
-            }
-        }
-
-        return appearences
     }
 
 }
