@@ -53,7 +53,7 @@ public class AlchemyGeneratorTest
         AlchemyGenerator instance = mock(AlchemyGenerator.class);
         Object expected = mock(Object.class);
         when(instance.get()).thenReturn(expected);
-        Object result = AlchemyGenerator.one(instance);
+        Object result = AlchemyGenerator.Get.one(instance);
         verify(instance).get();
         assertEquals(expected, result);
     }
@@ -63,7 +63,7 @@ public class AlchemyGeneratorTest
     {
         System.out.println("testOneWithBadArgs");
 
-        AlchemyGenerator.one(null);
+        AlchemyGenerator.Get.one(null);
     }
 
 }
