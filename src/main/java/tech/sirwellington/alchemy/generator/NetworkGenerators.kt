@@ -74,7 +74,7 @@ private constructor()
         }
 
         /**
-
+         *
          * @return URLs beginning with `https://`
          */
         fun httpsUrls(): AlchemyGenerator<URL>
@@ -83,7 +83,7 @@ private constructor()
         }
 
         /**
-
+         *
          * @param protocol The protocol to use for the URLs created. Do not include the "://".
          *
          * @return  URLs beginning with the `protocol`

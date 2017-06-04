@@ -127,7 +127,7 @@ internal constructor()
 
         /**
          * Creates a series of positive integer values from 1 to Integer.MAX_VALUE
-
+         *
          * @return
          *
          * @see .smallPositiveIntegers
@@ -154,7 +154,7 @@ internal constructor()
 
         /**
          * Creates a series of negative integer values from Integer.MIN_VALUE to -1
-
+         *
          * @return
          */
         @JvmStatic
@@ -169,7 +169,7 @@ internal constructor()
 
         /**
          * Produces long values within the specified Range
-
+         *
          * @param inclusiveLowerBound inclusive lower bound
          *
          * @param exclusiveUpperBound exclusive upper bound
@@ -245,7 +245,7 @@ internal constructor()
 
         /**
          * Produces a series of positive values from `1` to `Long.MAX_VALUE`
-
+         *
          * @return
          *
          * @see .smallPositiveLongs
@@ -259,7 +259,7 @@ internal constructor()
 
         /**
          * Produces a series of positive values from 1 to 10,000
-
+         *
          * @return
          *
          *
@@ -274,7 +274,7 @@ internal constructor()
 
         /**
          * Creates a series of double values within the specified range
-
+         *
          * @param inclusiveLowerBound The inclusive lower bound
          *
          * @param inclusiveUpperBound The inclusive upper bound
@@ -347,7 +347,7 @@ internal constructor()
 
         /**
          * Creates a series of positive doubles from 0.1 to 1000.0
-
+         *
          * @return
          *
          *
@@ -404,7 +404,7 @@ internal constructor()
         //==============================================================================================
         /**
          * Attempts to increment the value without potentially circling back to [Long.MIN_VALUE]
-
+         *
          * @param value
          *
          *
@@ -435,7 +435,7 @@ internal constructor()
         /**
          * Attempts to increment the value without potentially circling back to
          * [Integer.MIN_VALUE]
-
+         *
          * @param value
          *
          * @return

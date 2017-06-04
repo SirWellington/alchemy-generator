@@ -162,7 +162,7 @@ internal constructor()
         }
 
         /**
-
+         *
          * @param length The length of the Generated Strings.
          *
          * @return
@@ -204,7 +204,7 @@ internal constructor()
          * String result = numericString(5).get();
          * //49613
         </pre> *
-
+         *
          * @param length
          *
          * @return

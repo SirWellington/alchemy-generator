@@ -111,7 +111,7 @@ internal constructor()
          * private String manufacturer;
          * private double cost;
          * }
-
+         *
          * private class Person
          * {
          * private String name;
@@ -119,15 +119,15 @@ internal constructor()
          * private double money;
          * private Computer computer;
          * }
-
+         *
          * private class Company
          * {
-
+         *
          * private String name;
          * private int numberOfEmployees;
          * private List<Person> employees;
          * }
-
+         *
          * private class CompanyIndex
          * {
          * private String indexName;
@@ -142,13 +142,13 @@ internal constructor()
          * @return
          *
          * @see StringGenerators
-
+         *
          * @see NumberGenerators
-
+         *
          * @see DateGenerators
-
+         *
          * @see TimeGenerators
-        </T> */
+         */
         fun <T : Any> pojos(classOfPojo: Class<T>): AlchemyGenerator<T?>
         {
             return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS)
