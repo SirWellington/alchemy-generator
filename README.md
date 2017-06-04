@@ -78,7 +78,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>1.7</version>
+	<version>2.0</version>
 </dependency>
 ```
 
@@ -95,7 +95,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>2.0-SNAPSHOT</version>
+	<version>2.1-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -105,7 +105,8 @@ To use, simply add the following maven dependency.
 API
 ==============================================
 
->Examples use static imports
+> Examples use static imports
+> Specifically, `tech.sirwellington.alchemy.generator.Generators.one()`
 
 ## Numbers
 `tech.sirwellington.alchemy.generator.NumberGenerators`
