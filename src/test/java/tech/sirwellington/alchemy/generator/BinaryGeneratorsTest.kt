@@ -22,7 +22,7 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.negativeIntegers
@@ -63,7 +63,7 @@ class BinaryGeneratorsTest
 
         assertNotNull(instance)
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.size, `is`(bytes))
@@ -97,7 +97,7 @@ class BinaryGeneratorsTest
         val instance = BinaryGenerators.byteBuffers(size)
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = instance.get()
             assertThat(result, notNullValue())
             assertThat(result.limit(), `is`(size))
@@ -127,7 +127,7 @@ class BinaryGeneratorsTest
         val generator = BinaryGenerators.bytes()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             assertThat(result, notNullValue())
         }
