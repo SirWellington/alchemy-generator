@@ -270,7 +270,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.stringsFromFixedList(one, two, three)
 
-        doInLoop {  assertThat(instance.get(), org.hamcrest.Matchers.isIn(values)) }
+        doInLoop { assertThat(instance.get(), org.hamcrest.Matchers.isIn(values)) }
     }
 
     @Test
