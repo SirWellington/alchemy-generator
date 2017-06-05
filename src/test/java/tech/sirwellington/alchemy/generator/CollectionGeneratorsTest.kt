@@ -28,7 +28,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.atLeast
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.negativeIntegers
@@ -77,7 +77,7 @@ class CollectionGeneratorsTest
 
         val result = CollectionGenerators.listOf(generator)
         assertThat(result.isEmpty(), `is`(false))
-        result.forEach { i -> assertThat(i, `is`(value)) }
+        result.forEach { assertThat(it, `is`(value)) }
     }
 
     @Test
@@ -95,7 +95,7 @@ class CollectionGeneratorsTest
         assertThat(result, notNullValue())
         assertThat(result.size, `is`(size))
 
-        result.forEach { i -> assertThat(i, `is`(value)) }
+        result.forEach { assertThat(it, `is`(value)) }
     }
 
     @Test
@@ -128,10 +128,10 @@ class CollectionGeneratorsTest
         val valueGenerator = mock(AlchemyGenerator::class.java)
 
         whenever(keyGenerator.get())
-                .thenAnswer { invk -> one(strings()) }
+                .thenAnswer { one(strings()) }
 
         whenever(valueGenerator.get())
-                .thenAnswer { invk -> one(positiveIntegers()) }
+                .thenAnswer { one(positiveIntegers()) }
 
         val result = CollectionGenerators.mapOf(keyGenerator, valueGenerator)
         assertThat(result, notNullValue())
@@ -158,7 +158,7 @@ class CollectionGeneratorsTest
         val instance = CollectionGenerators.fromList(list)
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertThat(list.contains(value), `is`(true))
         }

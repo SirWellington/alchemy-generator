@@ -53,7 +53,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Computer::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val computer = generator.get()
             checkComputer(computer)
         }
@@ -69,7 +69,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Person::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             checkPerson(result)
         }
@@ -83,7 +83,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Building::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             checkBuilding(result)
         }
@@ -98,7 +98,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(AddressBook::class.java)
         assertThat<AlchemyGenerator<AddressBook>>(generator, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val result = generator.get()
             checkAddressBook(result)
         }
@@ -186,9 +186,9 @@ class ObjectGeneratorsTest
         assertThat(person.age, not(0))
         assertThat(person.money, not(0.0))
         assertThat(person.website, notNullValue())
-        assertThat(person.website!!.toString(), startsWith("http"))
+        assertThat(person.website.toString(), startsWith("http"))
         assertThat(Person.staticField.toString(), `is`(ObjectGeneratorsTest.staticField))
-        checkComputer(person.computer!!)
+        checkComputer(person.computer)
     }
 
     private fun checkComputer(computer: Computer)
@@ -201,7 +201,7 @@ class ObjectGeneratorsTest
         assertThat(computer.cost, greaterThan(0.0))
 
         assertThat(computer.data, notNullValue())
-        assertThat(computer.data!!.size, greaterThan(0))
+        assertThat(computer.data.size, greaterThan(0))
     }
 
     private fun checkBuilding(building: Building)
@@ -211,7 +211,7 @@ class ObjectGeneratorsTest
         assertThat(building.age, greaterThan(0))
         assertThat(building.floors, greaterThan(0))
         assertThat(building.people, notNullValue())
-        assertThat(building.people!!.size, greaterThan(0))
+        assertThat(building.people.size, greaterThan(0))
         building.people.forEach { this.checkPerson(it) }
     }
 
@@ -219,7 +219,7 @@ class ObjectGeneratorsTest
     {
         assertThat(addressBook, notNullValue())
         assertThat(addressBook.directory, notNullValue())
-        assertThat(addressBook.directory!!.size, greaterThan(0))
+        assertThat(addressBook.directory.size, greaterThan(0))
         addressBook.directory.keys.forEach { key -> assertThat(key, not(isEmptyOrNullString())) }
         addressBook.directory.values.forEach(Consumer<Building> { this.checkBuilding(it) })
     }
@@ -238,10 +238,10 @@ class ObjectGeneratorsTest
         assertThat(cityBlock.stores, notNullValue())
         assertThat(cityBlock.internetUsers, notNullValue())
 
-        assertThat(cityBlock.homes!!.size, greaterThan(0))
-        assertThat(cityBlock.stores!!.size, greaterThan(0))
-        assertThat(cityBlock.internetUsers!!.size, greaterThan(0))
-        assertThat(cityBlock.memory!!.limit(), greaterThan(0))
+        assertThat(cityBlock.homes.size, greaterThan(0))
+        assertThat(cityBlock.stores.size, greaterThan(0))
+        assertThat(cityBlock.internetUsers.size, greaterThan(0))
+        assertThat(cityBlock.memory.limit(), greaterThan(0))
 
         cityBlock.homes.forEach { this.checkBuilding(it) }
         cityBlock.stores.forEach { this.checkBuilding(it) }

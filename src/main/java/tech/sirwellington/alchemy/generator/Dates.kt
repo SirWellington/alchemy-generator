@@ -16,13 +16,13 @@
 
 package tech.sirwellington.alchemy.generator
 
-import java.time.Instant
-import java.util.Date
-
 import tech.sirwellington.alchemy.annotations.access.Internal
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
-
-import java.time.temporal.ChronoUnit.*
+import java.time.Instant
+import java.time.temporal.ChronoUnit.DAYS
+import java.time.temporal.ChronoUnit.HOURS
+import java.time.temporal.ChronoUnit.MINUTES
+import java.util.*
 
 /*
  * TODO: This belongs in a separate project.

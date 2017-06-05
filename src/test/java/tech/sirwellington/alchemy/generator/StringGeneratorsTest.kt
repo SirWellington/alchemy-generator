@@ -35,7 +35,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.DateGenerators.Companion.anyTime
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
@@ -93,7 +93,7 @@ class StringGeneratorsTest
         val instance = strings(length)
         assertNotNull(instance)
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertTrue(value.length == length)
         }
@@ -270,7 +270,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.stringsFromFixedList(one, two, three)
 
-        doInLoop {  assertThat(instance.get(), org.hamcrest.Matchers.isIn(values)) }
+        doInLoop { assertThat(instance.get(), org.hamcrest.Matchers.isIn(values)) }
     }
 
     @Test

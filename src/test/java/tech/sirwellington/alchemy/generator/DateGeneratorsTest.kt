@@ -24,13 +24,12 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.Dates.Companion.isNow
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.lang.Long
 import java.time.Instant
 
 /**
@@ -68,7 +67,7 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.presentDates()
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(isNow(value, 30), `is`(true))
@@ -79,10 +78,10 @@ class DateGeneratorsTest
     fun testPastDates()
     {
         println("testPastDates")
-        
+
         val instance = DateGenerators.pastDates()
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.before(Dates.now()), `is`(true))
@@ -96,7 +95,7 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.futureDates()
 
-        doInLoop { i ->
+        doInLoop {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.after(Dates.now()), `is`(true))
@@ -108,7 +107,7 @@ class DateGeneratorsTest
     {
         println("testAnyTime")
 
-        doInLoop { i ->
+        doInLoop {
             val instance = DateGenerators.anyTime()
             assertThat(instance, notNullValue())
             assertThat(instance.get(), notNullValue())
@@ -121,7 +120,7 @@ class DateGeneratorsTest
     {
         println("testBefore")
 
-        doInLoop { i ->
+        doInLoop {
             val referenceDate = Dates.now()
 
             val instance = DateGenerators.before(referenceDate)
@@ -141,7 +140,7 @@ class DateGeneratorsTest
     {
         println("testAfter")
 
-        doInLoop { i ->
+        doInLoop {
             val referenceDate = Dates.now()
 
             val instance = DateGenerators.after(referenceDate)
@@ -161,7 +160,7 @@ class DateGeneratorsTest
     {
         println("testToDate")
 
-        doInLoop { i ->
+        doInLoop {
             val now = Instant.now()
             val generator = AlchemyGenerator { now }
 
@@ -194,7 +193,7 @@ class DateGeneratorsTest
         assertThrows { DateGenerators.datesBetween(endDate, startDate) }
 
 
-        doInLoop { i ->
+        doInLoop {
             //Pick a start and end time
             val begin = one(longs(1, Long.MAX_VALUE / 2))
             val end = one(longs(begin + 1, java.lang.Long.MAX_VALUE))

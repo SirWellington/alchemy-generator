@@ -19,7 +19,7 @@ import org.apache.commons.lang3.RandomStringUtils
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 
 /**
@@ -45,7 +45,7 @@ class ChecksTest
 
         val `object` = Any()
         checkNotNull(`object`)
-        checkNotNull(`object`, message!!)
+        checkNotNull(`object`, message)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -61,7 +61,7 @@ class ChecksTest
     {
         println("testCheckNotNullExpectingWithMessage")
 
-        checkNotNull(null, message!!)
+        checkNotNull(null, message)
     }
 
     @Test
@@ -70,7 +70,7 @@ class ChecksTest
         println("testCheckThat")
 
         checkThat(true)
-        checkThat(true, message!!)
+        checkThat(true, message)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -86,7 +86,7 @@ class ChecksTest
     {
         println("testCheckThatExpectingWithMessage")
 
-        checkThat(false, message!!)
+        checkThat(false, message)
     }
 
     @Test

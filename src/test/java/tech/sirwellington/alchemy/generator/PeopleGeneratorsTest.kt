@@ -29,7 +29,7 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticString
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.util.regex.Pattern
@@ -69,7 +69,7 @@ class PeopleGeneratorsTest
         assertThat(instance, notNullValue())
 
         val upperCasePattern = Pattern.compile("[A-Z]{1}[a-z]+")
-        doInLoop { i ->
+        doInLoop {
             val name = instance.get()
             assertThat(name, not(isEmptyString()))
             assertThat(name.length, greaterThanOrEqualTo(2))
@@ -85,7 +85,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.ages()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(1))
             assertThat(age, lessThanOrEqualTo(100))
@@ -100,7 +100,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.adultAges()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(18))
             assertThat(age, lessThanOrEqualTo(100))
@@ -115,7 +115,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.childAges()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(1))
             assertThat(age, lessThanOrEqualTo(17))
@@ -130,7 +130,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.phoneNumbers()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val phoneNumber = instance.get()
             assertThat(phoneNumber, greaterThanOrEqualTo(100_000_0000L))
             assertThat(phoneNumber, lessThanOrEqualTo(999_999_9999L))
@@ -146,7 +146,7 @@ class PeopleGeneratorsTest
         assertThat(instance, notNullValue())
 
         val phoneNumberPattern = Pattern.compile("\\d{3}\\-\\d{3}\\-\\d{4}")
-        doInLoop { i ->
+        doInLoop {
             val phoneNumber = instance.get()
             assertThat(phoneNumber, not(isEmptyString()))
             assertThat(phoneNumberPattern.asPredicate().test(phoneNumber), `is`(true))
@@ -161,7 +161,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.popularEmailDomains()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val domain = instance.get()
             assertThat(domain, not(isEmptyString()))
             assertThat(domain, either(endsWith(".com")).or(endsWith(".tech")))
@@ -176,7 +176,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.emails()
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val email = instance.get()
             assertThat(email, not(isEmptyString()))
             assertThat(email.contains("@"), `is`(true))
@@ -194,7 +194,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.emails(domainGenerator)
         assertThat(instance, notNullValue())
 
-        doInLoop { i ->
+        doInLoop {
             val email = instance.get()
             assertThat(email, not(isEmptyString()))
             assertEndsWithOneOfTheDomains(email, domains)
