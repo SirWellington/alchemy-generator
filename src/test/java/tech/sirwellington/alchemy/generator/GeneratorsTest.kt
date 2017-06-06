@@ -32,7 +32,7 @@ class GeneratorsTest
     fun testOne()
     {
         doInLoop {
-            string = StringGenerators.alphanumericString().get()
+            string = StringGenerators.alphanumericStrings().get()
             generator = AlchemyGenerator { string }
 
             val result = one(generator)

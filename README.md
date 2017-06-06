@@ -151,7 +151,7 @@ String alphabetical = alphabeticStrings().get();
 ### Alphanumeric
 Uses the Latin Alphabet, and numbers 1-9.
 ```java
-String alphanumeric = one(alphanumericString());
+String alphanumeric = one(alphanumericStrings());
 ```
 ### Hexadecimal
 ```java

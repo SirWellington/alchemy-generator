@@ -151,10 +151,10 @@ internal constructor()
          *
          * @return
          *
-         * @see .alphanumericString
+         * @see .alphanumericStrings
          */
         @JvmStatic
-        fun alphanumericString(): AlchemyGenerator<String>
+        fun alphanumericStrings(): AlchemyGenerator<String>
         {
             val length = one(integers(10, 100))
 
@@ -172,7 +172,7 @@ internal constructor()
          */
         @JvmStatic
         @Throws(IllegalArgumentException::class)
-        fun alphanumericString(length: Int): AlchemyGenerator<String>
+        fun alphanumericStrings(length: Int): AlchemyGenerator<String>
         {
             checkThat(length > 0, "length must be > 0")
 

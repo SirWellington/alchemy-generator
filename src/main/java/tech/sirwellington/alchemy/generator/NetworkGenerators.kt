@@ -23,7 +23,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.PeopleGenerators.Companion.popularEmailDomains
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericStrings
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -106,7 +106,7 @@ private constructor()
 
             return AlchemyGenerator {
 
-                val url = "$cleanProtocol://${alphanumericString().get()}.${popularEmailDomains().get()}"
+                val url = "$cleanProtocol://${alphanumericStrings().get()}.${popularEmailDomains().get()}"
 
                 try
                 {

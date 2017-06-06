@@ -176,7 +176,7 @@ class StringGeneratorsTest
     {
         println("testAlphanumericString")
 
-        val instance = StringGenerators.alphanumericString()
+        val instance = StringGenerators.alphanumericStrings()
 
         doInLoop {
             val value = instance.get()
@@ -192,7 +192,7 @@ class StringGeneratorsTest
         println("testAlphanumericStringWithLength")
 
         val length = one(integers(10, 100))
-        val instance = StringGenerators.alphanumericString(length)
+        val instance = StringGenerators.alphanumericStrings(length)
 
         doInLoop {
             val value = instance.get()
