@@ -30,7 +30,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.util.regex.Pattern
 
@@ -188,7 +188,7 @@ class PeopleGeneratorsTest
     {
         println("testEmailsWithCustomDomains")
 
-        val domains = CollectionGenerators.listOf(alphabeticString(), 10)
+        val domains = CollectionGenerators.listOf(alphabeticStrings(), 10)
         val domainGenerator = StringGenerators.stringsFromFixedList(domains)
 
         val instance = PeopleGenerators.emails(domainGenerator)

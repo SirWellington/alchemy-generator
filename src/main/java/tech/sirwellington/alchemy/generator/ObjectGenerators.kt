@@ -25,7 +25,7 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveDoubles
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveLongs
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -74,7 +74,7 @@ internal constructor()
             DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
             DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
             DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
-            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticString())
+            DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticStrings())
             DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
             DEFAULT_GENERATOR_MAPPINGS.put(URL::class.java, NetworkGenerators.httpUrls())
             DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Boolean::class.java, BooleanGenerators.booleans())

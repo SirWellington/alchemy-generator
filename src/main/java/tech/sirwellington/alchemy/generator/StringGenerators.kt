@@ -118,11 +118,11 @@ internal constructor()
          * @throws IllegalArgumentException If `length < 0`
          *
          *
-         * @see .alphabeticString
+         * @see .alphabeticStrings
          */
         @JvmStatic
         @Throws(IllegalArgumentException::class)
-        fun alphabeticString(length: Int): AlchemyGenerator<String>
+        fun alphabeticStrings(length: Int): AlchemyGenerator<String>
         {
             checkThat(length > 0, "length must be > 0")
 
@@ -135,14 +135,14 @@ internal constructor()
          *
          * @return
          *
-         * @see .alphabeticString
+         * @see .alphabeticStrings
          */
         @JvmStatic
-        fun alphabeticString(): AlchemyGenerator<String>
+        fun alphabeticStrings(): AlchemyGenerator<String>
         {
             val length = one(integers(10, 100))
 
-            return alphabeticString(length)
+            return alphabeticStrings(length)
         }
 
         /**
@@ -158,7 +158,7 @@ internal constructor()
         {
             val length = one(integers(10, 100))
 
-            return alphabeticString(length)
+            return alphabeticStrings(length)
         }
 
         /**

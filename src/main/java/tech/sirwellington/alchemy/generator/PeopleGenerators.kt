@@ -22,7 +22,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticString
+import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericString
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFromFixedList
 
@@ -50,16 +50,16 @@ internal constructor()
 
         /**
          * Generates a "names". There are no guarantees on the names except that it is an
-         * [Alphabetic String][StringGenerators.alphabeticString] where the first letter is capitalized.
+         * [Alphabetic String][StringGenerators.alphabeticStrings] where the first letter is capitalized.
          */
         @JvmStatic
         fun names(): AlchemyGenerator<String>
         {
             //TODO: It may be better to use an actual dictionary resource file for names instead of generating them.
             return AlchemyGenerator {
-                val firstLetter = one(alphabeticString(1)).toUpperCase()
+                val firstLetter = one(alphabeticStrings(1)).toUpperCase()
                 val length = one(integers(2, 15))
-                val restOfTheName = one(alphabeticString(length - 1)).toLowerCase()
+                val restOfTheName = one(alphabeticStrings(length - 1)).toLowerCase()
                 firstLetter + restOfTheName
             }
 

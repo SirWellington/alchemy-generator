@@ -145,7 +145,7 @@ for(int i = 0; i < 100; ++i)
 Uses the Latin Alphabet, a-z | A-Z
 
 ```java
-String alphabetical = alphabeticString().get();
+String alphabetical = alphabeticStrings().get();
 ```
 
 ### Alphanumeric
@@ -205,7 +205,7 @@ assertThat(buffer, notNullValue());
 ### Lists
 
 ```java
-List<String> randomStrings = listOf(alphabeticString(20), 100);
+List<String> randomStrings = listOf(alphabeticStrings(20), 100);
 List<Integer> ages = listOf(integers(1, 100));
 ```
 

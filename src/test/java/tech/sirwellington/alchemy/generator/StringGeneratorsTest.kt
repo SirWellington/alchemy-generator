@@ -140,7 +140,7 @@ class StringGeneratorsTest
 
         val length = one(integers(40, 100))
 
-        val instance = StringGenerators.alphabeticString(length)
+        val instance = StringGenerators.alphabeticStrings(length)
 
         doInLoop {
             val value = instance.get()
@@ -153,7 +153,7 @@ class StringGeneratorsTest
     {
         println("testAlphabeticString")
 
-        val instance = StringGenerators.alphabeticString()
+        val instance = StringGenerators.alphabeticStrings()
 
         doInLoop {
             val value = instance.get()
@@ -167,7 +167,7 @@ class StringGeneratorsTest
         println("testAlphabeticStringWithBadSize")
 
         val length = 0
-        assertThrows { StringGenerators.alphabeticString(length) }
+        assertThrows { StringGenerators.alphabeticStrings(length) }
                 .isInstanceOf(IllegalArgumentException::class.java)
     }
 
@@ -200,7 +200,7 @@ class StringGeneratorsTest
         }
 
         //Edge cases
-        assertThrows { StringGenerators.alphabeticString(one(negativeIntegers())) }
+        assertThrows { StringGenerators.alphabeticStrings(one(negativeIntegers())) }
                 .isInstanceOf(IllegalArgumentException::class.java)
     }
 
@@ -278,7 +278,7 @@ class StringGeneratorsTest
     {
         println("testStringsFromFixedList_StringArr")
 
-        val alphabetic = StringGenerators.alphabeticString(10)
+        val alphabetic = StringGenerators.alphabeticStrings(10)
         val values = arrayOf(alphabetic.get(), alphabetic.get(), alphabetic.get())
         val instance = StringGenerators.stringsFromFixedList(*values)
         assertThat(instance, notNullValue())
@@ -294,7 +294,7 @@ class StringGeneratorsTest
     {
         println("testAlphabeticStringWithNoArgs")
 
-        val instance = StringGenerators.alphabeticString()
+        val instance = StringGenerators.alphabeticStrings()
         assertThat(instance, notNullValue())
 
         doInLoop {
