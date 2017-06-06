@@ -188,11 +188,11 @@ internal constructor()
          * @return
          */
         @JvmStatic
-        fun numericString(): AlchemyGenerator<String>
+        fun numericStrings(): AlchemyGenerator<String>
         {
             val length = one(integers(4, 25))
 
-            return numericString(length)
+            return numericStrings(length)
         }
 
         /**
@@ -201,7 +201,7 @@ internal constructor()
          *
          * For Example:
          * <pre>
-         * String result = numericString(5).get();
+         * String result = numericStrings(5).get();
          * //49613
         </pre> *
          *
@@ -213,7 +213,7 @@ internal constructor()
          */
         @JvmStatic
         @Throws(IllegalArgumentException::class)
-        fun numericString(length: Int): AlchemyGenerator<String>
+        fun numericStrings(length: Int): AlchemyGenerator<String>
         {
             checkThat(length > 0, "length must be > 0")
 

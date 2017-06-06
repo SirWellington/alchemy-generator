@@ -210,7 +210,7 @@ class StringGeneratorsTest
     {
         println("testNumericString")
 
-        val instance = StringGenerators.numericString()
+        val instance = StringGenerators.numericStrings()
         assertThat(instance, notNullValue())
 
         doInLoop {
@@ -227,7 +227,7 @@ class StringGeneratorsTest
         println("testNumericStringWithLength")
 
         val length = one(integers(1, 100))
-        val instance = StringGenerators.numericString(length)
+        val instance = StringGenerators.numericStrings(length)
         assertThat(instance, notNullValue())
 
         doInLoop {
