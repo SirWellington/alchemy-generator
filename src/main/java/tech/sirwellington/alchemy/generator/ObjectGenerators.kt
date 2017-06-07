@@ -219,7 +219,7 @@ object ObjectGenerators
     @Throws(NoSuchMethodException::class, InstantiationException::class, IllegalAccessException::class, IllegalArgumentException::class, InvocationTargetException::class)
     private fun <T : Any> instantiate(classOfT: Class<T>): T
     {
-        val defaultConstructor = classOfT.firstAvailableConstructor ?: throw IllegalAccessException("Cannot instantiate: $classOfT")
+        val defaultConstructor = classOfT.firstAvailableConstructor
 
         val originalAccessibility = defaultConstructor.isAccessible
         val args = defaultConstructor.parameterTypes
@@ -257,9 +257,36 @@ object ObjectGenerators
 
     private fun <T : Any> determineValueFor(klass: Class<T>): T?
     {
-        val key = ClassUtils.primitiveToWrapper(klass) ?: return null
-        val generator = DEFAULT_GENERATOR_MAPPINGS[key] ?: return null
-        return generator.get() as? T
+        val classOfT = ClassUtils.primitiveToWrapper(klass) ?: return null
+
+        val generator: AlchemyGenerator<*>?
+
+        if (DEFAULT_GENERATOR_MAPPINGS.containsKey(classOfT))
+        {
+            generator = DEFAULT_GENERATOR_MAPPINGS[classOfT]
+        }
+        else if (isEnumType(classOfT))
+        {
+            val enumValues = classOfT.enumConstants
+
+            if (enumValues == null)
+            {
+                LOG.warn("Enum Class {} has no Enum Values: " + classOfT)
+                return null
+            }
+
+            generator = AlchemyGenerator {
+                val position = one(NumberGenerators.integers(0, enumValues.size))
+                enumValues[position]
+            }
+        }
+        else
+        {
+            //Assume Pojo and recurse
+            generator = pojos(classOfT)
+        }
+
+        return generator?.get() as? T
     }
 
 
@@ -399,7 +426,6 @@ object ObjectGenerators
         return Map::class.java.isAssignableFrom(type)
     }
 
-
     private fun lacksGenericTypeArguments(field: Field): Boolean
     {
         val genericType = field.genericType
@@ -464,11 +490,12 @@ object ObjectGenerators
         return typeOfField.isEnum
     }
 
-    private val Class<*>.firstAvailableConstructor: Constructor<*>?
+    private val Class<*>.firstAvailableConstructor: Constructor<*>
         get()
         {
             return this.constructors.find { it.hasNoParameters() } ?:
-                   this.constructors.firstOrNull()
+                   this.constructors.firstOrNull() ?:
+                   this.getDeclaredConstructor()
         }
 
     private fun Constructor<*>.hasNoParameters(): Boolean
