@@ -23,6 +23,7 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveDoubles
+import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveLongs
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
@@ -36,6 +37,7 @@ import java.nio.ByteBuffer
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.collections.HashSet
 import kotlin.collections.Map
 import kotlin.collections.Set
 import kotlin.collections.set
@@ -55,16 +57,27 @@ object ObjectGenerators
 
     private val DEFAULT_GENERATOR_MAPPINGS = ConcurrentHashMap<Class<*>, AlchemyGenerator<*>>()
 
+    private val shortGenerator = AlchemyGenerator {
+        one(positiveIntegers()).toShort()
+    }
+
+    private val charGenerator = AlchemyGenerator {
+        one(alphabeticStrings()).first()
+    }
+
     init
     {
         DEFAULT_GENERATOR_MAPPINGS.put(Boolean::class.java, BooleanGenerators.booleans())
         DEFAULT_GENERATOR_MAPPINGS.put(Byte::class.java, BinaryGenerators.bytes())
         DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer::class.java, BinaryGenerators.byteBuffers(333))
         DEFAULT_GENERATOR_MAPPINGS.put(ByteArray::class.java, BinaryGenerators.binary(333))
+        DEFAULT_GENERATOR_MAPPINGS.put(Char::class.java, charGenerator)
+        DEFAULT_GENERATOR_MAPPINGS.put(Character::class.java, charGenerator)
         DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
         DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
         DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
         DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
+        DEFAULT_GENERATOR_MAPPINGS.put(Short::class.java, shortGenerator)
         DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticStrings())
         DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
         DEFAULT_GENERATOR_MAPPINGS.put(URL::class.java, NetworkGenerators.httpUrls())
@@ -74,6 +87,7 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Double::class.java, positiveDoubles())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Integer::class.java, smallPositiveIntegers())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Long::class.java, positiveLongs())
+        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Short::class.java, shortGenerator)
     }
 
     /**
@@ -101,8 +115,9 @@ object ObjectGenerators
      *
      *
      * Valid Examples:
-     * <pre>
-     * `private class Computer
+     *
+     * ```
+     * private class Computer
      * {
      * private Date releaseDate;
      * private String name;
@@ -131,8 +146,8 @@ object ObjectGenerators
      * private String indexName;
      * private Map<String, Company> index;
      * }
-    ` *
-    </pre> *
+     * ```
+     *
      * @param <T>
      *
      * @param classOfPojo
@@ -140,11 +155,8 @@ object ObjectGenerators
      * @return
      *
      * @see StringGenerators
-     *
      * @see NumberGenerators
-     *
      * @see DateGenerators
-     *
      * @see TimeGenerators
      */
     @JvmStatic
@@ -153,12 +165,26 @@ object ObjectGenerators
         return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS)
     }
 
+    /**
+     * Kotlin shorthand method for [pojos]
+     */
+    inline fun <reified T : Any> pojos(): AlchemyGenerator<T>
+    {
+        return pojos(T::class.java)
+    }
+
+
     @JvmStatic
     fun <T : Any> pojos(classOfPojo: Class<T>, customMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<T>
     {
         checkNotNull(classOfPojo, "missing class of POJO")
+
+        if (customMappings.containsKey(classOfPojo))
+        {
+            return customMappings[classOfPojo] as AlchemyGenerator<T>
+        }
+
         checkThat(canInstantiate(classOfPojo), "cannot instantiate class: " + classOfPojo)
-        checkThat(!isPrimitiveClass(classOfPojo), "Cannot use pojos with Primitive Type. Use one of the Primitive generators instead.")
 
         val validFields = classOfPojo.declaredFields
                 .filter { f -> !isStatic(f) }
@@ -167,22 +193,9 @@ object ObjectGenerators
 
         return AlchemyGenerator<T> result@ {
 
-            val instance: T
+            val instance = classOfPojo.tryToInstantiate() ?: return@result null
 
-            try
-            {
-                instance = instantiate(classOfPojo)
-            }
-            catch (ex: Exception)
-            {
-                LOG.error("Failed to instantiate {}", classOfPojo.name, ex)
-                return@result null
-            }
-
-            for (field in validFields)
-            {
-                tryInjectField(instance, field, customMappings)
-            }
+            validFields.forEach { tryInjectField(instance, it, customMappings) }
 
             return@result instance
         }
@@ -191,29 +204,20 @@ object ObjectGenerators
 
     private fun <T : Any> canInstantiate(classOfPojo: Class<T>): Boolean
     {
-        try
+        return classOfPojo.tryToInstantiate() != null
+    }
+
+    private fun <T : Any> Class<T>.tryToInstantiate(): T?
+    {
+        return try
         {
-            instantiate(classOfPojo)
-            return true
+            instantiate(this)
         }
         catch (ex: Exception)
         {
-            LOG.warn("cannot instantiate type {}", classOfPojo)
-            return false
+            LOG.warn("cannot instantiate type $this")
+            null
         }
-
-    }
-
-    private fun isStatic(field: Field): Boolean
-    {
-        val modifiers = field.modifiers
-        return Modifier.isStatic(modifiers)
-    }
-
-    private fun isFinal(field: Field): Boolean
-    {
-        val modifiers = field.modifiers
-        return Modifier.isFinal(modifiers)
     }
 
     @Throws(NoSuchMethodException::class, InstantiationException::class, IllegalAccessException::class, IllegalArgumentException::class, InvocationTargetException::class)
@@ -240,74 +244,9 @@ object ObjectGenerators
 
     private fun createValuesFor(args: Array<out Class<*>>): List<Any?>
     {
-        if (args.isEmpty())
-        {
-            return emptyList()
-        }
+        return args.map { determineValueFor<Any>(it) }
+                .toList()
 
-        val result = mutableListOf<Any?>()
-
-        args.forEach { klass ->
-            val value = determineValueFor(klass)
-            result.add(value)
-        }
-
-        return result.toList()
-    }
-
-    private fun <T : Any> determineValueFor(klass: Class<T>): T?
-    {
-        val classOfT = ClassUtils.primitiveToWrapper(klass) ?: return null
-
-        val generator: AlchemyGenerator<*>?
-
-        if (DEFAULT_GENERATOR_MAPPINGS.containsKey(classOfT))
-        {
-            generator = DEFAULT_GENERATOR_MAPPINGS[classOfT]
-        }
-        else if (isEnumType(classOfT))
-        {
-            val enumValues = classOfT.enumConstants
-
-            if (enumValues == null)
-            {
-                LOG.warn("Enum Class {} has no Enum Values: " + classOfT)
-                return null
-            }
-
-            generator = AlchemyGenerator {
-                val position = one(NumberGenerators.integers(0, enumValues.size))
-                enumValues[position]
-            }
-        }
-        else
-        {
-            //Assume Pojo and recurse
-            generator = pojos(classOfT)
-        }
-
-        return generator?.get() as? T
-    }
-
-
-    private fun <T> isPrimitiveClass(classOfPojo: Class<T>): Boolean
-    {
-        if (classOfPojo.isPrimitive)
-        {
-            return true
-        }
-
-        val otherPrimitives = HashSet<Class<*>>()
-        otherPrimitives.add(String::class.java)
-        otherPrimitives.add(Date::class.java)
-        otherPrimitives.add(Instant::class.java)
-
-        if (otherPrimitives.contains(classOfPojo))
-        {
-            return true
-        }
-
-        return false
     }
 
     private fun <T : Any> tryInjectField(instance: T, field: Field, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>)
@@ -316,13 +255,9 @@ object ObjectGenerators
         {
             injectField(instance, field, generatorMappings)
         }
-        catch (ex: IllegalAccessException)
+        catch (ex: Exception)
         {
-            LOG.warn("Could not inject field {}", field.toString(), ex)
-        }
-        catch (ex: IllegalArgumentException)
-        {
-            LOG.warn("Could not inject field {}", field.toString(), ex)
+            LOG.warn("Could not inject field $field", ex)
         }
 
     }
@@ -333,7 +268,7 @@ object ObjectGenerators
         var typeOfField = field.type
         typeOfField = ClassUtils.primitiveToWrapper(typeOfField)
 
-        val generator = determineGeneratorFor(typeOfField, field, generatorMappings)
+        val generator = determineGeneratorFor(field, typeOfField, generatorMappings)
 
         if (generator == null)
         {
@@ -356,7 +291,16 @@ object ObjectGenerators
         }
     }
 
-    private fun determineGeneratorFor(typeOfField: Class<*>, field: Field, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
+    private fun <T : Any> determineValueFor(type: Class<*>): T?
+    {
+        val generator = determineGeneratorFor(typeOfField = type, generatorMappings = DEFAULT_GENERATOR_MAPPINGS)
+
+        return generator?.get() as? T
+    }
+
+    private fun determineGeneratorFor(field: Field? = null,
+                                      typeOfField: Class<*>,
+                                      generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
     {
         var generator: AlchemyGenerator<*>? = generatorMappings[typeOfField]
 
@@ -368,8 +312,13 @@ object ObjectGenerators
 
         if (isCollectionType(typeOfField))
         {
+            if (field == null)
+            {
+                LOG.warn("Need type information in order to created a Collection field. Cannot inject.")
+                return null
+            }
 
-            if (lacksGenericTypeArguments(field))
+            if (field.lacksGenericTypeArguments())
             {
                 LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
                          field.declaringClass,
@@ -391,7 +340,7 @@ object ObjectGenerators
             }
 
             generator = AlchemyGenerator {
-                val position = one(NumberGenerators.integers(0, enumValues.size))
+                val position = one(integers(0, enumValues.size))
                 enumValues[position]
             }
         }
@@ -406,8 +355,8 @@ object ObjectGenerators
 
     private fun isCollectionType(type: Class<*>): Boolean
     {
-        return isListType(type) ||
-               isSetType(type) ||
+        return isListType(type) or
+               isSetType(type) or
                isMapType(type)
     }
 
@@ -426,10 +375,8 @@ object ObjectGenerators
         return Map::class.java.isAssignableFrom(type)
     }
 
-    private fun lacksGenericTypeArguments(field: Field): Boolean
+    private fun Field.lacksGenericTypeArguments(): Boolean
     {
-        val genericType = field.genericType
-
         return genericType !is ParameterizedType
     }
 
@@ -443,25 +390,30 @@ object ObjectGenerators
         }
 
         val parameterizedType = collectionField.genericType as ParameterizedType
-        val valueType = parameterizedType.actualTypeArguments[0] as Class<*>
+        val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
 
-        val generator = generatorMappings[valueType] ?: determineGeneratorFor(valueType, collectionField, generatorMappings) ?: return null
+        val generator =  determineGeneratorFor(typeOfField = valueType, generatorMappings = generatorMappings) ?: return null
 
-        val list = ArrayList<Any>()
-        val size = one(NumberGenerators.integers(10, 100))
-
-        for (i in 0..size - 1)
-        {
-            list.add(generator.get())
-        }
+        val size = one(integers(10, 100))
 
         if (isSetType(collectionType))
         {
-            val set = HashSet(list)
-            return AlchemyGenerator { set }
+            return AlchemyGenerator {
+
+                List(size)
+                {
+                    generator.get()
+                }.toSet()
+            }
         }
 
-        return AlchemyGenerator { list }
+        return AlchemyGenerator {
+
+            List(size)
+            {
+                generator.get()
+            }
+        }
     }
 
     private fun determineGeneratorForMapField(mapField: Field,
@@ -471,18 +423,33 @@ object ObjectGenerators
         val keyType = parameterizedType.actualTypeArguments[0] as Class<*>
         val valueType = parameterizedType.actualTypeArguments[1] as Class<*>
 
-        val keyGenerator = generatorMappings[keyType] ?: determineGeneratorFor(keyType, mapField, generatorMappings) ?: return null
-        val valueGenerator = generatorMappings[valueType] ?: determineGeneratorFor(valueType, mapField, generatorMappings) ?: return null
+        val keyGenerator = determineGeneratorFor(mapField, keyType, generatorMappings) ?: return null
+        val valueGenerator = determineGeneratorFor(mapField, valueType, generatorMappings) ?: return null
 
-        val map = mutableMapOf<Any, Any>()
-        val size = one(integers(10, 100))
+        return AlchemyGenerator {
 
-        for (i in 0..size - 1)
-        {
-            map[keyGenerator.get()] = valueGenerator.get()
+            val map = mutableMapOf<Any, Any>()
+            val size = one(integers(10, 100))
+
+            for (i in 0..size - 1)
+            {
+                map[keyGenerator.get()] = valueGenerator.get()
+            }
+
+            map
         }
+    }
 
-        return AlchemyGenerator { map }
+    private fun isStatic(field: Field): Boolean
+    {
+        val modifiers = field.modifiers
+        return Modifier.isStatic(modifiers)
+    }
+
+    private fun isFinal(field: Field): Boolean
+    {
+        val modifiers = field.modifiers
+        return Modifier.isFinal(modifiers)
     }
 
     private fun isEnumType(typeOfField: Class<*>): Boolean
@@ -501,5 +468,24 @@ object ObjectGenerators
     private fun Constructor<*>.hasNoParameters(): Boolean
     {
         return this.parameterCount == 0
+    }
+
+    private fun <T> isPrimitiveClass(classOfPojo: Class<T>): Boolean
+    {
+        if (classOfPojo.isPrimitive)
+        {
+            return true
+        }
+
+        val otherPrimitives = setOf(String::class.java,
+                                    Date::class.java,
+                                    Instant::class.java)
+
+        if (otherPrimitives.contains(classOfPojo))
+        {
+            return true
+        }
+
+        return false
     }
 }

@@ -26,7 +26,6 @@ import org.junit.Before
 import org.junit.Test
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
@@ -119,22 +118,25 @@ class ObjectGeneratorsTest
     }
 
     @Test
-    fun testPojosRejectsPrimitives()
+    fun testPojosHandlesPrimitives()
     {
-        println("testPojosRejectsPrimitives")
+        println("testPojosHandlesPrimitives")
 
-        val primitives = HashSet<Class<*>>()
-        primitives.add(Int::class.java)
-        primitives.add(Double::class.java)
-        primitives.add(Long::class.java)
-        primitives.add(Char::class.java)
-        primitives.add(String::class.java)
-        primitives.add(Date::class.java)
-        primitives.add(Instant::class.java)
+        val primitives = setOf(Int::class.java,
+                               Double::class.java,
+                               Long::class.java,
+                               String::class.java,
+                               Date::class.java,
+                               Instant::class.java,
+                               Char::class.java,
+                               Short::class.java)
 
         primitives.forEach { p ->
-            assertThrows { ObjectGenerators.pojos(p) }
-                    .isInstanceOf(IllegalArgumentException::class.java)
+            val generator = ObjectGenerators.pojos(p)
+            assertThat(generator, notNullValue())
+
+            val value = generator.get()
+            assertThat(value, notNullValue())
         }
 
     }
