@@ -30,8 +30,10 @@ import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
-import java.util.*
+import java.util.Date
+import java.util.HashSet
 import java.util.function.Consumer
+import kotlin.test.assertFalse
 
 /**
  *
@@ -317,12 +319,13 @@ class ObjectGeneratorsTest
         val staticField = one(strings())
     }
 
-    data class Band(val name: String,
-                    val fans: Int,
-                    val money: Double,
-                    val city: String,
-                    val data: ByteArray,
-                    val onTour: Boolean)
+    private data class Band(val name: String,
+                            val fans: Int,
+                            val money: Double,
+                            val city: String,
+                            val data: ByteArray,
+                            val onTour: Boolean,
+                            val workstation: Computer)
 
     private fun Band?.check()
     {
@@ -331,6 +334,10 @@ class ObjectGeneratorsTest
 
         assertThat(name, not(isEmptyOrNullString()))
         assertThat(fans, greaterThan(0))
-
+        assertThat(money, greaterThan(0.0))
+        assertThat(city, not(isEmptyOrNullString()))
+        assertFalse { data.isEmpty() }
+        assertThat(workstation, notNullValue())
+        checkComputer(workstation)
     }
 }

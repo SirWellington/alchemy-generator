@@ -26,6 +26,7 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveD
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveLongs
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
+import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -197,7 +198,7 @@ object ObjectGenerators
         }
         catch (ex: Exception)
         {
-            LOG.warn("cannot instatiate type {}", classOfPojo)
+            LOG.warn("cannot instantiate type {}", classOfPojo)
             return false
         }
 
@@ -218,7 +219,8 @@ object ObjectGenerators
     @Throws(NoSuchMethodException::class, InstantiationException::class, IllegalAccessException::class, IllegalArgumentException::class, InvocationTargetException::class)
     private fun <T : Any> instantiate(classOfT: Class<T>): T
     {
-        val defaultConstructor = classOfT.constructors.firstOrNull() ?: classOfT.getDeclaredConstructor()
+        val defaultConstructor = classOfT.firstAvailableConstructor ?: throw IllegalAccessException("Cannot instantiate: $classOfT")
+
         val originalAccessibility = defaultConstructor.isAccessible
         val args = defaultConstructor.parameterTypes
         val values = createValuesFor(args).toTypedArray()
@@ -460,5 +462,17 @@ object ObjectGenerators
     private fun isEnumType(typeOfField: Class<*>): Boolean
     {
         return typeOfField.isEnum
+    }
+
+    private val Class<*>.firstAvailableConstructor: Constructor<*>?
+        get()
+        {
+            return this.constructors.find { it.hasNoParameters() } ?:
+                   this.constructors.firstOrNull()
+        }
+
+    private fun Constructor<*>.hasNoParameters(): Boolean
+    {
+        return this.parameterCount == 0
     }
 }
