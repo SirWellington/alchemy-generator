@@ -15,7 +15,6 @@
  */
 package tech.sirwellington.alchemy.generator
 
-import com.nhaarman.mockito_kotlin.notNull
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.isEmptyOrNullString
@@ -26,7 +25,6 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import org.omg.CORBA.INTERNAL
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
 import java.net.URL
@@ -185,20 +183,53 @@ class ObjectGeneratorsTest
     }
 
 
-    @Ignore
     @Test
     fun testWithAnotherDataClass()
     {
         data class Holder(val string: String,
-                          val number: INTERNAL,
+                          val number: Int,
                           val strings: List<String>)
 
         val generator = ObjectGenerators.pojos<Holder>()
 
         doInLoop {
             val result = generator.get()
-            assertThat(result, notNull())
+            assertThat(result, notNullValue())
         }
+    }
+
+    @Test
+    fun testWithADataClassThatContainsAMap()
+    {
+        data class Holder(val string: String,
+                          val number: Int,
+                          val map: Map<String, Computer>)
+
+        val generator = ObjectGenerators.pojos<Holder>()
+
+        doInLoop {
+            val result = generator.get()
+            assertThat(result, notNullValue())
+        }
+    }
+
+    /**
+     * This is a very complex generator.
+     * If you want this level of sophistication, you're going to have to generated these things on
+     * your own.
+     */
+    @Ignore
+    @Test
+    fun testWithADataClassThatContainsAMapOfAList()
+    {
+        data class Holder(val string: String,
+                          val number: Int,
+                          val map: Map<String, List<Computer>>)
+
+        val generator = ObjectGenerators.pojos<Holder>()
+
+        val result = generator.get()
+        assertThat(result, notNullValue())
     }
 
     private fun checkPerson(person: Person)

@@ -31,6 +31,7 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
+import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
 import java.net.URL
 import java.nio.ByteBuffer
@@ -223,7 +224,7 @@ object ObjectGenerators
         val defaultConstructor = classOfT.firstAvailableConstructor
 
         val originalAccessibility = defaultConstructor.isAccessible
-        val args = defaultConstructor.parameterTypes
+        val args = defaultConstructor.parameters
         val values = createValuesFor(args).toTypedArray()
 
         LOG.debug("Constructor parameters for $classOfT are $args")
@@ -239,9 +240,11 @@ object ObjectGenerators
         }
     }
 
-    private fun createValuesFor(args: Array<out Class<*>>): List<Any?>
+    private fun createValuesFor(args: Array<out Parameter>): List<Any?>
     {
-        return args.map { determineValueFor<Any>(it) }
+        if (args.isEmpty()) return emptyList()
+
+        return args.map { getValueFor<Any>(it) }
                 .toList()
 
     }
@@ -265,7 +268,10 @@ object ObjectGenerators
         var typeOfField = field.type
         typeOfField = ClassUtils.primitiveToWrapper(typeOfField)
 
-        val generator = determineGeneratorFor(field, typeOfField, generatorMappings)
+        val generator = determineGeneratorFor(field = field,
+                                              parameter = null,
+                                              typeOfField = typeOfField,
+                                              generatorMappings = generatorMappings)
 
         if (generator == null)
         {
@@ -288,14 +294,15 @@ object ObjectGenerators
         }
     }
 
-    private fun <T : Any> determineValueFor(type: Class<*>): T?
+    private fun <T : Any> getValueFor(parameter: Parameter): T?
     {
-        val generator = determineGeneratorFor(typeOfField = type, generatorMappings = DEFAULT_GENERATOR_MAPPINGS)
+        val generator = determineGeneratorFor(typeOfField = parameter.type, parameter = parameter, generatorMappings = DEFAULT_GENERATOR_MAPPINGS)
 
         return generator?.get() as? T
     }
 
     private fun determineGeneratorFor(field: Field? = null,
+                                      parameter: Parameter? = null,
                                       typeOfField: Class<*>,
                                       generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
     {
@@ -309,7 +316,10 @@ object ObjectGenerators
 
         if (isCollectionType(typeOfField))
         {
-            return generatorForCollectionType(field, typeOfField, generatorMappings)
+            return generatorForCollectionType(field = field,
+                                              parameter = parameter,
+                                              typeOfField =  typeOfField,
+                                              generatorMappings = generatorMappings)
         }
         else if (isEnumType(typeOfField))
         {
@@ -340,24 +350,40 @@ object ObjectGenerators
         }
     }
 
-    private fun generatorForCollectionType(field: Field?, typeOfField: Class<*>, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
+    private fun generatorForCollectionType(field: Field?, parameter: Parameter? = null, typeOfField: Class<*>, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
     {
-        if (field == null)
+        if (field != null)
         {
-            LOG.warn("Need type information in order to created a Collection field. Cannot inject.")
+
+            if (field.lacksGenericTypeArguments())
+            {
+                LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
+                         field.declaringClass,
+                         field)
+
+                return null
+            }
+
+            return determineGeneratorForCollectionField(field, typeOfField, generatorMappings)
+        }
+        else if (parameter != null)
+        {
+            if (parameter.parameterizedType !is ParameterizedType)
+            {
+                LOG.warn("POJO $typeOfField contains a Collection parameter $parameter which is not type-parameterized. Cannot inject.")
+                return null
+            }
+
+            return determineGeneratorForCollectionParameter(collectionParameter = parameter,
+                                                            collectionType = typeOfField,
+                                                            generatorMappings = generatorMappings)
+        }
+        else
+        {
+            LOG.warn("Cannot Instantiate: No generic information available in order to generate values for $typeOfField")
             return null
         }
 
-        if (field.lacksGenericTypeArguments())
-        {
-            LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
-                     field.declaringClass,
-                     field)
-
-            return null
-        }
-
-        return determineGeneratorForCollectionField(field, typeOfField, generatorMappings)
     }
 
     private fun isCollectionType(type: Class<*>): Boolean
@@ -399,6 +425,30 @@ object ObjectGenerators
         val parameterizedType = collectionField.genericType as ParameterizedType
         val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
 
+        return determineGeneratorForCollectionWithValueType(valueType, collectionType, generatorMappings)
+    }
+
+    private fun determineGeneratorForCollectionParameter(collectionParameter: Parameter,
+                                                        collectionType: Class<*> = collectionParameter.type,
+                                                        generatorMappings: Map<Class<*>, AlchemyGenerator<*>>) : AlchemyGenerator<*>?
+    {
+        if (isMapType(collectionType))
+        {
+            return determineGeneratorForMapParameter(collectionParameter, collectionType, generatorMappings)
+        }
+
+        val parameterizedType = collectionParameter.parameterizedType as? ParameterizedType ?: return null
+        val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
+
+        return determineGeneratorForCollectionWithValueType(valueType = valueType,
+                                                            collectionType = collectionType,
+                                                            generatorMappings = generatorMappings)
+    }
+
+
+    private fun determineGeneratorForCollectionWithValueType(valueType: Class<*>, collectionType: Class<*>, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
+    {
+
         val generator = determineGeneratorFor(typeOfField = valueType, generatorMappings = generatorMappings) ?: return null
 
         val size = one(integers(10, 100))
@@ -430,15 +480,55 @@ object ObjectGenerators
         val keyType = parameterizedType.actualTypeArguments[0] as Class<*>
         val valueType = parameterizedType.actualTypeArguments[1] as Class<*>
 
-        val keyGenerator = determineGeneratorFor(mapField, keyType, generatorMappings) ?: return null
-        val valueGenerator = determineGeneratorFor(mapField, valueType, generatorMappings) ?: return null
+        val keyGenerator = determineGeneratorFor(field = mapField,
+                                                 parameter = null,
+                                                 typeOfField = keyType,
+                                                 generatorMappings = generatorMappings) ?: return null
+
+        val valueGenerator = determineGeneratorFor(field = mapField,
+                                                   parameter = null,
+                                                   typeOfField = valueType,
+                                                   generatorMappings = generatorMappings) ?: return null
 
         return AlchemyGenerator {
 
             val map = mutableMapOf<Any, Any>()
             val size = one(integers(10, 100))
 
-            for (i in 0..size - 1)
+            for (i in 0 until size)
+            {
+                map[keyGenerator.get()] = valueGenerator.get()
+            }
+
+            map
+        }
+    }
+
+
+    private fun determineGeneratorForMapParameter(mapParameter: Parameter,
+                                                  collectionType: Class<*>,
+                                                  generatorMappings: Map<Class<*>, AlchemyGenerator<*>>) : AlchemyGenerator<*>?
+    {
+        val parameterizedType = mapParameter.parameterizedType as? ParameterizedType ?: return null
+        val keyType = parameterizedType.actualTypeArguments[0] as? Class<*> ?: return null
+        val valueType = parameterizedType.actualTypeArguments[1] as? Class<*> ?: return null
+
+        val keyGenerator = determineGeneratorFor(field = null,
+                                                 parameter = mapParameter,
+                                                 typeOfField = keyType,
+                                                 generatorMappings = generatorMappings) ?: return null
+
+        val valueGenerator = determineGeneratorFor(field = null,
+                                                   parameter = null,
+                                                   typeOfField = valueType,
+                                                   generatorMappings = generatorMappings) ?: return null
+
+        return AlchemyGenerator {
+
+            val map = mutableMapOf<Any, Any>()
+            val size = one(integers(10, 100))
+
+            for (i in 0 until size)
             {
                 map[keyGenerator.get()] = valueGenerator.get()
             }
