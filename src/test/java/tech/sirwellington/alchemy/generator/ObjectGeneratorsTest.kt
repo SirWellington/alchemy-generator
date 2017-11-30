@@ -15,6 +15,7 @@
  */
 package tech.sirwellington.alchemy.generator
 
+import com.nhaarman.mockito_kotlin.notNull
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.isEmptyOrNullString
@@ -23,7 +24,9 @@ import org.hamcrest.Matchers.notNullValue
 import org.hamcrest.Matchers.startsWith
 import org.junit.Assert.assertThat
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
+import org.omg.CORBA.INTERNAL
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
 import java.net.URL
@@ -178,6 +181,23 @@ class ObjectGeneratorsTest
         doInLoop {
             val result = generator.get()
             result.check()
+        }
+    }
+
+
+    @Ignore
+    @Test
+    fun testWithAnotherDataClass()
+    {
+        data class Holder(val string: String,
+                          val number: INTERNAL,
+                          val strings: List<String>)
+
+        val generator = ObjectGenerators.pojos<Holder>()
+
+        doInLoop {
+            val result = generator.get()
+            assertThat(result, notNull())
         }
     }
 

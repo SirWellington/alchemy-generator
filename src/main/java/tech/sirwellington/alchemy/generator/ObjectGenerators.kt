@@ -35,11 +35,8 @@ import java.lang.reflect.ParameterizedType
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
-import java.util.*
+import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.HashSet
-import kotlin.collections.Map
-import kotlin.collections.Set
 import kotlin.collections.set
 
 /**
@@ -312,45 +309,55 @@ object ObjectGenerators
 
         if (isCollectionType(typeOfField))
         {
-            if (field == null)
-            {
-                LOG.warn("Need type information in order to created a Collection field. Cannot inject.")
-                return null
-            }
-
-            if (field.lacksGenericTypeArguments())
-            {
-                LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
-                         field.declaringClass,
-                         field)
-
-                return null
-            }
-
-            generator = determineGeneratorForCollectionField(field, typeOfField, generatorMappings)
+            return generatorForCollectionType(field, typeOfField, generatorMappings)
         }
         else if (isEnumType(typeOfField))
         {
-            val enumValues = typeOfField.enumConstants
-
-            if (enumValues == null)
-            {
-                LOG.warn("Enum Class {} has no Enum Values: " + typeOfField)
-                return null
-            }
-
-            generator = AlchemyGenerator {
-                val position = one(integers(0, enumValues.size))
-                enumValues[position]
-            }
+            return generatorForEnumType(typeOfField)
         }
         else
         {
-            //Assume Pojo and recurse
+            //Assume it's a POJO and recurse
             generator = pojos(typeOfField)
         }
 
         return generator
+    }
+
+    private fun generatorForEnumType(typeOfField: Class<*>): AlchemyGenerator<*>?
+    {
+        val enumValues = typeOfField.enumConstants
+
+        if (enumValues == null)
+        {
+            LOG.warn("Enum Class {} has no Enum Values: " + typeOfField)
+            return null
+        }
+
+        return AlchemyGenerator {
+            val position = one(integers(0, enumValues.size))
+            enumValues[position]
+        }
+    }
+
+    private fun generatorForCollectionType(field: Field?, typeOfField: Class<*>, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
+    {
+        if (field == null)
+        {
+            LOG.warn("Need type information in order to created a Collection field. Cannot inject.")
+            return null
+        }
+
+        if (field.lacksGenericTypeArguments())
+        {
+            LOG.warn("POJO {} contains a Collection field {} which is not type-parametrized. Cannot inject.",
+                     field.declaringClass,
+                     field)
+
+            return null
+        }
+
+        return determineGeneratorForCollectionField(field, typeOfField, generatorMappings)
     }
 
     private fun isCollectionType(type: Class<*>): Boolean
@@ -392,7 +399,7 @@ object ObjectGenerators
         val parameterizedType = collectionField.genericType as ParameterizedType
         val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
 
-        val generator =  determineGeneratorFor(typeOfField = valueType, generatorMappings = generatorMappings) ?: return null
+        val generator = determineGeneratorFor(typeOfField = valueType, generatorMappings = generatorMappings) ?: return null
 
         val size = one(integers(10, 100))
 
