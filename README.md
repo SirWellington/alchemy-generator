@@ -78,7 +78,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>2.1.1</version>
+	<version>2.2</version>
 </dependency>
 ```
 
@@ -95,7 +95,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>2.2-SNAPSHOT</version>
+	<version>2.3-SNAPSHOT</version>
 </dependency>
 ```
 
