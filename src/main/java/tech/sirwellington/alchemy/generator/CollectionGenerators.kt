@@ -1,11 +1,10 @@
 /*
- * Copyright 2017 SirWellington Tech.
- *
+ * Copyright © 2018. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +21,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import java.util.*
+import java.util.HashMap
 
 /**
  * [Alchemy Generators][AlchemyGenerator] for Java Collections. These generators are useful in conjuction with
