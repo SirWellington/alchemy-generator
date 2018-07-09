@@ -61,7 +61,8 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.presentInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val result = instance.get()
             assertThat(Dates.isNow(result, 30), `is`(true))
         }
@@ -75,7 +76,8 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.pastInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val now = Instant.now()
             val result = instance.get()
             assertThat(result, notNullValue())
@@ -92,7 +94,8 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.futureInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val now = Instant.now()
             val result = instance.get()
             assertThat(result, notNullValue())
@@ -106,7 +109,8 @@ class TimeGeneratorsTest
     {
         println("testBefore")
 
-        doInLoop {
+        doInLoop()
+        {
             val daysBefore = one(smallPositiveIntegers())
 
             val referenceTime = Instant.now().minus(daysBefore.toLong(), DAYS)
@@ -124,7 +128,8 @@ class TimeGeneratorsTest
     {
         println("testAfter")
 
-        doInLoop {
+        doInLoop()
+        {
             val daysAhead = one(smallPositiveIntegers())
 
             val referenceTime = Instant.now().plus(daysAhead.toLong(), DAYS)
@@ -142,7 +147,8 @@ class TimeGeneratorsTest
     {
         println("testAnytime")
 
-        doInLoop {
+        doInLoop()
+        {
             val instance = TimeGenerators.anytime()
             assertThat(instance, notNullValue())
 
@@ -165,7 +171,8 @@ class TimeGeneratorsTest
         assertThrows { TimeGenerators.timesBetween(endTime, startTime) }
 
 
-        doInLoop {
+        doInLoop()
+        {
             val startTimestamp = one(longs(1, java.lang.Long.MAX_VALUE / 2))
             val endTimestamp = one(longs(startTimestamp + 1, java.lang.Long.MAX_VALUE))
 
