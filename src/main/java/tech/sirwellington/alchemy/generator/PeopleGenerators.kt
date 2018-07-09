@@ -15,7 +15,6 @@
 
 package tech.sirwellington.alchemy.generator
 
-import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
@@ -45,7 +44,6 @@ internal constructor()
     companion object
     {
 
-        private val LOG = LoggerFactory.getLogger(PeopleGenerators::class.java)
 
         /**
          * Generates a "names". There are no guarantees on the names except that it is an
@@ -55,7 +53,8 @@ internal constructor()
         fun names(): AlchemyGenerator<String>
         {
             //TODO: It may be better to use an actual dictionary resource file for names instead of generating them.
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
                 val firstLetter = one(alphabeticStrings(1)).toUpperCase()
                 val length = one(integers(2, 15))
                 val restOfTheName = one(alphabeticStrings(length - 1)).toLowerCase()
@@ -118,7 +117,8 @@ internal constructor()
         @JvmStatic
         fun phoneNumberStrings(): AlchemyGenerator<String>
         {
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
 
                 val firstPart = one(integers(100, 1000))
                 val secondPart = one(integers(100, 1000))
@@ -166,7 +166,8 @@ internal constructor()
         {
             checkNotEmpty(domainGenerator.get(), "Email Domain Generator returned empty String")
 
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
                 val username = one(alphanumericStrings())
                 val domain = domainGenerator.get()
 
