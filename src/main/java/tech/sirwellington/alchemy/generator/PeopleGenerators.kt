@@ -45,8 +45,8 @@ internal constructor()
     {
         private val LOG = LoggerFactory.getLogger(this::class.java)
 
-        private val firstNames = readLinesFromResource("/names/first-names.txt")
-        private val names = readLinesFromResource("/names/names.txt")
+        private val firstNames = readLinesFromResource("names/first-names.txt")
+        private val names = readLinesFromResource("names/names.txt")
         private val places = readLinesFromResource("places/places.txt")
 
 
@@ -200,15 +200,13 @@ internal constructor()
 
         private fun tryToLoadResource(path: String): String?
         {
-            val classLoader = this::class.java.classLoader ?: return null
+            val classLoader = AlchemyGenerator::class.java.classLoader ?: return null
 
-            val url = try
+            val url = classLoader.getResource(path)
+
+            if (url == null)
             {
-                classLoader.getResource(path)
-            }
-            catch (ex: Exception)
-            {
-                LOG.error("Failed to load resource at [$path]", ex)
+                LOG.warn("Could not load resource at [$path]")
                 return null
             }
 

@@ -67,7 +67,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.names()
         assertThat(instance, notNullValue())
 
-        val upperCasePattern = Pattern.compile("[A-Z]{1}[a-z]+")
+        val upperCasePattern = Pattern.compile("[A-Z][a-z]+")
 
         doInLoop()
         {
@@ -225,7 +225,6 @@ class PeopleGeneratorsTest
     @Test
     fun testEmailsWithCustomDomainsEdgeCases()
     {
-        assertThrows { PeopleGenerators.emails(null!!) }
         assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { null }) }
         assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { "" }) }
     }
