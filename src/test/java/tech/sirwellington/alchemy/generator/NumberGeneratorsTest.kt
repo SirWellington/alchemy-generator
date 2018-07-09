@@ -219,7 +219,8 @@ class IntegersTests
         val instance = NumberGenerators.negativeIntegers()
         assertThat(instance, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val value = instance.get()
             assertThat(value, lessThan(0))
         }
@@ -441,7 +442,8 @@ class DoubleTests
         upperBound = -5945.0
         instance = NumberGenerators.doubles(lowerBound, upperBound)
 
-        doInLoop {
+        doInLoop()
+        {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
             assertThat(value, lessThanOrEqualTo(upperBound))
