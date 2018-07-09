@@ -20,6 +20,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
+import tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFromFixedList
@@ -183,34 +184,6 @@ internal constructor()
 
                 "$username@$domain"
             }
-        }
-
-
-        //===========================================
-        // PRIVATE FUNCTIONS
-        //===========================================
-        private fun readLinesFromResource(path: String): List<String>
-        {
-            val file = tryToLoadResource(path) ?: return emptyList()
-            val lines = file.split("\n")
-
-            LOG.info("Successfully read [${lines.size}] lines from resource [$path]")
-            return lines
-        }
-
-        private fun tryToLoadResource(path: String): String?
-        {
-            val classLoader = AlchemyGenerator::class.java.classLoader ?: return null
-
-            val url = classLoader.getResource(path)
-
-            if (url == null)
-            {
-                LOG.warn("Could not load resource at [$path]")
-                return null
-            }
-
-            return url.readText(Charsets.UTF_8)
         }
 
     }
