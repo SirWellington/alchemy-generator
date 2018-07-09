@@ -131,6 +131,8 @@ class ObjectGeneratorsTest
                                Long::class.java,
                                String::class.java,
                                Date::class.java,
+                               java.sql.Date::class.java,
+                               java.sql.Timestamp::class.java,
                                Instant::class.java,
                                Char::class.java,
                                Short::class.java)
@@ -250,6 +252,8 @@ class ObjectGeneratorsTest
         assertThat(person.money, not(0.0))
         assertThat(person.heightCm, not(0.0f))
         assertThat(person.weightKg, not(0.0f))
+        assertThat(person.birthdayDate, notNullValue())
+        assertThat(person.birthdayTimestamp, notNullValue())
         assertThat(person.website, notNullValue())
         assertThat(person.website.toString(), startsWith("http"))
         assertThat(Person.staticField.toString(), `is`(ObjectGeneratorsTest.staticField))
@@ -339,6 +343,8 @@ class ObjectGeneratorsTest
         lateinit var middleName: String
         lateinit var computer: Computer
         lateinit var website: URL
+        lateinit var birthdayDate: java.util.Date
+        lateinit var birthdayTimestamp: java.sql.Timestamp
 
         companion object
         {
@@ -393,8 +399,11 @@ class ObjectGeneratorsTest
     private data class Band(val name: String,
                             val fans: Int,
                             val money: Double,
+                            val price: Float,
                             val city: String,
                             val data: ByteArray,
+                            val dateFormed: java.util.Date,
+                            val timeFormed: java.sql.Timestamp,
                             val onTour: Boolean,
                             val workstation: Computer)
 
@@ -406,8 +415,11 @@ class ObjectGeneratorsTest
         assertThat(name, not(isEmptyOrNullString()))
         assertThat(fans, greaterThan(0))
         assertThat(money, greaterThan(0.0))
+        assertThat(price, greaterThan(0.0f))
         assertThat(city, not(isEmptyOrNullString()))
         assertFalse { data.isEmpty() }
+        assertThat(dateFormed, notNullValue())
+        assertThat(timeFormed, notNullValue())
         assertThat(workstation, notNullValue())
         checkComputer(workstation)
     }

@@ -47,7 +47,7 @@ final class AlchemyResources
 
         String[] lines = file.split("\n");
 
-        LOG.info("Successfully read [{}] lines from resource [{}]", lines.length, path);
+        LOG.trace("Successfully read [{}] lines from resource [{}]", lines.length, path);
         return Arrays.asList(lines);
     }
 
