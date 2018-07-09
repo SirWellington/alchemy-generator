@@ -15,13 +15,13 @@
 
 package tech.sirwellington.alchemy.generator
 
+import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericStrings
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFromFixedList
 
 /**
@@ -43,6 +43,11 @@ internal constructor()
 
     companion object
     {
+        private val LOG = LoggerFactory.getLogger(this::class.java)
+
+        private val firstNames = readLinesFromResource("/names/first-names.txt")
+        private val names = readLinesFromResource("/names/names.txt")
+        private val places = readLinesFromResource("places/places.txt")
 
 
         /**
@@ -52,7 +57,11 @@ internal constructor()
         @JvmStatic
         fun names(): AlchemyGenerator<String>
         {
-            //TODO: It may be better to use an actual dictionary resource file for names instead of generating them.
+            if (this.names.isNotEmpty())
+            {
+                return StringGenerators.stringsFromFixedList(names)
+            }
+
             return AlchemyGenerator()
             {
                 val firstLetter = one(alphabeticStrings(1)).toUpperCase()
@@ -97,7 +106,8 @@ internal constructor()
         @JvmStatic
         fun phoneNumbers(): AlchemyGenerator<Long>
         {
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
 
                 val firstPart = one(integers(100, 1000))
                 val secondPart = one(integers(100, 1000))
@@ -168,11 +178,42 @@ internal constructor()
 
             return AlchemyGenerator()
             {
-                val username = one(alphanumericStrings())
+                val username = one(names()).toLowerCase()
                 val domain = domainGenerator.get()
 
                 "$username@$domain"
             }
         }
+
+
+        //===========================================
+        // PRIVATE FUNCTIONS
+        //===========================================
+        private fun readLinesFromResource(path: String): List<String>
+        {
+            val file = tryToLoadResource(path) ?: return emptyList()
+            val lines = file.split("\n")
+
+            LOG.info("Successfully read [${lines.size}] lines from resource [$path]")
+            return lines
+        }
+
+        private fun tryToLoadResource(path: String): String?
+        {
+            val classLoader = this::class.java.classLoader ?: return null
+
+            val url = try
+            {
+                classLoader.getResource(path)
+            }
+            catch (ex: Exception)
+            {
+                LOG.error("Failed to load resource at [$path]", ex)
+                return null
+            }
+
+            return url.readText(Charsets.UTF_8)
+        }
+
     }
 }
