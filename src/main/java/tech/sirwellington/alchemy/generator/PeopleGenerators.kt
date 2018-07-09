@@ -48,7 +48,6 @@ internal constructor()
 
         private val firstNames = readLinesFromResource("names/first-names.txt")
         private val names = readLinesFromResource("names/names.txt")
-        private val places = readLinesFromResource("places/places.txt")
 
 
         /**
