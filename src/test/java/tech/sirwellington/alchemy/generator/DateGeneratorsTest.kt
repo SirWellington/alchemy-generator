@@ -16,6 +16,7 @@
 package tech.sirwellington.alchemy.generator
 
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.hamcrest.Matchers.lessThan
 import org.hamcrest.Matchers.notNullValue
@@ -29,7 +30,9 @@ import tech.sirwellington.alchemy.generator.Dates.Companion.isNow
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
+import java.sql.Timestamp
 import java.time.Instant
+import java.util.Date
 
 /**
 
@@ -217,6 +220,40 @@ class DateGeneratorsTest
             assertThat(result.time, lessThan(endDate.time))
         }
 
+    }
+
+    @Test
+    fun testAsSqlDateGenerator()
+    {
+        println("testAsSqlDateGenerator")
+
+        doInLoop()
+        {
+            val date = one(DateGenerators.anyTime())
+
+            val generator = AlchemyGenerator<Date> { date }
+            val result = generator.asSqlDateGenerator()
+            val sqlDate = result.get()
+
+            assertThat(sqlDate, equalTo(java.sql.Date(date.time)))
+        }
+    }
+
+    @Test
+    fun testSqlSqlTimestampGenerator()
+    {
+        println("testSqlSqlTimestampGenerator")
+
+        doInLoop()
+        {
+            val date = one(DateGenerators.anyTime())
+            val generator = AlchemyGenerator { date }
+
+            val result = generator.asSqlTimestampGenerator()
+            val sqlTimestamp = result.get()
+
+            assertThat(sqlTimestamp, equalTo(Timestamp(date.time)))
+        }
     }
 
 }

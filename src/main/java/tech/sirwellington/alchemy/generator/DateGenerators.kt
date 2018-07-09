@@ -176,6 +176,24 @@ internal constructor()
                 Date(timestamp)
             }
         }
+
     }
 
+}
+
+/**
+ * Converts a [Generator][AlchemyGenerator] of [java.util.Date] objects to a [Generator][AlchemyGenerator]
+ * of [java.sql.Date] objects.
+ */
+fun AlchemyGenerator<java.util.Date>.asSqlDateGenerator(): AlchemyGenerator<java.sql.Date>
+{
+    return AlchemyGenerator { java.sql.Date(this.get().time) }
+}
+
+/**
+ * Converts the [java.util.Date] objects generated into [java.sql.Timestamp] types.
+ */
+fun AlchemyGenerator<java.util.Date>.asSqlTimestampGenerator(): AlchemyGenerator<java.sql.Timestamp>
+{
+    return AlchemyGenerator { java.sql.Timestamp(this.get().time) }
 }
