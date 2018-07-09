@@ -66,7 +66,8 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.presentDates()
 
-        doInLoop {
+        doInLoop()
+        {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(isNow(value, 30), `is`(true))
@@ -80,7 +81,8 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.pastDates()
 
-        doInLoop {
+        doInLoop()
+        {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.before(Dates.now()), `is`(true))
@@ -94,7 +96,8 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.futureDates()
 
-        doInLoop {
+        doInLoop()
+        {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.after(Dates.now()), `is`(true))
@@ -106,7 +109,8 @@ class DateGeneratorsTest
     {
         println("testAnyTime")
 
-        doInLoop {
+        doInLoop()
+        {
             val instance = DateGenerators.anyTime()
             assertThat(instance, notNullValue())
             assertThat(instance.get(), notNullValue())
@@ -119,7 +123,8 @@ class DateGeneratorsTest
     {
         println("testBefore")
 
-        doInLoop {
+        doInLoop()
+        {
             val referenceDate = Dates.now()
 
             val instance = DateGenerators.before(referenceDate)
@@ -139,7 +144,8 @@ class DateGeneratorsTest
     {
         println("testAfter")
 
-        doInLoop {
+        doInLoop()
+        {
             val referenceDate = Dates.now()
 
             val instance = DateGenerators.after(referenceDate)
@@ -159,7 +165,8 @@ class DateGeneratorsTest
     {
         println("testToDate")
 
-        doInLoop {
+        doInLoop()
+        {
             val now = Instant.now()
             val generator = AlchemyGenerator { now }
 
@@ -192,7 +199,8 @@ class DateGeneratorsTest
         assertThrows { DateGenerators.datesBetween(endDate, startDate) }
 
 
-        doInLoop {
+        doInLoop()
+        {
             //Pick a start and end time
             val begin = one(longs(1, Long.MAX_VALUE / 2))
             val end = one(longs(begin + 1, java.lang.Long.MAX_VALUE))
