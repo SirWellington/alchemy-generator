@@ -22,6 +22,7 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveDoubles
+import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveFloats
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveLongs
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
@@ -71,6 +72,7 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(Char::class.java, charGenerator)
         DEFAULT_GENERATOR_MAPPINGS.put(Character::class.java, charGenerator)
         DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
+        DEFAULT_GENERATOR_MAPPINGS.put(Float::class.java, positiveFloats())
         DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
         DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
         DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
