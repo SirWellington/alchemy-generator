@@ -71,7 +71,6 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(ByteArray::class.java, BinaryGenerators.binary(333))
         DEFAULT_GENERATOR_MAPPINGS.put(Char::class.java, charGenerator)
         DEFAULT_GENERATOR_MAPPINGS.put(Character::class.java, charGenerator)
-        DEFAULT_GENERATOR_MAPPINGS.put(Date::class.java, DateGenerators.anyTime())
         DEFAULT_GENERATOR_MAPPINGS.put(Float::class.java, positiveFloats())
         DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
         DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
@@ -83,10 +82,14 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Boolean::class.java, BooleanGenerators.booleans())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
+        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Float::class.java, positiveFloats())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Double::class.java, positiveDoubles())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Integer::class.java, smallPositiveIntegers())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Long::class.java, positiveLongs())
         DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Short::class.java, shortGenerator)
+        DEFAULT_GENERATOR_MAPPINGS.put(java.util.Date::class.java, DateGenerators.anyTime())
+        DEFAULT_GENERATOR_MAPPINGS.put(java.sql.Date::class.java, DateGenerators.anyTime().asSqlDateGenerator())
+        DEFAULT_GENERATOR_MAPPINGS.put(java.sql.Timestamp::class.java, DateGenerators.anyTime().asSqlTimestampGenerator())
     }
 
     /**

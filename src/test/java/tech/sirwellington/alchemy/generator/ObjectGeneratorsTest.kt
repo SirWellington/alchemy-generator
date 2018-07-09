@@ -126,6 +126,7 @@ class ObjectGeneratorsTest
         println("testPojosHandlesPrimitives")
 
         val primitives = setOf(Int::class.java,
+                               Float::class.java,
                                Double::class.java,
                                Long::class.java,
                                String::class.java,
@@ -134,7 +135,8 @@ class ObjectGeneratorsTest
                                Char::class.java,
                                Short::class.java)
 
-        primitives.forEach { p ->
+        primitives.forEach()
+        { p ->
             val generator = ObjectGenerators.pojos(p)
             assertThat(generator, notNullValue())
 
@@ -246,6 +248,8 @@ class ObjectGeneratorsTest
         assertThat(person.middleName, not(isEmptyOrNullString()))
         assertThat(person.age, not(0))
         assertThat(person.money, not(0.0))
+        assertThat(person.heightCm, not(0.0f))
+        assertThat(person.weightKg, not(0.0f))
         assertThat(person.website, notNullValue())
         assertThat(person.website.toString(), startsWith("http"))
         assertThat(Person.staticField.toString(), `is`(ObjectGeneratorsTest.staticField))
@@ -260,6 +264,7 @@ class ObjectGeneratorsTest
         assertThat(computer.manufacturer, not(isEmptyOrNullString()))
         assertThat(computer.year, greaterThan(0))
         assertThat(computer.cost, greaterThan(0.0))
+        assertThat(computer.weightKg, greaterThan(0.0f))
 
         assertThat(computer.data, notNullValue())
         assertThat(computer.data.size, greaterThan(0))
@@ -319,6 +324,7 @@ class ObjectGeneratorsTest
         lateinit var manufacturer: String
         var cost: Double = 0.0
         lateinit var data: ByteArray
+        var weightKg: Float = 0f
 
     }
 
@@ -327,7 +333,9 @@ class ObjectGeneratorsTest
 
         lateinit var name: String
         var age: Int = 0
-        var money: Double = 0.toDouble()
+        var money: Double = 0.0
+        var heightCm: Float = 0f
+        var weightKg: Float = 0f
         lateinit var middleName: String
         lateinit var computer: Computer
         lateinit var website: URL
