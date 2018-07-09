@@ -492,7 +492,8 @@ class DoubleTests
         val instance = NumberGenerators.positiveDoubles()
         assertNotNull(instance)
 
-        doInLoop {
+        doInLoop()
+        {
             assertThat(instance.get(), greaterThan(0.0))
         }
 
@@ -519,6 +520,138 @@ class DoubleTests
     {
         val generator = NumberGenerators.anyDoubles()
         val value = generator.get()
+    }
+
+}
+
+@RunWith(MockitoJUnitRunner::class)
+class FloatTests
+{
+
+    @Test
+    fun testFloats()
+    {
+        println("testFloats")
+
+        val lowerBound = 80.0f
+        val upperBound = 190.0f
+        val instance = NumberGenerators.floats(lowerBound, upperBound)
+
+        doInLoop()
+        {
+            val value = instance.get()
+            assertThat(value, greaterThanOrEqualTo(lowerBound))
+            assertThat(value, lessThanOrEqualTo(upperBound))
+        }
+    }
+
+    @Test
+    fun testFloatsWithNegativeRange()
+    {
+        println("testFloatsWithNegativeRange")
+
+        var lowerBound = -1343.0f
+        var upperBound = 2044532.3f
+        var instance = NumberGenerators.floats(lowerBound, upperBound)
+
+        doInLoop()
+        {
+            val value = instance.get()
+            assertThat(value, greaterThanOrEqualTo(lowerBound))
+            assertThat(value, lessThanOrEqualTo(upperBound))
+        }
+
+        lowerBound = -492425.0f
+        upperBound = -5945.0f
+        instance = NumberGenerators.floats(lowerBound, upperBound)
+
+        doInLoop()
+        {
+            val value = instance.get()
+            assertThat(value, greaterThanOrEqualTo(lowerBound))
+            assertThat(value, lessThanOrEqualTo(upperBound))
+        }
+    }
+
+    @Test
+    fun testFloatsWithBadBounds()
+    {
+        println("testFloatsWithBadBounds")
+
+        assertThrows { NumberGenerators.floats(50.0f, 15.0f) }
+                .isInstanceOf(IllegalArgumentException::class.java)
+
+        assertThrows { NumberGenerators.floats(60.0f, -35.0f) }
+                .isInstanceOf(IllegalArgumentException::class.java)
+
+        assertThrows { NumberGenerators.floats(-50.0f, -550.0f) }
+                .isInstanceOf(IllegalArgumentException::class.java)
+    }
+
+    @Test
+    fun testFloatsFromFixedList()
+    {
+        println("testFloatsFromFixedList")
+
+        val values = ArrayList<Float>()
+
+        doInLoop()
+        {
+            values.add(RandomUtils.nextFloat(1.0f, 365.0f))
+        }
+
+        val instance = NumberGenerators.floatsFromFixedList(values)
+
+        doInLoop()
+        {
+            val value = instance.get()
+            assertTrue(values.contains(value))
+        }
+    }
+
+
+    @Test
+    fun testPositiveFloats()
+    {
+        println("testPositiveFloats")
+
+        val instance = NumberGenerators.positiveFloats()
+        assertNotNull(instance)
+
+        doInLoop()
+        {
+            assertThat(instance.get(), greaterThan(0.0f))
+        }
+
+    }
+
+    @Test
+    fun testSmallPositiveFloats()
+    {
+        println("testSmallPositiveFloats")
+
+        val instance = NumberGenerators.smallPositiveFloats()
+        assertThat(instance, notNullValue())
+
+        doInLoop()
+        {
+            val value = instance.get()
+            assertThat(value, greaterThan(0.0f))
+            assertThat(value, lessThanOrEqualTo(1000.0f))
+        }
+    }
+
+    @Test
+    fun testAnyFloats()
+    {
+        val generator = NumberGenerators.anyFloats()
+
+        doInLoop()
+        {
+            val value = generator.get()
+            assertThat(value, notNullValue())
+        }
+
     }
 
 }

@@ -51,6 +51,11 @@ internal constructor()
 
         private val LOG = LoggerFactory.getLogger(NumberGenerators::class.java)
 
+
+        //===========================================
+        // INTEGERS
+        //===========================================
+
         /**
          * Creates a series of integer values within the specified bounds.
          *
@@ -165,6 +170,10 @@ internal constructor()
             }
         }
 
+        //===========================================
+        // LONGS
+        //===========================================
+
         /**
          * Produces long values within the specified Range
          *
@@ -265,6 +274,10 @@ internal constructor()
             return longs(1L, 10_000L)
         }
 
+        //===========================================
+        // DOUBLES
+        //===========================================
+
         /**
          * Creates a series of double values within the specified range
          *
@@ -327,8 +340,8 @@ internal constructor()
          *
          * @return
          *
-         * @see .smallPositiveDoubles
-         * @see .positiveIntegers
+         * @see smallPositiveDoubles
+         * @see positiveIntegers
          */
         @JvmStatic
         fun positiveDoubles(): AlchemyGenerator<Double>
@@ -337,10 +350,19 @@ internal constructor()
         }
 
         /**
+         * Creates a series of negative double values from `-Double.MAX_VALUE` to `-0.01`.
+         *
+         * @see positiveDoubles
+         * @see negativeIntegers
+         */
+        @JvmStatic
+        fun negativeDoubles(): AlchemyGenerator<Double>
+        {
+            return doubles(-Double.MAX_VALUE, -0.01)
+        }
+
+        /**
          * Creates a series of positive doubles from 0.1 to 1000.0
-         *
-         * @return
-         *
          *
          * @see positiveDoubles
          * @see positiveLongs
@@ -353,6 +375,94 @@ internal constructor()
             return doubles(0.1, 1000.0)
         }
 
+        //===========================================
+        // FLOATS
+        //===========================================
+
+        /**
+         * Creates a series of float values within the specified range
+         *
+         * @param inclusiveLowerBound The inclusive lower bound
+         * @param inclusiveUpperBound The inclusive upper bound
+         *
+         * @return
+         *
+         * @throws IllegalArgumentException If `lowerBound >= upperBound`
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun floats(inclusiveLowerBound: Float, inclusiveUpperBound: Float): AlchemyGenerator<Float>
+        {
+            checkThat(inclusiveLowerBound <= inclusiveUpperBound, "Upper Bound must be greater than Lower Bound")
+
+            val doubleGenerator = doubles(inclusiveLowerBound.toDouble(), inclusiveUpperBound.toDouble())
+
+            return AlchemyGenerator()
+            {
+                doubleGenerator.get().toFloat()
+            }
+        }
+
+        /**
+         * Creates a series of floats, both negative and positive.
+         * The range is `-Float.MAX_VALUE...Float.MAX_VALUE`.
+         *
+         * @see anyDoubles
+         * @see anyIntegers
+         */
+        @JvmStatic
+        fun anyFloats(): AlchemyGenerator<Float>
+        {
+            return floats(-Float.MAX_VALUE, Float.MAX_VALUE)
+        }
+
+        /**
+         * Creates a series of positive float values from 0 to Float.MAX_VALUE.
+         *
+         * @return
+         *
+         * @see .smallPositiveFloats
+         * @see .positiveIntegers
+         */
+        @JvmStatic
+        fun positiveFloats(): AlchemyGenerator<Float>
+        {
+            return floats(0.1f, Float.MAX_VALUE)
+        }
+
+        /**
+         * Creates a series of positive floats from 0.1 to 1000.0
+         *
+         * @return
+         *
+         *
+         * @see positiveFloats
+         * @see positiveLongs
+         * @see smallPositiveIntegers
+         * @see smallPositiveLongs
+         */
+        @JvmStatic
+        fun smallPositiveFloats(): AlchemyGenerator<Float>
+        {
+            return floats(0.1f, 1000.0f)
+        }
+
+        /**
+         * Create a series of negative floats from `-Float.MAX_VALUE` to `-0.01`.
+         *
+         * @see positiveFloats
+         * @see negativeDoubles
+         * @see negativeIntegers
+         */
+        @JvmStatic
+        fun negativeFloats(): AlchemyGenerator<Float>
+        {
+            return floats(-Float.MAX_VALUE, -0.01f)
+        }
+
+        //===========================================
+        // LISTS
+        //===========================================
         /**
          * Generates an integer value from the specified set.
          *
@@ -366,7 +476,8 @@ internal constructor()
         {
             checkThat(values.isNotEmpty(), "No values specified")
 
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
                 val index = integers(0, values.size).get()
                 values[index]
             }
@@ -385,7 +496,27 @@ internal constructor()
         {
             checkThat(values.isNotEmpty(), "No values specified")
 
-            return AlchemyGenerator {
+            return AlchemyGenerator()
+            {
+                val index = integers(0, values.size).get()
+                values[index]
+            }
+        }
+
+        /**
+         * Generates a float value from the specified set.
+         *
+         * @param values
+         *
+         * @return
+         */
+        @JvmStatic
+        fun floatsFromFixedList(values: List<Float>): AlchemyGenerator<Float>
+        {
+            checkThat(values.isNotEmpty(), "No values specified")
+
+            return AlchemyGenerator()
+            {
                 val index = integers(0, values.size).get()
                 values[index]
             }
