@@ -347,7 +347,7 @@ object ObjectGenerators
 
         return when (typeOfField)
         {
-            String::javaClass ->
+            String::class.java ->
             {
                 when (fieldName)
                 {
@@ -359,7 +359,7 @@ object ObjectGenerators
                 }
             }
 
-            Double::javaClass ->
+            Double::class.java ->
             {
                 when (fieldName)
                 {
@@ -369,7 +369,7 @@ object ObjectGenerators
                 }
             }
 
-            Int::javaClass ->
+            Int::class.java ->
             {
                 when (fieldName)
                 {
