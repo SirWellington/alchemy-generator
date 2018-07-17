@@ -193,13 +193,14 @@ object ObjectGenerators
                 .filter { f -> !isFinal(f) }
                 .toList()
 
-        return AlchemyGenerator<T> result@ {
+        return AlchemyGenerator<T>()
+        {
 
-            val instance = classOfPojo.tryToInstantiate() ?: return@result null
+            val instance = classOfPojo.tryToInstantiate() ?: return@AlchemyGenerator null
 
             validFields.forEach { tryInjectField(instance, it, customMappings) }
 
-            return@result instance
+            return@AlchemyGenerator instance
         }
 
     }
@@ -459,21 +460,15 @@ object ObjectGenerators
 
         if (isSetType(collectionType))
         {
-            return AlchemyGenerator {
-
-                List(size)
-                {
-                    generator.get()
-                }.toSet()
+            return AlchemyGenerator()
+            {
+                List(size) { generator.get() }.toSet()
             }
         }
 
-        return AlchemyGenerator {
-
-            List(size)
-            {
-                generator.get()
-            }
+        return AlchemyGenerator()
+        {
+            List(size) { generator.get() }
         }
     }
 
@@ -494,8 +489,8 @@ object ObjectGenerators
                                                    typeOfField = valueType,
                                                    generatorMappings = generatorMappings) ?: return null
 
-        return AlchemyGenerator {
-
+        return AlchemyGenerator()
+        {
             val map = mutableMapOf<Any, Any>()
             val size = one(integers(10, 100))
 
