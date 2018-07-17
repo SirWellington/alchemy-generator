@@ -101,14 +101,15 @@ class NetworkGeneratorsTest
         assertThat(generator, notNullValue())
 
         val max = "999.999.999.999"
-        val min = "11.11.11.11"
+        val min = "1.1.1.1"
         val expectedPeriods = 3
 
-        doInLoop {
+        doInLoop()
+        {
             val address = generator.get()
 
-            val periodAppearences = numberOfAppearencesOfCharInString('.', address)
-            assertThat(periodAppearences, `is`(expectedPeriods))
+            val periodAppearances = numberOfAppearencesOfCharInString('.', address)
+            assertThat(periodAppearances, `is`(expectedPeriods))
 
             assertThat(address.length, `is`(lessThanOrEqualTo(max.length)))
             assertThat(address.length, `is`(greaterThanOrEqualTo(min.length)))
