@@ -46,7 +46,8 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.httpUrls()
         assertThat(generator, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val result = generator.get()
             assertThat(result, notNullValue())
         }
@@ -58,7 +59,8 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.httpsUrls()
         assertThat(generator, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val result = generator.get()
             assertThat(result, notNullValue())
             assertThat(result.toString(), startsWith("https://"))
@@ -68,7 +70,8 @@ class NetworkGeneratorsTest
     @Test
     fun testUrlsWithProtocol()
     {
-        doInLoop {
+        doInLoop()
+        {
             val scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp").get()
             val generator = NetworkGenerators.urlsWithProtocol(scheme)
             assertThat(generator, notNullValue())
@@ -86,7 +89,8 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.ports()
         assertThat(generator, notNullValue())
 
-        doInLoop {
+        doInLoop()
+        {
             val port = generator.get()
             assertThat(port, greaterThanOrEqualTo(22))
             assertThat(port, lessThan(java.lang.Short.MAX_VALUE.toInt()))
@@ -108,7 +112,7 @@ class NetworkGeneratorsTest
         {
             val address = generator.get()
 
-            val periodAppearances = numberOfAppearencesOfCharInString('.', address)
+            val periodAppearances = numberOfAppearancesOfCharInString('.', address)
             assertThat(periodAppearances, `is`(expectedPeriods))
 
             assertThat(address.length, `is`(lessThanOrEqualTo(max.length)))
@@ -116,7 +120,7 @@ class NetworkGeneratorsTest
         }
     }
 
-    private fun numberOfAppearencesOfCharInString(character: Char, string: String): Int
+    private fun numberOfAppearancesOfCharInString(character: Char, string: String): Int
     {
         return string.toCharArray()
                 .count { it == character }
