@@ -317,8 +317,8 @@ object ObjectGenerators
 
         if (generator != null)
         {
-            //Already found it
-            return generator
+            //Already found it, now see if there's a more specialized version
+            tryToLoadSpecializedGenerator(field, typeOfField, generator)
         }
 
         if (isCollectionType(typeOfField))
@@ -341,6 +341,47 @@ object ObjectGenerators
         return generator
     }
 
+    private fun tryToLoadSpecializedGenerator(field: Field?, typeOfField: Class<*>, generator: AlchemyGenerator<*>) : AlchemyGenerator<*>
+    {
+        val fieldName = field?.name ?: ""
+
+        return when (typeOfField)
+        {
+            String::javaClass ->
+            {
+                when (fieldName)
+                {
+                    "name", "firstName", "lastName" -> PeopleGenerators.names()
+                    "email"                         -> PeopleGenerators.emails()
+                    "city"                          -> PlaceGenerators.cities()
+                    "country"                       -> PlaceGenerators.countries()
+                    else                            -> generator
+                }
+            }
+
+            Double::javaClass ->
+            {
+                when (fieldName)
+                {
+                    "latitude"  -> GeolocationGenerators.latitudes()
+                    "longitude" -> GeolocationGenerators.longitudes()
+                    else        -> generator
+                }
+            }
+
+            Int::javaClass ->
+            {
+                when (fieldName)
+                {
+                    "age" -> PeopleGenerators.adultAges()
+                    else  -> generator
+                }
+            }
+
+            else -> generator
+        }
+    }
+
     private fun generatorForEnumType(typeOfField: Class<*>): AlchemyGenerator<*>?
     {
         val enumValues = typeOfField.enumConstants
@@ -351,7 +392,8 @@ object ObjectGenerators
             return null
         }
 
-        return AlchemyGenerator {
+        return AlchemyGenerator()
+        {
             val position = one(integers(0, enumValues.size))
             enumValues[position]
         }
