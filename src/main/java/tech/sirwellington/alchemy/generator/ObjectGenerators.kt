@@ -33,6 +33,8 @@ import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
 import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+import java.lang.reflect.WildcardType
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
@@ -443,20 +445,57 @@ object ObjectGenerators
         }
 
         val parameterizedType = collectionParameter.parameterizedType as? ParameterizedType ?: return null
-        val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
+        val actualType = parameterizedType.actualTypeArguments.firstOrNull()
+        val name = actualType?.typeName
+        val valueType = actualType as? Class<*>
+                        ?: tryToDetermineClassFrom(actualType)
+                        ?: return null
 
         return determineGeneratorForCollectionWithValueType(valueType = valueType,
                                                             collectionType = collectionType,
                                                             generatorMappings = generatorMappings)
     }
 
+    private fun tryToDetermineClassFrom(actualType: Type?): Class<*>?
+    {
+        return when
+        {
+            actualType == null -> null
+
+            actualType is WildcardType && actualType.upperBounds.isNotEmpty() ->
+            {
+                val className = actualType.typeName.removePrefix("? extends ")
+                tryToLoadClass(className)
+            }
+
+            actualType is WildcardType && actualType.lowerBounds.isNotEmpty() ->
+            {
+                val className = actualType.typeName.removePrefix("? super ")
+                tryToLoadClass(className)
+            }
+
+            else -> return null
+        }
+    }
+
+    private fun tryToLoadClass(name: String): Class<*>?
+    {
+        return try
+        {
+            this.javaClass.classLoader.loadClass(name)
+        }
+        catch(ex: Throwable)
+        {
+            return null
+        }
+    }
 
     private fun determineGeneratorForCollectionWithValueType(valueType: Class<*>, collectionType: Class<*>, generatorMappings: Map<Class<*>, AlchemyGenerator<*>>): AlchemyGenerator<*>?
     {
 
         val generator = determineGeneratorFor(typeOfField = valueType, generatorMappings = generatorMappings) ?: return null
 
-        val size = one(integers(10, 100))
+        val size = one(integers(3, 25))
 
         if (isSetType(collectionType))
         {
@@ -492,7 +531,7 @@ object ObjectGenerators
         return AlchemyGenerator()
         {
             val map = mutableMapOf<Any, Any>()
-            val size = one(integers(10, 100))
+            val size = one(integers(3, 25))
 
             for (i in 0 until size)
             {
@@ -522,10 +561,10 @@ object ObjectGenerators
                                                    typeOfField = valueType,
                                                    generatorMappings = generatorMappings) ?: return null
 
-        return AlchemyGenerator {
-
+        return AlchemyGenerator()
+        {
             val map = mutableMapOf<Any, Any>()
-            val size = one(integers(10, 100))
+            val size = one(integers(3, 25))
 
             for (i in 0 until size)
             {

@@ -14,6 +14,9 @@
  */
 package tech.sirwellington.alchemy.generator
 
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.isEmpty
+import com.natpryce.hamkrest.isNullOrEmptyString
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.greaterThan
 import org.hamcrest.Matchers.isEmptyOrNullString
@@ -32,6 +35,7 @@ import java.time.Instant
 import java.util.Date
 import java.util.function.Consumer
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 
 /**
  *
@@ -221,6 +225,23 @@ class ObjectGeneratorsTest
         {
             val result = generator.get()
             assertThat(result, notNullValue())
+        }
+    }
+
+    @Test
+    fun testWithADataClassThatContainsListOfEnumValues()
+    {
+        val generator = ObjectGenerators.pojos<Restaurant>()
+
+        doInLoop()
+        {
+            val result = generator.get()
+            assertThat(result, notNullValue())
+            assertThat(result.name, !isNullOrEmptyString)
+            assertThat(result.type, notNullValue())
+            assertThat(result.tags, notNullValue())
+            assertThat(result.tags, !isEmpty)
+            result.tags.forEach { assertNotNull(it) }
         }
     }
 
@@ -422,5 +443,28 @@ class ObjectGeneratorsTest
         assertThat(timeFormed, notNullValue())
         assertThat(workstation, notNullValue())
         checkComputer(workstation)
+    }
+
+    data class Restaurant(val name: String,
+                          val type: VenueType,
+                          val tags: List<Tag>)
+    {
+
+        enum class VenueType
+        {
+
+            RESTAURANT,
+            CAFE,
+            SIT_DOWN
+        }
+
+        enum class Tag
+        {
+
+            FANCY,
+            CHEAP,
+            CASUAL,
+            ROMANTIC
+        }
     }
 }
