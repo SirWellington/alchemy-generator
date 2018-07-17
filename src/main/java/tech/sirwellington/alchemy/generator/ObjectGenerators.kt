@@ -417,9 +417,10 @@ object ObjectGenerators
         }
         else if (parameter != null)
         {
-            if (parameter.parameterizedType !is ParameterizedType)
+            val parameterType = parameter.parameterizedType
+            if (parameterType !is ParameterizedType)
             {
-                LOG.warn("POJO $typeOfField contains a Collection parameter $parameter which is not type-parameterized. Cannot inject.")
+                LOG.warn("POJO $typeOfField contains a Collection parameter $parameter which is not type-parameterized: [$parameterType]. Cannot inject.")
                 return null
             }
 
