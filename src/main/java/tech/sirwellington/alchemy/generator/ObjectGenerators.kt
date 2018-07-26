@@ -474,7 +474,10 @@ object ObjectGenerators
         }
 
         val parameterizedType = collectionField.genericType as ParameterizedType
-        val valueType = parameterizedType.actualTypeArguments.firstOrNull() as? Class<*> ?: return null
+        val actualType = parameterizedType.actualTypeArguments?.firstOrNull()
+        val valueType = actualType as? Class<*>
+                        ?: tryToDetermineClassFrom(actualType)
+                        ?: return null
 
         return determineGeneratorForCollectionWithValueType(valueType, collectionType, generatorMappings)
     }
@@ -490,7 +493,6 @@ object ObjectGenerators
 
         val parameterizedType = collectionParameter.parameterizedType as? ParameterizedType ?: return null
         val actualType = parameterizedType.actualTypeArguments.firstOrNull()
-        val name = actualType?.typeName
         val valueType = actualType as? Class<*>
                         ?: tryToDetermineClassFrom(actualType)
                         ?: return null
