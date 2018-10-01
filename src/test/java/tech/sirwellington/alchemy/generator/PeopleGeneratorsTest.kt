@@ -15,14 +15,7 @@
 
 package tech.sirwellington.alchemy.generator
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.either
-import org.hamcrest.Matchers.endsWith
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.isEmptyString
-import org.hamcrest.Matchers.lessThanOrEqualTo
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Assert.fail
 import org.junit.Before
@@ -229,4 +222,17 @@ class PeopleGeneratorsTest
         assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { "" }) }
     }
 
+    @Test
+    fun testProfessions()
+    {
+        val generator = PeopleGenerators.professions()
+
+        doInLoop loop@
+        {
+            val result = generator.get()
+            assertThat(result, notNullValue())
+            assertThat(result, not(isEmptyString()))
+        }
+
+    }
 }

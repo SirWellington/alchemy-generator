@@ -48,7 +48,7 @@ internal constructor()
 
         private val firstNames = readLinesFromResource("names/first-names.txt")
         private val names = readLinesFromResource("names/names.txt")
-
+        private val professions = readLinesFromResource("other/professions.txt")
 
         /**
          * Generates a "names". There are no guarantees on the names except that it is an
@@ -184,6 +184,22 @@ internal constructor()
                 "$username@$domain"
             }
         }
+
+        /**
+         * Generates professions.
+         */
+        fun professions(): AlchemyGenerator<String>
+        {
+            return if (professions.isNotEmpty())
+            {
+                stringsFromFixedList(professions)
+            }
+            else
+            {
+                StringGenerators.alphabeticStrings(10)
+            }
+        }
+
 
     }
 }
