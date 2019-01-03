@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018. Sir Wellington.
+ * Copyright © 2019. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -17,14 +17,7 @@ package tech.sirwellington.alchemy.generator
 import com.nhaarman.mockito_kotlin.whenever
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.isEmptyOrNullString
-import org.hamcrest.Matchers.isEmptyString
-import org.hamcrest.Matchers.lessThanOrEqualTo
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.notNullValue
-import org.hamcrest.Matchers.sameInstance
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue

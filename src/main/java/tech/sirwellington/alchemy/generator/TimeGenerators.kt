@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018. Sir Wellington.
+ * Copyright © 2019. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -23,11 +23,7 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.R
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import java.time.Instant
-import java.time.temporal.ChronoUnit.DAYS
-import java.time.temporal.ChronoUnit.HOURS
-import java.time.temporal.ChronoUnit.MILLIS
-import java.time.temporal.ChronoUnit.MINUTES
-import java.time.temporal.ChronoUnit.SECONDS
+import java.time.temporal.ChronoUnit.*
 
 /**
  * Generators for [Java Instants][Instant].

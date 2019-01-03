@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018. Sir Wellington.
+ * Copyright © 2019. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -15,12 +15,7 @@
 
 package tech.sirwellington.alchemy.generator
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.lessThan
-import org.hamcrest.Matchers.lessThanOrEqualTo
-import org.hamcrest.Matchers.notNullValue
-import org.hamcrest.Matchers.startsWith
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
