@@ -15,10 +15,7 @@
 
 package tech.sirwellington.alchemy.generator
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.lessThan
-import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -27,7 +24,10 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit.DAYS
+import kotlin.test.assertTrue
 
 /**
 
@@ -186,6 +186,35 @@ class TimeGeneratorsTest
             assertThat(result.toEpochMilli(), greaterThanOrEqualTo(start.toEpochMilli()))
             assertThat(result.toEpochMilli(), lessThan(end.toEpochMilli()))
         }
+    }
+
+    @Test
+    fun testAsZonedDateTimeGenerator()
+    {
+        val zone = anyZone()
+
+        val time = TimeGenerators.anytime().get()
+        val expected = time.atZone(zone)
+
+        val generator = AlchemyGenerator { time }.asZonedDateTimeGenerator(zone)
+        val result = generator.get()
+
+        assertThat(result, equalTo(expected))
+    }
+
+    @Test
+    fun testAsZonedDateTimeGeneratorWithPastGenerator()
+    {
+        val zone = anyZone()
+        val generator = TimeGenerators.pastInstants().asZonedDateTimeGenerator(zone)
+        val result = generator.get()
+        assertThat(result, notNullValue())
+        assertTrue { result.isBefore(ZonedDateTime.now(zone)) }
+    }
+
+    fun anyZone(): ZoneId
+    {
+        return ZoneId.getAvailableZoneIds().random().let { ZoneId.of(it) }
     }
 
 }

@@ -23,6 +23,9 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.R
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import java.time.Instant
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit.*
 
 /**
@@ -208,4 +211,17 @@ internal constructor()
         }
     }
 
+}
+
+/**
+ * Converts this [Instant] generator into a [ZonedDateTime] generator.
+ *
+ * @param zone  The [ZoneId] to the generate times in. Defaults to [ZoneOffset.UTC].
+ */
+fun AlchemyGenerator<Instant>.asZonedDateTimeGenerator(zone: ZoneId = ZoneOffset.UTC): AlchemyGenerator<ZonedDateTime>
+{
+    return AlchemyGenerator {
+        val instant = this.get()
+        ZonedDateTime.ofInstant(instant, zone)
+    }
 }
