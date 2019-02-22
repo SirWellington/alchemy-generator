@@ -31,6 +31,7 @@ import java.lang.reflect.*
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.collections.set
@@ -60,31 +61,32 @@ object ObjectGenerators
 
     init
     {
-        DEFAULT_GENERATOR_MAPPINGS.put(Boolean::class.java, BooleanGenerators.booleans())
-        DEFAULT_GENERATOR_MAPPINGS.put(Byte::class.java, BinaryGenerators.bytes())
-        DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer::class.java, BinaryGenerators.byteBuffers(333))
-        DEFAULT_GENERATOR_MAPPINGS.put(ByteArray::class.java, BinaryGenerators.binary(333))
-        DEFAULT_GENERATOR_MAPPINGS.put(Char::class.java, charGenerator)
-        DEFAULT_GENERATOR_MAPPINGS.put(Character::class.java, charGenerator)
-        DEFAULT_GENERATOR_MAPPINGS.put(Float::class.java, positiveFloats())
-        DEFAULT_GENERATOR_MAPPINGS.put(Double::class.java, positiveDoubles())
-        DEFAULT_GENERATOR_MAPPINGS.put(Int::class.java, smallPositiveIntegers())
-        DEFAULT_GENERATOR_MAPPINGS.put(Long::class.java, positiveLongs())
-        DEFAULT_GENERATOR_MAPPINGS.put(Short::class.java, shortGenerator)
-        DEFAULT_GENERATOR_MAPPINGS.put(String::class.java, alphabeticStrings())
-        DEFAULT_GENERATOR_MAPPINGS.put(Instant::class.java, TimeGenerators.anytime())
-        DEFAULT_GENERATOR_MAPPINGS.put(URL::class.java, NetworkGenerators.httpUrls())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Boolean::class.java, BooleanGenerators.booleans())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Byte::class.java, BinaryGenerators.bytes())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Float::class.java, positiveFloats())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Double::class.java, positiveDoubles())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Integer::class.java, smallPositiveIntegers())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Long::class.java, positiveLongs())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.lang.Short::class.java, shortGenerator)
-        DEFAULT_GENERATOR_MAPPINGS.put(java.util.Date::class.java, DateGenerators.anyTime())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.sql.Date::class.java, DateGenerators.anyTime().asSqlDateGenerator())
-        DEFAULT_GENERATOR_MAPPINGS.put(java.sql.Timestamp::class.java, DateGenerators.anyTime().asSqlTimestampGenerator())
+        DEFAULT_GENERATOR_MAPPINGS[Boolean::class.java]            = BooleanGenerators.booleans()
+        DEFAULT_GENERATOR_MAPPINGS[Byte::class.java]               = BinaryGenerators.bytes()
+        DEFAULT_GENERATOR_MAPPINGS[ByteBuffer::class.java]         = BinaryGenerators.byteBuffers(333)
+        DEFAULT_GENERATOR_MAPPINGS[ByteArray::class.java]          = BinaryGenerators.binary(333)
+        DEFAULT_GENERATOR_MAPPINGS[Char::class.java]               = charGenerator
+        DEFAULT_GENERATOR_MAPPINGS[Character::class.java]          = charGenerator
+        DEFAULT_GENERATOR_MAPPINGS[Float::class.java]              = positiveFloats()
+        DEFAULT_GENERATOR_MAPPINGS[Double::class.java]             = positiveDoubles()
+        DEFAULT_GENERATOR_MAPPINGS[Int::class.java]                = smallPositiveIntegers()
+        DEFAULT_GENERATOR_MAPPINGS[Long::class.java]               = positiveLongs()
+        DEFAULT_GENERATOR_MAPPINGS[Short::class.java]              = shortGenerator
+        DEFAULT_GENERATOR_MAPPINGS[String::class.java]             = alphabeticStrings()
+        DEFAULT_GENERATOR_MAPPINGS[Instant::class.java]            = TimeGenerators.anytime()
+        DEFAULT_GENERATOR_MAPPINGS[ZonedDateTime::class.java]      = TimeGenerators.anytime().asZonedDateTimeGenerator()
+        DEFAULT_GENERATOR_MAPPINGS[URL::class.java]                = NetworkGenerators.httpUrls()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Boolean::class.java]  = BooleanGenerators.booleans()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Float::class.java]    = positiveFloats()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Double::class.java]   = positiveDoubles()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Integer::class.java]  = smallPositiveIntegers()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Long::class.java]     = positiveLongs()
+        DEFAULT_GENERATOR_MAPPINGS[java.lang.Short::class.java]    = shortGenerator
+        DEFAULT_GENERATOR_MAPPINGS[java.util.Date::class.java]     = DateGenerators.anyTime()
+        DEFAULT_GENERATOR_MAPPINGS[java.sql.Date::class.java]      = DateGenerators.anyTime().asSqlDateGenerator()
+        DEFAULT_GENERATOR_MAPPINGS[java.sql.Timestamp::class.java] = DateGenerators.anyTime().asSqlTimestampGenerator()
     }
 
     /**

@@ -27,6 +27,7 @@ import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.function.Consumer
 import kotlin.test.assertFalse
@@ -288,6 +289,8 @@ class ObjectGeneratorsTest
 
         assertThat(computer.data, notNullValue())
         assertThat(computer.data.size, greaterThan(0))
+        assertThat(computer.purchaseTime, notNullValue())
+        assertThat(computer.purchaseInstant, notNullValue())
     }
 
     private fun checkBuilding(building: Building)
@@ -345,6 +348,8 @@ class ObjectGeneratorsTest
         var cost: Double = 0.0
         lateinit var data: ByteArray
         var weightKg: Float = 0f
+        lateinit var purchaseTime: ZonedDateTime
+        lateinit var purchaseInstant: Instant
 
     }
 
