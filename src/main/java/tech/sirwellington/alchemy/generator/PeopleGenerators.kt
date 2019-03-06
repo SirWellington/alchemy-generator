@@ -176,12 +176,15 @@ internal constructor()
         {
             checkNotEmpty(domainGenerator.get(), "Email Domain Generator returned empty String")
 
+            val numberGenerator = NumberGenerators.integers(0, 999)
+
             return AlchemyGenerator()
             {
                 val username = one(names()).toLowerCase()
+                val number = one(numberGenerator)
                 val domain = domainGenerator.get()
 
-                "$username@$domain"
+                "$username$number@$domain"
             }
         }
 
