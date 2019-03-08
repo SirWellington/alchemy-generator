@@ -20,6 +20,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import java.time.Instant
+import java.time.LocalDate
 import java.util.Date
 
 /**
@@ -124,10 +125,23 @@ internal constructor()
         /**
          * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
          *
+         * @deprecated In favor of [anytime]
+         * @return
+         */
+        @Deprecated(message = "In favor of `anytime()`", replaceWith = ReplaceWith("anytime()", "tech.sirwellington.alchemy.generator.DateGenerators"))
+        @JvmStatic
+        fun anyTime(): AlchemyGenerator<Date>
+        {
+            return anytime()
+        }
+
+        /**
+         * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
+         *
          * @return
          */
         @JvmStatic
-        fun anyTime(): AlchemyGenerator<Date>
+        fun anytime(): AlchemyGenerator<Date>
         {
             return toDate(TimeGenerators.anytime())
         }
@@ -196,4 +210,10 @@ fun AlchemyGenerator<java.util.Date>.asSqlDateGenerator(): AlchemyGenerator<java
 fun AlchemyGenerator<java.util.Date>.asSqlTimestampGenerator(): AlchemyGenerator<java.sql.Timestamp>
 {
     return AlchemyGenerator { java.sql.Timestamp(this.get().time) }
+}
+
+fun AlchemyGenerator<java.util.Date>.asLocalDateGenerator(): AlchemyGenerator<LocalDate>
+{
+    val gen = this.asSqlDateGenerator()
+    return AlchemyGenerator() { gen.get().toLocalDate() }
 }

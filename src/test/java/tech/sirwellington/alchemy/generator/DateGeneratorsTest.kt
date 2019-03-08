@@ -230,8 +230,24 @@ class DateGeneratorsTest
             val generator = AlchemyGenerator<Date> { date }
             val result = generator.asSqlDateGenerator()
             val sqlDate = result.get()
+            val expected = java.sql.Date(date.time)
 
-            assertThat(sqlDate, equalTo(java.sql.Date(date.time)))
+            assertThat(sqlDate, equalTo(expected))
+        }
+    }
+
+    @Test
+    fun testAsLocalDateGenerator()
+    {
+        println("testAsLocalDateGenerator")
+
+        doInLoop()
+        {
+            val date = one(DateGenerators.anyTime())
+            val generator = AlchemyGenerator<Date> { date }
+            val result = generator.asLocalDateGenerator()
+            val expected = java.sql.Date(date.time).toLocalDate()
+            assertThat(result.get(), equalTo(expected))
         }
     }
 

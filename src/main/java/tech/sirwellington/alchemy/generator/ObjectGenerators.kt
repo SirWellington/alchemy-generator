@@ -31,6 +31,7 @@ import java.lang.reflect.*
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.ConcurrentHashMap
@@ -75,6 +76,7 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS[String::class.java]             = alphabeticStrings()
         DEFAULT_GENERATOR_MAPPINGS[Instant::class.java]            = TimeGenerators.anytime()
         DEFAULT_GENERATOR_MAPPINGS[ZonedDateTime::class.java]      = TimeGenerators.anytime().asZonedDateTimeGenerator()
+        DEFAULT_GENERATOR_MAPPINGS[LocalDate::class.java]          = DateGenerators.anytime().asLocalDateGenerator()
         DEFAULT_GENERATOR_MAPPINGS[URL::class.java]                = NetworkGenerators.httpUrls()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Boolean::class.java]  = BooleanGenerators.booleans()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()

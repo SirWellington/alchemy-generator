@@ -27,6 +27,7 @@ import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.Date
 import java.util.function.Consumer
@@ -425,6 +426,7 @@ class ObjectGeneratorsTest
                             val data: ByteArray,
                             val dateFormed: java.util.Date,
                             val timeFormed: java.sql.Timestamp,
+                            val nextTourDate: LocalDate,
                             val onTour: Boolean,
                             val workstation: Computer)
 
@@ -441,6 +443,7 @@ class ObjectGeneratorsTest
         assertFalse { data.isEmpty() }
         assertThat(dateFormed, notNullValue())
         assertThat(timeFormed, notNullValue())
+        assertThat(nextTourDate, notNullValue())
         assertThat(workstation, notNullValue())
         checkComputer(workstation)
     }
