@@ -78,24 +78,7 @@ To use, simply add the following maven dependency.
 <dependency>
 	<groupId>tech.sirwellington.alchemy</groupId>
 	<artifactId>alchemy-generator</artifactId>
-	<version>2.2</version>
-</dependency>
-```
-
-## Snapshot
->First add the Snapshot Repository
-```xml
-<repository>
-	<id>ossrh</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-</repository>
-```
-
-```xml
-<dependency>
-	<groupId>tech.sirwellington.alchemy</groupId>
-	<artifactId>alchemy-generator</artifactId>
-	<version>2.3-SNAPSHOT</version>
+	<version>2.4.1</version>
 </dependency>
 ```
 
