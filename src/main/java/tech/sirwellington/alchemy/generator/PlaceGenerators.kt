@@ -33,9 +33,10 @@ object PlaceGenerators
     private val LOG = LoggerFactory.getLogger(this::class.java)
 
     private val cities = AlchemyResources.readLinesFromResource("places/cities.txt")
-    private val states = AlchemyResources.readLinesFromResource("places/states.txt")
-    private val places = AlchemyResources.readLinesFromResource("places/places.txt")
     private val country = AlchemyResources.readLinesFromResource("places/countries.txt")
+    private val places = AlchemyResources.readLinesFromResource("places/places.txt")
+    private val states = AlchemyResources.readLinesFromResource("places/states.txt")
+    private val stateShortCodes = AlchemyResources.readLinesFromResource("places/states_short_codes.txt")
 
     /**
      * Returns a list of valid U.S. cities.
@@ -55,6 +56,12 @@ object PlaceGenerators
     fun states(): AlchemyGenerator<String>
     {
         return StringGenerators.stringsFromFixedList(states)
+    }
+
+    @JvmStatic
+    fun stateShortCodes(): AlchemyGenerator<String>
+    {
+        return StringGenerators.stringsFromFixedList(stateShortCodes)
     }
 
     /**

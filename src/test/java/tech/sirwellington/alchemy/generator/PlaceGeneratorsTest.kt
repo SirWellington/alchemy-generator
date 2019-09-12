@@ -16,6 +16,7 @@
 package tech.sirwellington.alchemy.generator
 
 import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.greaterThanOrEqualTo
 import com.natpryce.hamkrest.isNullOrBlank
 import org.junit.Test
@@ -40,6 +41,38 @@ class PlaceGeneratorsTest
             val city = instance.get()
             assertThat(city, !isNullOrBlank)
             assertThat(city.length, greaterThanOrEqualTo(2))
+        }
+    }
+
+    @Test
+    fun testStates()
+    {
+        println("testStates")
+
+        val instance = PlaceGenerators.states()
+        assertNotNull(instance)
+
+        doInLoop()
+        {
+            val state = instance.get()
+            assertThat(state, !isNullOrBlank)
+            assertThat(state.length, greaterThanOrEqualTo(2))
+        }
+    }
+
+    @Test
+    fun testStatesShortCodes()
+    {
+        println("testStatesShortCodes")
+
+        val instance = PlaceGenerators.stateShortCodes()
+        assertNotNull(instance)
+
+        doInLoop()
+        {
+            val stateShortCode = instance.get()
+            assertThat(stateShortCode, !isNullOrBlank)
+            assertThat(stateShortCode.length, equalTo(2))
         }
     }
 
