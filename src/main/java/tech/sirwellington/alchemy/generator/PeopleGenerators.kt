@@ -64,9 +64,9 @@ internal constructor()
 
             return AlchemyGenerator()
             {
-                val firstLetter = one(alphabeticStrings(1)).toUpperCase()
+                val firstLetter = one(alphabeticStrings(1)).uppercase()
                 val length = one(integers(2, 15))
-                val restOfTheName = one(alphabeticStrings(length - 1)).toLowerCase()
+                val restOfTheName = one(alphabeticStrings(length - 1)).lowercase()
                 firstLetter + restOfTheName
             }
 
@@ -180,7 +180,7 @@ internal constructor()
 
             return AlchemyGenerator()
             {
-                val username = one(names()).toLowerCase()
+                val username = one(names()).lowercase()
                 val number = one(numberGenerator)
                 val domain = domainGenerator.get()
 

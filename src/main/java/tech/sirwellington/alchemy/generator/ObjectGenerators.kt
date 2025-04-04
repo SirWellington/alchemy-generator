@@ -647,23 +647,4 @@ object ObjectGenerators
     {
         return this.parameterCount == 0
     }
-
-    private fun <T> isPrimitiveClass(classOfPojo: Class<T>): Boolean
-    {
-        if (classOfPojo.isPrimitive)
-        {
-            return true
-        }
-
-        val otherPrimitives = setOf(String::class.java,
-                                    Date::class.java,
-                                    Instant::class.java)
-
-        if (otherPrimitives.contains(classOfPojo))
-        {
-            return true
-        }
-
-        return false
-    }
 }
