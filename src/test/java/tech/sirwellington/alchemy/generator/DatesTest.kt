@@ -22,10 +22,10 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.negativeIntegers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers
+import tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers
+import tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.time.Instant
 import java.time.Instant.now

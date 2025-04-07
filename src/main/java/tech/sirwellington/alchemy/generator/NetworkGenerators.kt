@@ -20,7 +20,7 @@ package tech.sirwellington.alchemy.generator
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 import tech.sirwellington.alchemy.generator.PeopleGenerators.Companion.popularEmailDomains
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericStrings
 import java.net.MalformedURLException

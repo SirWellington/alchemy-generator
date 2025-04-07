@@ -20,8 +20,8 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
+import tech.sirwellington.alchemy.generator.NumberGenerators.longs
+import tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.time.Instant
 import java.time.ZoneId

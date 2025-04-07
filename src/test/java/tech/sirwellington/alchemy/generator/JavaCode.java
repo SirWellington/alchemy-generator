@@ -15,13 +15,12 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import org.hamcrest.*;
+
 import java.net.URL;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author SirWellington
@@ -42,14 +41,13 @@ final class JavaCode
         static void check(Computer computer)
         {
             assertThat(computer, notNullValue());
-            assertThat(computer.name, not(isEmptyOrNullString()));
+            assertThat(computer.name, is(not(isEmptyOrNullString())));
             assertThat(computer.model, not(isEmptyOrNullString()));
             assertThat(computer.manufacturer, not(isEmptyOrNullString()));
             assertThat(computer.year, greaterThan(0));
             assertThat(computer.cost, greaterThan(0.0));
             assertThat(computer.data, notNullValue());
             assertThat(computer.data.length, greaterThan(0));
-
         }
     }
 
@@ -67,7 +65,7 @@ final class JavaCode
         static void check(Person person)
         {
             assertThat(person, notNullValue());
-            assertThat(person.name, not(isEmptyOrNullString()));
+            assertThat(person.name, is(not(isEmptyOrNullString())));
             assertThat(person.age, greaterThan(0));
             assertThat(person.money, greaterThan(0.0));
             assertThat(person.middleName, not(isEmptyOrNullString()));
@@ -75,6 +73,76 @@ final class JavaCode
             assertThat(person.website, notNullValue());
 
             Computer.check(person.computer);
+        }
+    }
+
+    static Matcher<String> isEmptyOrNullString()
+    {
+        return new EmptyOrNullString();
+    }
+
+    static Matcher<Number> greaterThan(int number)
+    {
+        return new GreaterThan(number);
+    }
+
+    static Matcher<Number> greaterThan(double number)
+    {
+        return new GreaterThan(number);
+    }
+
+    static class EmptyOrNullString extends BaseMatcher<String>
+    {
+
+        @Override
+        public boolean matches(Object item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            if (item instanceof String)
+            {
+                return ((String) item).isEmpty();
+            }
+
+            return false;
+        }
+
+        @Override
+        public void describeTo(Description description)
+        {
+            description.appendText("Empty or null string");
+        }
+    }
+
+    static class GreaterThan extends BaseMatcher<Number>
+    {
+        private final Number target;
+
+        GreaterThan(Number target)
+        {
+            this.target = target;
+        }
+
+        @Override
+        public boolean matches(Object item)
+        {
+            if (item instanceof Number)
+            {
+                return ((Number)item).doubleValue() > target.doubleValue();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        @Override
+        public void describeTo(Description description)
+        {
+            description.appendText("Greater than or equal to");
         }
     }
 }

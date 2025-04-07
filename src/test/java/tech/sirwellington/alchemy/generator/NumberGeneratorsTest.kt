@@ -23,8 +23,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.safeDecrement
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.safeIncrement
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.safeIncrement
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.util.ArrayList
 
@@ -37,9 +37,6 @@ class NumberGeneratorsTest
     fun testCannotInstantiate()
     {
         println("testCannotInstantiate")
-
-        assertThrows { NumberGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
 
         assertThrows { NumberGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
@@ -57,7 +54,7 @@ class IntegersTests
 
         val lowerBound = RandomUtils.nextInt(0, Integer.MAX_VALUE / 2)
         val upperBound = RandomUtils.nextInt(lowerBound, Integer.MAX_VALUE)
-        val instance = NumberGenerators.integers(lowerBound, upperBound)
+        val instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -75,7 +72,7 @@ class IntegersTests
         val lowerBound = Integer.MIN_VALUE
         val upperBound = Integer.MAX_VALUE
 
-        val instance = NumberGenerators.integers(lowerBound, upperBound)
+        val instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -92,7 +89,7 @@ class IntegersTests
 
         var lowerBound = -10
         var upperBound = 150
-        var instance = NumberGenerators.integers(lowerBound, upperBound)
+        var instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -103,7 +100,7 @@ class IntegersTests
 
         lowerBound = -4934
         upperBound = -500
-        instance = NumberGenerators.integers(lowerBound, upperBound)
+        instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -114,7 +111,7 @@ class IntegersTests
 
         lowerBound = -5000
         upperBound = -1
-        instance = NumberGenerators.integers(lowerBound, upperBound)
+        instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -125,7 +122,7 @@ class IntegersTests
 
         lowerBound = Integer.MIN_VALUE
         upperBound = -1
-        instance = NumberGenerators.integers(lowerBound, upperBound)
+        instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -136,7 +133,7 @@ class IntegersTests
 
         lowerBound = Integer.MIN_VALUE
         upperBound = 0
-        instance = NumberGenerators.integers(lowerBound, upperBound)
+        instance = integers(lowerBound, upperBound)
 
         doInLoop()
         {
@@ -227,19 +224,19 @@ class IntegersTests
     {
         println("testIntegersWithBadBounds")
 
-        assertThrows { NumberGenerators.integers(7, 3) }
+        assertThrows { integers(7, 3) }
                 .isInstanceOf(IllegalArgumentException::class.java)
 
-        assertThrows { NumberGenerators.integers(-10, -100) }
+        assertThrows { integers(-10, -100) }
                 .isInstanceOf(IllegalArgumentException::class.java)
 
-        assertThrows { NumberGenerators.integers(50, -600) }
+        assertThrows { integers(50, -600) }
                 .isInstanceOf(IllegalArgumentException::class.java)
 
-        assertThrows { NumberGenerators.integers(10, 10) }
+        assertThrows { integers(10, 10) }
                 .isInstanceOf(IllegalArgumentException::class.java)
 
-        assertThrows { NumberGenerators.integers(-10, -10) }
+        assertThrows { integers(-10, -10) }
                 .isInstanceOf(IllegalArgumentException::class.java)
     }
 
@@ -656,7 +653,6 @@ class FloatTests
 @RunWith(MockitoJUnitRunner::class)
 class InternalFunctionsTests
 {
-
     @Test
     fun testSafeIncrement_long()
     {
@@ -676,29 +672,11 @@ class InternalFunctionsTests
     }
 
     @Test
-    fun testSafeDecrement_long()
-    {
-        println("testSafeDecrement_long")
-
-        var value = one(NumberGenerators.longs(-10_000L, 10_000L))
-        var result = safeDecrement(value)
-        assertThat(result, `is`(value - 1))
-
-        value = Long.MIN_VALUE
-        result = safeDecrement(value)
-        assertThat(result, `is`(value))
-
-        value = Long.MAX_VALUE
-        result = safeDecrement(value)
-        assertThat(result, `is`(value - 1))
-    }
-
-    @Test
     fun testSafeIncrement_int()
     {
         println("testSafeIncrement_int")
 
-        var value = one(NumberGenerators.integers(-10000, 10000))
+        var value = one(integers(-10000, 10000))
         var result = safeIncrement(value)
         assertThat(result, `is`(value + 1))
 
@@ -710,24 +688,5 @@ class InternalFunctionsTests
         result = safeIncrement(value)
         assertThat(result, `is`(value + 1))
     }
-
-    @Test
-    fun testSafeDecrement_int()
-    {
-        println("testSafeDecrement_int")
-
-        var value = one(NumberGenerators.integers(-10000, 10000))
-        var result = safeDecrement(value)
-        assertThat(result, `is`(value - 1))
-
-        value = Integer.MIN_VALUE
-        result = safeDecrement(value)
-        assertThat(result, `is`(value))
-
-        value = Integer.MAX_VALUE
-        result = safeDecrement(value)
-        assertThat(result, `is`(value - 1))
-    }
-
 
 }
