@@ -28,6 +28,7 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.Date
 
 /**
@@ -174,7 +175,7 @@ class DateGeneratorsTest
 
             val result = instance.get()
             assertThat(result, notNullValue())
-            assertThat(result.toInstant(), `is`(now))
+            assertThat(result.toInstant(), `is`(now.truncatedTo(ChronoUnit.MILLIS)))
         }
 
         //Edge cases
