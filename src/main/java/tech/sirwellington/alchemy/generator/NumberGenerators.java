@@ -20,6 +20,8 @@ package tech.sirwellington.alchemy.generator;
 
 import java.util.List;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+
 import org.apache.commons.lang3.RandomUtils;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
@@ -76,12 +78,10 @@ class NumberGenerators {
               return -RandomUtils.secure().randomInt(adjustedMin, adjustedMax);
           }
           else if (isNegativeLowerBound) {
-              IntStream negativeRange = IntStream.range(inclusiveLowerBound, 0);
-              IntStream positiveRange = IntStream.range(0, exclusiveUpperBound);
-              long positiveCount = positiveRange.count();
-              long negativeCount = negativeRange.count();
-              long totalSize = negativeCount + positiveCount;
-              double positivePercent = (double) positiveCount / (double) totalSize;
+              // Protect against overflowing the integer type.
+              int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
+              long totalSize = (long)negativeCount + (long)exclusiveUpperBound;
+              double positivePercent = (double) exclusiveUpperBound / (double) totalSize;
               double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
               
               if (seed <= positivePercent) {
@@ -89,12 +89,7 @@ class NumberGenerators {
                   return RandomUtils.secure().randomInt(0, exclusiveUpperBound);
               } else {
                   // Negative
-                  int adjustLowerBound = 0;
-                  if (inclusiveLowerBound == MIN_VALUE) {
-                      adjustLowerBound = Integer.MAX_VALUE;
-                  } else {
-                      adjustLowerBound = -inclusiveLowerBound;
-                  }
+                  int adjustLowerBound = negativeCount;
                   return -RandomUtils.secure().randomInt(0, safeIncrement(adjustLowerBound));
               }
           }
@@ -167,8 +162,19 @@ class NumberGenerators {
                 return -RandomUtils.secure().randomLong(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
-                long seed= -RandomUtils.secure().randomLong(0, exclusiveUpperBound - inclusiveLowerBound);
-                return inclusiveLowerBound + seed;
+                // Protect against a range overflow in the case the lower bound range overruns the long type.
+                long negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
+                double totalSize = (double) negativeCount + (double) exclusiveUpperBound;
+                double positivePercent = (double) exclusiveUpperBound / totalSize;
+                double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
+
+                if (seed <= positivePercent) {
+                    // Positive
+                    return RandomUtils.secure().randomLong(0, exclusiveUpperBound);
+                } else {
+                    // Negative
+                    return -RandomUtils.secure().randomLong(0L, safeIncrement(negativeCount));
+                }
             }
             else {
                 return RandomUtils.secure().randomLong(inclusiveLowerBound, exclusiveUpperBound);
