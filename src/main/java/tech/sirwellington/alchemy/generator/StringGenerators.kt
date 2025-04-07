@@ -22,7 +22,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.BinaryGenerators.binary
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 import java.util.UUID
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter
 

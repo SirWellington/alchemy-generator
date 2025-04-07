@@ -18,7 +18,7 @@ package tech.sirwellington.alchemy.generator
 
 
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.doubles
+import tech.sirwellington.alchemy.generator.NumberGenerators.doubles
 
 
 /**

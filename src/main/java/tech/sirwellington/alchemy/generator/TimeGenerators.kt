@@ -20,8 +20,8 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.longs
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset

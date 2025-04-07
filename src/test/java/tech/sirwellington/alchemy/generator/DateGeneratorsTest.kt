@@ -23,8 +23,8 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.Dates.Companion.isNow
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.longs
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.longs
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.sql.Timestamp
 import java.time.Instant

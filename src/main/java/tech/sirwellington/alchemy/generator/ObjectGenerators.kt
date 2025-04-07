@@ -20,12 +20,7 @@ import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveDoubles
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveFloats
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveLongs
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.smallPositiveIntegers
+import tech.sirwellington.alchemy.generator.NumberGenerators.*
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
 import java.lang.reflect.*
 import java.net.URL

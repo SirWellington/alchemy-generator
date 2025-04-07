@@ -31,8 +31,8 @@ import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotNull;
 import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
-import static tech.sirwellington.alchemy.generator.NumberGeneratorsJ.integers;
-import static tech.sirwellington.alchemy.generator.NumberGeneratorsJ.smallPositiveIntegers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 
 /**
  * {@link AlchemyGenerator Alchemy Generators} for Java Collections. These generators

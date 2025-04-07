@@ -17,7 +17,7 @@ package tech.sirwellington.alchemy.generator
 
 import tech.sirwellington.alchemy.annotations.access.Internal
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
+import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 
 /**
 
@@ -31,7 +31,7 @@ fun doInLoop(function: RepeatedFunction)
 {
     val iterations = one(integers(50, 250))
 
-    for (i in 0..iterations - 1)
+    for (i in 0..<iterations)
     {
         function(i)
     }

@@ -19,11 +19,16 @@ package tech.sirwellington.alchemy.generator;
 
 
 import org.apache.commons.lang3.RandomUtils;
+import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
+
+import java.util.List;
 
 import static java.lang.Integer.MIN_VALUE;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
+import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
 
 /**
@@ -39,9 +44,9 @@ import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
  */
 @NonInstantiable
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
-class NumberGeneratorsJ {
+class NumberGenerators {
 
-    private NumberGeneratorsJ() throws IllegalAccessError {
+    private NumberGenerators() throws IllegalAccessError {
         throw new IllegalAccessError("cannot directly instantiate.");
     }
     //===========================================
@@ -71,8 +76,8 @@ class NumberGeneratorsJ {
               return -RandomUtils.secure().randomInt(adjustedMin, adjustedMax);
           }
           else if (isNegativeLowerBound) {
-              int seed= -RandomUtils.secure().randomInt(0, inclusiveLowerBound - exclusiveUpperBound);
-              return exclusiveUpperBound + seed;
+              int seed= -RandomUtils.secure().randomInt(0, exclusiveUpperBound -inclusiveLowerBound);
+              return inclusiveLowerBound + seed;
           } 
           else {
               return RandomUtils.secure().randomInt(inclusiveLowerBound, exclusiveUpperBound);
@@ -94,13 +99,13 @@ class NumberGeneratorsJ {
      * @see #integers(int, int) 
      * @see #negativeIntegers() 
      */
-    static AlchemyGenerator<Integer> positiveInteger() {
+    static AlchemyGenerator<Integer> positiveIntegers() {
         return integers(1, Integer.MAX_VALUE);
     }
     
     /**
      * Produces positive integers from {@code 1...1000}.
-     * @see #positiveInteger()
+     * @see #positiveIntegers()
      * @see #integers(int, int) 
      */
     static AlchemyGenerator<Integer> smallPositiveIntegers() {
@@ -109,7 +114,7 @@ class NumberGeneratorsJ {
     
     /**
      * Produces a series of negative integers from {@code Integer.MIN_VALUE...0}.
-     * @see #positiveInteger()
+     * @see #positiveIntegers()
      * @see #integers(int, int) 
      */
     static AlchemyGenerator<Integer> negativeIntegers() {
@@ -143,8 +148,8 @@ class NumberGeneratorsJ {
                 return -RandomUtils.secure().randomLong(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
-                long seed= -RandomUtils.secure().randomLong(0, inclusiveLowerBound - exclusiveUpperBound);
-                return exclusiveUpperBound + seed;
+                long seed= -RandomUtils.secure().randomLong(0, exclusiveUpperBound - inclusiveLowerBound);
+                return inclusiveLowerBound + seed;
             }
             else {
                 return RandomUtils.secure().randomLong(inclusiveLowerBound, exclusiveUpperBound);
@@ -215,8 +220,8 @@ class NumberGeneratorsJ {
                 return -RandomUtils.secure().randomDouble(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
-                double seed= -RandomUtils.secure().randomDouble(0, inclusiveLowerBound - exclusiveUpperBound);
-                return exclusiveUpperBound + seed;
+                double seed= -RandomUtils.secure().randomDouble(0, exclusiveUpperBound - inclusiveLowerBound);
+                return inclusiveLowerBound + seed;
             }
             else {
                 return RandomUtils.secure().randomDouble(inclusiveLowerBound, exclusiveUpperBound);
@@ -244,7 +249,7 @@ class NumberGeneratorsJ {
     }
 
     /**
-     * Produces positive integers from {@code 1...1000}.
+     * Produces positive doubles from {@code 1...1000}.
      * @see #positiveDoubles() 
      * @see #doubles(double, double) 
      */
@@ -253,8 +258,8 @@ class NumberGeneratorsJ {
     }
 
     /**
-     * Produces a series of negative integers from {@code Long.MIN_VALUE...0}.
-     * @see #positiveDoubles() ()
+     * Produces a series of negative doubles from {@code Long.MIN_VALUE...0}.
+     * @see #positiveDoubles()
      * @see #doubles(double, double) 
      */
     static AlchemyGenerator<Double> negativeDoubles() {
@@ -262,9 +267,103 @@ class NumberGeneratorsJ {
     }
 
     //===========================================
+    // FLOATS
+    //===========================================
+    /**
+     * Creates a series of float values within the specified bounds.
+     * @param inclusiveLowerBound Can be negative, must be {@code < exclusiveUpperBound}.
+     * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
+     * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
+     */
+    static AlchemyGenerator<Float> floats(float inclusiveLowerBound, float exclusiveUpperBound) {
+        AlchemyGenerator<Double> doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
+        return () -> doubles.get().floatValue();
+    }
+
+    /**
+     * Creates a series of Float values, negative and positive.
+     * The range is {@code -Float.MAX_VALUE...Float.MAX_VALUE}.
+     * @see #floats(float, float)
+     */
+    static AlchemyGenerator<Float> anyFloats() {
+        return floats(-Float.MAX_VALUE, Float.MAX_VALUE);
+    }
+
+    /**
+     * Produces positive floats from {@code 1...Float.MAX_VALUE}.
+     * @see #smallPositiveFloats()
+     * @see #floats(float, float)
+     * @see #negativeFloats()
+     */
+    static AlchemyGenerator<Float> positiveFloats() {
+        return floats(1.0f, Float.MAX_VALUE);
+    }
+
+    /**
+     * Produces positive floats from {@code 1...1000}.
+     * @see #positiveFloats()
+     * @see #floats(float, float)
+     */
+    static AlchemyGenerator<Float> smallPositiveFloats() {
+        return floats(1.0f, 1000.0f);
+    }
+
+    /**
+     * Produces a series of negative integers from {@code Long.MIN_VALUE...0}.
+     * @see #positiveFloats()
+     * @see #floats(float, float)
+     */
+    static AlchemyGenerator<Float> negativeFloats() {
+        return floats(-Float.MAX_VALUE, 0.0f);
+    }
+
+    //===========================================
+    // LISTS
+    //===========================================
+    /**
+     * Generates an integer value from the specified set.
+     * @param values The list to pull the values from.
+     */
+    static AlchemyGenerator<Integer> integersFromFixedList(@Required List<Integer> values) {
+        checkNotEmpty(values, "No values specified");
+
+        return () -> {
+            int index = integers(0, values.size()).get();
+            return values.get(index);
+        };
+    }
+
+    /**
+     * Generates a double value from the specified List.
+     * @param values The list to pull values from.
+     */
+    static AlchemyGenerator<Double> doublesFromFixedList(List<Double> values) {
+        checkNotEmpty(values, "No values specified");
+
+        return () -> {
+            int index = integers(0, values.size()).get();
+            return values.get(index);
+        };
+    }
+
+    /**
+     * Generates a float value from the specified set.
+     * @param values The list to pull values from.
+     */
+    static AlchemyGenerator<Float> floatsFromFixedList(List<Float> values) {
+        checkNotEmpty(values, "No values specified");
+
+        return () -> {
+            int index = integers(0, values.size()).get();
+            return values.get(index);
+        };
+    }
+
+    //===========================================
     // UTILITY FUNCTIONS
     //===========================================
-    private static int safeIncrement(int num) {
+    @Internal
+    static int safeIncrement(int num) {
         if (num == Integer.MAX_VALUE) {
             return num;
         } else {
@@ -272,7 +371,8 @@ class NumberGeneratorsJ {
         }
     }
 
-    private static long safeIncrement(long num) {
+    @Internal
+    static long safeIncrement(long num) {
         if (num == Long.MAX_VALUE) {
             return num;
         } else {
@@ -280,7 +380,8 @@ class NumberGeneratorsJ {
         }
     }
 
-    private static double safeIncrement(double num) {
+    @Internal
+    static double safeIncrement(double num) {
         if (num == Double.MAX_VALUE) {
             return num;
         } else {

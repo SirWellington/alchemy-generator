@@ -29,9 +29,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.negativeIntegers
-import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers
+import tech.sirwellington.alchemy.generator.NumberGenerators.*
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.hexadecimalString
 import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
