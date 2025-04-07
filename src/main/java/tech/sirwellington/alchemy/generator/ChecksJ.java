@@ -17,6 +17,7 @@
  
 package tech.sirwellington.alchemy.generator;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 /**
@@ -26,8 +27,12 @@ import java.util.function.BooleanSupplier;
 class ChecksJ  {
     
     static void checkNotNull(Object any) throws IllegalArgumentException {
+        checkNotNull(any, "Expected non-null object.");
+    }
+    
+    static void checkNotNull(Object any, String message) throws IllegalArgumentException {
         if (any == null) {
-            throw new IllegalArgumentException("Expected non-null object.");
+            throw new IllegalArgumentException(message);
         }
     }
     
@@ -57,5 +62,14 @@ class ChecksJ  {
     static void checkNotEmpty(String string, String message) throws IllegalArgumentException {
         checkThat(string != null, message);
         checkThat(!string.isEmpty(), message);
+    }
+    
+    static <T> void checkNotEmpty(List<T> list) throws IllegalArgumentException {
+        checkNotEmpty(list, "Expected non-empty list");
+    }
+    
+    static <T> void checkNotEmpty(List<T> list, String message) throws IllegalArgumentException {
+        checkNotNull(list, message);
+        checkThat(!list.isEmpty(), message);
     }
 }
