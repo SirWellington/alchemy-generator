@@ -18,6 +18,8 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -79,7 +81,7 @@ class NumberGenerators {
           }
           else if (isNegativeLowerBound) {
               // Protect against overflowing the integer type.
-              int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : -inclusiveLowerBound;
+              int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : (-inclusiveLowerBound) - 1;
               long totalSize = (long)negativeCount + (long)exclusiveUpperBound;
               double positivePercent = (double) exclusiveUpperBound / (double) totalSize;
               double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
@@ -163,7 +165,7 @@ class NumberGenerators {
             }
             else if (isNegativeLowerBound) {
                 // Protect against a range overflow in the case the lower bound range overruns the long type.
-                long negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : -inclusiveLowerBound;
+                long negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : (-inclusiveLowerBound) -1;
                 double totalSize = (double) negativeCount + (double) exclusiveUpperBound;
                 double positivePercent = (double) exclusiveUpperBound / totalSize;
                 double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
@@ -245,8 +247,20 @@ class NumberGenerators {
                 return -RandomUtils.secure().randomDouble(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
-                double seed= -RandomUtils.secure().randomDouble(0, exclusiveUpperBound - inclusiveLowerBound);
-                return inclusiveLowerBound + seed;
+                // Protect against a range overflow in the case the lower bound range overruns the long type.
+                BigDecimal negativeCount = BigDecimal.valueOf(-(inclusiveLowerBound + 1.0));
+                BigDecimal positiveCount = BigDecimal.valueOf(exclusiveUpperBound);
+                BigDecimal totalSize = negativeCount.add(positiveCount);
+                double positivePercent = positiveCount.divide(totalSize, 15, RoundingMode.HALF_UP).doubleValue();
+                double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
+
+                if (seed <= positivePercent) {
+                    // Positive
+                    return RandomUtils.secure().randomDouble(0.0, exclusiveUpperBound);
+                } else {
+                    // Negative
+                    return -RandomUtils.secure().randomDouble(0.0, -safeIncrement(inclusiveLowerBound));
+                }
             }
             else {
                 return RandomUtils.secure().randomDouble(inclusiveLowerBound, exclusiveUpperBound);
