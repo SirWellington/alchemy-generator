@@ -33,10 +33,10 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  */
 @NonInstantiable
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
-class BooleanGeneratorsJ {
-    private final static Logger LOG = LoggerFactory.getLogger(BooleanGeneratorsJ.class);
+class BooleanGenerators {
+    private final static Logger LOG = LoggerFactory.getLogger(BooleanGenerators.class);
 
-    private BooleanGeneratorsJ() throws IllegalAccessException {
+    private BooleanGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("cannot directly instatiate this class");
     }
     
