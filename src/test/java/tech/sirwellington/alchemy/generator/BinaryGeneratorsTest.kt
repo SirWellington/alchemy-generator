@@ -45,9 +45,6 @@ class BinaryGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { BinaryGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { BinaryGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }

@@ -43,9 +43,6 @@ class BooleanGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { BooleanGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { BooleanGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }

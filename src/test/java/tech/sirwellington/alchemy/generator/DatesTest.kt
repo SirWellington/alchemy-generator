@@ -22,7 +22,7 @@ import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.negativeIntegers
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.positiveIntegers

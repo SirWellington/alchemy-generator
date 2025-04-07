@@ -59,7 +59,7 @@ public class BinaryGenerators {
      * @see #binary(int) 
      */
     static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException {
-        checkThat(size > 0, "length must be >= 0");
+        checkThat(size >= 0, "length must be >= 0");
         AlchemyGenerator<byte[]> delegate = binary(size);
         return () -> ByteBuffer.wrap(delegate.get());
     }

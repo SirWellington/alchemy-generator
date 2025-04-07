@@ -21,7 +21,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
-import tech.sirwellington.alchemy.generator.BinaryGenerators.Companion.binary
+import tech.sirwellington.alchemy.generator.BinaryGenerators.binary
 import tech.sirwellington.alchemy.generator.NumberGenerators.Companion.integers
 import java.util.UUID
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter

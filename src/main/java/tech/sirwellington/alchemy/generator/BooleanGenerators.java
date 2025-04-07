@@ -42,7 +42,7 @@ class BooleanGenerators {
     
     /**
      * Generates a series of randomly selected booleans.
-     * @return 
+     * @see #alternatingBooleans()
      */
     static AlchemyGenerator<Boolean> booleans() {
         return () -> RandomUtils.secure().randomBoolean();
@@ -50,9 +50,9 @@ class BooleanGenerators {
     
     /**
      * Generates a series of alternating boolean. In other words, `true, false, true, false, etc`.
-     * @return 
+     * @see #booleans()
      */
-    static AlchemyGenerator<Boolean> alternatinBooleans() {
+    static AlchemyGenerator<Boolean> alternatingBooleans() {
         AtomicInteger count = new AtomicInteger();
         return () -> isEven(count.incrementAndGet());
     }
