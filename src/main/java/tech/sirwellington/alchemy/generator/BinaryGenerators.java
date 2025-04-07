@@ -33,9 +33,9 @@ import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
  */
 @NonInstantiable
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
-public class BinaryGeneratorsJ {
+public class BinaryGenerators {
 
-    private BinaryGeneratorsJ() throws IllegalAccessException  {
+    private BinaryGenerators() throws IllegalAccessException  {
         throw new IllegalAccessException("Cannot instantiate this class");
     }
     
