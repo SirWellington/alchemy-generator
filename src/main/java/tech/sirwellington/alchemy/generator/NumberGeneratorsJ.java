@@ -119,6 +119,7 @@ class NumberGeneratorsJ {
     //===========================================
     // LONGS
     //===========================================
+    
     /**
      * Creates a series of long values within the specified bounds.
      * @param inclusiveLowerBound Can be negative, must be {@code < exclusiveUpperBound}.
@@ -154,6 +155,7 @@ class NumberGeneratorsJ {
     /**
      * Creates a series of Long values, negative and positive.
      * The range is {@code Long.MIN_VALUE...Long.MAX_VALUE}.
+     * @see #longs(long, long) 
      */
     static AlchemyGenerator<Long> anyLongs() {
         return longs(Long.MIN_VALUE, Long.MAX_VALUE);
@@ -161,32 +163,107 @@ class NumberGeneratorsJ {
 
     /**
      * Produces positive longs from {@code 1...Long.MAX_VALUE}.
-     * @see #smallPositiveIntegers()
-     * @see #integers(int, int)
-     * @see #negativeIntegers()
+     * @see #smallPositiveLongs() ()
+     * @see #longs(long, long)
+     * @see #negativeLongs() 
      */
     static AlchemyGenerator<Long> positiveLongs() {
         return longs(1L, Long.MAX_VALUE);
     }
 
     /**
-     * Produces positive integers from {@code 1...1000}.
-     * @see #positiveInteger()
-     * @see #integers(int, int)
+     * Produces positive longs from {@code 1...1000}.
+     * @see #positiveLongs() ()
+     * @see #longs(long, long) 
      */
     static AlchemyGenerator<Long> smallPositiveLongs() {
         return longs(1L, 1000L);
     }
 
     /**
-     * Produces a series of negative integers from {@code Long.MIN_VALUE...0}.
-     * @see #positiveInteger()
-     * @see #integers(int, int)
+     * Produces a series of negative longs from {@code Long.MIN_VALUE...0}.
+     * @see #positiveLongs() 
+     * @see #longs(long, long) 
      */
     static AlchemyGenerator<Long> negativeLongs() {
         return longs(Long.MIN_VALUE, 0L);
     }
 
+    //===========================================
+    // DOUBLES
+    //===========================================
+    /**
+     * Creates a series of double values within the specified bounds.
+     * @param inclusiveLowerBound Can be negative, must be {@code < exclusiveUpperBound}.
+     * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
+     * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
+     */
+    static AlchemyGenerator<Double> doubles(double inclusiveLowerBound, double exclusiveUpperBound) {
+        checkThat(inclusiveLowerBound <= exclusiveUpperBound, "upper bound must be > lower bound.");
+        boolean isNegativeLowerBound = inclusiveLowerBound < 0.0;
+        boolean isNegativeUpperBound = exclusiveUpperBound < 0.0;
+
+        return () -> {
+            if (isNegativeLowerBound && isNegativeUpperBound) {
+                double min = -exclusiveUpperBound;
+                double max = -inclusiveLowerBound;
+                if (inclusiveLowerBound == -Double.MAX_VALUE) {
+                    max = Double.MAX_VALUE;
+                }
+                double adjustedMin = safeIncrement(min);
+                double adjustedMax = safeIncrement(max);
+                return -RandomUtils.secure().randomDouble(adjustedMin, adjustedMax);
+            }
+            else if (isNegativeLowerBound) {
+                double seed= -RandomUtils.secure().randomDouble(0, inclusiveLowerBound - exclusiveUpperBound);
+                return exclusiveUpperBound + seed;
+            }
+            else {
+                return RandomUtils.secure().randomDouble(inclusiveLowerBound, exclusiveUpperBound);
+            }
+        };
+    }
+
+    /**
+     * Creates a series of Double values, negative and positive.
+     * The range is {@code -Double.MAX_VALUE...Double.MAX_VALUE}.
+     * @see #doubles(double, double)
+     */
+    static AlchemyGenerator<Double> anyDoubles() {
+        return doubles(-Double.MAX_VALUE, Double.MAX_VALUE);
+    }
+
+    /**
+     * Produces positive doubles from {@code 1...Double.MAX_VALUE}.
+     * @see #smallPositiveDoubles()
+     * @see #doubles(double, double) 
+     * @see #negativeDoubles() 
+     */
+    static AlchemyGenerator<Double> positiveDoubles() {
+        return doubles(1.0, Double.MAX_VALUE);
+    }
+
+    /**
+     * Produces positive integers from {@code 1...1000}.
+     * @see #positiveDoubles() 
+     * @see #doubles(double, double) 
+     */
+    static AlchemyGenerator<Double> smallPositiveDoubles() {
+        return doubles(1.0, 1000.0);
+    }
+
+    /**
+     * Produces a series of negative integers from {@code Long.MIN_VALUE...0}.
+     * @see #positiveDoubles() ()
+     * @see #doubles(double, double) 
+     */
+    static AlchemyGenerator<Double> negativeDoubles() {
+        return doubles(-Double.MAX_VALUE, 0.0);
+    }
+
+    //===========================================
+    // UTILITY FUNCTIONS
+    //===========================================
     private static int safeIncrement(int num) {
         if (num == Integer.MAX_VALUE) {
             return num;
@@ -194,12 +271,20 @@ class NumberGeneratorsJ {
             return num + 1;
         }
     }
-    
+
     private static long safeIncrement(long num) {
         if (num == Long.MAX_VALUE) {
             return num;
         } else {
             return num + 1;
+        }
+    }
+
+    private static double safeIncrement(double num) {
+        if (num == Double.MAX_VALUE) {
+            return num;
+        } else {
+            return num + 1.0;
         }
     }
 }
