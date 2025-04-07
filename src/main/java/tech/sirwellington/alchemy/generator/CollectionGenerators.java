@@ -43,9 +43,9 @@ import static tech.sirwellington.alchemy.generator.NumberGeneratorsJ.smallPositi
  * @see BinaryGenerators
  * @author SirWellington
  */
-class CollectorGeneratorsJ {
+class CollectionGenerators {
 
-    private CollectorGeneratorsJ() throws IllegalAccessError {
+    private CollectionGenerators() throws IllegalAccessError {
         throw new IllegalAccessError("cannot directly instatiate");
     }
     
@@ -55,7 +55,7 @@ class CollectorGeneratorsJ {
      * @param generator The underlying generator that produces the values for the list.
      * @return A generator -> A list of random values, the length of which will vary.
      */
-    static <T> AlchemyGenerator<List<T>> listOf(@Required AlchemyGenerator<T> generator) {
+    static <T> List<T> listOf(@Required AlchemyGenerator<T> generator) {
         int size = one(integers(5, 200));
         return listOf(generator, size);
     }
@@ -67,14 +67,13 @@ class CollectorGeneratorsJ {
      * @param size The size of the lists produced by the generator.
      * @return A generator -> A list of random values, the length of which will vary.
      */
-    static <T> AlchemyGenerator<List<T>> listOf(@Required AlchemyGenerator<T> generator, int size) {
+    static <T> List<T> listOf(@Required AlchemyGenerator<T> generator, int size) {
         checkThat(size >= 0, "Size must be at least 0");
         checkNotNull(generator, "generator is null");
-        return () -> {
-            return IntStream.range(0, size)
-                .mapToObj(x -> generator.get())
-                .collect(Collectors.toList());
-        };
+
+        return IntStream.range(0, size)
+            .mapToObj(x -> generator.get())
+            .collect(Collectors.toList());
     }
     
     /**

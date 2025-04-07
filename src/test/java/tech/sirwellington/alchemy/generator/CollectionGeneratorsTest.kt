@@ -59,9 +59,6 @@ class CollectionGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { CollectionGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { CollectionGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
