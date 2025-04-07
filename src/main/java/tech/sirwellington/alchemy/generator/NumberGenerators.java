@@ -18,13 +18,13 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.util.List;
+import java.util.stream.IntStream;
 import org.apache.commons.lang3.RandomUtils;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
-import java.util.List;
 
 import static java.lang.Integer.MIN_VALUE;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
@@ -76,9 +76,28 @@ class NumberGenerators {
               return -RandomUtils.secure().randomInt(adjustedMin, adjustedMax);
           }
           else if (isNegativeLowerBound) {
-              int seed= -RandomUtils.secure().randomInt(0, exclusiveUpperBound -inclusiveLowerBound);
-              return inclusiveLowerBound + seed;
-          } 
+              IntStream negativeRange = IntStream.range(inclusiveLowerBound, 0);
+              IntStream positiveRange = IntStream.range(0, exclusiveUpperBound);
+              long positiveCount = positiveRange.count();
+              long negativeCount = negativeRange.count();
+              long totalSize = negativeCount + positiveCount;
+              double positivePercent = (double) positiveCount / (double) totalSize;
+              double seed = RandomUtils.secure().randomDouble(0.0, 1.0);
+              
+              if (seed <= positivePercent) {
+                  // Positive
+                  return RandomUtils.secure().randomInt(0, exclusiveUpperBound);
+              } else {
+                  // Negative
+                  int adjustLowerBound = 0;
+                  if (inclusiveLowerBound == MIN_VALUE) {
+                      adjustLowerBound = Integer.MAX_VALUE;
+                  } else {
+                      adjustLowerBound = -inclusiveLowerBound;
+                  }
+                  return -RandomUtils.secure().randomInt(0, safeIncrement(adjustLowerBound));
+              }
+          }
           else {
               return RandomUtils.secure().randomInt(inclusiveLowerBound, exclusiveUpperBound);
           }
