@@ -191,7 +191,7 @@ internal constructor()
             checkThat(inclusiveLowerBound < exclusiveUpperBound, "Lower Bound must be < Upper Bound")
 
             val negativeLowerBound = inclusiveLowerBound < 0
-            // <= because of the fact that 0 would be the *exclusive* upper bound.
+            // <= because 0 would be the *exclusive* upper bound.
             val negativeUpperBound = exclusiveUpperBound <= 0
 
             return AlchemyGenerator {
