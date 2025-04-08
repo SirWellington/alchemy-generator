@@ -38,9 +38,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
  *
  * @author SirWellington
  */
-class TimeGeneratorsJ {
-    private final static Logger LOG = LoggerFactory.getLogger(TimeGeneratorsJ.class);
-
+class TimeGenerators {
     /**
      * Produces [Instants][Instant] representing the *present*, i.e *now*. Note that
      * the 'present'

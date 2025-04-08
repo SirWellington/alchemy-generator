@@ -29,9 +29,9 @@ import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
  * Generators for Date types
  * @author SirWellington
  */
-class DateGeneratorsJ {
+class DateGenerators {
 
-    private DateGeneratorsJ() {
+    private DateGenerators() {
         throw new IllegalAccessError("cannot instantiated");
     }
 
