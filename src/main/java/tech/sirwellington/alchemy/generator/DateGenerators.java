@@ -26,7 +26,8 @@ import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotNull;
 import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
 
 /**
- * Generators for Date types
+ * Generators for {@link Date} types.
+ *
  * @author SirWellington
  */
 class DateGenerators {
@@ -97,7 +98,7 @@ class DateGenerators {
     }
 
     /**
-     * Converts [Instants][Instant] to [Dates][Date] using the supplied [AlchemyGenerator].
+     * Converts {@link Instant Instants} to {@link Date Dates} using the supplied [AlchemyGenerator].
      *
      * @param generator The underlying generator.
      */
@@ -110,7 +111,7 @@ class DateGenerators {
     }
 
     /**
-     * Generates Dates between the specified Times.
+     * Generates {@link Date Dates} between the specified Times.
      *
      * @param startDate Dates produced will be at or after this date.
      * @param endDate   Dates produced will be before this date.
@@ -133,8 +134,8 @@ class DateGenerators {
 
 
     /**
-     * Converts a [Generator][AlchemyGenerator] of [java.util.Date] objects to a [Generator][AlchemyGenerator]
-     * of [java.sql.Date] objects.
+     * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
+     * of {@link java.sql.Date} objects.
      */
     static AlchemyGenerator<java.sql.Date> toSqlDateGenerator(AlchemyGenerator<java.util.Date> generator) {
         checkNotNull(generator);
@@ -142,7 +143,8 @@ class DateGenerators {
     }
 
     /**
-     * Converts the [java.util.Date] objects generated into [java.sql.Timestamp] types.
+     * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
+     * of {@link java.sql.Timestamp} objects.
      */
     static AlchemyGenerator<java.sql.Timestamp> toSqlTimestampGenerator(
         AlchemyGenerator<java.util.Date> generator
@@ -154,6 +156,12 @@ class DateGenerators {
         };
     }
 
+    /**
+     * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
+     * of {@link java.time.LocalDateTime} objects.
+     * @param generator Date generator to be converted.
+     * @return Converted generator.
+     */
     static AlchemyGenerator<LocalDate> toLocalDateGenerator(AlchemyGenerator<Date> generator) {
         checkNotNull(generator);
         AlchemyGenerator<java.sql.Date> _generator = toSqlDateGenerator(generator);

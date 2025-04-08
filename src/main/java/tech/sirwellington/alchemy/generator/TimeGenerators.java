@@ -34,6 +34,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 
 /**
+ * Generators for {@link Instant} types.
  *
  * @author SirWellington
  */
@@ -43,16 +44,16 @@ class TimeGenerators {
         throw new IllegalAccessException("Cannot instantiate directly");
     }
     /**
-     * Produces [Instants][Instant] representing the *present*, i.e *now*. Note that
-     * the 'present'
-     * depends on when the Generator is [called][AlchemyGenerator.get].
+     * Produces {@link Instant Instants} representing the *present*, i.e *now*. Note that
+     * the 'present'.
+     * depends on when the Generator is {@link AlchemyGenerator#get() called}.
      */
     static AlchemyGenerator<Instant> presentInstants() {
         return Instant::now;
     }
 
     /**
-     * Produces [Instants][Instant] that are always in the past, i.e. before the present.
+     * Produces {@link Instant Instants} that are always in the past, i.e. before the present.
      */
     static AlchemyGenerator<Instant> pastInstants() {
         /*
@@ -63,7 +64,7 @@ class TimeGenerators {
     }
 
     /**
-     * Produces [Instants][Instant] that are always in the future, i.e. after the present.
+     * Produces {@link Instant Instants} that are always in the future, i.e. after the present.
      */
     static AlchemyGenerator<Instant> futureInstants() {
         // In order to stay in the future, the "present" must be continuously recalculated.
@@ -74,7 +75,7 @@ class TimeGenerators {
     }
 
     /**
-     * Produces [Instants][Instant] that are always before the specified time.
+     * Produces {@link Instant Instants} that are always before the specified time.
      * @param instant Dates produced will be before this instant.
      */
     static AlchemyGenerator<Instant> before(@Required Instant instant) {
@@ -97,7 +98,7 @@ class TimeGenerators {
     }
 
     /**
-     * Produces [Instants][Instant] that are always after the specified time.
+     * Produces {@link Instant Instants} that are always after the specified time.
      *
      * @param instant Dates produced will be after this instant.
      */
@@ -122,7 +123,7 @@ class TimeGenerators {
     }
 
     /**
-     * Produces [Instants][Instant] from any time, past, present, or future.
+     * Produces {@link Instant Instants} from any time, past, present, or future.
      */
     static AlchemyGenerator<Instant> anyTime() {
         return () -> {
@@ -136,7 +137,7 @@ class TimeGenerators {
     }
 
     /**
-     * Generates [Instants][Instant] between the specified times.
+     * Generates {@link Instant Instants} between the specified times.
      * @param startTime Times produced will come at or after this time.
      * @param endTime Times produced will come before this time.
      * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
@@ -159,7 +160,7 @@ class TimeGenerators {
         };
     }
     /**
-     * Converts this [Instant] generator into a [ZonedDateTime] generator. Zone Id Defaults to UTC.
+     * Converts this {@link Instant} generator into a {@link ZonedDateTime} generator. ZoneId Defaults to UTC.
      * @param generator The underlying generator to convert.
      */
     static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
@@ -168,9 +169,9 @@ class TimeGenerators {
        return toZonedDateTimeGenerator(generator, ZoneOffset.UTC);
     }
     /**
-     * Converts this [Instant] generator into a [ZonedDateTime] generator.
+     * Converts this {@link Instant} generator into a {@link ZonedDateTime} generator.
      * @param generator The underlying generator to convert.
-     * @param zone  The [ZoneId] to the generate times in. Defaults to [ZoneOffset.UTC].
+     * @param zone  The {@link ZoneId} to the generate times in. Defaults to {@link ZoneOffset#UTC}.
      */
     static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
         @Required  AlchemyGenerator<Instant> generator,
