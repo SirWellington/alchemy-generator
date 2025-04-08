@@ -46,9 +46,6 @@ class TimeGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { TimeGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { TimeGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
@@ -143,13 +140,13 @@ class TimeGeneratorsTest
     }
 
     @Test
-    fun testAnytime()
+    fun testAnyTime()
     {
         println("testAnytime")
 
         doInLoop()
         {
-            val instance = TimeGenerators.anytime()
+            val instance = TimeGenerators.anyTime()
             assertThat(instance, notNullValue())
 
             val result = instance.get()
@@ -193,10 +190,13 @@ class TimeGeneratorsTest
     {
         val zone = anyZone()
 
-        val time = TimeGenerators.anytime().get()
+        val time = TimeGenerators.anyTime().get()
         val expected = time.atZone(zone)
 
-        val generator = AlchemyGenerator { time }.asZonedDateTimeGenerator(zone)
+        val generator = TimeGenerators.toZonedDateTimeGenerator(
+                AlchemyGenerator { time },
+                zone
+        )
         val result = generator.get()
 
         assertThat(result, equalTo(expected))
@@ -206,7 +206,10 @@ class TimeGeneratorsTest
     fun testAsZonedDateTimeGeneratorWithPastGenerator()
     {
         val zone = anyZone()
-        val generator = TimeGenerators.pastInstants().asZonedDateTimeGenerator(zone)
+        val generator = TimeGenerators.toZonedDateTimeGenerator(
+            TimeGenerators.pastInstants(),
+            zone
+        )
         val result = generator.get()
         assertThat(result, notNullValue())
         assertTrue { result.isBefore(ZonedDateTime.now(zone)) }

@@ -22,8 +22,8 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource
 import tech.sirwellington.alchemy.generator.NumberGenerators.integers
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.stringsFromFixedList
+import tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings
+import tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList
 
 /**
  * Generators for common information about People: names, addresses, phone numbers, emails.
@@ -153,13 +153,15 @@ internal constructor()
         @JvmStatic
         fun popularEmailDomains(): AlchemyGenerator<String>
         {
-            return stringsFromFixedList("yahoo.com",
-                                        "google.com",
-                                        "gmail.com",
-                                        "sirwellington.tech",
-                                        "apple.com",
-                                        "icloud.com",
-                                        "microsoft.com")
+            return stringsFromFixedList(
+                "yahoo.com",
+                "google.com",
+                "gmail.com",
+                "sirwellington.tech",
+                "apple.com",
+                "icloud.com",
+                "microsoft.com"
+            )
         }
 
         /**

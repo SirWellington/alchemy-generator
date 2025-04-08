@@ -52,9 +52,6 @@ class DateGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { DateGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { DateGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
@@ -229,7 +226,7 @@ class DateGeneratorsTest
             val date = one(DateGenerators.anyTime())
 
             val generator = AlchemyGenerator<Date> { date }
-            val result = generator.asSqlDateGenerator()
+            val result = DateGenerators.toSqlDateGenerator(generator)
             val sqlDate = result.get()
             val expected = java.sql.Date(date.time)
 
@@ -246,7 +243,7 @@ class DateGeneratorsTest
         {
             val date = one(DateGenerators.anyTime())
             val generator = AlchemyGenerator<Date> { date }
-            val result = generator.asLocalDateGenerator()
+            val result = DateGenerators.toLocalDateGenerator(generator)
             val expected = java.sql.Date(date.time).toLocalDate()
             assertThat(result.get(), equalTo(expected))
         }
@@ -262,7 +259,7 @@ class DateGeneratorsTest
             val date = one(DateGenerators.anyTime())
             val generator = AlchemyGenerator { date }
 
-            val result = generator.asSqlTimestampGenerator()
+            val result = DateGenerators.toSqlTimestampGenerator(generator)
             val sqlTimestamp = result.get()
 
             assertThat(sqlTimestamp, equalTo(Timestamp(date.time)))

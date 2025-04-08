@@ -23,7 +23,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.strings
+import tech.sirwellington.alchemy.generator.StringGenerators.strings
 import java.net.URL
 import java.nio.ByteBuffer
 import java.time.Instant

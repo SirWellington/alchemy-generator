@@ -22,7 +22,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty
 import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 import tech.sirwellington.alchemy.generator.PeopleGenerators.Companion.popularEmailDomains
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphanumericStrings
+import tech.sirwellington.alchemy.generator.StringGenerators.alphanumericStrings
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.Arrays
@@ -100,7 +100,7 @@ private constructor()
             }
             catch (ex: MalformedURLException)
             {
-                throw IllegalArgumentException("Unknown protocol: " + protocol, ex)
+                throw IllegalArgumentException("Unknown protocol: $protocol", ex)
             }
 
             return AlchemyGenerator {
