@@ -29,8 +29,9 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.DateGenerators.Companion.anyTime
+import tech.sirwellington.alchemy.generator.DateGenerators.anyTime
 import tech.sirwellington.alchemy.generator.NumberGenerators.*
+import tech.sirwellington.alchemy.generator.StringGenerators.strings
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.util.ArrayList
 import java.util.HashSet
@@ -54,9 +55,6 @@ class StringGeneratorsTest
     fun testCannotInstantiate()
     {
         println("testCannotInstantiate")
-
-        assertThrows { StringGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
 
         assertThrows { StringGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
@@ -321,7 +319,7 @@ class StringGeneratorsTest
 
         val uuids = HashSet<String>()
 
-        val instance = StringGenerators.uuids
+        val instance = StringGenerators.UUIDS
 
         val iterations = AtomicInteger()
         doInLoop()
@@ -341,7 +339,7 @@ class StringGeneratorsTest
     {
         println("testUuidsFunction")
 
-        assertThat(StringGenerators.uuids(), sameInstance(StringGenerators.uuids))
+        assertThat(StringGenerators.uuids(), sameInstance(StringGenerators.UUIDS))
     }
 
     @Test
@@ -354,7 +352,7 @@ class StringGeneratorsTest
         whenever(generator.get())
                 .thenReturn(one(anyTime()))
 
-        val instance = StringGenerators.asString(generator)
+        val instance = StringGenerators.toString(generator)
         assertThat(instance, notNullValue())
 
         doInLoop()

@@ -30,6 +30,8 @@ import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
 import tech.sirwellington.alchemy.generator.NumberGenerators.*
+import tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString
+import tech.sirwellington.alchemy.generator.StringGenerators.strings
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 import java.util.ArrayList
 import java.util.UUID
@@ -167,7 +169,7 @@ class CollectionGeneratorsTest
         assertThrows { CollectionGenerators.listOf(StringGenerators.uuids(), badSize) }
                 .isInstanceOf(IllegalArgumentException::class.java)
 
-        val result = CollectionGenerators.listOf(StringGenerators.uuids, 0)
+        val result = CollectionGenerators.listOf(StringGenerators.UUIDS, 0)
         assertThat(result, notNullValue())
         assertThat(result, `is`(empty<String>()))
 

@@ -196,7 +196,10 @@ class TimeGeneratorsTest
         val time = TimeGenerators.anyTime().get()
         val expected = time.atZone(zone)
 
-        val generator = AlchemyGenerator { time }.asZonedDateTimeGenerator(zone)
+        val generator = TimeGenerators.toZonedDateTimeGenerator(
+                AlchemyGenerator { time },
+                zone
+        )
         val result = generator.get()
 
         assertThat(result, equalTo(expected))
@@ -206,7 +209,10 @@ class TimeGeneratorsTest
     fun testAsZonedDateTimeGeneratorWithPastGenerator()
     {
         val zone = anyZone()
-        val generator = TimeGenerators.pastInstants().asZonedDateTimeGenerator(zone)
+        val generator = TimeGenerators.toZonedDateTimeGenerator(
+            TimeGenerators.pastInstants(),
+            zone
+        )
         val result = generator.get()
         assertThat(result, notNullValue())
         assertTrue { result.isBefore(ZonedDateTime.now(zone)) }
