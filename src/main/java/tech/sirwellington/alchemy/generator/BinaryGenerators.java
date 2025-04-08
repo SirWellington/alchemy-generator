@@ -35,6 +35,8 @@ import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
 public class BinaryGenerators {
 
+    private static final RandomUtils RANDOM = RandomUtils.secure();
+
     private BinaryGenerators() throws IllegalAccessException  {
         throw new IllegalAccessException("Cannot instantiate this class");
     }
@@ -48,7 +50,7 @@ public class BinaryGenerators {
      */
     static AlchemyGenerator<byte[]> binary(int length) {
         checkThat(length >= 0, "length must be >= 0");
-        return () -> RandomUtils.secure().randomBytes(length);
+        return () -> RANDOM.randomBytes(length);
     }
     
     /**
@@ -69,6 +71,6 @@ public class BinaryGenerators {
      * @return A {@link AlchemyGenerator} that produces a single byte.
      */
     static AlchemyGenerator<Byte> bytes() {
-        return () -> RandomUtils.secure().randomBytes(1)[0];
+        return () -> RANDOM.randomBytes(1)[0];
     }
 }

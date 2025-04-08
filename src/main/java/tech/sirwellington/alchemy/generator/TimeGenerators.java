@@ -20,6 +20,7 @@ package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
+import java.sql.Time;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -37,6 +38,10 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
  * @author SirWellington
  */
 class TimeGenerators {
+
+    private TimeGenerators() throws IllegalAccessException {
+        throw new IllegalAccessException("Cannot instantiate directly");
+    }
     /**
      * Produces [Instants][Instant] representing the *present*, i.e *now*. Note that
      * the 'present'

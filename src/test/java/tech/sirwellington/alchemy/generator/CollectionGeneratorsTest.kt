@@ -102,7 +102,7 @@ class CollectionGeneratorsTest
         val valueGenerator = AlchemyGenerator { string }
         val size = integers(5, 100).get()
 
-        val result = CollectionGenerators.mapOf<String, String>(StringGenerators.uuids, valueGenerator, size)
+        val result = CollectionGenerators.mapOf<String, String>(StringGenerators.UUIDS, valueGenerator, size)
         assertThat(result, notNullValue())
         assertThat(result.size, `is`(size))
 
