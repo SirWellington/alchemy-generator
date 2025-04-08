@@ -19,17 +19,13 @@ package tech.sirwellington.alchemy.generator;
 
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -43,11 +39,11 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  *
  * @author SirWellington
  */
-class StringGeneratorsJ {
+class StringGenerators {
 
     private static final RandomStringUtils RANDOM = RandomStringUtils.secure();
 
-    private StringGeneratorsJ() throws IllegalAccessException {
+    private StringGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("cannot instatiate directly");
     }
 

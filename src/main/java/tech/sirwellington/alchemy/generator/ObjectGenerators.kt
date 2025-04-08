@@ -21,7 +21,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.NumberGenerators.*
-import tech.sirwellington.alchemy.generator.StringGenerators.Companion.alphabeticStrings
+import tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings
 import java.lang.reflect.*
 import java.net.URL
 import java.nio.ByteBuffer
@@ -69,9 +69,9 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS[Long::class.java]               = positiveLongs()
         DEFAULT_GENERATOR_MAPPINGS[Short::class.java]              = shortGenerator
         DEFAULT_GENERATOR_MAPPINGS[String::class.java]             = alphabeticStrings()
-        DEFAULT_GENERATOR_MAPPINGS[Instant::class.java]            = TimeGenerators.anytime()
-        DEFAULT_GENERATOR_MAPPINGS[ZonedDateTime::class.java]      = TimeGenerators.anytime().asZonedDateTimeGenerator()
-        DEFAULT_GENERATOR_MAPPINGS[LocalDate::class.java]          = DateGenerators.anytime().asLocalDateGenerator()
+        DEFAULT_GENERATOR_MAPPINGS[Instant::class.java]            = TimeGenerators.anyTime()
+        DEFAULT_GENERATOR_MAPPINGS[ZonedDateTime::class.java]      = TimeGenerators.toZonedDateTimeGenerator(TimeGenerators.anyTime())
+        DEFAULT_GENERATOR_MAPPINGS[LocalDate::class.java]          = DateGenerators.toLocalDateGenerator(DateGenerators.anyTime())
         DEFAULT_GENERATOR_MAPPINGS[URL::class.java]                = NetworkGenerators.httpUrls()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Boolean::class.java]  = BooleanGenerators.booleans()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()
@@ -82,8 +82,8 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Long::class.java]     = positiveLongs()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Short::class.java]    = shortGenerator
         DEFAULT_GENERATOR_MAPPINGS[java.util.Date::class.java]     = DateGenerators.anyTime()
-        DEFAULT_GENERATOR_MAPPINGS[java.sql.Date::class.java]      = DateGenerators.anyTime().asSqlDateGenerator()
-        DEFAULT_GENERATOR_MAPPINGS[java.sql.Timestamp::class.java] = DateGenerators.anyTime().asSqlTimestampGenerator()
+        DEFAULT_GENERATOR_MAPPINGS[java.sql.Date::class.java]      = DateGenerators.toSqlDateGenerator(DateGenerators.anyTime())
+        DEFAULT_GENERATOR_MAPPINGS[java.sql.Timestamp::class.java] = DateGenerators.toSqlTimestampGenerator(DateGenerators.anyTime())
     }
 
     /**

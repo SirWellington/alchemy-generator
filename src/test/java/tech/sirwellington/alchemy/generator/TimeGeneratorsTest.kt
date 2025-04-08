@@ -143,13 +143,13 @@ class TimeGeneratorsTest
     }
 
     @Test
-    fun testAnytime()
+    fun testAnyTime()
     {
         println("testAnytime")
 
         doInLoop()
         {
-            val instance = TimeGenerators.anytime()
+            val instance = TimeGenerators.anyTime()
             assertThat(instance, notNullValue())
 
             val result = instance.get()
@@ -193,7 +193,7 @@ class TimeGeneratorsTest
     {
         val zone = anyZone()
 
-        val time = TimeGenerators.anytime().get()
+        val time = TimeGenerators.anyTime().get()
         val expected = time.atZone(zone)
 
         val generator = AlchemyGenerator { time }.asZonedDateTimeGenerator(zone)

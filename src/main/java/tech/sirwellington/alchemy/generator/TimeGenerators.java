@@ -18,8 +18,6 @@
 package tech.sirwellington.alchemy.generator;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import java.time.Instant;
@@ -121,7 +119,7 @@ class TimeGenerators {
     /**
      * Produces [Instants][Instant] from any time, past, present, or future.
      */
-    static AlchemyGenerator<Instant> anytime() {
+    static AlchemyGenerator<Instant> anyTime() {
         return () -> {
             int choice = one(integers(0, 3));
             switch(choice) {

@@ -93,7 +93,7 @@ class DateGenerators {
      * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
      */
     static AlchemyGenerator<Date> anyTime() {
-        return toDate(TimeGenerators.anytime());
+        return toDate(TimeGenerators.anyTime());
     }
 
     /**
