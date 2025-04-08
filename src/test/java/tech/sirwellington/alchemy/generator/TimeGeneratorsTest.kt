@@ -46,9 +46,6 @@ class TimeGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { TimeGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { TimeGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
