@@ -30,8 +30,8 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static java.lang.Integer.MIN_VALUE;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotEmpty;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * Common {@link AlchemyGenerator Alchemy Generators} for Number Generators.

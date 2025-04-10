@@ -28,9 +28,9 @@ import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotEmpty;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotNull;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 

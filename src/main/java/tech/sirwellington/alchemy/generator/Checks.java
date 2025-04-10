@@ -24,7 +24,7 @@ import java.util.function.BooleanSupplier;
  * Used internally to perform argument checks.
  * @author SirWellington
  */
-class ChecksJ  {
+class Checks {
     
     static void checkNotNull(Object any) throws IllegalArgumentException {
         checkNotNull(any, "Expected non-null object.");

@@ -20,7 +20,6 @@ package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
-import java.sql.Time;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -28,8 +27,8 @@ import java.time.ZonedDateTime;
 
 import static java.time.temporal.ChronoUnit.*;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotNull;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 
