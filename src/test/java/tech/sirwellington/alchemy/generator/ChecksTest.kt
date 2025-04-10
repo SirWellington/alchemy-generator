@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import tech.sirwellington.alchemy.generator.Checks.*
 import tech.sirwellington.alchemy.generator.Throwables.assertThrows
 
 /**
