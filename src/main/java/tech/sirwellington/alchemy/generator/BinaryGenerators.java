@@ -24,7 +24,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * {@link AlchemyGenerator Alchemy Generators} for raw binary (`byte[]`).

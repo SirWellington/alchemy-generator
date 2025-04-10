@@ -32,7 +32,7 @@ import java.util.UUID;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.BinaryGenerators.binary;
-import static tech.sirwellington.alchemy.generator.ChecksJ.*;
+import static tech.sirwellington.alchemy.generator.Checks.*;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**

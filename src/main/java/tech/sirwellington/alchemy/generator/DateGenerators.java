@@ -22,8 +22,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkNotNull;
-import static tech.sirwellington.alchemy.generator.ChecksJ.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
+import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * Generators for {@link Date} types.

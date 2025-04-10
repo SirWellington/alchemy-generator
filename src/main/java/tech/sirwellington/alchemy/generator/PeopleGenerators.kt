@@ -21,6 +21,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR
 import tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource
+import tech.sirwellington.alchemy.generator.Checks.checkNotEmpty
 import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 import tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings
 import tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList

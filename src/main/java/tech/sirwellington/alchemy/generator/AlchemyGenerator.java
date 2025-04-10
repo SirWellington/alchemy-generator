@@ -52,31 +52,25 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * @author SirWellington
  */
 @StrategyPattern(role = INTERFACE)
-public interface AlchemyGenerator<T>
-{
+public interface AlchemyGenerator<T>  {
 
     /**
      * Generate a non-null value of type {@code T}.
-     *
-     * @return
      */
     @Required
     T get();
 
-    class Get
-    {
+    final class Get {
 
         /**
          * Calls the generator once to get the ones of its values.
          *
-         * @param <T>
-         * @param generator
+         * @param <T> The type being generated.
+         * @param generator Provides the value to get.
          * @return Only one value from the generator.
          */
-        public static <T> T one(@Required AlchemyGenerator<T> generator)
-        {
-            if (generator == null)
-            {
+        public static <T> T one(@Required AlchemyGenerator<T> generator) {
+            if (generator == null) {
                 throw new IllegalArgumentException("Generator cannot be null");
             }
 
