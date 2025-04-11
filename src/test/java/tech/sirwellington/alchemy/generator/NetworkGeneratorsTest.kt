@@ -38,7 +38,7 @@ class NetworkGeneratorsTest
     @Test
     fun testHttpUrls()
     {
-        val generator = NetworkGenerators.httpUrls()
+        val generator = NetworkGenerators.httpURLs()
         assertThat(generator, notNullValue())
 
         doInLoop()
@@ -51,7 +51,7 @@ class NetworkGeneratorsTest
     @Test
     fun testHttpsUrls()
     {
-        val generator = NetworkGenerators.httpsUrls()
+        val generator = NetworkGenerators.httpsURLs()
         assertThat(generator, notNullValue())
 
         doInLoop()
@@ -96,7 +96,7 @@ class NetworkGeneratorsTest
     @Test
     fun testIp4Addresses()
     {
-        val generator = NetworkGenerators.ip4Addresses()
+        val generator = NetworkGenerators.ipv4Addresses()
         assertThat(generator, notNullValue())
 
         val max = "999.999.999.999"

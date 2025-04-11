@@ -45,9 +45,6 @@ class EnumGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { EnumGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { EnumGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
@@ -60,7 +57,7 @@ class EnumGeneratorsTest
 
         assertThat(fruits, notNullValue())
 
-        for (i in 0..iterations - 1)
+        for (i in 0..<iterations)
         {
             val fruit = fruits.get()
             assertThat(fruit, notNullValue())
