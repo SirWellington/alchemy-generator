@@ -17,8 +17,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphanumericStrings;
 
 @NonInstantiable
-public final class NetworkGeneratorsJ {
-    private static final Logger LOG = LoggerFactory.getLogger(NetworkGeneratorsJ.class);
+public final class NetworkGenerators {
+    private static final Logger LOG = LoggerFactory.getLogger(NetworkGenerators.class);
     private static final URL FALLBACK_URL;
     private static final List<String> VALID_PROTOCOLS = Arrays.asList(
             "http",
@@ -38,7 +38,7 @@ public final class NetworkGeneratorsJ {
         FALLBACK_URL = url;
     }
 
-    private NetworkGeneratorsJ() throws IllegalAccessException {
+    private NetworkGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("cannot directly instantiate");
     }
 
