@@ -33,7 +33,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  */
 @NonInstantiable
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
-public class BinaryGenerators {
+public final class BinaryGenerators {
 
     private static final RandomUtils RANDOM = RandomUtils.secure();
 

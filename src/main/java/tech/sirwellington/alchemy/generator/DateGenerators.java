@@ -30,7 +30,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  *
  * @author SirWellington
  */
-class DateGenerators {
+public final class DateGenerators {
 
     private DateGenerators() {
         throw new IllegalAccessError("cannot instantiated");

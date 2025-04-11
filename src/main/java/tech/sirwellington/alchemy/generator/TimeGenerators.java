@@ -37,7 +37,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
  *
  * @author SirWellington
  */
-class TimeGenerators {
+public final class TimeGenerators {
 
     private TimeGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("Cannot instantiate directly");

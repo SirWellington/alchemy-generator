@@ -39,7 +39,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  * {@link AlchemyGenerator} for {@link String Strings}.
  * @author SirWellington
  */
-class StringGenerators {
+public final class StringGenerators {
 
     private static final RandomStringUtils RANDOM = RandomStringUtils.secure();
 

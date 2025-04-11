@@ -17,6 +17,8 @@
  
 package tech.sirwellington.alchemy.generator;
 
+import tech.sirwellington.alchemy.annotations.access.Internal;
+
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -24,7 +26,8 @@ import java.util.function.BooleanSupplier;
  * Used internally to perform argument checks.
  * @author SirWellington
  */
-class Checks {
+@Internal
+final class Checks {
     
     static void checkNotNull(Object any) throws IllegalArgumentException {
         checkNotNull(any, "Expected non-null object.");

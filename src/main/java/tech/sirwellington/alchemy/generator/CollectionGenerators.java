@@ -43,7 +43,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiv
  * @see BinaryGenerators
  * @author SirWellington
  */
-class CollectionGenerators {
+public final class CollectionGenerators {
 
     private CollectionGenerators() throws IllegalAccessError {
         throw new IllegalAccessError("cannot directly instatiate");
