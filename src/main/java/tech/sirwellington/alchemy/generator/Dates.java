@@ -12,6 +12,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * Functions that help working with Dates.
+ * @author SirWellington
  */
 public final class Dates {
 
