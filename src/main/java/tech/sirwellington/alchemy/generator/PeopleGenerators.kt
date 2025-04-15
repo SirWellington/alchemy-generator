@@ -48,7 +48,7 @@ internal constructor()
         private val LOG = LoggerFactory.getLogger(this::class.java)
 
         private val firstNames = readLinesFromResource("names/first-names.txt")
-        private val names = readLinesFromResource("names/names.txt")
+        private val names = readLinesFromResource("names/last-names.txt")
         private val professions = readLinesFromResource("other/professions.txt")
 
         /**
