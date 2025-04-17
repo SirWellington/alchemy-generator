@@ -54,7 +54,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Computer::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val computer = generator.get()
             checkComputer(computer)
@@ -71,7 +71,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Person::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             checkPerson(result)
@@ -86,7 +86,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(Building::class.java)
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             checkBuilding(result)
@@ -102,7 +102,7 @@ class ObjectGeneratorsTest
         val generator = ObjectGenerators.pojos(AddressBook::class.java)
         assertThat<AlchemyGenerator<AddressBook>>(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             checkAddressBook(result)
@@ -171,7 +171,7 @@ class ObjectGeneratorsTest
 
         val generator = ObjectGenerators.pojos(JavaCode.Person::class.java)
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             JavaCode.Person.check(result)
@@ -185,7 +185,7 @@ class ObjectGeneratorsTest
 
         val generator = ObjectGenerators.pojos(Band::class.java)
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             result.check()
@@ -202,7 +202,7 @@ class ObjectGeneratorsTest
 
         val generator = ObjectGenerators.pojos<Holder>()
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())
@@ -218,7 +218,7 @@ class ObjectGeneratorsTest
 
         val generator = ObjectGenerators.pojos<Holder>()
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())
@@ -230,7 +230,7 @@ class ObjectGeneratorsTest
     {
         val generator = ObjectGenerators.pojos<Restaurant>()
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())

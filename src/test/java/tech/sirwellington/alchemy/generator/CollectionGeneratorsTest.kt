@@ -153,7 +153,7 @@ class CollectionGeneratorsTest
         val instance = CollectionGenerators.fromList(list)
         assertThat(instance, notNullValue())
 
-        doInLoop {
+        repeatTest {
             val value = instance.get()
             assertThat(list.contains(value), `is`(true))
         }

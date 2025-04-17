@@ -59,7 +59,7 @@ class BinaryGeneratorsTest
 
         assertNotNull(instance)
 
-        doInLoop() {
+        repeatTest() {
             val value = instance.get()
             assertThat(value, notNullValue())
             assertThat(value.size, `is`(bytes))
@@ -93,7 +93,7 @@ class BinaryGeneratorsTest
         val instance = BinaryGenerators.byteBuffers(size)
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = instance.get()
             assertThat(result, notNullValue())
@@ -124,7 +124,7 @@ class BinaryGeneratorsTest
         val generator = BinaryGenerators.bytes()
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())

@@ -36,7 +36,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.cities()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val city = instance.get()
             assertThat(city, !isNullOrBlank)
@@ -52,7 +52,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.states()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val state = instance.get()
             assertThat(state, !isNullOrBlank)
@@ -68,7 +68,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.stateShortCodes()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val stateShortCode = instance.get()
             assertThat(stateShortCode, !isNullOrBlank)
@@ -84,7 +84,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.countries()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val country = instance.get()
             assertThat(country, !isNullOrBlank)
@@ -100,7 +100,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.streetAddresses()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val address = instance.get()
             assertThat(address, !isNullOrBlank)
@@ -116,7 +116,7 @@ class PlaceGeneratorsTest
         val instance = PlaceGenerators.fullAddresses()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val address = instance.get()
             assertThat(address, !isNullOrBlank)

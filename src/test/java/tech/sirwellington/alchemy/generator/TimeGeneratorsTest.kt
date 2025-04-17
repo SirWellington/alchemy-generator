@@ -58,7 +58,7 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.presentInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = instance.get()
             assertThat(Dates.isNow(result, 30), `is`(true))
@@ -73,7 +73,7 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.pastInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val now = Instant.now()
             val result = instance.get()
@@ -91,7 +91,7 @@ class TimeGeneratorsTest
         val instance = TimeGenerators.futureInstants()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val now = Instant.now()
             val result = instance.get()
@@ -106,7 +106,7 @@ class TimeGeneratorsTest
     {
         println("testBefore")
 
-        doInLoop()
+        repeatTest()
         {
             val daysBefore = one(smallPositiveIntegers())
 
@@ -125,7 +125,7 @@ class TimeGeneratorsTest
     {
         println("testAfter")
 
-        doInLoop()
+        repeatTest()
         {
             val daysAhead = one(smallPositiveIntegers())
 
@@ -144,7 +144,7 @@ class TimeGeneratorsTest
     {
         println("testAnytime")
 
-        doInLoop()
+        repeatTest()
         {
             val instance = TimeGenerators.anyTime()
             assertThat(instance, notNullValue())
@@ -168,7 +168,7 @@ class TimeGeneratorsTest
         assertThrows { TimeGenerators.timesBetween(endTime, startTime) }
 
 
-        doInLoop()
+        repeatTest()
         {
             val startTimestamp = one(longs(1, java.lang.Long.MAX_VALUE / 2))
             val endTimestamp = one(longs(startTimestamp + 1, java.lang.Long.MAX_VALUE))

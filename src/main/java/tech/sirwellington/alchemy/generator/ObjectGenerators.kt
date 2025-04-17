@@ -345,11 +345,13 @@ object ObjectGenerators
             {
                 when (fieldName)
                 {
-                    "name", "firstName", "lastName" -> PeopleGenerators.names()
-                    "email"                         -> PeopleGenerators.emails()
-                    "city"                          -> PlaceGenerators.cities()
-                    "country"                       -> PlaceGenerators.countries()
-                    else                            -> generator
+                    "firstName"        -> PeopleGenerators.firstNames()
+                    "lastName"         -> PeopleGenerators.lastNames()
+                    "name", "fullName" -> PeopleGenerators.fullNames()
+                    "email"            -> PeopleGenerators.emailAddresses()
+                    "city"             -> PlaceGenerators.cities()
+                    "country"          -> PlaceGenerators.countries()
+                    else               -> generator
                 }
             }
 

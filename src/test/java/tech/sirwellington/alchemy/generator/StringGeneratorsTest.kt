@@ -69,7 +69,7 @@ class StringGeneratorsTest
         val instance = strings()
         assertThat<AlchemyGenerator<String>>(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             assertThat(instance.get(), not(isEmptyOrNullString()))
         }
@@ -84,7 +84,7 @@ class StringGeneratorsTest
         val instance = strings(length)
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(value.length == length)
@@ -109,7 +109,7 @@ class StringGeneratorsTest
         val length = 90
         val instance = StringGenerators.hexadecimalString(length)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(value.length == length)
@@ -135,7 +135,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.alphabeticStrings(length)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value.length, `is`(length))
@@ -149,7 +149,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.alphabeticStrings()
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, not(isEmptyString()))
@@ -173,7 +173,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.alphanumericStrings()
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, not(isEmptyString()))
@@ -190,7 +190,7 @@ class StringGeneratorsTest
         val length = one(integers(10, 100))
         val instance = StringGenerators.alphanumericStrings(length)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value.length, `is`(length))
@@ -210,7 +210,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.numericStrings()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, not(isEmptyOrNullString()))
@@ -228,7 +228,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.numericStrings(length)
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, not(isEmptyOrNullString()))
@@ -245,11 +245,11 @@ class StringGeneratorsTest
 
         val values = ArrayList<String>()
 
-        doInLoop()
+        repeatTest()
         { values.add(RandomStringUtils.randomAlphabetic(it + 1)) }
         val instance = StringGenerators.stringsFromFixedList(values)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(values.contains(value))
@@ -271,7 +271,7 @@ class StringGeneratorsTest
 
         val instance = StringGenerators.stringsFromFixedList(one, two, three)
 
-        doInLoop()
+        repeatTest()
         {
             assertThat(instance.get(), org.hamcrest.Matchers.isIn(values))
         }
@@ -287,7 +287,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.stringsFromFixedList(*values)
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = instance.get()
             assertThat(result, Matchers.isIn(values))
@@ -302,7 +302,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.alphabeticStrings()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, notNullValue())
@@ -322,7 +322,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.UUIDS
 
         val iterations = AtomicInteger()
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, notNullValue())
@@ -355,7 +355,7 @@ class StringGeneratorsTest
         val instance = StringGenerators.toString(generator)
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = instance.get()
             assertThat(result, not(isEmptyOrNullString()))

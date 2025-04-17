@@ -27,7 +27,7 @@ import tech.sirwellington.alchemy.generator.NumberGenerators.integers
 internal typealias RepeatedFunction = (Int) -> Unit
 
 @Internal
-fun doInLoop(function: RepeatedFunction)
+fun repeatTest(function: RepeatedFunction)
 {
     val iterations = one(integers(50, 250))
 

@@ -56,7 +56,7 @@ class IntegersTests
         val upperBound = RandomUtils.nextInt(lowerBound, Integer.MAX_VALUE)
         val instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -74,7 +74,7 @@ class IntegersTests
 
         val instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -91,7 +91,7 @@ class IntegersTests
         var upperBound = 150
         var instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -102,7 +102,7 @@ class IntegersTests
         upperBound = -500
         instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -113,7 +113,7 @@ class IntegersTests
         upperBound = -1
         instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -124,7 +124,7 @@ class IntegersTests
         upperBound = -1
         instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -135,7 +135,7 @@ class IntegersTests
         upperBound = 0
         instance = integers(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -151,7 +151,7 @@ class IntegersTests
         val instance = NumberGenerators.positiveIntegers()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             assertThat(instance.get(), greaterThan(0))
         }
@@ -165,7 +165,7 @@ class IntegersTests
         val instance = NumberGenerators.smallPositiveIntegers()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThan(0))
@@ -188,14 +188,14 @@ class IntegersTests
         println("testIntegersFromFixedList")
         val values = ArrayList<Int>()
 
-        doInLoop()
+        repeatTest()
         {
             values.add(RandomUtils.nextInt(4, 35))
         }
 
         val instance = NumberGenerators.integersFromFixedList(values)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(values.contains(value))
@@ -211,7 +211,7 @@ class IntegersTests
         val instance = NumberGenerators.negativeIntegers()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, lessThan(0))
@@ -255,7 +255,7 @@ class LongTests
         val upperBound = RandomUtils.nextLong(lowerBound, Long.MAX_VALUE)
         val instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -271,7 +271,7 @@ class LongTests
         var upperBound = 150_435_353_256_241L
         var instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -282,7 +282,7 @@ class LongTests
         upperBound = -500000
         instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -293,7 +293,7 @@ class LongTests
         upperBound = -1L
         instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -304,7 +304,7 @@ class LongTests
         upperBound = 0L
         instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -343,7 +343,7 @@ class LongTests
 
         val instance = NumberGenerators.longs(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -359,7 +359,7 @@ class LongTests
         val instance = NumberGenerators.positiveLongs()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThan(0L))
@@ -374,7 +374,7 @@ class LongTests
         val instance = NumberGenerators.smallPositiveLongs()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThan(0L))
@@ -406,7 +406,7 @@ class DoubleTests
         val upperBound = 190.0
         val instance = NumberGenerators.doubles(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -423,7 +423,7 @@ class DoubleTests
         var upperBound = 2044532.3
         var instance = NumberGenerators.doubles(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -434,7 +434,7 @@ class DoubleTests
         upperBound = -5945.0
         instance = NumberGenerators.doubles(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -464,14 +464,14 @@ class DoubleTests
 
         val values = ArrayList<Double>()
 
-        doInLoop()
+        repeatTest()
         {
             values.add(RandomUtils.nextDouble(4.0, 365.0))
         }
 
         val instance = NumberGenerators.doublesFromFixedList(values)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(values.contains(value))
@@ -486,7 +486,7 @@ class DoubleTests
         val instance = NumberGenerators.positiveDoubles()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             assertThat(instance.get(), greaterThan(0.0))
         }
@@ -501,7 +501,7 @@ class DoubleTests
         val instance = NumberGenerators.smallPositiveDoubles()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThan(0.0))
@@ -531,7 +531,7 @@ class FloatTests
         val upperBound = 190.0f
         val instance = NumberGenerators.floats(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -548,7 +548,7 @@ class FloatTests
         var upperBound = 2044532.3f
         var instance = NumberGenerators.floats(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -559,7 +559,7 @@ class FloatTests
         upperBound = -5945.0f
         instance = NumberGenerators.floats(lowerBound, upperBound)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThanOrEqualTo(lowerBound))
@@ -589,14 +589,14 @@ class FloatTests
 
         val values = ArrayList<Float>()
 
-        doInLoop()
+        repeatTest()
         {
             values.add(RandomUtils.nextFloat(1.0f, 365.0f))
         }
 
         val instance = NumberGenerators.floatsFromFixedList(values)
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertTrue(values.contains(value))
@@ -612,7 +612,7 @@ class FloatTests
         val instance = NumberGenerators.positiveFloats()
         assertNotNull(instance)
 
-        doInLoop()
+        repeatTest()
         {
             assertThat(instance.get(), greaterThan(0.0f))
         }
@@ -627,7 +627,7 @@ class FloatTests
         val instance = NumberGenerators.smallPositiveFloats()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, greaterThan(0.0f))
@@ -640,7 +640,7 @@ class FloatTests
     {
         val generator = NumberGenerators.anyFloats()
 
-        doInLoop()
+        repeatTest()
         {
             val value = generator.get()
             assertThat(value, notNullValue())

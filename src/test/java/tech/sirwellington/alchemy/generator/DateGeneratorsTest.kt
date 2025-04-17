@@ -63,7 +63,7 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.presentDates()
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, notNullValue())
@@ -78,7 +78,7 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.pastDates()
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, notNullValue())
@@ -93,7 +93,7 @@ class DateGeneratorsTest
 
         val instance = DateGenerators.futureDates()
 
-        doInLoop()
+        repeatTest()
         {
             val value = instance.get()
             assertThat(value, notNullValue())
@@ -106,7 +106,7 @@ class DateGeneratorsTest
     {
         println("testAnyTime")
 
-        doInLoop()
+        repeatTest()
         {
             val instance = DateGenerators.anyTime()
             assertThat(instance, notNullValue())
@@ -120,7 +120,7 @@ class DateGeneratorsTest
     {
         println("testBefore")
 
-        doInLoop()
+        repeatTest()
         {
             val referenceDate = Dates.now()
 
@@ -141,7 +141,7 @@ class DateGeneratorsTest
     {
         println("testAfter")
 
-        doInLoop()
+        repeatTest()
         {
             val referenceDate = Dates.now()
 
@@ -162,7 +162,7 @@ class DateGeneratorsTest
     {
         println("testToDate")
 
-        doInLoop()
+        repeatTest()
         {
             val now = Instant.now()
             val generator = AlchemyGenerator { now }
@@ -196,7 +196,7 @@ class DateGeneratorsTest
         assertThrows { DateGenerators.datesBetween(endDate, startDate) }
 
 
-        doInLoop()
+        repeatTest()
         {
             //Pick a start and end time
             val begin = one(longs(1, Long.MAX_VALUE / 2))
@@ -221,7 +221,7 @@ class DateGeneratorsTest
     {
         println("testAsSqlDateGenerator")
 
-        doInLoop()
+        repeatTest()
         {
             val date = one(DateGenerators.anyTime())
 
@@ -239,7 +239,7 @@ class DateGeneratorsTest
     {
         println("testAsLocalDateGenerator")
 
-        doInLoop()
+        repeatTest()
         {
             val date = one(DateGenerators.anyTime())
             val generator = AlchemyGenerator<Date> { date }
@@ -254,7 +254,7 @@ class DateGeneratorsTest
     {
         println("testSqlSqlTimestampGenerator")
 
-        doInLoop()
+        repeatTest()
         {
             val date = one(DateGenerators.anyTime())
             val generator = AlchemyGenerator { date }

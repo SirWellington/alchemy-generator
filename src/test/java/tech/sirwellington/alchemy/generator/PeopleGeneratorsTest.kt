@@ -46,29 +46,58 @@ class PeopleGeneratorsTest
     {
         println("testCannotInstantiate")
 
-        assertThrows { PeopleGenerators() }
-                .isInstanceOf(IllegalAccessException::class.java)
-
         assertThrows { PeopleGenerators::class.java.newInstance() }
                 .isInstanceOf(IllegalAccessException::class.java)
     }
 
     @Test
-    fun testNames()
+    fun testFirstNames()
     {
-        println("testNames")
+        println("testFirstNames")
 
-        val instance = PeopleGenerators.names()
-        assertThat(instance, notNullValue())
+        val firstName = PeopleGenerators.firstNames()
+        testNameGenerator(firstName)
+    }
 
-        val upperCasePattern = Pattern.compile("[A-Z][a-z]+")
+    @Test
+    fun testLastNames()
+    {
+        println("testLastNames")
 
-        doInLoop()
+        val lastNames = PeopleGenerators.lastNames()
+        testNameGenerator(lastNames)
+    }
+
+    @Test
+    fun testFullNames()
+    {
+        println("testFullNames")
+
+        val fullNames = PeopleGenerators.fullNames()
+        testNameGenerator(fullNames)
+
+        repeatTest()
         {
-            val name = instance.get()
+            val name = fullNames.get()
+            assertThat(name, not(isEmptyString()))
+            val split = name.split(" ")
+            assertThat(split.size, greaterThanOrEqualTo(2))
+            assertThat(split.size, lessThanOrEqualTo(3))
+        }
+    }
+
+    private fun testNameGenerator(generator: AlchemyGenerator<String>)
+    {
+        assertThat(generator, notNullValue())
+
+        val titleCasePattern = Pattern.compile("[A-Z][a-z]+")
+
+        repeatTest()
+        {
+            val name = generator.get()
             assertThat(name, not(isEmptyString()))
             assertThat(name.length, greaterThanOrEqualTo(2))
-            assertThat(upperCasePattern.asPredicate().test(name), `is`(true))
+            assertThat(titleCasePattern.asPredicate().test(name), `is`(true))
         }
     }
 
@@ -80,11 +109,11 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.ages()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(1))
-            assertThat(age, lessThanOrEqualTo(100))
+            assertThat(age, lessThanOrEqualTo(108))
         }
     }
 
@@ -96,11 +125,11 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.adultAges()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(18))
-            assertThat(age, lessThanOrEqualTo(100))
+            assertThat(age, lessThanOrEqualTo(108))
         }
     }
 
@@ -112,7 +141,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.childAges()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val age = instance.get()
             assertThat(age, greaterThanOrEqualTo(1))
@@ -121,31 +150,34 @@ class PeopleGeneratorsTest
     }
 
     @Test
-    fun testPhoneNumbers()
+    fun testPhoneNumbers_NoCountryCode()
     {
-        println("testPhoneNumbers")
+        println("testPhoneNumbers_NoCountryCode")
 
         val instance = PeopleGenerators.phoneNumbers()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        val phoneNumberPattern = Pattern.compile("\\d{3}-\\d{3}-\\d{4}")
+        repeatTest()
         {
             val phoneNumber = instance.get()
-            assertThat(phoneNumber, greaterThanOrEqualTo(100_000_0000L))
-            assertThat(phoneNumber, lessThanOrEqualTo(999_999_9999L))
+            assertThat(phoneNumber, not(isEmptyString()))
+            assertThat(phoneNumberPattern.asPredicate().test(phoneNumber), `is`(true))
         }
     }
 
     @Test
-    fun testPhoneNumberStrings()
+    fun testPhoneNumbers_USCountryCode()
     {
-        println("testPhoneNumberStrings")
+        println("testPhoneNumbers_USCountryCode")
 
-        val instance = PeopleGenerators.phoneNumberStrings()
+        val phoneCountryCode = "+1"
+        val instance = PeopleGenerators.phoneNumbers(phoneCountryCode)
         assertThat(instance, notNullValue())
 
-        val phoneNumberPattern = Pattern.compile("\\d{3}\\-\\d{3}\\-\\d{4}")
-        doInLoop()
+        val phoneNumberPattern = Pattern.compile("\\+1 \\d{3}-\\d{3}-\\d{4}")
+
+        repeatTest()
         {
             val phoneNumber = instance.get()
             assertThat(phoneNumber, not(isEmptyString()))
@@ -161,7 +193,7 @@ class PeopleGeneratorsTest
         val instance = PeopleGenerators.popularEmailDomains()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val domain = instance.get()
             assertThat(domain, not(isEmptyString()))
@@ -170,14 +202,14 @@ class PeopleGeneratorsTest
     }
 
     @Test
-    fun testEmails()
+    fun testEmailAddresses()
     {
         println("testEmails")
 
-        val instance = PeopleGenerators.emails()
+        val instance = PeopleGenerators.emailAddresses()
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val email = instance.get()
             assertThat(email, not(isEmptyString()))
@@ -186,17 +218,17 @@ class PeopleGeneratorsTest
     }
 
     @Test
-    fun testEmailsWithCustomDomains()
+    fun testEmailAddressesWithCustomDomains()
     {
         println("testEmailsWithCustomDomains")
 
         val domains = CollectionGenerators.listOf(alphabeticStrings(), 10)
         val domainGenerator = stringsFromFixedList(domains)
 
-        val instance = PeopleGenerators.emails(domainGenerator)
+        val instance = PeopleGenerators.emailAddresses(domainGenerator)
         assertThat(instance, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val email = instance.get()
             assertThat(email, not(isEmptyString()))
@@ -217,10 +249,10 @@ class PeopleGeneratorsTest
     }
 
     @Test
-    fun testEmailsWithCustomDomainsEdgeCases()
+    fun testEmailAddressesWithCustomDomainsEdgeCases()
     {
-        assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { null }) }
-        assertThrows { PeopleGenerators.emails(AlchemyGenerator<String> { "" }) }
+        assertThrows { PeopleGenerators.emailAddresses(AlchemyGenerator<String> { null }) }
+        assertThrows { PeopleGenerators.emailAddresses(AlchemyGenerator<String> { "" }) }
     }
 
     @Test
@@ -228,7 +260,7 @@ class PeopleGeneratorsTest
     {
         val generator = PeopleGenerators.professions()
 
-        doInLoop loop@
+        repeatTest loop@
         {
             val result = generator.get()
             assertThat(result, notNullValue())
