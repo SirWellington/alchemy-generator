@@ -2,6 +2,7 @@ package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
+import tech.sirwellington.alchemy.annotations.arguments.Optional;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
@@ -116,37 +117,76 @@ public class PeopleGeneratorsJ {
         return integers(1, 18);
     }
 
+    /**
+     * Returns a US-based phone number in String form,
+     * without the leading country code.
+     * For example, "7545185179".
+     */
     public static AlchemyGenerator<String> phoneNumbers() {
-        return phoneNumbers("+1");
+        return phoneNumbers(null);
     }
 
+    /**
+     * Returns a phone number with an optional phoneCountryCode that will be prefixed.
+     * @param phoneCountryCode Optional. For example, {@code "+1", "+57"}, etc.
+     *                         If {@code null}, no phone country prefix will be added.
+     */
     public static AlchemyGenerator<String> phoneNumbers(
-            @NonEmpty String phoneCountryCode
+            @Optional String phoneCountryCode
     ) {
-        checkNotEmpty(phoneCountryCode, "missing phoneCountryCode");
         AlchemyGenerator<Integer> threeDigits = integers(100, 1000);
         AlchemyGenerator<Integer> fourDigits = integers(1_000, 10_000);
 
-        return () -> MessageFormat.format(
-                "{0} {1}-{2}-{3}",
-                phoneCountryCode,
-                one(threeDigits),
-                one(threeDigits),
-                one(fourDigits)
-        );
+        if (phoneCountryCode == null) {
+            return () -> MessageFormat.format(
+                    "{0}-{1}-{2}",
+                    one(threeDigits),
+                    one(threeDigits),
+                    one(fourDigits)
+            );
+        } else {
+            return () -> MessageFormat.format(
+                    "{0} {1}-{2}-{3}",
+                    phoneCountryCode,
+                    one(threeDigits),
+                    one(threeDigits),
+                    one(fourDigits)
+            );
+        }
     }
 
+    /**
+     * @return A Generator of the most popular email domains used today,
+     * according to ChatGPT.
+     * <blockquote>
+     * <ol>
+     *   <li><b>@gmail.com</b> – Google's free email service; dominant globally due to Android and Google integration.</li>
+     *   <li><b>@yahoo.com</b> – Yahoo’s long-standing email service, still widely used in the U.S. and parts of Asia.</li>
+     *   <li><b>@outlook.com</b> – Microsoft's modern replacement for Hotmail, popular for both personal and business use.</li>
+     *   <li><b>@hotmail.com</b> – Legacy Microsoft domain still in active use, especially with older accounts.</li>
+     *   <li><b>@live.com</b> – Another Microsoft domain introduced with Windows Live services.</li>
+     *   <li><b>@icloud.com</b> – Apple’s domain used by iCloud Mail; common among iOS/macOS users.</li>
+     *   <li><b>@mail.com</b> – A customizable domain provided by GMX, popular in Europe.</li>
+     *   <li><b>@yandex.com / @yandex.ru</b> – Russia’s top email provider, widely used in Russian-speaking countries.</li>
+     *   <li><b>@protonmail.com</b> – A privacy-focused email service based in Switzerland, growing among security-conscious users.</li>
+     *   <li><b>@163.com / @126.com / @qq.com</b> – Major Chinese providers (NetEase and Tencent) with massive local user bases.</li>
+     * </ol>
+     * </blockquote>
+     */
     public static AlchemyGenerator<String> popularEmailDomains() {
         return stringsFromFixedList(
-                "yahoo.com",
-                "google.com",
                 "gmail.com",
-                "sirwellington.tech",
-                "apple.com",
+                "yahoo.com",
+                "outlook.com",
+                "hotmail.com",
+                "live.com",
                 "icloud.com",
-                "microsoft.com",
-                "kw.com",
-                "walmart.com"
+                "mail.com",
+                "yandex.com",
+                "protonmail.com",
+                "163.com",
+                "126.com",
+                "qq.com"
         );
     }
 
@@ -184,6 +224,10 @@ public class PeopleGeneratorsJ {
         };
     }
 
+    /**
+     * This generator returns a profession or job title,
+     * for example, "Software Engineer", or "Carpenter", or "Teacher".
+     */
     public static AlchemyGenerator<String> professions() {
         return stringsFromFixedList(PROFESSIONS);
     }

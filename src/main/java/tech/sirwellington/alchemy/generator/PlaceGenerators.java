@@ -113,7 +113,32 @@ public class PlaceGenerators {
     }
 
     /**
-     * Return a full address, which includes a street address, city, and country.
+     * Return a full U.S., which includes:
+     * 1. Street address line one,
+     * 2. Street address line two (sometimes)
+     * 3. City
+     * 4. State
+     * 5. Country
+     * <p/>
+     * <blockquote>
+     * <strong>Note:</strong>
+     * There are no guarantees as the validity of the addresses generated
+     * or whether they actually exist in the real world.
+     * </blockquote>
+     * <p/>
+     * For example: {@code 4592 E 2 St New York, United States}.
+     */
+    public static AlchemyGenerator<String> fullAddresses() {
+        return fullAddresses(true);
+    }
+
+    /**
+     * Return a full U.S., which includes:
+     * 1. Street address line one,
+     * 2. Street address line two (sometimes)
+     * 3. City
+     * 4. State
+     * 5. Country
      * <p/>
      * <blockquote>
      * <strong>Note:</strong>
