@@ -46,7 +46,7 @@ class GeneratorsTest
     @Test
     fun testOne()
     {
-        doInLoop {
+        repeatTest {
             string = StringGenerators.alphanumericStrings().get()
             generator = AlchemyGenerator { string }
 

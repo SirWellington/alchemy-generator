@@ -74,7 +74,7 @@ object ObjectGenerators
         DEFAULT_GENERATOR_MAPPINGS[Instant::class.java]            = TimeGenerators.anyTime()
         DEFAULT_GENERATOR_MAPPINGS[ZonedDateTime::class.java]      = TimeGenerators.toZonedDateTimeGenerator(TimeGenerators.anyTime())
         DEFAULT_GENERATOR_MAPPINGS[LocalDate::class.java]          = DateGenerators.toLocalDateGenerator(DateGenerators.anyTime())
-        DEFAULT_GENERATOR_MAPPINGS[URL::class.java]                = NetworkGenerators.httpUrls()
+        DEFAULT_GENERATOR_MAPPINGS[URL::class.java]                = NetworkGenerators.httpURLs()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Boolean::class.java]  = BooleanGenerators.booleans()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()
         DEFAULT_GENERATOR_MAPPINGS[java.lang.Byte::class.java]     = BinaryGenerators.bytes()
@@ -345,11 +345,13 @@ object ObjectGenerators
             {
                 when (fieldName)
                 {
-                    "name", "firstName", "lastName" -> PeopleGenerators.names()
-                    "email"                         -> PeopleGenerators.emails()
-                    "city"                          -> PlaceGenerators.cities()
-                    "country"                       -> PlaceGenerators.countries()
-                    else                            -> generator
+                    "firstName"        -> PeopleGenerators.firstNames()
+                    "lastName"         -> PeopleGenerators.lastNames()
+                    "name", "fullName" -> PeopleGenerators.fullNames()
+                    "email"            -> PeopleGenerators.emailAddresses()
+                    "city"             -> PlaceGenerators.cities()
+                    "country"          -> PlaceGenerators.countries()
+                    else               -> generator
                 }
             }
 

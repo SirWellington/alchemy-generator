@@ -44,7 +44,7 @@ class GeolocationGeneratorsTest
         val generator = GeolocationGenerators.latitudes()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        repeatTest { i ->
             val latitude = generator.get()
 
             assertThat(latitude, greaterThanOrEqualTo(-90.0))
@@ -58,7 +58,7 @@ class GeolocationGeneratorsTest
         val generator = GeolocationGenerators.longitudes()
         assertThat(generator, notNullValue())
 
-        doInLoop { i ->
+        repeatTest { i ->
             val latitude = generator.get()
 
             assertThat(latitude, greaterThanOrEqualTo(-180.0))

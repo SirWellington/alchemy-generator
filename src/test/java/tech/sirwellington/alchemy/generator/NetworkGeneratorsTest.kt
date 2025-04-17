@@ -38,10 +38,10 @@ class NetworkGeneratorsTest
     @Test
     fun testHttpUrls()
     {
-        val generator = NetworkGenerators.httpUrls()
+        val generator = NetworkGenerators.httpURLs()
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())
@@ -51,10 +51,10 @@ class NetworkGeneratorsTest
     @Test
     fun testHttpsUrls()
     {
-        val generator = NetworkGenerators.httpsUrls()
+        val generator = NetworkGenerators.httpsURLs()
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val result = generator.get()
             assertThat(result, notNullValue())
@@ -65,7 +65,7 @@ class NetworkGeneratorsTest
     @Test
     fun testUrlsWithProtocol()
     {
-        doInLoop()
+        repeatTest()
         {
             val scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp").get()
             val generator = NetworkGenerators.urlsWithProtocol(scheme)
@@ -84,7 +84,7 @@ class NetworkGeneratorsTest
         val generator = NetworkGenerators.ports()
         assertThat(generator, notNullValue())
 
-        doInLoop()
+        repeatTest()
         {
             val port = generator.get()
             assertThat(port, greaterThanOrEqualTo(22))
@@ -96,14 +96,14 @@ class NetworkGeneratorsTest
     @Test
     fun testIp4Addresses()
     {
-        val generator = NetworkGenerators.ip4Addresses()
+        val generator = NetworkGenerators.ipv4Addresses()
         assertThat(generator, notNullValue())
 
         val max = "999.999.999.999"
         val min = "1.1.1.1"
         val expectedPeriods = 3
 
-        doInLoop()
+        repeatTest()
         {
             val address = generator.get()
 

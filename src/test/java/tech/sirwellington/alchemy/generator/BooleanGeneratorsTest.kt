@@ -57,7 +57,7 @@ class BooleanGeneratorsTest
 
         val values = HashSet<Boolean>()
 
-        doInLoop {
+        repeatTest {
             val value = instance.get()
             assertNotNull(value)
             values.add(value)
@@ -76,7 +76,7 @@ class BooleanGeneratorsTest
         var value = instance.get()
         var previous: Boolean
 
-        doInLoop {
+        repeatTest {
             previous = value
             value = instance.get()
 

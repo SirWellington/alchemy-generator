@@ -239,7 +239,10 @@ Psychologist
 Publisher
 Rapper
 Radiologist
-Real Estate
+Real Estate Agent
+Real Estate Broker
+Real Estate Developer
+Real Estate Investor
 Receptionist
 Recruiter
 Retail Manager
