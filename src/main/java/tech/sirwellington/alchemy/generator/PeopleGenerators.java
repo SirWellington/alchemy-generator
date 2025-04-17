@@ -1,7 +1,6 @@
 package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
-import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Optional;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
@@ -23,14 +22,14 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromF
  */
 @NonInstantiable
 @StrategyPattern(role = StrategyPattern.Role.CONCRETE_BEHAVIOR)
-public class PeopleGeneratorsJ {
+public class PeopleGenerators {
 
     private static final List<String> FIRST_NAMES = readLinesFromResource("names/first-names.txt");
     private static final List<String> MIDDLE_NAMES = readLinesFromResource("names/middle-names.txt");
     private static final List<String> LAST_NAMES = readLinesFromResource("names/last-names.txt");
     private static final List<String> PROFESSIONS = readLinesFromResource("other/professions.txt");
 
-    private PeopleGeneratorsJ() throws IllegalAccessException {
+    private PeopleGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("cannot directly instantiate");
     }
 
@@ -140,17 +139,17 @@ public class PeopleGeneratorsJ {
         if (phoneCountryCode == null) {
             return () -> MessageFormat.format(
                     "{0}-{1}-{2}",
-                    one(threeDigits),
-                    one(threeDigits),
-                    one(fourDigits)
+                    String.valueOf(one(threeDigits)),
+                    String.valueOf(one(threeDigits)),
+                    String.valueOf(one(fourDigits))
             );
         } else {
             return () -> MessageFormat.format(
                     "{0} {1}-{2}-{3}",
                     phoneCountryCode,
-                    one(threeDigits),
-                    one(threeDigits),
-                    one(fourDigits)
+                    String.valueOf(one(threeDigits)),
+                    String.valueOf(one(threeDigits)),
+                    String.valueOf(one(fourDigits))
             );
         }
     }
@@ -190,7 +189,24 @@ public class PeopleGeneratorsJ {
         );
     }
 
-    public static AlchemyGenerator<String> emails(
+    /**
+     * Generates email addresses using one of the most popular domains.
+     * If you want to control which domains are in the email addresses,
+     * use {@link #emailAddresses(AlchemyGenerator)} and provide a custom domain generator.
+     *
+     * @see #emailAddresses(AlchemyGenerator)
+     */
+    public static AlchemyGenerator<String> emailAddresses() {
+        return emailAddresses(popularEmailDomains());
+    }
+
+    /**
+     * Generates email addresses using the domains provided by the {@code domainGenerator}.
+     * @param domainGenerator Used to create domains for the email addresses.
+     *                        You can use the {@link #popularEmailDomains()}
+     * @see #emailAddresses()
+     */
+    public static AlchemyGenerator<String> emailAddresses(
             @Required AlchemyGenerator<String> domainGenerator
     ) {
         checkNotNull(domainGenerator, "missing domainGenerator");
