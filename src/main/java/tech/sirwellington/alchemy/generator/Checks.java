@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 Wellington Moreno<jwellington.moreno@gmail.com>.
+ *Copyright © 2026 Wellington Moreno<jwellington.moreno@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.access.Internal;
@@ -24,31 +24,32 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Used internally to perform argument checks.
+ *
  * @author SirWellington
  */
 @Internal
 final class Checks {
-    
+
     static void checkNotNull(Object any) throws IllegalArgumentException {
         checkNotNull(any, "Expected non-null object.");
     }
-    
+
     static void checkNotNull(Object any, String message) throws IllegalArgumentException {
         if (any == null) {
             throw new IllegalArgumentException(message);
         }
     }
-    
+
     static void checkThat(boolean predicate) throws IllegalArgumentException {
         checkThat(predicate, "");
     }
-    
+
     static void checkThat(boolean predicate, String message) throws IllegalArgumentException {
         if (!predicate) {
             throw new IllegalArgumentException(message);
         }
     }
-    
+
     static void checkThat(BooleanSupplier predicate, String message) throws IllegalArgumentException {
         if (predicate == null) {
             return;
@@ -57,20 +58,25 @@ final class Checks {
             throw new IllegalArgumentException(message);
         }
     }
-    
+
     static void checkNotEmpty(String string) throws IllegalArgumentException {
         checkNotEmpty(string, "Expected non-empty String.");
     }
-    
+
     static void checkNotEmpty(String string, String message) throws IllegalArgumentException {
         checkThat(string != null, message);
         checkThat(!string.isEmpty(), message);
     }
     
+    static void checkNotBlank(String string, String message) throws IllegalArgumentException {
+        checkNotNull(string, message);
+        checkThat(!string.isBlank(), message);
+    }
+
     static <T> void checkNotEmpty(List<T> list) throws IllegalArgumentException {
         checkNotEmpty(list, "Expected non-empty list");
     }
-    
+
     static <T> void checkNotEmpty(List<T> list, String message) throws IllegalArgumentException {
         checkNotNull(list, message);
         checkThat(!list.isEmpty(), message);
