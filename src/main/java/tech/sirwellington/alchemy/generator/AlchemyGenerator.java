@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019. Sir Wellington.
+ * Copyright © 2026. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -52,7 +52,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * @author SirWellington
  */
 @StrategyPattern(role = INTERFACE)
-public interface AlchemyGenerator<T>  {
+public interface AlchemyGenerator<T> {
 
     /**
      * Generate a non-null value of type {@code T}.
@@ -65,7 +65,7 @@ public interface AlchemyGenerator<T>  {
         /**
          * Calls the generator once to get the ones of its values.
          *
-         * @param <T> The type being generated.
+         * @param <T>       The type being generated.
          * @param generator Provides the value to get.
          * @return Only one value from the generator.
          */
