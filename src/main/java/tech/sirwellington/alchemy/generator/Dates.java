@@ -49,7 +49,7 @@ public final class Dates {
      */
     public static Date daysAgo(@Positive int days) {
         checkThat(days > 0, "days must be positive");
-        Instant instant = Instant.now().minus(days, ChronoUnit.DAYS);
+        var instant = Instant.now().minus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -61,7 +61,7 @@ public final class Dates {
      */
     public static Date daysAhead(@Positive int days) {
         checkThat(days > 0, "days must be positive");
-        Instant instant = Instant.now().plus(days, ChronoUnit.DAYS);
+        var instant = Instant.now().plus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -73,7 +73,7 @@ public final class Dates {
      */
     public static Date hoursAgo(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
-        Instant instant = Instant.now().minus(hours, ChronoUnit.HOURS);
+        var instant = Instant.now().minus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -85,7 +85,7 @@ public final class Dates {
      */
     public static Date hoursAhead(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
-        Instant instant = Instant.now().plus(hours, ChronoUnit.HOURS);
+        var instant = Instant.now().plus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -97,7 +97,7 @@ public final class Dates {
      */
     public static Date minutesAgo(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
-        Instant instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
+        var instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
     }
 
@@ -109,7 +109,7 @@ public final class Dates {
      */
     public static Date minutesAhead(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
-        Instant instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
+        var instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
     }
 
@@ -133,7 +133,7 @@ public final class Dates {
         checkNotNull(date, "date cannot be null");
         checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0");
 
-        long delta = marginOfErrorMillis;
+        var delta = marginOfErrorMillis;
         long timeOfDate = date.getTime();
         long timeOfNow = now.getTime();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;
@@ -147,11 +147,11 @@ public final class Dates {
      * @return Whether the instant can be considered "now", using the specified margin of error.
      */
     public static boolean isNow(@Required Instant instant, long marginOfErrorMillis) {
-        Instant now = Instant.now();
+        var now = Instant.now();
         checkNotNull(instant, "instant cannot be null");
         checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0");
 
-        long delta = marginOfErrorMillis;
+        var delta = marginOfErrorMillis;
         long timeOfDate = instant.toEpochMilli();
         long timeOfNow = now.toEpochMilli();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;

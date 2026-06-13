@@ -11,18 +11,12 @@ public final class GeolocationGenerators {
     /**
      * Object representing a latitude and longitude coordinate.
      */
-    public static final class Coordinate {
-        public final double latitude;
-        public final double longitude;
-
-        public Coordinate(double latitude, double longitude) {
+    public record Coordinate(double latitude, double longitude) {
+        public Coordinate {
             Checks.checkThat(latitude >= -90.0, "latitude out of bounds");
             Checks.checkThat(latitude <= 90.0, "latitude out of bounds");
             Checks.checkThat(longitude >= -180, "longitude out of bounds");
             Checks.checkThat(longitude <= 180, "longitude out of bounds");
-
-            this.latitude = latitude;
-            this.longitude = longitude;
         }
     }
 
@@ -48,8 +42,8 @@ public final class GeolocationGenerators {
      * Generates valid {@link Coordinate Coordinates}.
      */
     public static AlchemyGenerator<Coordinate> coordinates() {
-        AlchemyGenerator<Double> latitudes = latitudes();
-        AlchemyGenerator<Double> longitudes = longitudes();
+        var latitudes = latitudes();
+        var longitudes = longitudes();
         return () -> new Coordinate(latitudes.get(), longitudes.get());
     }
 }
