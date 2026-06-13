@@ -19,7 +19,8 @@ package tech.sirwellington.alchemy.generator;
 
 
 import java.nio.ByteBuffer;
-import org.apache.commons.lang3.RandomUtils;
+import java.security.SecureRandom;
+
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
@@ -35,7 +36,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class BinaryGenerators {
 
-    private static final RandomUtils RANDOM = RandomUtils.secure();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private BinaryGenerators() throws IllegalAccessException  {
         throw new IllegalAccessException("Cannot instantiate this class");
@@ -50,7 +51,11 @@ public final class BinaryGenerators {
      */
     static AlchemyGenerator<byte[]> binary(int length) {
         checkThat(length >= 0, "length must be >= 0");
-        return () -> RANDOM.randomBytes(length);
+        var bytes = new byte[length];
+        return () -> {
+            RANDOM.nextBytes(bytes);
+            return bytes;
+        };
     }
     
     /**
@@ -71,6 +76,7 @@ public final class BinaryGenerators {
      * @return A {@link AlchemyGenerator} that produces a single byte.
      */
     static AlchemyGenerator<Byte> bytes() {
-        return () -> RANDOM.randomBytes(1)[0];
+        return binary(1)
+                .map(bytes -> bytes[0]);
     }
 }

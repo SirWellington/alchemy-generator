@@ -17,6 +17,8 @@ package tech.sirwellington.alchemy.generator;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
+import java.util.function.Function;
+
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 
 /**
@@ -76,6 +78,16 @@ public interface AlchemyGenerator<T> {
 
             return generator.get();
         }
+    }
+
+    /**
+     * Creates a new generator by applying a function over the output of {@code this} {@link AlchemyGenerator}.
+     * @param function The mapping function.
+     * @return A new {@link AlchemyGenerator} that produces values of type {@code O}.
+     * @param <O> The type of the output.
+     */
+    default <O> AlchemyGenerator<O> map(@Required Function<T, O> function) {
+        return () -> function.apply(get());
     }
 }
 
