@@ -76,7 +76,7 @@ public final class DateGenerators {
      */
     static AlchemyGenerator<Date> before(@Required Date referenceDate) {
         checkNotNull(referenceDate);
-        Instant instant = referenceDate.toInstant();
+        var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.before(instant));
     }
 
@@ -86,7 +86,7 @@ public final class DateGenerators {
      * @param referenceDate Dates produced will be after this date.
      */
     static AlchemyGenerator<Date> after(@Required Date referenceDate) {
-        Instant instant = referenceDate.toInstant();
+        var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.after(instant));
     }
 
@@ -164,7 +164,7 @@ public final class DateGenerators {
      */
     static AlchemyGenerator<LocalDate> toLocalDateGenerator(AlchemyGenerator<Date> generator) {
         checkNotNull(generator);
-        AlchemyGenerator<java.sql.Date> _generator = toSqlDateGenerator(generator);
+        var _generator = toSqlDateGenerator(generator);
         return () -> _generator.get().toLocalDate();
     }
 }
