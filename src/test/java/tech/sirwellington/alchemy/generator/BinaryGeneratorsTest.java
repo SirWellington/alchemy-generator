@@ -12,123 +12,105 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.notNullValue
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.nio.ByteBuffer;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
 
 /**
-
+ * Tests for {@link BinaryGenerators}.
+ *
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class BinaryGeneratorsTest
-{
+@DisplayName("BinaryGenerators should")
+class BinaryGeneratorsTest extends BaseGeneratorTest {
 
-    @Before
-    fun setUp()
-    {
+    @Test
+    void testCannotInstantiate() throws Exception {
+        assertThrows(
+            IllegalAccessException.class,
+            () -> BinaryGenerators.class.getDeclaredConstructor().newInstance(),
+            "should throw IllegalAccessException when trying to instantiate via reflection"
+        );
     }
 
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
+    void testBinary() {
+        int bytes = integers(50, 5000).get();
+        var instance = BinaryGenerators.binary(bytes);
 
-        assertThrows { BinaryGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+        assertNotNull(instance);
+        repeatTest(
+            3, () -> {
+                byte[] value = instance.get();
+                assertThat(value, notNullValue());
+                assertEquals(bytes, value.length);
+            }
+        );
     }
 
     @Test
-    fun testBinary()
-    {
-        println("testBinary")
+    void testBinaryEdgeCases() {
+        var instance = BinaryGenerators.binary(0);
+        assertNotNull(instance);
 
-        val bytes = integers(50, 5000).get()
-        val instance = BinaryGenerators.binary(bytes)
+        byte[] result = instance.get();
+        assertNotNull(result);
+        assertEquals(0, result.length);
 
-        assertNotNull(instance)
-
-        repeatTest() {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(value.size, `is`(bytes))
-        }
+        int length = one(negativeIntegers());
+        assertThrows(
+            IllegalArgumentException.class, () -> BinaryGenerators.binary(length),
+            "should reject negative size"
+        );
     }
 
     @Test
-    fun testBinaryEdgeCases()
-    {
-        println("testBinaryGeneratorEdgeCases")
+    void testByteBuffers() {
+        int size = one(integers(10, 1000));
+        var instance = BinaryGenerators.byteBuffers(size);
+        assertNotNull(instance);
 
-
-        val instance = BinaryGenerators.binary(0)
-        assertThat(instance, notNullValue())
-
-        val result = instance.get()
-        assertThat(result, notNullValue())
-        assertThat(result.size, `is`(0))
-
-        val length = one(negativeIntegers())
-        assertThrows { BinaryGenerators.binary(length) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        repeatTest(
+            3, () -> {
+                ByteBuffer result = instance.get();
+                assertThat(result, notNullValue());
+                assertEquals(size, result.limit());
+                assertEquals(size, result.array().length);
+            }
+        );
     }
 
     @Test
-    fun testByteBuffers()
-    {
-        println("testByteBuffers")
+    void testByteBuffersEdgeCases() {
+        int size = one(negativeIntegers());
+        assertThrows(IllegalArgumentException.class, () -> BinaryGenerators.byteBuffers(size));
 
-        val size = one(integers(10, 1000))
-        val instance = BinaryGenerators.byteBuffers(size)
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.limit(), `is`(size))
-            assertThat(result.array().size, `is`(size))
-        }
+        ByteBuffer result = BinaryGenerators.byteBuffers(0).get();
+        assertNotNull(result);
+        assertEquals(0, result.limit());
     }
 
     @Test
-    fun testByteBuffersEdgeCases()
-    {
-        println("testByteBuffersEdgeCases")
+    void testBytes() {
+        var generator = BinaryGenerators.bytes();
+        assertNotNull(generator);
 
-        val size = one(negativeIntegers())
-        assertThrows { BinaryGenerators.byteBuffers(size) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        val result = BinaryGenerators.byteBuffers(0).get()
-        assertThat(result, notNullValue())
-        assertThat(result.limit(), `is`(0))
-    }
-
-    @Test
-    fun testBytes()
-    {
-        println("testBytes")
-
-        val generator = BinaryGenerators.bytes()
-        assertThat(generator, notNullValue())
-
-        repeatTest()
-        {
-            val result = generator.get()
-            assertThat(result, notNullValue())
-        }
+        repeatTest(
+            5, () -> {
+                var result = generator.get();
+                assertThat(result, notNullValue());
+            }
+        );
     }
 
 }
