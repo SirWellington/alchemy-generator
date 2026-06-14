@@ -12,76 +12,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.util.HashSet
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
-
+ * Tests for {@link BooleanGenerators}.
+ *
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class BooleanGeneratorsTest
-{
+@DisplayName("BooleanGenerators should")
+class BooleanGeneratorsTest extends BaseGeneratorTest {
 
-    @Before
-    fun setUp()
-    {
+    @Test
+    void testCannotInstantiate() throws Exception {
+        assertThrows(
+            IllegalAccessException.class,
+            () -> BooleanGenerators.class.getDeclaredConstructor().newInstance()
+        );
     }
 
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
+    void testBooleans() {
+        var instance = BooleanGenerators.booleans();
+        assertNotNull(instance);
 
-        assertThrows { BooleanGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+        Set<Boolean> values = new HashSet<>();
+        int repetitions = 25; // enough to capture both true and false with high probability
+
+        repeatTest(repetitions, () -> {
+            Boolean value = instance.get();
+            assertNotNull(value);
+            values.add(value);
+        });
+
+        // Ensure we got *both* boolean values (true & false)
+        assertThat(values.size(), is(2));
     }
 
     @Test
-    fun testBooleans()
-    {
-        println("testBooleans")
+    void testAlternatingBooleans() {
+        var instance = BooleanGenerators.alternatingBooleans();
+        AtomicReference<Boolean> previous = new AtomicReference<>(false);
 
-        val instance = BooleanGenerators.booleans()
-        assertNotNull(instance)
+        previous.set(instance.get());
+        assertNotNull(previous.get());
 
-        val values = HashSet<Boolean>()
-
-        repeatTest {
-            val value = instance.get()
-            assertNotNull(value)
-            values.add(value)
-        }
-
-        assertThat(values.size, `is`(2))
+        int repetitions = 20;
+        repeatTest(repetitions, () -> {
+            Boolean current = instance.get();
+            assertNotNull(current);
+            assertThat(current, is(not(previous.get())));
+            previous.set(current); // update for next iteration
+        });
     }
-
-    @Test
-    fun testAlternatingBooleans()
-    {
-        println("testAlternatingBooleans")
-
-        val instance = BooleanGenerators.alternatingBooleans()
-
-        var value = instance.get()
-        var previous: Boolean
-
-        repeatTest {
-            previous = value
-            value = instance.get()
-
-            assertThat(value, `is`(not(previous)))
-        }
-    }
-
 }
