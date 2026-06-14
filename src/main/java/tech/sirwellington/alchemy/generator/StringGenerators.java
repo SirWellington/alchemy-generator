@@ -14,39 +14,50 @@
  * limitations under the License.
  */
 
- 
 package tech.sirwellington.alchemy.generator;
 
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
-import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-import static tech.sirwellington.alchemy.generator.BinaryGenerators.binary;
 import static tech.sirwellington.alchemy.generator.Checks.*;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
  * {@link AlchemyGenerator} for {@link String Strings}.
+ *
  * @author SirWellington
  */
 public final class StringGenerators {
 
-    private static final RandomStringUtils RANDOM = RandomStringUtils.secure();
+    private static final SecureRandom RANDOM = new SecureRandom();
+    private static final String ALPHANUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String ALPHABETIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final String NUMERIC = "0123456789";
+    private static final String HEXADECIMAL = "0123456789ABCDEF";
 
     private StringGenerators() throws IllegalAccessException {
-        throw new IllegalAccessException("cannot instatiate directly");
+        throw new IllegalAccessException("cannot instantiate directly");
     }
 
+    private static String randomStringFrom(String charset, int size) {
+        checkNotBlank(charset, "Empty charset");
+        checkThat(size > 0, "String size should be > 0");
+        var builder = new StringBuilder();
+        for (int i = 0; i < size; ++i) {
+            var index = RANDOM.nextInt(0, charset.length());
+            builder.append(charset.charAt(index));
+        }
+        return builder.toString();
+    }
 
     //==============================================================================================
     //BASIC STRINGS
@@ -58,40 +69,35 @@ public final class StringGenerators {
      */
     static AlchemyGenerator<String> strings() {
         return () -> {
-            int size = one(integers(5, 1000));
-            return RANDOM.next(size);
+            var size = one(integers(5, 1000));
+            return randomStringFrom(ALPHANUMERIC, size);
         };
     }
 
     /**
      * Generates a random string of specified length. Characters are included from all sets.
+     *
      * @param length The length of the String, must be at least 1.
      */
     static AlchemyGenerator<String> strings(int length) {
         checkThat(length > 0, "Length must be at least 1");
-        return () -> RANDOM.next(length);
+        return () -> randomStringFrom(ALPHANUMERIC, length);
     }
 
     /**
      * Generates a random hexadecimal string.
+     *
      * @param length The length of the String, must be at least 1.
      */
     static AlchemyGenerator<String> hexadecimalString(@Positive int length) {
         checkThat(length > 0, "Length must be at least 1");
-
-        HexBinaryAdapter hexBinaryAdapter = new HexBinaryAdapter();
-        AlchemyGenerator<byte[]> binaryGenerator = binary(length);
-
-        return () -> {
-            byte[] binary = one(binaryGenerator);
-            String hex = hexBinaryAdapter.marshal(binary);
-            return StringUtils.left(hex, length);
-        };
+        return () -> randomStringFrom(HEXADECIMAL, length);
     }
 
     /**
      * Generates a random alphabetic string anywhere between `10 - 100` characters. Well suited for the case when
      * you don't really care for the size of the string returned.
+     *
      * @see #alphabeticStrings(int)
      */
     static AlchemyGenerator<String> alphabeticStrings() {
@@ -101,18 +107,20 @@ public final class StringGenerators {
 
     /**
      * Generates a random alphabetic string.
+     *
      * @param length The length of the String, must be at least 1.
      * @throws IllegalArgumentException If `length < 0`
      * @see #alphabeticStrings()
      */
     static AlchemyGenerator<String> alphabeticStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
-        return () -> RANDOM.nextAlphabetic(length);
+        return () -> randomStringFrom(ALPHABETIC, length);
     }
 
     /**
      * Generates a random alphanumeric string anywhere between `10 - 100` characters. Well suited for the case
      * when you don't really care what the size of the string returned.
+     *
      * @see #alphanumericStrings(int)
      */
     static AlchemyGenerator<String> alphanumericStrings() {
@@ -122,18 +130,20 @@ public final class StringGenerators {
 
     /**
      * Generates a random alphanumeric string of the specified length.
+     *
      * @param length The length of the Generated Strings.
      * @throws IllegalArgumentException If `length < 0`
      * @see #alphanumericStrings()
      */
     static AlchemyGenerator<String> alphanumericStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
-        return () -> RANDOM.nextAlphanumeric(length);
+        return () -> randomStringFrom(ALPHANUMERIC, length);
     }
 
     /**
      * Creates a numeric integer-based String. The sizes of the Strings will vary across instances.
      * Each resulting string will be directly [parsable into an Integer][Integer.parseInt].
+     *
      * @see #numericStrings(int)
      */
     static AlchemyGenerator<String> numericStrings() {
@@ -147,7 +157,7 @@ public final class StringGenerators {
      * <pre>
      * String result = numericStrings(5).get();
      * //49613
-     </pre> *
+     * </pre> *
      *
      * @param length Size of the numeric strings generated.
      * @throws IllegalArgumentException If {@code length <= 0}.
@@ -155,7 +165,7 @@ public final class StringGenerators {
      */
     static AlchemyGenerator<String> numericStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
-        return () -> RANDOM.nextNumeric(length);
+        return () -> randomStringFrom(NUMERIC, length);
 
     }
 
@@ -181,6 +191,7 @@ public final class StringGenerators {
 
     /**
      * Generates a string value from the specified set.
+     *
      * @param values Must be non-empty, produces the values for the generator.
      * @see #stringsFromFixedList(String...)
      */
@@ -188,20 +199,19 @@ public final class StringGenerators {
         @NonEmpty List<String> values
     ) {
         checkNotEmpty(values, "Values list empty");
-        return () -> {
-            int index = one(integers(0, values.size()));
-            return values.get(index);
-        };
+        return integers(0, values.size())
+            .map(values::get);
     }
 
     /**
      * Generates a string value from the specified set.
+     *
      * @param args Must be non-empty, produces the values for the generator.
      * @see #stringsFromFixedList(List)
      */
     static AlchemyGenerator<String> stringsFromFixedList(String... args) {
         checkNotNull(args);
-        List<String> values = Arrays.asList(args);
+        var values = Arrays.asList(args);
         checkNotEmpty(values, "no values specified");
         return stringsFromFixedList(values);
     }
@@ -209,10 +219,11 @@ public final class StringGenerators {
     /**
      * Takes an existing {@link AlchemyGenerator Generator} and transforms its values to a
      * String using the {@link Object#toString()} method.
-     * @param <T> Underlying type.
+     *
+     * @param <T>       Underlying type.
      * @param generator The underlying Alchemy Generator to convert values for.
      * @throws IllegalArgumentException If the Generator is null.
-    */
+     */
     static <T> AlchemyGenerator<String> toString(
         @Required AlchemyGenerator<T> generator
     ) {

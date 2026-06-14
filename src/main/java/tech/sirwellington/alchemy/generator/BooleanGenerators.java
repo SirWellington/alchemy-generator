@@ -37,7 +37,7 @@ public final class BooleanGenerators {
     private final static Logger LOG = LoggerFactory.getLogger(BooleanGenerators.class);
 
     private BooleanGenerators() throws IllegalAccessException {
-        throw new IllegalAccessException("cannot directly instatiate this class");
+        throw new IllegalAccessException("cannot directly instantiate this class");
     }
     
     /**

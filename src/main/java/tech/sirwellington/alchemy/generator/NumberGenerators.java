@@ -20,9 +20,9 @@ package tech.sirwellington.alchemy.generator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.SecureRandom;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomUtils;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
@@ -48,7 +48,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class NumberGenerators {
     
-    private static final RandomUtils RANDOM = RandomUtils.secure();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private NumberGenerators() throws IllegalAccessError {
         throw new IllegalAccessError("cannot directly instantiate.");
@@ -63,7 +63,10 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Integer> integers(int inclusiveLowerBound, int exclusiveUpperBound) throws IllegalArgumentException {
+    static AlchemyGenerator<Integer> integers(
+        int inclusiveLowerBound,
+        int exclusiveUpperBound
+    ) throws IllegalArgumentException {
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
         boolean isNegativeLowerBound = inclusiveLowerBound < 0;
         boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
@@ -77,26 +80,26 @@ public final class NumberGenerators {
               }
               int adjustedMin = safeIncrement(min);
               int adjustedMax = safeIncrement(max);
-              return -RANDOM.randomInt(adjustedMin, adjustedMax);
+              return RANDOM.nextInt(adjustedMin, adjustedMax);
           }
           else if (isNegativeLowerBound) {
               // Protect against overflowing the integer type.
               int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : (-inclusiveLowerBound) - 1;
               long totalSize = (long)negativeCount + (long)exclusiveUpperBound;
               double positivePercent = (double) exclusiveUpperBound / (double) totalSize;
-              double seed = RANDOM.randomDouble(0.0, 1.0);
+              double seed = RANDOM.nextDouble(0.0, 1.0);
               
               if (seed <= positivePercent) {
                   // Positive
-                  return RANDOM.randomInt(0, exclusiveUpperBound);
+                  return RANDOM.nextInt(0, exclusiveUpperBound);
               } else {
                   // Negative
                   int adjustedLowerBound = negativeCount;
-                  return -RANDOM.randomInt(0, safeIncrement(adjustedLowerBound));
+                  return -RANDOM.nextInt(0, safeIncrement(adjustedLowerBound));
               }
           }
           else {
-              return RANDOM.randomInt(inclusiveLowerBound, exclusiveUpperBound);
+              return RANDOM.nextInt(inclusiveLowerBound, exclusiveUpperBound);
           }
         };
     }
@@ -149,37 +152,37 @@ public final class NumberGenerators {
      */
     static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException {
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
+        var isNegativeLowerBound = inclusiveLowerBound < 0;
+        var isNegativeUpperBound = exclusiveUpperBound <= 0;
 
         return () -> {
             if (isNegativeLowerBound && isNegativeUpperBound) {
-                long min = -exclusiveUpperBound;
-                long max = -inclusiveLowerBound;
+                var min = -exclusiveUpperBound;
+                var max = -inclusiveLowerBound;
                 if (inclusiveLowerBound == Long.MIN_VALUE) {
                     max = Long.MAX_VALUE;
                 }
-                long adjustedMin = safeIncrement(min);
-                long adjustedMax = safeIncrement(max);
-                return -RANDOM.randomLong(adjustedMin, adjustedMax);
+                var adjustedMin = safeIncrement(min);
+                var adjustedMax = safeIncrement(max);
+                return -RANDOM.nextLong(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
                 // Protect against a range overflow in the case the lower bound range overruns the long type.
-                long negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : (-inclusiveLowerBound) -1;
-                double totalSize = (double) negativeCount + (double) exclusiveUpperBound;
-                double positivePercent = (double) exclusiveUpperBound / totalSize;
-                double seed = RANDOM.randomDouble(0.0, 1.0);
+                var negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : (-inclusiveLowerBound) -1;
+                var totalSize = (double) negativeCount + (double) exclusiveUpperBound;
+                var positivePercent = (double) exclusiveUpperBound / totalSize;
+                var seed = RANDOM.nextDouble(0.0, 1.0);
 
                 if (seed <= positivePercent) {
                     // Positive
-                    return RANDOM.randomLong(0, exclusiveUpperBound);
+                    return RANDOM.nextLong(0, exclusiveUpperBound);
                 } else {
                     // Negative
-                    return -RANDOM.randomLong(0L, safeIncrement(negativeCount));
+                    return -RANDOM.nextLong(0L, safeIncrement(negativeCount));
                 }
             }
             else {
-                return RANDOM.randomLong(inclusiveLowerBound, exclusiveUpperBound);
+                return RANDOM.nextLong(inclusiveLowerBound, exclusiveUpperBound);
             }
         };
     }
@@ -232,38 +235,38 @@ public final class NumberGenerators {
      */
     static AlchemyGenerator<Double> doubles(double inclusiveLowerBound, double exclusiveUpperBound) {
         checkThat(inclusiveLowerBound <= exclusiveUpperBound, "upper bound must be > lower bound.");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0.0;
-        boolean isNegativeUpperBound = exclusiveUpperBound < 0.0;
+        var isNegativeLowerBound = inclusiveLowerBound < 0.0;
+        var isNegativeUpperBound = exclusiveUpperBound < 0.0;
 
         return () -> {
             if (isNegativeLowerBound && isNegativeUpperBound) {
-                double min = -exclusiveUpperBound;
-                double max = -inclusiveLowerBound;
+                var min = -exclusiveUpperBound;
+                var max = -inclusiveLowerBound;
                 if (inclusiveLowerBound == -Double.MAX_VALUE) {
                     max = Double.MAX_VALUE;
                 }
-                double adjustedMin = safeIncrement(min);
-                double adjustedMax = safeIncrement(max);
-                return -RANDOM.randomDouble(adjustedMin, adjustedMax);
+                var adjustedMin = safeIncrement(min);
+                var adjustedMax = safeIncrement(max);
+                return -RANDOM.nextDouble(adjustedMin, adjustedMax);
             }
             else if (isNegativeLowerBound) {
                 // Protect against a range overflow in the case the lower bound range overruns the long type.
-                BigDecimal negativeCount = BigDecimal.valueOf(-(inclusiveLowerBound + 1.0));
-                BigDecimal positiveCount = BigDecimal.valueOf(exclusiveUpperBound);
-                BigDecimal totalSize = negativeCount.add(positiveCount);
-                double positivePercent = positiveCount.divide(totalSize, 15, RoundingMode.HALF_UP).doubleValue();
-                double seed = RANDOM.randomDouble(0.0, 1.0);
+                var negativeCount = BigDecimal.valueOf(-(inclusiveLowerBound + 1.0));
+                var positiveCount = BigDecimal.valueOf(exclusiveUpperBound);
+                var totalSize = negativeCount.add(positiveCount);
+                var positivePercent = positiveCount.divide(totalSize, 15, RoundingMode.HALF_UP).doubleValue();
+                var seed = RANDOM.nextDouble(0.0, 1.0);
 
                 if (seed <= positivePercent) {
                     // Positive
-                    return RANDOM.randomDouble(0.0, exclusiveUpperBound);
+                    return RANDOM.nextDouble(0.0, exclusiveUpperBound);
                 } else {
                     // Negative
-                    return -RANDOM.randomDouble(0.0, -safeIncrement(inclusiveLowerBound));
+                    return -RANDOM.nextDouble(0.0, -safeIncrement(inclusiveLowerBound));
                 }
             }
             else {
-                return RANDOM.randomDouble(inclusiveLowerBound, exclusiveUpperBound);
+                return RANDOM.nextDouble(inclusiveLowerBound, exclusiveUpperBound);
             }
         };
     }
@@ -301,7 +304,8 @@ public final class NumberGenerators {
      * @see #positiveDoubles()
      * @see #doubles(double, double) 
      */
-    static AlchemyGenerator<Double> negativeDoubles() {
+    @Deprecated
+    private static AlchemyGenerator<Double> negativeDoubles() {
         return doubles(-Double.MAX_VALUE, 0.0);
     }
 
@@ -315,7 +319,7 @@ public final class NumberGenerators {
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
     static AlchemyGenerator<Float> floats(float inclusiveLowerBound, float exclusiveUpperBound) {
-        AlchemyGenerator<Double> doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
+        var doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
         return () -> doubles.get().floatValue();
     }
 
@@ -367,7 +371,7 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
     }
@@ -380,7 +384,7 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
     }
@@ -393,7 +397,7 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
     }
