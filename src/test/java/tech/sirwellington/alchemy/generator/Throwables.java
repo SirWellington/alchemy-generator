@@ -14,9 +14,6 @@
  */
 package tech.sirwellington.alchemy.generator
 
-import org.hamcrest.Matchers.instanceOf
-import org.junit.Assert.assertThat
-import org.junit.Assert.fail
 import org.slf4j.LoggerFactory
 import tech.sirwellington.alchemy.annotations.access.Internal
 
