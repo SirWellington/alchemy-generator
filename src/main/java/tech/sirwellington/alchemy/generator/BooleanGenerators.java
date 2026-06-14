@@ -18,8 +18,8 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
@@ -35,6 +35,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class BooleanGenerators {
     private final static Logger LOG = LoggerFactory.getLogger(BooleanGenerators.class);
+    private final static SecureRandom RANDOM = new SecureRandom();
 
     private BooleanGenerators() throws IllegalAccessException {
         throw new IllegalAccessException("cannot directly instantiate this class");
@@ -45,7 +46,7 @@ public final class BooleanGenerators {
      * @see #alternatingBooleans()
      */
     static AlchemyGenerator<Boolean> booleans() {
-        return () -> RandomUtils.secure().randomBoolean();
+        return RANDOM::nextBoolean;
     }
     
     /**
