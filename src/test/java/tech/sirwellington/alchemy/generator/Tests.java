@@ -13,26 +13,27 @@
  * limitations under the License.
  */
 
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import tech.sirwellington.alchemy.annotations.access.Internal
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.integers
+import tech.sirwellington.alchemy.annotations.access.Internal;
+
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
-
  * @author SirWellington
  */
-
-internal typealias RepeatedFunction = (Int) -> Unit
-
 @Internal
-fun repeatTest(function: RepeatedFunction)
-{
-    val iterations = one(integers(50, 250))
+class BaseGeneratorTest {
 
-    for (i in 0..<iterations)
-    {
-        function(i)
+    void repeatTest(Runnable function) {
+        var iterations = one(integers(50, 250));
+        repeatTest(iterations, function);
+    }
+
+    void repeatTest(int iterations, Runnable function) {
+        for (int i = 0; i < iterations; ++i) {
+            function.run();
+        }
     }
 }
