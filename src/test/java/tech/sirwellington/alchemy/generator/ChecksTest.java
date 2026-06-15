@@ -12,117 +12,103 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.apache.commons.lang3.RandomStringUtils
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.Checks.*
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.Checks.*;
+import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings;
 
 /**
-
+ * Tests for {@link Checks}.
+ *
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class ChecksTest
-{
+@DisplayName("Checks should")
+class ChecksTest {
 
-    private lateinit var message: String
+    private static final String MESSAGE = "some message";
 
-    @Before
-    fun setUp()
-    {
-        message = "some message"
+    @Test
+    void testCheckNotNull() {
+        Object obj = new Object();
+        checkNotNull(obj);
+        checkNotNull(obj, MESSAGE);
     }
 
     @Test
-    fun testCheckNotNull()
-    {
-        println("testCheckNotNull")
-
-        val `object` = Any()
-        checkNotNull(`object`)
-        checkNotNull(`object`, message)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun testCheckNotNullExpecting()
-    {
-        println("testCheckNotNullExpecting")
-
-        checkNotNull(null)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun testCheckNotNullExpectingWithMessage()
-    {
-        println("testCheckNotNullExpectingWithMessage")
-
-        checkNotNull(null, message)
+    void testCheckNotNullExpecting() {
+        assertThrows(IllegalArgumentException.class, () -> checkNotNull(null));
     }
 
     @Test
-    fun testCheckThat()
-    {
-        println("testCheckThat")
-
-        checkThat(true)
-        checkThat(true, message)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun testCheckThatExpecting()
-    {
-        println("testCheckThatExpecting")
-
-        checkThat(false)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun testCheckThatExpectingWithMessage()
-    {
-        println("testCheckThatExpectingWithMessage")
-
-        checkThat(false, message)
+    void testCheckNotNullExpectingWithMessage() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkNotNull(null, MESSAGE),
+            "message should be included"
+        );
     }
 
     @Test
-    fun testCheckNotEmptyString()
-    {
-        println("testCheckNotEmptyString")
-
-        val string = RandomStringUtils.randomAlphanumeric(10)
-        checkNotEmpty(string)
-
-        val nullString: String? = null
-        assertThrows { checkNotEmpty(nullString) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        val emptyString = ""
-        assertThrows { checkNotEmpty(emptyString) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+    void testCheckThat() {
+        checkThat(true);
+        checkThat(true, MESSAGE);
     }
 
     @Test
-    fun testCheckNotEmptyStringWithMessage()
-    {
-        println("testCheckNotEmptyStringWithMessage")
+    void testCheckThatExpecting() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkThat(false)
+        );
+    }
 
-        val message = RandomStringUtils.randomAlphabetic(100)
-        val string = RandomStringUtils.randomAscii(10)
-        checkNotEmpty(string, message)
-        checkNotEmpty(string, null)
-        checkNotEmpty(string, "")
+    @Test
+    void testCheckThatExpectingWithMessage() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkThat(false, MESSAGE),
+            "message should be included"
+        );
+    }
 
-        val nullString: String? = null
-        assertThrows { checkNotEmpty(nullString, message) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+    @Test
+    void testCheckNotEmptyString() {
+        String valid = alphabeticStrings().get();
+        checkNotEmpty(valid);
 
-        val emptyString = ""
-        assertThrows { checkNotEmpty(emptyString, message) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        // null → throws
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkNotEmpty((String) null)
+        );
+
+        // empty → throws
+        assertThrows(IllegalArgumentException.class, () -> checkNotEmpty(""));
+    }
+
+    @Test
+    void testCheckNotEmptyStringWithMessage() {
+        String msg = "test message";
+        String valid = one(alphabeticStrings());
+
+        // Valid cases
+        checkNotEmpty(valid, msg);
+        checkNotEmpty(valid, null);     // uses default message
+        checkNotEmpty(valid, "");       // empty string allowed as message
+
+        // Invalid cases
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkNotEmpty((String) null, msg)
+        );
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> checkNotEmpty("", msg)
+        );
     }
 }
