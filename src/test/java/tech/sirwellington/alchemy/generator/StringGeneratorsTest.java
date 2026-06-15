@@ -12,363 +12,275 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
 
-import com.nhaarman.mockito_kotlin.whenever
-import org.apache.commons.lang3.RandomStringUtils
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.DateGenerators.anyTime
-import tech.sirwellington.alchemy.generator.NumberGenerators.*
-import tech.sirwellington.alchemy.generator.StringGenerators.strings
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.util.ArrayList
-import java.util.HashSet
-import java.util.concurrent.atomic.AtomicInteger
+package tech.sirwellington.alchemy.generator;
 
-/**
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
- * @author SirWellington
- */
-@RunWith(MockitoJUnitRunner::class)
-class StringGeneratorsTest
-{
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.Character.isDigit;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.DateGenerators.anyTime;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
+import static tech.sirwellington.alchemy.generator.StringGenerators.*;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
-    @Before
-    fun setUp()
-    {
-    }
+class StringGeneratorsTest extends BaseGeneratorTest {
 
+    @DisplayName("testCannotInstantiate")
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
-
-        assertThrows { StringGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+    void testCannotInstantiate() {
+        assertThrows(() -> StringGenerators.class.getDeclaredConstructor().newInstance())
+            .isInstanceOf(IllegalAccessException.class);
     }
 
+    @DisplayName("testStrings")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStrings() {
+        var generator = strings();
+        assertThat(generator, notNullValue());
 
-    @Test
-    fun testStrings()
-    {
-        println("testStrings")
-
-        val instance = strings()
-        assertThat<AlchemyGenerator<String>>(instance, notNullValue())
-
-        repeatTest()
-        {
-            assertThat(instance.get(), not(isEmptyOrNullString()))
-        }
+        var value = generator.get();
+        assertThat(value, not(isEmptyOrNullString()));
     }
 
-    @Test
-    fun testStringsWithLength()
-    {
-        println("testStringsWithLength")
+    @DisplayName("testStringsWithLength")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStringsWithLength() {
+        var length = one(smallPositiveIntegers());
+        var instance = strings(length);
+        assertThat(instance, notNullValue());
 
-        val length = one(smallPositiveIntegers())
-        val instance = strings(length)
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(value.length == length)
-        }
+        var value = instance.get();
+        assertThat(value.length(), equalTo(length));
     }
 
-    @Test
-    fun testStringsWithBadSize()
-    {
-        println("testStringsWithBadSize")
-
-        val length = one(negativeIntegers())
-        assertThrows { StringGenerators.strings(length) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+    @DisplayName("testStringsWithBadSize")
+    @RepeatedTest(1)
+    void testStringsWithBadSize() {
+        var length = one(negativeIntegers());
+        assertThrows(() -> StringGenerators.strings(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    fun testHexadecimalString()
-    {
-        println("testHexadecimalString")
+    @DisplayName("testHexadecimalString")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testHexadecimalString() {
+        var length = 90;
+        var instance = StringGenerators.hexadecimalString(length);
 
-        val length = 90
-        val instance = StringGenerators.hexadecimalString(length)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(value.length == length)
-        }
+        var value = instance.get();
+        assertThat(value.length(), equalTo(length));
     }
 
-    @Test
-    fun testHexadecimalStringWithBadSize()
-    {
-        println("testHexadecimalStringWithBadSize")
-
-        val length = -90
-        assertThrows { StringGenerators.hexadecimalString(length) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+    @DisplayName("testHexadecimalStringWithBadSize")
+    @RepeatedTest(1)
+    void testHexadecimalStringWithBadSize() {
+        var length = -90;
+        assertThrows(() -> StringGenerators.hexadecimalString(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    fun testAlphabeticStringWithLength()
-    {
-        println("testAlphabeticStringWithLength")
+    @DisplayName("testAlphabeticStringWithLength")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAlphabeticStringWithLength() {
+        var length = one(integers(40, 100));
+        var instance = alphabeticStrings(length);
 
-        val length = one(integers(40, 100))
-
-        val instance = StringGenerators.alphabeticStrings(length)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value.length, `is`(length))
-        }
+        var value = instance.get();
+        assertThat(value.length(), equalTo(length));
     }
 
-    @Test
-    fun testAlphabeticString()
-    {
-        println("testAlphabeticString")
+    @DisplayName("testAlphabeticString")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAlphabeticString() {
+        var instance = alphabeticStrings();
 
-        val instance = StringGenerators.alphabeticStrings()
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, not(isEmptyString()))
-        }
+        var value = instance.get();
+        assertThat(value, not(isEmptyString()));
     }
 
-    @Test
-    fun testAlphabeticStringWithBadSize()
-    {
-        println("testAlphabeticStringWithBadSize")
-
-        val length = 0
-        assertThrows { StringGenerators.alphabeticStrings(length) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+    @DisplayName("testAlphabeticStringWithBadSize")
+    @RepeatedTest(1)
+    void testAlphabeticStringWithBadSize() {
+        var length = 0;
+        assertThrows(() -> alphabeticStrings(length))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    fun testAlphanumericString()
-    {
-        println("testAlphanumericString")
+    @DisplayName("testAlphanumericString")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAlphanumericString() {
+        var instance = StringGenerators.alphanumericStrings();
 
-        val instance = StringGenerators.alphanumericStrings()
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, not(isEmptyString()))
-            assertThat(value.length, greaterThanOrEqualTo(10))
-            assertThat(value.length, lessThanOrEqualTo(100))
-        }
+        var value = instance.get();
+        assertThat(value, not(isEmptyString()));
+        assertThat(value.length(), greaterThanOrEqualTo(10));
+        assertThat(value.length(), lessThanOrEqualTo(100));
     }
 
-    @Test
-    fun testAlphanumericStringWithLength()
-    {
-        println("testAlphanumericStringWithLength")
+    @DisplayName("testAlphanumericStringWithLength")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAlphanumericStringWithLength() {
+        var length = one(integers(10, 100));
+        var instance = StringGenerators.alphanumericStrings(length);
 
-        val length = one(integers(10, 100))
-        val instance = StringGenerators.alphanumericStrings(length)
+        var value = instance.get();
+        assertThat(value.length(), equalTo(length));
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value.length, `is`(length))
-        }
-
-        //Edge cases
-        assertThrows { StringGenerators.alphabeticStrings(one(negativeIntegers())) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        assertThrows(() -> alphabeticStrings(one(negativeIntegers())))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @DisplayName("testNumericString")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testNumericString() {
+        var instance = StringGenerators.numericStrings();
+        assertThat(instance, notNullValue());
 
-    @Test
-    fun testNumericString()
-    {
-        println("testNumericString")
-
-        val instance = StringGenerators.numericStrings()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, not(isEmptyOrNullString()))
-            assertAllDigits(value)
-        }
+        var value = instance.get();
+        assertThat(value, not(isEmptyOrNullString()));
+        assertAllDigits(value);
     }
 
-    @Test
-    @Throws(Exception::class)
-    fun testNumericStringWithLength()
-    {
-        println("testNumericStringWithLength")
+    @DisplayName("testNumericStringWithLength")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testNumericStringWithLength() {
+        var length = one(integers(1, 100));
+        var instance = StringGenerators.numericStrings(length);
+        assertThat(instance, notNullValue());
 
-        val length = one(integers(1, 100))
-        val instance = StringGenerators.numericStrings(length)
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, not(isEmptyOrNullString()))
-            assertThat(value.length, `is`(length))
-            assertAllDigits(value)
-        }
+        var value = instance.get();
+        assertThat(value, not(isEmptyOrNullString()));
+        assertThat(value.length(), equalTo(length));
+        assertAllDigits(value);
     }
 
+    @DisplayName("testStringsFromFixedList")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStringsFromFixedList() {
+        ArrayList<String> values = new ArrayList<>();
 
-    @Test
-    fun testStringsFromFixedList()
-    {
-        println("testStringsFromFixedList")
+        repeatTest(20, () -> {
+            var seed = RANDOM.nextInt(100, 10_000);
+            var randomHexString = Integer.toHexString(seed);
+            values.add(randomHexString);
+        });
 
-        val values = ArrayList<String>()
+        var instance = stringsFromFixedList(values);
 
-        repeatTest()
-        { values.add(RandomStringUtils.randomAlphabetic(it + 1)) }
-        val instance = StringGenerators.stringsFromFixedList(values)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(values.contains(value))
-        }
+        var value = instance.get();
+        assertThat(value, isIn(values));
     }
 
-    @Test
-    fun testStringsFromFixedList_List()
-    {
-        println("testStringsFromFixedList_List")
+    @DisplayName("testStringsFromFixedList_List")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStringsFromFixedList_List() {
+        var values = new ArrayList<String>();
+        var one = strings(10).get();
+        var two = strings(10).get();
+        var three = strings(10).get();
 
-        val values = ArrayList<String>()
-        val one = StringGenerators.strings(10).get()
-        val two = strings(10).get()
-        val three = strings(10).get()
-        values.add(one)
-        values.add(two)
-        values.add(three)
+        values.add(one);
+        values.add(two);
+        values.add(three);
 
-        val instance = StringGenerators.stringsFromFixedList(one, two, three)
+        var instance = stringsFromFixedList(one, two, three);
 
-        repeatTest()
-        {
-            assertThat(instance.get(), org.hamcrest.Matchers.isIn(values))
-        }
+        var value = instance.get();
+        assertThat(value, isIn(values));
     }
 
-    @Test
-    fun testStringsFromFixedList_StringArr()
-    {
-        println("testStringsFromFixedList_StringArr")
+    @DisplayName("testStringsFromFixedList_StringArr")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStringsFromFixedList_StringArr() {
+        var alphabetic = alphabeticStrings(10);
+        var values = new String[]{
+            alphabetic.get(),
+            alphabetic.get(),
+            alphabetic.get()
+        };
 
-        val alphabetic = StringGenerators.alphabeticStrings(10)
-        val values = arrayOf(alphabetic.get(), alphabetic.get(), alphabetic.get())
-        val instance = StringGenerators.stringsFromFixedList(*values)
-        assertThat(instance, notNullValue())
+        var instance = stringsFromFixedList(values);
 
-        repeatTest()
-        {
-            val result = instance.get()
-            assertThat(result, Matchers.isIn(values))
-        }
+        assertThat(instance, notNullValue());
+
+        String result = instance.get();
+        assertThat(result, isIn(values));
     }
 
-    @Test
-    fun testAlphabeticStringWithNoArgs()
-    {
-        println("testAlphabeticStringWithNoArgs")
+    @DisplayName("testAlphabeticStringWithNoArgs")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAlphabeticStringWithNoArgs() {
+        var instance = alphabeticStrings();
 
-        val instance = StringGenerators.alphabeticStrings()
-        assertThat(instance, notNullValue())
+        assertThat(instance, notNullValue());
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(value.length, greaterThanOrEqualTo(10))
-            assertThat(value.length, lessThanOrEqualTo(100))
-        }
-
+        var value = instance.get();
+        assertThat(value, notNullValue());
+        assertThat(value.length(), greaterThanOrEqualTo(10));
+        assertThat(value.length(), lessThanOrEqualTo(100));
     }
 
-    @Test
-    fun testUuids()
-    {
-        println("testUuids")
+    @DisplayName("testUuids")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testUuids() {
+        var uuids = new HashSet<String>();
+        var generator = StringGenerators.UUIDS;
 
-        val uuids = HashSet<String>()
+        final int iterations = 20;
 
-        val instance = StringGenerators.UUIDS
+        repeatTest(iterations, () -> {
+            var value = generator.get();
+            assertThat(value, notNullValue());
+            assertThat(value.isEmpty(), is(false));
+            uuids.add(value);
+        });
 
-        val iterations = AtomicInteger()
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(value.isEmpty(), `is`(false))
-            uuids.add(value)
-            iterations.incrementAndGet()
-        }
-
-        assertThat(uuids.size, `is`(iterations.get()))
+        assertThat(uuids.size(), equalTo(iterations));
     }
 
-    @Test
-    fun testUuidsFunction()
-    {
-        println("testUuidsFunction")
-
-        assertThat(StringGenerators.uuids(), sameInstance(StringGenerators.UUIDS))
+    @DisplayName("testUuidsFunction")
+    @RepeatedTest(1)
+    void testUuidsFunction() {
+        var generator = StringGenerators.UUIDS;
+        assertThat(StringGenerators.uuids(), sameInstance(generator));
     }
 
-    @Test
-    fun testAsString()
-    {
-        println("testAsString")
+    @DisplayName("testAsString")
+    @RepeatedTest(20)
+    void testAsString() {
+        AlchemyGenerator<Date> generator = mock();
+        var mockValue = one(anyTime());
+        Mockito.when(generator.get()).thenReturn(mockValue);
 
-        val generator = mock(AlchemyGenerator::class.java)
+        var instance = StringGenerators.toString(generator);
+        assertThat(instance, notNullValue());
 
-        whenever(generator.get())
-                .thenReturn(one(anyTime()))
-
-        val instance = StringGenerators.toString(generator)
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val result = instance.get()
-            assertThat(result, not(isEmptyOrNullString()))
-            verify(generator, times(it + 1)).get()
-        }
-
+        AtomicInteger iterations = new AtomicInteger();
+        repeatTest(20, () -> {
+            String result = instance.get();
+            assertThat(result, not(isEmptyOrNullString()));
+            var expectedInvocations = iterations.get() + 1;
+            Mockito.verify(generator, times(expectedInvocations)).get();
+            iterations.incrementAndGet();
+        });
     }
 
-    private fun assertAllDigits(value: String)
-    {
-        for (c in value.toCharArray())
-        {
-            assertThat(Character.isDigit(c), `is`(true))
+    private void assertAllDigits(String value) {
+        for (char c : value.toCharArray()) {
+            assertThat(isDigit(c), is(true));
         }
     }
 
