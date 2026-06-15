@@ -30,16 +30,10 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 class BaseGeneratorTest {
 
     static final SecureRandom RANDOM = new SecureRandom();
-
-    int iterations = 10;
-
-    @BeforeEach
-    void setup() {
-        iterations = one(integers(50, 100));
-    }
+    static final int DEFAULT_ITERATIONS = 100;
 
     void repeatTest(Runnable function) {
-        repeatTest(iterations, function);
+        repeatTest(DEFAULT_ITERATIONS, function);
     }
 
     void repeatTest(int iterations, Runnable function) {
