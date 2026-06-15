@@ -14,19 +14,18 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.function.Supplier;
 
 /**
  * Tests for {@link AlchemyGenerator}.
@@ -35,29 +34,40 @@ import java.util.function.Supplier;
  */
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AlchemyGenerator should")
-class AlchemyGeneratorTest {
+class AlchemyGeneratorTest extends BaseGeneratorTest {
 
     @Test
-    void get_shouldReturnWrappedValue() {
+    void testGet_shouldReturnWrappedValue() {
         // Given
         Object expected = mock(Object.class);
         AlchemyGenerator<Object> generator = mock();
         when(generator.get()).thenReturn(expected);
 
         // When
-        Object result = AlchemyGenerator.Get.one(generator);
+        Object result = one(generator);
 
         // Then
         assertEquals(expected, result);
         verify(generator).get();
     }
 
+    @Test
+    void testOne_shouldProduceValue() {
+        repeatTest(() -> {
+            var string = StringGenerators.alphanumericStrings().get();
+            AlchemyGenerator<String> generator =  () -> string;
+
+            var result = one(generator);
+            assertThat(result, equalTo(string));
+        });
+    }
+
     @ParameterizedTest(name = "one should reject null input")
     @ValueSource(classes = {Void.class, String.class})
-    void one_shouldRejectNull(Class<?> type) {
+    void testOne_shouldRejectNull(Class<?> type) {
         assertThrowsExactly(
             IllegalArgumentException.class,
-            () -> AlchemyGenerator.Get.one(null),
+            () -> one(null),
             "should reject null generator"
         );
     }
