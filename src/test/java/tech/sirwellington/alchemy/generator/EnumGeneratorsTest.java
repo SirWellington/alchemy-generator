@@ -12,63 +12,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.apache.commons.lang3.RandomUtils
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.notNullValue
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.notNullValue;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
-
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class EnumGeneratorsTest
-{
+class EnumGeneratorsTest extends BaseGeneratorTest {
 
-    private var iterations: Int = 0
-
-    @Before
-    fun setUp()
-    {
-        iterations = RandomUtils.nextInt(500, 5000)
+    @Test
+    @DisplayName("EnumGenerators cannot instantiate")
+    void testCannotInstantiate() {
+        assertThrows(
+            IllegalAccessException.class,
+            () -> EnumGenerators.class.getDeclaredConstructor().newInstance()
+        );
     }
 
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
+    @DisplayName("EnumGenerators valueOf should produce values")
+    void testEnumValueOf() {
+        // Given
+        var generator = EnumGenerators.enumValueOf(Fruit.class);
+        assertThat(generator, notNullValue());
 
-        assertThrows { EnumGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+        repeatTest(() -> {
+           var fruit = generator.get();
+           assertThat(fruit, notNullValue());
+           assertThat(fruit, isA(Fruit.class));
+        });
     }
 
-    @Test
-    fun testEnumValueOf()
-    {
-        println("testEnumValueOf")
-        val fruits = EnumGenerators.enumValueOf(Fruit::class.java)
-
-        assertThat(fruits, notNullValue())
-
-        for (i in 0..<iterations)
-        {
-            val fruit = fruits.get()
-            assertThat(fruit, notNullValue())
-            assertThat(fruit, Matchers.isA(Fruit::class.java))
-        }
+    enum Fruit {
+        Apple, Orange, Pear, Banana
     }
-
-    internal enum class Fruit
-    {
-
-        Apple, Orange, Pear
-    }
-
 }
