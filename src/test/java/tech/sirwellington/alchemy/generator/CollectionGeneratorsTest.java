@@ -12,166 +12,168 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package tech.sirwellington.alchemy.generator;
 
-package tech.sirwellington.alchemy.generator
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
-import com.nhaarman.mockito_kotlin.whenever
-import org.apache.commons.lang3.RandomUtils
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.notNullValue
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito.atLeast
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.*
-import tech.sirwellington.alchemy.generator.StringGenerators.hexadecimalString
-import tech.sirwellington.alchemy.generator.StringGenerators.strings
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.util.ArrayList
-import java.util.UUID
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
-
+ * Tests for {@link CollectionGenerators}.
+ *
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class CollectionGeneratorsTest
-{
+@DisplayName("Collection Generators")
+class CollectionGeneratorsTest extends BaseGeneratorTest {
 
-    private var iterations: Int = 0
+    private int iterations;
 
-    @Before
-    fun setUp()
-    {
-        iterations = RandomUtils.nextInt(500, 5000)
+    @Mock
+    private AlchemyGenerator<Object> mockGenerator;
+
+    @BeforeEach
+    void setUp() {
+        iterations = RANDOM.nextInt(500, 5000);
     }
 
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
-
-        assertThrows { CollectionGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+    @DisplayName("cannot be instantiated")
+    void testCannotInstantiate() throws Exception {
+        var constructor = CollectionGenerators.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        assertThrows(IllegalAccessException.class, constructor::newInstance);
     }
 
     @Test
-    fun testListOf_AlchemyGenerator()
-    {
-        println("testListOf_AlchemyGenerator")
+    @DisplayName("listOf(AlchemyGenerator) produces non-empty list")
+    void testListOf_AlchemyGenerator() {
+        var expectedValue = new Object();
+        when(mockGenerator.get()).thenReturn(expectedValue);
 
-        val value = Any()
-        val generator = mock(AlchemyGenerator::class.java)
-        whenever(generator.get()).thenReturn(value)
+        List<?> result = CollectionGenerators.listOf(mockGenerator);
 
-        val result = CollectionGenerators.listOf(generator)
-        assertThat(result.isEmpty(), `is`(false))
-        result.forEach { assertThat(it, `is`(value)) }
+        assertThat(result, notNullValue());
+        assertThat(result.isEmpty(), is(false));
+
+        result.forEach(item -> assertThat(item, is(equalTo(expectedValue))));
     }
 
     @Test
-    fun testListOf_AlchemyGenerator_int()
-    {
-        println("testListOf_AlchemyGenerator_int")
+    @DisplayName("listOf(AlchemyGenerator, int) produces list of specified size")
+    void testListOf_AlchemyGenerator_int() {
+        var expectedValue = new Object();
+        int size = 50;
+        when(mockGenerator.get()).thenReturn(expectedValue);
 
-        val value = Any()
-        val size = 50
-        val generator = mock(AlchemyGenerator::class.java)
-        whenever(generator.get()).thenReturn(value)
+        List<?> result = CollectionGenerators.listOf(mockGenerator, size);
 
-        val result = CollectionGenerators.listOf(generator, 50)
+        assertThat(result, notNullValue());
+        assertThat(result.size(), is(size));
 
-        assertThat(result, notNullValue())
-        assertThat(result.size, `is`(size))
-
-        result.forEach { assertThat(it, `is`(value)) }
+        result.forEach(item -> assertThat(item, is(equalTo(expectedValue))));
     }
 
     @Test
-    fun testMapOfWithInt()
-    {
-        println("testMapOfWithInt")
+    @DisplayName("mapOf(String, String) produces map with UUID keys")
+    void testMapOfWithInt() {
+        String expectedValue = "fixed-string-for-test";
+        AlchemyGenerator<String> valueGenerator = () -> expectedValue;
+        int size = 10;
 
-        val string = strings(50).get()
-        val valueGenerator = AlchemyGenerator { string }
-        val size = integers(5, 100).get()
+        Map<String, String> result = CollectionGenerators.mapOf(
+            StringGenerators.UUIDS,
+            valueGenerator,
+            size
+        );
 
-        val result = CollectionGenerators.mapOf<String, String>(StringGenerators.UUIDS, valueGenerator, size)
-        assertThat(result, notNullValue())
-        assertThat(result.size, `is`(size))
+        assertThat(result, notNullValue());
+        assertThat(result.size(), is(size));
 
-        for ((key, value) in result)
-        {
-            UUID.fromString(key)
-            assertThat(value, `is`(string))
-        }
-
-    }
-
-    @Test
-    fun testConvenienceMapOf()
-    {
-        println("testConvenienceMapOf")
-
-        val keyGenerator = mock(AlchemyGenerator::class.java)
-        val valueGenerator = mock(AlchemyGenerator::class.java)
-
-        whenever(keyGenerator.get())
-                .thenAnswer { one(strings()) }
-
-        whenever(valueGenerator.get())
-                .thenAnswer { one(positiveIntegers()) }
-
-        val result = CollectionGenerators.mapOf(keyGenerator, valueGenerator)
-        assertThat(result, notNullValue())
-        assertThat(result.isEmpty(), `is`(false))
-
-        //'At least', in case duplicate entries were generated
-        verify(keyGenerator, atLeast(result.size)).get()
-        verify(valueGenerator, atLeast(result.size)).get()
-    }
-
-    @Test
-    fun testFromList()
-    {
-        println("testFromList")
-
-        val list = ArrayList<String>()
-
-        val size = one(integers(1, 100))
-        for (i in 0..size - 1)
-        {
-            list.add(one(hexadecimalString(15)))
-        }
-
-        val instance = CollectionGenerators.fromList(list)
-        assertThat(instance, notNullValue())
-
-        repeatTest {
-            val value = instance.get()
-            assertThat(list.contains(value), `is`(true))
+        for (Map.Entry<String, String> entry : result.entrySet()) {
+            var uuid = UUID.fromString(entry.getKey());
+            assertThat(uuid, notNullValue());
+            assertThat(entry.getValue(), is(expectedValue));
         }
     }
 
+    @Test
+    @DisplayName("mapOf(AlchemyGenerator, AlchemyGenerator) produces non-empty map")
+    void testConvenienceMapOf() {
+        // Given
+        AlchemyGenerator<String> keyGen = mock();
+        AlchemyGenerator<String> valueGen = mock();
+
+        when(keyGen.get()).thenReturn(UUID.randomUUID().toString());
+        when(valueGen.get()).thenReturn(String.valueOf(RANDOM.nextDouble()));
+
+        // When
+        Map<String, String> result = CollectionGenerators.mapOf(keyGen, valueGen);
+
+        // Then
+        assertThat(result, notNullValue());
+        assertThat(result.isEmpty(), is(false));
+
+        int callsToKeys = mockingDetails(keyGen).getInvocations().size();
+        int callsToValues = mockingDetails(valueGen).getInvocations().size();
+
+        // TODO: Check if equal works over >=
+        assertThat(callsToKeys, equalTo(result.size()));
+        assertThat(callsToValues, equalTo(result.size()));
+    }
 
     @Test
-    fun testListOfEdgeCases()
-    {
-        println("testListOfEdgeCases")
+    @DisplayName("fromList(Iterable) returns generator selecting from list")
+    void testFromList() {
+        // Given
+        List<String> list = new ArrayList<>();
+        int size = RANDOM.nextInt(1, 100);
 
-        val badSize = one(negativeIntegers())
-        assertThrows { CollectionGenerators.listOf(StringGenerators.uuids(), badSize) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        for (int i = 0; i < size; ++i) {
+            var value = Integer.toHexString(RANDOM.nextInt());
+            list.add(value);
+        }
 
-        val result = CollectionGenerators.listOf(StringGenerators.UUIDS, 0)
-        assertThat(result, notNullValue())
-        assertThat(result, `is`(empty<String>()))
+        // When
+        AlchemyGenerator<String> generator = CollectionGenerators.fromList(list);
+        assertThat(generator, notNullValue());
 
+        // Then
+        for (int i = 0; i < iterations; ++i) {
+            String value = generator.get();
+            assertThat(
+                "Value '" + value + "' not in source list",
+                list.contains(value), is(true)
+            );
+        }
+    }
+
+    @Test
+    @DisplayName("listOf handles edge cases")
+    void testListOfEdgeCases() {
+        // Given
+        int badSize = -5;
+        var generator = StringGenerators.uuids();
+
+        // When, Then
+        assertThrows(() -> CollectionGenerators.listOf(generator, badSize))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasSomeMessage();
+
+        // Then
+        List<String> result = CollectionGenerators.listOf(generator, 0);
+        assertThat(result, notNullValue());
+        assertThat(result, is(empty()));
     }
 }

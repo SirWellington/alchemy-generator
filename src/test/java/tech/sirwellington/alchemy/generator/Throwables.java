@@ -12,55 +12,114 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.slf4j.LoggerFactory
-import tech.sirwellington.alchemy.annotations.access.Internal
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.hamcrest.Matchers;
 
-internal typealias ExceptionOperation = () -> Unit
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Objects;
 
 /**
+ * Utility for asserting exception throwing behavior.
+ *
+ * <p>Usage:
+ * {@code
+ * Throwables.assertThrows(() -> riskyOperation())
+ *     .isInstanceOf(IllegalArgumentException.class);
+ * }
+ *
  * @author SirWellington
  */
-@Internal
-internal object Throwables
-{
+interface ThrowingRunnable {
+    void run() throws Exception;
+}
 
-    private val LOG = LoggerFactory.getLogger(Throwables::class.java)
+final class Throwables {
 
-
-    inline fun assertThrows(operation: ExceptionOperation): Assertion
-    {
-        var ex: Throwable? = null
-
-        try
-        {
-            operation()
-        }
-        catch (result: Throwable)
-        {
-            ex = result
-        }
-
-        if (ex == null)
-        {
-            fail("Expected Exception")
-        }
-
-        return Assertion(ex!!)
+    private Throwables() {
+        throw new AssertionError("cannot instantiate utility class");
     }
 
-    internal class Assertion internal constructor(private val ex: Throwable)
-    {
-
-        fun isInstanceOf(classOfThrowable: Class<out Throwable>): Assertion
-        {
-            checkNotNull(classOfThrowable)
-
-            assertThat(ex, instanceOf<Throwable>(classOfThrowable))
-
-            return this
-        }
+    static Assertion assertThrows(
+        Class<? extends Throwable> exceptionType,
+        ThrowingRunnable runnable
+    ) {
+        return  assertThrows(runnable)
+            .isInstanceOf(exceptionType);
     }
 
+    static Assertion assertThrows(ThrowingRunnable operation) {
+        return assertThrows(
+            operation,
+            "Expected an exception to be thrown, but none was"
+        );
+    }
+
+    static Assertion assertThrows(ThrowingRunnable operation, String message) {
+        Objects.requireNonNull(operation, "operation must not be null");
+
+        Throwable ex = null;
+        try {
+            operation.run();
+        } catch (Throwable t) {
+            ex = t;
+        }
+
+        if (ex == null) {
+            fail(message);
+        }
+
+        return new Assertion(ex);
+    }
+
+    /**
+     * Fluent assertion for the caught exception.
+     */
+    static final class Assertion {
+        private final Throwable ex;
+
+        private Assertion(Throwable ex) {
+            this.ex = Objects.requireNonNull(ex, "exception must not be null");
+        }
+
+        Assertion isInstanceOf(Class<? extends Throwable> expectedType) {
+            Objects.requireNonNull(expectedType, "expectedType must not be null");
+            assertThat(ex, instanceOf(expectedType));
+            return this;
+        }
+
+        Assertion hasSomeMessage() {
+            assertThat(
+                "exception message empty",
+                ex.getMessage(),
+                is(not(Matchers.isEmptyOrNullString()))
+            );
+            return this;
+        }
+
+        Assertion hasMessage(String expectedMessage) {
+            if (!Objects.equals(ex.getMessage(), expectedMessage)) {
+                assertThat(
+                    "exception message",
+                    ex.getMessage(),
+                    is(expectedMessage)
+                );
+            }
+            return this;
+        }
+
+        Assertion hasMessageContaining(String substring) {
+            String msg = ex.getMessage();
+            if (msg == null || !msg.contains(substring)) {
+                throw new AssertionError(
+                    "Expected exception message to contain '" + substring +
+                        "', but was: " + msg);
+            }
+            return this;
+        }
+    }
 }

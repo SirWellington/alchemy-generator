@@ -17,6 +17,8 @@ package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.access.Internal;
 
+import java.security.SecureRandom;
+
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
@@ -25,6 +27,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  */
 @Internal
 class BaseGeneratorTest {
+
+    static final SecureRandom RANDOM = new SecureRandom();
 
     void repeatTest(Runnable function) {
         var iterations = one(integers(50, 250));

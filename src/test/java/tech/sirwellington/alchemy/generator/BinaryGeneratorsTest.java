@@ -21,10 +21,12 @@ import java.nio.ByteBuffer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  * Tests for {@link BinaryGenerators}.
@@ -37,10 +39,12 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
     @Test
     void testCannotInstantiate() throws Exception {
         assertThrows(
-            IllegalAccessException.class,
-            () -> BinaryGenerators.class.getDeclaredConstructor().newInstance(),
-            "should throw IllegalAccessException when trying to instantiate via reflection"
-        );
+            () -> BinaryGenerators.class.getDeclaredConstructor().newInstance()
+        ).isInstanceOf(IllegalAccessException.class);
+
+        assertThrows(
+            () -> BinaryGenerators.class.getDeclaredConstructor().newInstance()
+        ).isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
@@ -69,7 +73,7 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
 
         int length = one(negativeIntegers());
         assertThrows(
-            IllegalArgumentException.class, () -> BinaryGenerators.binary(length),
+            () -> BinaryGenerators.binary(length),
             "should reject negative size"
         );
     }
@@ -93,7 +97,9 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
     @Test
     void testByteBuffersEdgeCases() {
         int size = one(negativeIntegers());
-        assertThrows(IllegalArgumentException.class, () -> BinaryGenerators.byteBuffers(size));
+        assertThrows(
+            () -> BinaryGenerators.byteBuffers(size)
+        ).isInstanceOf(IllegalArgumentException.class);
 
         ByteBuffer result = BinaryGenerators.byteBuffers(0).get();
         assertNotNull(result);
