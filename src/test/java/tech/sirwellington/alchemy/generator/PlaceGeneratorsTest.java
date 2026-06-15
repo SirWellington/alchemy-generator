@@ -13,115 +13,80 @@
  * limitations under the License.
  */
 
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.greaterThanOrEqualTo
-import com.natpryce.hamkrest.isNullOrBlank
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import kotlin.test.assertNotNull
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 
-@RunWith(MockitoJUnitRunner::class)
-class PlaceGeneratorsTest
-{
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
-    @Test
-    fun testCities()
-    {
-        println("testCities")
+class PlaceGeneratorsTest extends BaseGeneratorTest {
 
-        val instance = PlaceGenerators.cities()
-        assertNotNull(instance)
+    @DisplayName("testCities")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testCities() {
+        var generator = PlaceGenerators.cities();
+        assertThat(generator, notNullValue());
 
-        repeatTest()
-        {
-            val city = instance.get()
-            assertThat(city, !isNullOrBlank)
-            assertThat(city.length, greaterThanOrEqualTo(2))
-        }
+        var city = generator.get();
+        assertThat(city, not(isEmptyOrNullString()));
+        assertThat(city.length(), greaterThanOrEqualTo(2));
     }
 
-    @Test
-    fun testStates()
-    {
-        println("testStates")
+    @DisplayName("testStates")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStates() {
+        var generator = PlaceGenerators.states();
+        assertThat(generator, notNullValue());
 
-        val instance = PlaceGenerators.states()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val state = instance.get()
-            assertThat(state, !isNullOrBlank)
-            assertThat(state.length, greaterThanOrEqualTo(2))
-        }
+        var state = generator.get();
+        assertThat(state, not(isEmptyOrNullString()));
+        assertThat(state.length(), greaterThanOrEqualTo(2));
     }
 
-    @Test
-    fun testStatesShortCodes()
-    {
-        println("testStatesShortCodes")
+    @DisplayName("testStatesShortCodes")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStatesShortCodes() {
+        var generator = PlaceGenerators.stateShortCodes();
+        assertThat(generator, notNullValue());
 
-        val instance = PlaceGenerators.stateShortCodes()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val stateShortCode = instance.get()
-            assertThat(stateShortCode, !isNullOrBlank)
-            assertThat(stateShortCode.length, equalTo(2))
-        }
+        var stateShortCode = generator.get();
+        assertThat(stateShortCode, not(isEmptyOrNullString()));
+        assertThat(stateShortCode.length(), equalTo(2));
     }
 
-    @Test
-    fun testCountries()
-    {
-        println("testCountries")
+    @DisplayName("testCountries")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testCountries() {
+        var generator = PlaceGenerators.countries();
+        assertThat(generator, notNullValue());
 
-        val instance = PlaceGenerators.countries()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val country = instance.get()
-            assertThat(country, !isNullOrBlank)
-            assertThat(country.length, greaterThanOrEqualTo(2))
-        }
+        var country = generator.get();
+        assertThat(country, not(isEmptyOrNullString()));
+        assertThat(country.length(), greaterThanOrEqualTo(2));
     }
 
-    @Test
-    fun testStreetAddresses()
-    {
-        println("testStreetAddresses")
+    @DisplayName("testStreetAddresses")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testStreetAddresses() {
+        var generator = PlaceGenerators.streetAddresses();
+        assertThat(generator, notNullValue());
 
-        val instance = PlaceGenerators.streetAddresses()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val address = instance.get()
-            assertThat(address, !isNullOrBlank)
-            assertThat(address.length, greaterThanOrEqualTo(5))
-        }
+        var address = generator.get();
+        assertThat(address, not(isEmptyOrNullString()));
+        assertThat(address.length(), greaterThanOrEqualTo(5));
     }
 
-    @Test
-    fun testFullAddresses()
-    {
-        println("testFullAddresses")
+    @DisplayName("testFullAddresses")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testFullAddresses() {
+        var generator = PlaceGenerators.fullAddresses();
+        assertThat(generator, notNullValue());
 
-        val instance = PlaceGenerators.fullAddresses()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            val address = instance.get()
-            assertThat(address, !isNullOrBlank)
-            assertThat(address.length, greaterThanOrEqualTo(5))
-        }
+        var address = generator.get();
+        assertThat(address, not(isEmptyOrNullString()));
+        assertThat(address.length(), greaterThanOrEqualTo(5));
     }
-
 }
