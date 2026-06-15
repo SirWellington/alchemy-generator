@@ -12,681 +12,572 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.apache.commons.lang3.RandomUtils
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.safeIncrement
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.util.ArrayList
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 
-@RunWith(MockitoJUnitRunner::class)
-class NumberGeneratorsTest
-{
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
 
-    @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
-
-        assertThrows { NumberGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
-    }
-}
-
-@RunWith(MockitoJUnitRunner::class)
-class IntegersTests
-{
+/**
+ * Tests for {@link NumberGenerators}
+ */
+@DisplayName("Number Generators Tests")
+class NumberGeneratorsTest extends BaseGeneratorTest {
 
     @Test
-    fun testIntegers()
-    {
-        println("testIntegers")
-
-        val lowerBound = RandomUtils.nextInt(0, Integer.MAX_VALUE / 2)
-        val upperBound = RandomUtils.nextInt(lowerBound, Integer.MAX_VALUE)
-        val instance = integers(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
-        }
+    @DisplayName("cannot instantiate utility class")
+    void testCannotInstantiate() {
+        assertThrows(
+            IllegalAccessException.class, () ->
+                NumberGenerators.class.getDeclaredConstructor().newInstance()
+        );
     }
 
-    @Test
-    fun testIntegersWithMinAndMax()
-    {
-        println("testIntegersWithMinAndMax")
+    // ===================== Integers =====================
 
-        val lowerBound = Integer.MIN_VALUE
-        val upperBound = Integer.MAX_VALUE
+    @Nested
+    @DisplayName("Integers Tests")
+    class IntegersTests {
 
-        val instance = integers(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("generates integers within bounds (exclusive upper)")
+        void testIntegers() {
+            int lowerBound = RANDOM.nextInt(0, Integer.MAX_VALUE / 2);
+            int upperBound = RANDOM.nextInt(lowerBound + 1, Integer.MAX_VALUE);
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
-        }
-    }
+            var instance = integers(lowerBound, upperBound);
 
-    @Test
-    fun testIntegersWithNegativeRange()
-    {
-        println("testIntegersWithNegativeRange")
-
-        var lowerBound = -10
-        var upperBound = 150
-        var instance = integers(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
         }
 
-        lowerBound = -4934
-        upperBound = -500
-        instance = integers(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("generates with MIN/MAX bounds (exclusive upper)")
+        void testIntegersWithMinAndMax() {
+            int lowerBound = Integer.MIN_VALUE;
+            int upperBound = Integer.MAX_VALUE;
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            var instance = integers(lowerBound, upperBound);
+
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
         }
 
-        lowerBound = -5000
-        upperBound = -1
-        instance = integers(lowerBound, upperBound)
+        @Test
+        @DisplayName("handles negative ranges")
+        void testIntegersWithNegativeRange() {
+            // Subtest 1: -10 to 150
+            {
+                int lowerBound = -10;
+                int upperBound = 150;
+                var instance = integers(lowerBound, upperBound);
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
+
+            // Subtest 2: -4934 to -500
+            {
+                int lowerBound = -4934;
+                int upperBound = -500;
+                var instance = integers(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
+
+            // Subtest 3: -5000 to -1
+            {
+                int lowerBound = -5000;
+                int upperBound = -1;
+                var instance = integers(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
+
+            // Subtest 4: MIN_VALUE to -1
+            {
+                int lowerBound = Integer.MIN_VALUE;
+                int upperBound = -1;
+                var instance = integers(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
+
+            // Subtest 5: MIN_VALUE to 0
+            {
+                int lowerBound = Integer.MIN_VALUE;
+                int upperBound = 0;
+                var instance = integers(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
         }
 
-        lowerBound = Integer.MIN_VALUE
-        upperBound = -1
-        instance = integers(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("positiveIntegers() returns values > 0")
+        void testPositiveIntegers() {
+            var instance = positiveIntegers();
+            assertNotNull(instance);
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            var value = instance.get();
+            assertThat(value, greaterThan(0));
         }
 
-        lowerBound = Integer.MIN_VALUE
-        upperBound = 0
-        instance = integers(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("smallPositiveIntegers() returns values in (0, 1000]")
+        void testSmallPositiveIntegers() {
+            var instance = smallPositiveIntegers();
+            assertNotNull(instance);
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
-        }
-    }
-
-    @Test
-    fun testPositiveIntegers()
-    {
-        println("testPositiveIntegers")
-
-        val instance = NumberGenerators.positiveIntegers()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            assertThat(instance.get(), greaterThan(0))
-        }
-    }
-
-    @Test
-    fun testSmallPositiveIntegers()
-    {
-        println("testSmallPositiveIntegers")
-
-        val instance = NumberGenerators.smallPositiveIntegers()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThan(0))
-            assertThat(value, lessThanOrEqualTo(1000))
-        }
-    }
-
-    @Test
-    fun testAnyIntegers()
-    {
-        val generator = NumberGenerators.anyIntegers()
-        val value = generator.get()
-
-        assertThat(value, notNullValue())
-    }
-
-    @Test
-    fun testIntegersFromFixedList()
-    {
-        println("testIntegersFromFixedList")
-        val values = ArrayList<Int>()
-
-        repeatTest()
-        {
-            values.add(RandomUtils.nextInt(4, 35))
+            var value = instance.get();
+            assertThat(value, greaterThan(0));
+            assertThat(value, lessThanOrEqualTo(1000));
         }
 
-        val instance = NumberGenerators.integersFromFixedList(values)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(values.contains(value))
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("anyIntegers() returns non-null value")
+        void testAnyIntegers() {
+            AlchemyGenerator<Integer> generator = anyIntegers();
+            var value = generator.get();
+            assertNotNull(value);
         }
-    }
 
+        @RepeatedTest(DEFAULT_ITERATIONS / 5)
+        @DisplayName("integersFromFixedList() only generates values from the list")
+        void testIntegersFromFixedList() {
+            var values = new ArrayList<Integer>();
 
-    @Test
-    fun testNegativeIntegers()
-    {
-        println("testNegativeIntegers")
+            for (int i = 0; i < 15; i++) {
+                values.add(RANDOM.nextInt(4, 35));
+            }
 
-        val instance = NumberGenerators.negativeIntegers()
-        assertThat(instance, notNullValue())
+            var instance = integersFromFixedList(values);
+            var value = instance.get();
+            assertThat(value, isIn(values));
+        }
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, lessThan(0))
+        @RepeatedTest(20)
+        @DisplayName("negativeIntegers() returns values < 0")
+        void testNegativeIntegers() {
+            var instance = negativeIntegers();
+            assertNotNull(instance);
+
+            var value = instance.get();
+            assertThat(value, lessThan(0));
+        }
+
+        @Test
+        @DisplayName("throws IllegalArgumentException for bad bounds")
+        void testIntegersWithBadBounds() {
+            assertThrows(IllegalArgumentException.class, () -> integers(7, 3));
+            assertThrows(IllegalArgumentException.class, () -> integers(-10, -100));
+            assertThrows(IllegalArgumentException.class, () -> integers(50, -600));
+            assertThrows(IllegalArgumentException.class, () -> integers(10, 10));
+            assertThrows(IllegalArgumentException.class, () -> integers(-10, -10));
         }
     }
 
+    // ===================== Longs =====================
 
-    @Test
-    fun testIntegersWithBadBounds()
-    {
-        println("testIntegersWithBadBounds")
+    @Nested
+    @DisplayName("Long Tests")
+    class LongTests {
 
-        assertThrows { integers(7, 3) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        @RepeatedTest(10)
+        @DisplayName("generates longs within bounds (exclusive upper)")
+        void testLongs() {
+            long lowerBound = RANDOM.nextLong(0L, Long.MAX_VALUE / 2);
+            long upperBound = RANDOM.nextLong(lowerBound + 1, Long.MAX_VALUE);
 
-        assertThrows { integers(-10, -100) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+            var instance = longs(lowerBound, upperBound);
 
-        assertThrows { integers(50, -600) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
+        }
 
-        assertThrows { integers(10, 10) }
-                .isInstanceOf(IllegalArgumentException::class.java)
+        @Test
+        @DisplayName("handles negative ranges")
+        void testLongsWithNegativeRange() {
+            // Subtest 1: -10 to ~150T
+            {
+                long lowerBound = -10;
+                long upperBound = 150_435_353_256_241L;
+                var instance = longs(lowerBound, upperBound);
 
-        assertThrows { integers(-10, -10) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-    }
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
 
-}
+            // Subtest 2: -493T... to -500K
+            {
+                long lowerBound = -493_435_754_432_216_763L;
+                long upperBound = -500_000L;
+                var instance = longs(lowerBound, upperBound);
 
-@RunWith(MockitoJUnitRunner::class)
-class LongTests
-{
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
 
-    @Test
-    fun testLongs()
-    {
-        println("testLongs")
+            // Subtest 3: MIN_VALUE to -1
+            {
+                long lowerBound = Long.MIN_VALUE;
+                long upperBound = -1L;
+                var instance = longs(lowerBound, upperBound);
 
-        val lowerBound = RandomUtils.nextLong(0L, Long.MAX_VALUE / 2)
-        val upperBound = RandomUtils.nextLong(lowerBound, Long.MAX_VALUE)
-        val instance = NumberGenerators.longs(lowerBound, upperBound)
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            // Subtest 4: MIN_VALUE to 0
+            {
+                long lowerBound = Long.MIN_VALUE;
+                long upperBound = 0L;
+                var instance = longs(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThan(upperBound));
+                });
+            }
+        }
+
+        @Test
+        @DisplayName("throws IllegalArgumentException for bad bounds")
+        void testLongsWithBadBounds() {
+            assertThrows(IllegalArgumentException.class, () -> longs(7_423_352_214L, 3L));
+            assertThrows(IllegalArgumentException.class, () -> longs(-10L, -100L));
+            assertThrows(IllegalArgumentException.class, () -> longs(50L, -600L));
+            assertThrows(IllegalArgumentException.class, () -> longs(50L, 50L));
+            assertThrows(IllegalArgumentException.class, () -> longs(-50L, -50L));
+        }
+
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("generates with MIN/MAX bounds (exclusive upper)")
+        void testLongsWithMinAndMax() {
+            long lowerBound = Long.MIN_VALUE;
+            long upperBound = Long.MAX_VALUE;
+
+            var instance = longs(lowerBound, upperBound);
+
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThan(upperBound));
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("positiveLongs() returns values > 0L")
+        void testPositiveLongs() {
+            var instance = positiveLongs();
+            assertNotNull(instance);
+
+            var value = instance.get();
+            assertThat(value, greaterThan(0L));
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("smallPositiveLongs() returns values in (0, 10_000]")
+        void testSmallPositiveLongs() {
+            var instance = smallPositiveLongs();
+            assertNotNull(instance);
+
+            var value = instance.get();
+            assertThat(value, greaterThan(0L));
+            assertThat(value, lessThanOrEqualTo(10_000L));
+        }
+
+        @Test
+        @DisplayName("anyLongs() returns non-null value")
+        void testAnyLongs() {
+            var generator = anyLongs();
+            var value = generator.get();
+            assertNotNull(value);
         }
     }
 
-    @Test
-    fun testLongsWithNegativeRange()
-    {
-        println("testLongsWithNegativeRange")
-        var lowerBound: Long = -10
-        var upperBound = 150_435_353_256_241L
-        var instance = NumberGenerators.longs(lowerBound, upperBound)
+    // ===================== Doubles =====================
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+    @Nested
+    @DisplayName("Double Tests")
+    class DoubleTests {
+
+        @RepeatedTest(10)
+        @DisplayName("generates doubles within bounds (inclusive upper)")
+        void testDoubles() {
+            double lowerBound = 80.0;
+            double upperBound = 190.0;
+
+            var instance = doubles(lowerBound, upperBound);
+
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThanOrEqualTo(upperBound));
         }
 
-        lowerBound = -493_435_754_432_216_763L
-        upperBound = -500000
-        instance = NumberGenerators.longs(lowerBound, upperBound)
+        @Test
+        @DisplayName("handles negative ranges")
+        void testDoublesWithNegativeRange() {
+            // Subtest 1: -1343 to ~2M
+            {
+                double lowerBound = -1343.0;
+                double upperBound = 2_044_532.3;
+                var instance = doubles(lowerBound, upperBound);
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThanOrEqualTo(upperBound));
+                });
+            }
+
+            // Subtest 2: -492K to -5K
+            {
+                double lowerBound = -492_425.0;
+                double upperBound = -5_945.0;
+                var instance = doubles(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThanOrEqualTo(upperBound));
+                });
+            }
         }
 
-        lowerBound = Long.MIN_VALUE
-        upperBound = -1L
-        instance = NumberGenerators.longs(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+        @Test
+        @DisplayName("throws IllegalArgumentException for bad bounds")
+        void testDoublesWithBadBounds() {
+            assertThrows(IllegalArgumentException.class, () -> doubles(50.0, 35.0));
+            assertThrows(IllegalArgumentException.class, () -> doubles(50.0, -35.0));
+            assertThrows(IllegalArgumentException.class, () -> doubles(-50.0, -350.0));
         }
 
-        lowerBound = Long.MIN_VALUE
-        upperBound = 0L
-        instance = NumberGenerators.longs(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("doublesFromFixedList() only generates values from list")
+        void testDoublesFromFixedList() {
+            ArrayList<Double> values = new ArrayList<>();
+            for (int i = 0; i < 15; i++) {
+                values.add(RANDOM.nextDouble(4.0, 365.0));
+            }
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            var instance = doublesFromFixedList(values);
+            var value = instance.get();
+            assertThat(value, isIn(values));
         }
-    }
 
-    @Test
-    fun testLongsWithBadBounds()
-    {
-        println("testLongsWithBadBounds")
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("positiveDoubles() returns values > 0.0")
+        void testPositiveDoubles() {
+            var instance = positiveDoubles();
+            assertNotNull(instance);
 
-        assertThrows { NumberGenerators.longs(7_423_352_214L, 3) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.longs(-10L, -100L) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.longs(50L, -600L) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.longs(50L, 50L) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.longs(-50L, -50L) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun testLongsWithMinAndMax()
-    {
-        println("testLongsWithMinAndMax")
-
-        val lowerBound = Long.MIN_VALUE
-        val upperBound = Long.MAX_VALUE
-
-        val instance = NumberGenerators.longs(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThan(upperBound))
+            var value = instance.get();
+            assertThat(value, greaterThan(0.0));
         }
-    }
 
-    @Test
-    fun testPositiveLongs()
-    {
-        println("testPositiveLongs")
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("smallPositiveDoubles() returns values in (0, 1000]")
+        void testSmallPositiveDoubles() {
+            var instance = smallPositiveDoubles();
+            assertNotNull(instance);
 
-        val instance = NumberGenerators.positiveLongs()
-        assertThat(instance, notNullValue())
+            var value = instance.get();
+            assertThat(value, greaterThan(0.0));
+            assertThat(value, lessThanOrEqualTo(1000.0));
+        }
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThan(0L))
+        @RepeatedTest(5)
+        @DisplayName("anyDoubles() returns non-null value")
+        void testAnyDoubles() {
+            var generator = anyDoubles();
+            var value = generator.get();
+            assertNotNull(value);
         }
     }
 
-    @Test
-    fun testSmallPositiveLongs()
-    {
-        println("testSmallPositiveLongs")
+    // ===================== Floats =====================
 
-        val instance = NumberGenerators.smallPositiveLongs()
-        assertThat(instance, notNullValue())
+    @Nested
+    @DisplayName("Float Tests")
+    class FloatTests {
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThan(0L))
-            assertThat(value, lessThanOrEqualTo(10_000L))
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("generates floats within bounds (inclusive upper)")
+        void testFloats() {
+            float lowerBound = 80.0f;
+            float upperBound = 190.0f;
+
+            var instance = floats(lowerBound, upperBound);
+
+            var value = instance.get();
+            assertThat(value, greaterThanOrEqualTo(lowerBound));
+            assertThat(value, lessThanOrEqualTo(upperBound));
+        }
+
+        @Test
+        @DisplayName("handles negative ranges")
+        void testFloatsWithNegativeRange() {
+            // Subtest 1: -1343 to ~2M
+            {
+                float lowerBound = -1343.0f;
+                float upperBound = 2_044_532.3f;
+                var instance = floats(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThanOrEqualTo(upperBound));
+                });
+            }
+
+            // Subtest 2: -492K to -5K
+            {
+                float lowerBound = -492_425.0f;
+                float upperBound = -5_945.0f;
+                var instance = floats(lowerBound, upperBound);
+
+                repeatTest(() -> {
+                    var value = instance.get();
+                    assertThat(value, greaterThanOrEqualTo(lowerBound));
+                    assertThat(value, lessThanOrEqualTo(upperBound));
+                });
+            }
+        }
+
+        @Test
+        @DisplayName("throws IllegalArgumentException for bad bounds")
+        void testFloatsWithBadBounds() {
+            assertThrows(IllegalArgumentException.class, () -> floats(50.0f, 35.0f));
+            assertThrows(IllegalArgumentException.class, () -> floats(50.0f, -35.0f));
+            assertThrows(IllegalArgumentException.class, () -> floats(-50.0f, -350.0f));
+        }
+
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("floatsFromFixedList() only generates values from list")
+        void testFloatsFromFixedList() {
+            var values = new ArrayList<Float>();
+            for (int i = 0; i < 15; i++) {
+                values.add(RANDOM.nextFloat(4.0f, 365.0f));
+            }
+
+            var instance = floatsFromFixedList(values);
+            var value = instance.get();
+            assertThat(value, isIn(values));
+        }
+
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("positiveFloats() returns values > 0.0f")
+        void testPositiveFloats() {
+            var instance = positiveFloats();
+            assertNotNull(instance);
+
+            var value = instance.get();
+            assertThat(value, greaterThan(0.0f));
+        }
+
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("smallPositiveFloats() returns values in (0, 1000]")
+        void testSmallPositiveFloats() {
+            var instance = smallPositiveFloats();
+            assertNotNull(instance);
+
+            var value = instance.get();
+            assertThat(value, greaterThan(0.0f));
+            assertThat(value, lessThanOrEqualTo(1000.0f));
+        }
+
+        @RepeatedTest(10)
+        @DisplayName("anyFloats() returns non-null value")
+        void testAnyFloats() {
+            var generator = anyFloats();
+            var value = generator.get();
+            assertNotNull(value);
         }
     }
 
-    @Test
-    fun testAnyLongs()
-    {
-        val generator = NumberGenerators.anyLongs()
-        val value = generator.get()
+    // ===================== Utilities =====================
 
-        assertThat(value, notNullValue())
-    }
+    @Nested
+    @DisplayName("Utility Function Tests")
+    class UtilityTests {
 
-}
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("safeIncrement_long handles normal and edge cases")
+        void testSafeIncrement_long() {
+            long value = one(longs(-10_000L, 10_000L));
+            long expected = Math.addExact(value, 1);
+            long result = safeIncrement(value);
+            assertThat(result, equalTo(expected));
 
-@RunWith(MockitoJUnitRunner::class)
-class DoubleTests
-{
+            // Edge: Long.MAX_VALUE → stays
+            value = Long.MAX_VALUE;
+            result = safeIncrement(value);
+            assertThat(result, equalTo(Long.MAX_VALUE));
 
-    @Test
-    fun testDoubles()
-    {
-        println("testDoubles")
-
-        val lowerBound = 80.0
-        val upperBound = 190.0
-        val instance = NumberGenerators.doubles(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
-        }
-    }
-
-    @Test
-    fun testDoublesWithNegativeRange()
-    {
-        println("testDoublesWithNegativeRange")
-
-        var lowerBound = -1343.0
-        var upperBound = 2044532.3
-        var instance = NumberGenerators.doubles(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
+            // Edge: Long.MIN_VALUE → MIN_VALUE + 1 (always valid)
+            value = Long.MIN_VALUE;
+            result = safeIncrement(value);
+            assertThat(result, equalTo(Long.MIN_VALUE + 1L));
         }
 
-        lowerBound = -492425.0
-        upperBound = -5945.0
-        instance = NumberGenerators.doubles(lowerBound, upperBound)
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("safeIncrement_int handles normal and edge cases")
+        void testSafeIncrement_int() {
+            int value = one(NumberGenerators.integers(-10_000, 10_000));
+            int expected = Math.addExact(value, 1);
+            int result = safeIncrement(value);
+            assertThat(result, equalTo(expected));
 
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
+            // Edge: Integer.MAX_VALUE → stays
+            value = Integer.MAX_VALUE;
+            result = safeIncrement(value);
+            assertThat(result, equalTo(Integer.MAX_VALUE));
+
+            // Edge: Integer.MIN_VALUE → MIN_VALUE + 1 (always valid)
+            value = Integer.MIN_VALUE;
+            result = safeIncrement(value);
+            assertThat(result, equalTo(Integer.MIN_VALUE + 1));
         }
     }
-
-    @Test
-    fun testDoublesWithBadBounds()
-    {
-        println("testDoublesWithBadBounds")
-
-        assertThrows { NumberGenerators.doubles(50.0, 35.0) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.doubles(50.0, -35.0) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.doubles(-50.0, -350.0) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun testDoublesFromFixedList()
-    {
-        println("testDoublesFromFixedList")
-
-        val values = ArrayList<Double>()
-
-        repeatTest()
-        {
-            values.add(RandomUtils.nextDouble(4.0, 365.0))
-        }
-
-        val instance = NumberGenerators.doublesFromFixedList(values)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(values.contains(value))
-        }
-    }
-
-
-    @Test
-    fun testPositiveDoubles()
-    {
-        println("testPositiveDoubles")
-        val instance = NumberGenerators.positiveDoubles()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            assertThat(instance.get(), greaterThan(0.0))
-        }
-
-    }
-
-    @Test
-    fun testSmallPositiveDoubles()
-    {
-        println("testSmallPositiveDoubles")
-
-        val instance = NumberGenerators.smallPositiveDoubles()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThan(0.0))
-            assertThat(value, lessThanOrEqualTo(1000.0))
-        }
-    }
-
-    @Test
-    fun testAnyDoubles()
-    {
-        val generator = NumberGenerators.anyDoubles()
-        val value = generator.get()
-    }
-
-}
-
-@RunWith(MockitoJUnitRunner::class)
-class FloatTests
-{
-
-    @Test
-    fun testFloats()
-    {
-        println("testFloats")
-
-        val lowerBound = 80.0f
-        val upperBound = 190.0f
-        val instance = NumberGenerators.floats(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
-        }
-    }
-
-    @Test
-    fun testFloatsWithNegativeRange()
-    {
-        println("testFloatsWithNegativeRange")
-
-        var lowerBound = -1343.0f
-        var upperBound = 2044532.3f
-        var instance = NumberGenerators.floats(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
-        }
-
-        lowerBound = -492425.0f
-        upperBound = -5945.0f
-        instance = NumberGenerators.floats(lowerBound, upperBound)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThanOrEqualTo(lowerBound))
-            assertThat(value, lessThanOrEqualTo(upperBound))
-        }
-    }
-
-    @Test
-    fun testFloatsWithBadBounds()
-    {
-        println("testFloatsWithBadBounds")
-
-        assertThrows { NumberGenerators.floats(50.0f, 15.0f) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.floats(60.0f, -35.0f) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        assertThrows { NumberGenerators.floats(-50.0f, -550.0f) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun testFloatsFromFixedList()
-    {
-        println("testFloatsFromFixedList")
-
-        val values = ArrayList<Float>()
-
-        repeatTest()
-        {
-            values.add(RandomUtils.nextFloat(1.0f, 365.0f))
-        }
-
-        val instance = NumberGenerators.floatsFromFixedList(values)
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertTrue(values.contains(value))
-        }
-    }
-
-
-    @Test
-    fun testPositiveFloats()
-    {
-        println("testPositiveFloats")
-
-        val instance = NumberGenerators.positiveFloats()
-        assertNotNull(instance)
-
-        repeatTest()
-        {
-            assertThat(instance.get(), greaterThan(0.0f))
-        }
-
-    }
-
-    @Test
-    fun testSmallPositiveFloats()
-    {
-        println("testSmallPositiveFloats")
-
-        val instance = NumberGenerators.smallPositiveFloats()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, greaterThan(0.0f))
-            assertThat(value, lessThanOrEqualTo(1000.0f))
-        }
-    }
-
-    @Test
-    fun testAnyFloats()
-    {
-        val generator = NumberGenerators.anyFloats()
-
-        repeatTest()
-        {
-            val value = generator.get()
-            assertThat(value, notNullValue())
-        }
-
-    }
-
-}
-
-@RunWith(MockitoJUnitRunner::class)
-class InternalFunctionsTests
-{
-    @Test
-    fun testSafeIncrement_long()
-    {
-        println("testSafeIncrement_long")
-
-        var value = one(NumberGenerators.longs(-10_000L, 10_000L))
-        var result = safeIncrement(value)
-        assertThat(result, `is`(value + 1))
-
-        value = Long.MAX_VALUE
-        result = safeIncrement(value)
-        assertThat(result, `is`(value))
-
-        value = Long.MIN_VALUE
-        result = safeIncrement(value)
-        assertThat(result, `is`(value + 1))
-    }
-
-    @Test
-    fun testSafeIncrement_int()
-    {
-        println("testSafeIncrement_int")
-
-        var value = one(integers(-10000, 10000))
-        var result = safeIncrement(value)
-        assertThat(result, `is`(value + 1))
-
-        value = Integer.MAX_VALUE
-        result = safeIncrement(value)
-        assertThat(result, `is`(value))
-
-        value = Integer.MIN_VALUE
-        result = safeIncrement(value)
-        assertThat(result, `is`(value + 1))
-    }
-
 }
