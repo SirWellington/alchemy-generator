@@ -13,211 +13,191 @@
  * limitations under the License.
  */
 
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.longs
-import tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit.DAYS
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import tech.sirwellington.alchemy.generator.NumberGenerators.longs;
+import tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
+import tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
-/**
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.concurrent.ThreadLocalRandom;
 
- * @author SirWellington
- */
+import static com.natpryce.hamkrest.assertion.assertThat;
+import static com.natpryce.hamkrest.equalTo;
+import static com.natpryce.hamkrest.greaterThanOrEqualTo;
+import static com.natpryce.hamkrest.lessThan;
+import static java.time.temporal.ChronoUnit.DAYS;
+import static org.hamcrest.Matchers.*;
+
 class TimeGeneratorsTest
 {
 
-    @Before
-    fun setUp()
+    @DisplayName("testCannotInstantiate")
+    @RepeatedTest(1)
+    void testCannotInstantiate()
     {
+        assertThrows(() -> TimeGenerators.class.getDeclaredConstructor().newInstance())
+            .isInstanceOf(IllegalAccessException.class);
     }
 
-    @Test
-    fun testCannotInstantiate()
+    @DisplayName("testPresentInstants")
+    @RepeatedTest(20)
+    void testPresentInstants()
     {
-        println("testCannotInstantiate")
+        AlchemyGenerator<Instant> instance = TimeGenerators.presentInstants();
+        assertThat(instance, notNullValue());
 
-        assertThrows { TimeGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+        Instant result = instance.get();
+        // Assuming Dates.isNow(Instant, int secondsThreshold) exists and is accessible
+        assertThat(Dates.isNow(result, 30), is(true));
     }
 
-    @Test
-    fun testPresentInstants()
+    @DisplayName("testPastInstants")
+    @RepeatedTest(20)
+    void testPastInstants()
     {
-        println("testPresentInstants")
+        AlchemyGenerator<Instant> instance = TimeGenerators.pastInstants();
+        assertThat(instance, notNullValue());
 
-        val instance = TimeGenerators.presentInstants()
-        assertThat(instance, notNullValue())
+        Instant now = Instant.now();
+        Instant result = instance.get();
 
-        repeatTest()
+        assertThat(result, notNullValue());
+        assertThat(result.isBefore(now), is(true));
+        assertThat(result.isAfter(result), is(false)); // reflexive property
+    }
+
+    @DisplayName("testFutureInstants")
+    @RepeatedTest(20)
+    void testFutureInstants()
+    {
+        AlchemyGenerator<Instant> instance = TimeGenerators.futureInstants();
+        assertThat(instance, notNullValue());
+
+        Instant now = Instant.now();
+        Instant result = instance.get();
+
+        assertThat(result, notNullValue());
+        assertThat(result.isAfter(now), is(true));
+        assertThat(result.isAfter(result), is(false)); // reflexive property
+    }
+
+    @DisplayName("testBefore")
+    @RepeatedTest(20)
+    void testBefore()
+    {
+        int daysBefore = one(smallPositiveIntegers());
+
+        Instant referenceTime = Instant.now().minus(daysBefore, DAYS);
+        AlchemyGenerator<Instant> instance = TimeGenerators.before(referenceTime);
+
+        assertThat(instance, notNullValue());
+
+        Instant result = instance.get();
+        assertThat(result, notNullValue());
+        assertThat(result.isBefore(referenceTime), is(true));
+    }
+
+    @DisplayName("testAfter")
+    @RepeatedTest(20)
+    void testAfter()
+    {
+        int daysAhead = one(smallPositiveIntegers());
+
+        Instant referenceTime = Instant.now().plus(daysAhead, DAYS);
+        AlchemyGenerator<Instant> instance = TimeGenerators.after(referenceTime);
+
+        assertThat(instance, notNullValue());
+
+        Instant result = instance.get();
+        assertThat(result, notNullValue());
+        assertThat(result.isAfter(referenceTime), is(true));
+    }
+
+    @DisplayName("testAnyTime")
+    @RepeatedTest(20)
+    void testAnyTime()
+    {
+        AlchemyGenerator<Instant> instance = TimeGenerators.anyTime();
+
+        assertThat(instance, notNullValue());
+
+        Instant result = instance.get();
+        assertThat(result, notNullValue());
+    }
+
+    @DisplayName("testTimesBetween")
+    @RepeatedTest(20)
+    void testTimesBetween()
+    {
+        // Edge cases
+        Instant now = Instant.now();
+        Instant later = now.plus(4, DAYS);
+
+        assertThrows(() -> TimeGenerators.timesBetween(now, null));
+        assertThrows(() -> TimeGenerators.timesBetween(null, now));
+        assertThrows(() -> TimeGenerators.timesBetween(later, now));
+
+        long startTimestamp = one(longs(1L, Long.MAX_VALUE / 2));
+        long endTimestamp   = one(longs(startTimestamp + 1, Long.MAX_VALUE));
+
+        Instant start = Instant.ofEpochMilli(startTimestamp);
+        Instant end   = Instant.ofEpochMilli(endTimestamp);
+
+        AlchemyGenerator<Instant> instance = TimeGenerators.timesBetween(start, end);
+        assertThat(instance, notNullValue());
+
+        Instant result = instance.get();
+        assertThat(result.toEpochMilli(), greaterThanOrEqualTo(start.toEpochMilli()));
+        assertThat(result.toEpochMilli(), lessThan(end.toEpochMilli()));
+    }
+
+    @DisplayName("testAsZonedDateTimeGenerator")
+    @RepeatedTest(20)
+    void testAsZonedDateTimeGenerator()
+    {
+        ZoneId zone = anyZone();
+
+        Instant time = TimeGenerators.anyTime().get();
+        ZonedDateTime expected = time.atZone(zone);
+
+        AlchemyGenerator<Instant> fixedTimeGen = new AlchemyGenerator<>()
         {
-            val result = instance.get()
-            assertThat(Dates.isNow(result, 30), `is`(true))
-        }
+            @Override
+            public Instant get()
+            {
+                return time;
+            }
+        };
+
+        ZonedDateTime result = TimeGenerators.toZonedDateTimeGenerator(fixedTimeGen, zone).get();
+
+        assertThat(result, equalTo(expected));
     }
 
-    @Test
-    fun testPastInstants()
+    @DisplayName("testAsZonedDateTimeGeneratorWithPastGenerator")
+    @RepeatedTest(20)
+    void testAsZonedDateTimeGeneratorWithPastGenerator()
     {
-        println("testPastInstants")
+        ZoneId zone = anyZone();
+        ZonedDateTime result = TimeGenerators
+            .toZonedDateTimeGenerator(TimeGenerators.pastInstants(), zone)
+            .get();
 
-        val instance = TimeGenerators.pastInstants()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val now = Instant.now()
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.isBefore(now), `is`(true))
-            assertThat(result.isAfter(result), `is`(false))
-        }
+        assertThat(result, notNullValue());
+        assertThat(result.isBefore(ZonedDateTime.now(zone)), is(true));
     }
 
-    @Test
-    fun testFutureInstants()
+    private ZoneId anyZone()
     {
-        println("testFutureInstants")
-
-        val instance = TimeGenerators.futureInstants()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val now = Instant.now()
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.isAfter(now), `is`(true))
-            assertThat(result.isAfter(result), `is`(false))
-        }
-    }
-
-    @Test
-    fun testBefore()
-    {
-        println("testBefore")
-
-        repeatTest()
-        {
-            val daysBefore = one(smallPositiveIntegers())
-
-            val referenceTime = Instant.now().minus(daysBefore.toLong(), DAYS)
-            val instance = TimeGenerators.before(referenceTime)
-            assertThat(instance, notNullValue())
-
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.isBefore(referenceTime), `is`(true))
-        }
-    }
-
-    @Test
-    fun testAfter()
-    {
-        println("testAfter")
-
-        repeatTest()
-        {
-            val daysAhead = one(smallPositiveIntegers())
-
-            val referenceTime = Instant.now().plus(daysAhead.toLong(), DAYS)
-            val instance = TimeGenerators.after(referenceTime)
-            assertThat(instance, notNullValue())
-
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.isAfter(referenceTime), `is`(true))
-        }
-    }
-
-    @Test
-    fun testAnyTime()
-    {
-        println("testAnytime")
-
-        repeatTest()
-        {
-            val instance = TimeGenerators.anyTime()
-            assertThat(instance, notNullValue())
-
-            val result = instance.get()
-            assertThat(result, notNullValue())
-        }
-    }
-
-    @Test
-    fun testTimesBetween()
-    {
-        println("testTimesBetween")
-
-        //Check the Edge Cases
-        val startTime = Instant.now()
-        val endTime = startTime.plus(4, DAYS)
-
-        assertThrows { TimeGenerators.timesBetween(startTime, null!!) }
-        assertThrows { TimeGenerators.timesBetween(null!!, endTime) }
-        assertThrows { TimeGenerators.timesBetween(endTime, startTime) }
-
-
-        repeatTest()
-        {
-            val startTimestamp = one(longs(1, java.lang.Long.MAX_VALUE / 2))
-            val endTimestamp = one(longs(startTimestamp + 1, java.lang.Long.MAX_VALUE))
-
-            val start = Instant.ofEpochMilli(startTimestamp)
-            val end = Instant.ofEpochMilli(endTimestamp)
-
-            val instance = TimeGenerators.timesBetween(start, end)
-            assertThat(instance, notNullValue())
-
-            val result = instance.get()
-            assertThat(result.toEpochMilli(), greaterThanOrEqualTo(start.toEpochMilli()))
-            assertThat(result.toEpochMilli(), lessThan(end.toEpochMilli()))
-        }
-    }
-
-    @Test
-    fun testAsZonedDateTimeGenerator()
-    {
-        val zone = anyZone()
-
-        val time = TimeGenerators.anyTime().get()
-        val expected = time.atZone(zone)
-
-        val generator = TimeGenerators.toZonedDateTimeGenerator(
-                AlchemyGenerator { time },
-                zone
-        )
-        val result = generator.get()
-
-        assertThat(result, equalTo(expected))
-    }
-
-    @Test
-    fun testAsZonedDateTimeGeneratorWithPastGenerator()
-    {
-        val zone = anyZone()
-        val generator = TimeGenerators.toZonedDateTimeGenerator(
-            TimeGenerators.pastInstants(),
-            zone
-        )
-        val result = generator.get()
-        assertThat(result, notNullValue())
-        assertTrue { result.isBefore(ZonedDateTime.now(zone)) }
-    }
-
-    fun anyZone(): ZoneId
-    {
-        return ZoneId.getAvailableZoneIds().random().let { ZoneId.of(it) }
+        String[] zoneIds = ZoneId.getAvailableZoneIds().toArray(new String[0]);
+        int idx = ThreadLocalRandom.current().nextInt(zoneIds.length);
+        return ZoneId.of(zoneIds[idx]);
     }
 
 }
