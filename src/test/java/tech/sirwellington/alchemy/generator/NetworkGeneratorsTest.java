@@ -1,125 +1,81 @@
-/*
- * Copyright © 2026. Sir Wellington.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- *
- * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package tech.sirwellington.alchemy.generator;
 
-package tech.sirwellington.alchemy.generator
+import org.junit.jupiter.api.RepeatedTest;
 
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static tech.sirwellington.alchemy.generator.NetworkGenerators.*;
+import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 
-/**
- *
- * @author SirWellington
- */
-@RunWith(MockitoJUnitRunner::class)
-class NetworkGeneratorsTest
-{
+class NetworkGeneratorsTest extends BaseGeneratorTest {
 
-    @Before
-    fun setUp()
-    {
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testHttpUrls() {
+        var generator = httpURLs();
+        assertThat(generator, notNullValue());
+        var url = generator.get();
+        assertThat(url, notNullValue());
     }
 
-    @Test
-    fun testHttpUrls()
-    {
-        val generator = NetworkGenerators.httpURLs()
-        assertThat(generator, notNullValue())
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testHttpsUrls() {
+        // Given
+        var generator = httpsURLs();
+        assertThat(generator, notNullValue());
 
-        repeatTest()
-        {
-            val result = generator.get()
-            assertThat(result, notNullValue())
+        // When
+        var url = generator.get();
+
+        // Then
+        assertThat(url, notNullValue());
+        assertThat(url.getProtocol(), startsWith("https"));
+    }
+
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testUrlsWithProtocol() {
+        var scheme = stringsFromFixedList("http", "https", "file", "ftp").get();
+        var generator = urlsWithProtocol(scheme);
+        assertThat(generator, notNullValue());
+
+        var url = generator.get();
+        assertThat(url, notNullValue());
+        assertThat(url.getProtocol(), startsWith(scheme));
+    }
+
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testPorts() {
+        // Given
+        var generator = ports();
+        assertThat(generator, notNullValue());
+
+        // When
+        int port = generator.get();
+        assertThat(port, greaterThanOrEqualTo(22));
+        assertThat(port, lessThan(Short.MAX_VALUE & 0xFFFF));
+    }
+
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testIp4Addresses() {
+        // Given
+        var generator = ipv4Addresses();
+        assertThat(generator, notNullValue());
+        String max = "999.999.999.999";
+        String min = "1.1.1.1";
+
+        // When
+        String address = generator.get();
+
+        // Then
+        assertThat(countOccurrencesOfCharInString(address, '.'), is(3));
+        assertThat(address.length(), greaterThanOrEqualTo(min.length()));
+        assertThat(address.length(), lessThanOrEqualTo(max.length()));
+    }
+
+    private static int countOccurrencesOfCharInString(String string, char character) {
+        int count = 0;
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) == character) count++;
         }
+        return count;
     }
-
-    @Test
-    fun testHttpsUrls()
-    {
-        val generator = NetworkGenerators.httpsURLs()
-        assertThat(generator, notNullValue())
-
-        repeatTest()
-        {
-            val result = generator.get()
-            assertThat(result, notNullValue())
-            assertThat(result.toString(), startsWith("https://"))
-        }
-    }
-
-    @Test
-    fun testUrlsWithProtocol()
-    {
-        repeatTest()
-        {
-            val scheme = StringGenerators.stringsFromFixedList("http", "https", "file", "ftp").get()
-            val generator = NetworkGenerators.urlsWithProtocol(scheme)
-            assertThat(generator, notNullValue())
-
-            val result = generator.get()
-            assertThat(result, notNullValue())
-            assertThat(result.toString(), startsWith(scheme))
-        }
-    }
-
-
-    @Test
-    fun testPorts()
-    {
-        val generator = NetworkGenerators.ports()
-        assertThat(generator, notNullValue())
-
-        repeatTest()
-        {
-            val port = generator.get()
-            assertThat(port, greaterThanOrEqualTo(22))
-            assertThat(port, lessThan(java.lang.Short.MAX_VALUE.toInt()))
-        }
-
-    }
-
-    @Test
-    fun testIp4Addresses()
-    {
-        val generator = NetworkGenerators.ipv4Addresses()
-        assertThat(generator, notNullValue())
-
-        val max = "999.999.999.999"
-        val min = "1.1.1.1"
-        val expectedPeriods = 3
-
-        repeatTest()
-        {
-            val address = generator.get()
-
-            val periodAppearances = numberOfAppearancesOfCharInString('.', address)
-            assertThat(periodAppearances, `is`(expectedPeriods))
-
-            assertThat(address.length, `is`(lessThanOrEqualTo(max.length)))
-            assertThat(address.length, `is`(greaterThanOrEqualTo(min.length)))
-        }
-    }
-
-    private fun numberOfAppearancesOfCharInString(character: Char, string: String): Int
-    {
-        return string.toCharArray()
-                .count { it == character }
-
-    }
-
 }
