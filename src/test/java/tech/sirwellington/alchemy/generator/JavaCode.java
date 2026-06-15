@@ -15,7 +15,9 @@
 
 package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.*;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 import java.net.URL;
 
@@ -25,11 +27,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author SirWellington
  */
-final class JavaCode
-{
+final class JavaCode {
 
-    static class Computer
-    {
+    static class Computer {
 
         private String name;
         private String model;
@@ -38,8 +38,7 @@ final class JavaCode
         private double cost;
         private byte[] data;
 
-        static void check(Computer computer)
-        {
+        static void check(Computer computer) {
             assertThat(computer, notNullValue());
             assertThat(computer.name, is(not(isEmptyOrNullString())));
             assertThat(computer.model, not(isEmptyOrNullString()));
@@ -51,8 +50,7 @@ final class JavaCode
         }
     }
 
-    static class Person
-    {
+    static class Person {
 
         public String name;
         public int age;
@@ -62,8 +60,7 @@ final class JavaCode
         private URL website;
 
 
-        static void check(Person person)
-        {
+        static void check(Person person) {
             assertThat(person, notNullValue());
             assertThat(person.name, is(not(isEmptyOrNullString())));
             assertThat(person.age, greaterThan(0));
@@ -76,34 +73,27 @@ final class JavaCode
         }
     }
 
-    static Matcher<String> isEmptyOrNullString()
-    {
+    static Matcher<String> isEmptyOrNullString() {
         return new EmptyOrNullString();
     }
 
-    static Matcher<Number> greaterThan(int number)
-    {
+    static Matcher<Number> greaterThan(int number) {
         return new GreaterThan(number);
     }
 
-    static Matcher<Number> greaterThan(double number)
-    {
+    static Matcher<Number> greaterThan(double number) {
         return new GreaterThan(number);
     }
 
-    static class EmptyOrNullString extends BaseMatcher<String>
-    {
+    static class EmptyOrNullString extends BaseMatcher<String> {
 
         @Override
-        public boolean matches(Object item)
-        {
-            if (item == null)
-            {
+        public boolean matches(Object item) {
+            if (item == null) {
                 return false;
             }
 
-            if (item instanceof String)
-            {
+            if (item instanceof String) {
                 return ((String) item).isEmpty();
             }
 
@@ -111,37 +101,30 @@ final class JavaCode
         }
 
         @Override
-        public void describeTo(Description description)
-        {
+        public void describeTo(Description description) {
             description.appendText("Empty or null string");
         }
     }
 
-    static class GreaterThan extends BaseMatcher<Number>
-    {
+    static class GreaterThan extends BaseMatcher<Number> {
         private final Number target;
 
-        GreaterThan(Number target)
-        {
+        GreaterThan(Number target) {
             this.target = target;
         }
 
         @Override
-        public boolean matches(Object item)
-        {
-            if (item instanceof Number)
-            {
-                return ((Number)item).doubleValue() > target.doubleValue();
+        public boolean matches(Object item) {
+            if (item instanceof Number) {
+                return ((Number) item).doubleValue() > target.doubleValue();
             }
-            else
-            {
+            else {
                 return false;
             }
         }
 
         @Override
-        public void describeTo(Description description)
-        {
+        public void describeTo(Description description) {
             description.appendText("Greater than or equal to");
         }
     }
