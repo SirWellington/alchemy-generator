@@ -1,213 +1,182 @@
-/*
- * Copyright © 2026. Sir Wellington.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- *
- * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.greaterThanOrEqualTo
-import org.hamcrest.Matchers.lessThanOrEqualTo
-import org.junit.After
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.NumberGenerators.negativeIntegers
-import tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.time.Instant
-import java.time.Instant.now
-import java.time.temporal.ChronoUnit
-import java.time.temporal.ChronoUnit.DAYS
-import java.time.temporal.ChronoUnit.MINUTES
-import java.util.Date
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+
+import static java.time.temporal.ChronoUnit.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
-
+ * Tests for {@link Dates}.
+ *
  * @author SirWellington
  */
-@RunWith(MockitoJUnitRunner::class)
-class DatesTest
-{
+@DisplayName("Dates Utilities")
+class DatesTest extends BaseGeneratorTest {
 
-    @Before
-    fun setUp()
-    {
-    }
+    @Test
+    void testNow() {
+        // Given
+        Date result = Dates.now();
+        Date after = new Date();
 
-    @After
-    fun tearDown()
-    {
-
+        // Then
+        assertThat(result, notNullValue());
+        assertThat(result.getTime(), lessThanOrEqualTo(after.getTime()));
+        assertThat(System.currentTimeMillis() - result.getTime(), lessThan(100L));
     }
 
     @Test
-    fun testNow()
-    {
-        println("testNow")
+    void testDaysAgo() {
+        // Given
+        int daysAgo = one(integers(1, 3650));
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedLeft = nowMillis - Duration.ofDays(daysAgo).toMillis();
 
-        val result = Dates.now()
-        val after = Date()
-        assertThat(after.time, greaterThanOrEqualTo(result.time))
+        // When
+        Date result = Dates.daysAgo(daysAgo);
+
+        // Then
+        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
     }
 
     @Test
-    fun testDaysAgo()
-    {
-        println("testDaysAgo")
+    void testDaysAhead() {
+        int days = one(integers(1, 3650));
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedRight = nowMillis + (long) days * DAYS.getDuration().toMillis();
 
-        val days = positiveIntegers().get()
+        Date result = Dates.daysAhead(days);
 
-        val right = now().toEpochMilli()
-        val left = now().minus(days.toLong(), DAYS).toEpochMilli()
-
-        val result = Dates.daysAgo(days)
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
+        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
     @Test
-    fun testDaysAhead()
-    {
-        println("testDaysAhead")
+    void testHoursAgo() {
+        int hours = one(integers(1, 24 * 365)); // up to ~1 year
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedLeft = nowMillis - (long) hours * HOURS.getDuration().toMillis();
 
-        val days = positiveIntegers().get()
+        Date result = Dates.hoursAgo(hours);
 
-        val left = now().toEpochMilli()
-
-        val result = Dates.daysAhead(days)
-        val right = now().plus(days.toLong(), ChronoUnit.DAYS).toEpochMilli()
-
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
+        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
     @Test
-    fun testHoursAgo()
-    {
-        println("testHoursAgo")
+    void testHoursAhead() {
+        int hours = one(integers(1, 24 * 365));
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedRight = nowMillis + (long) hours * HOURS.getDuration().toMillis();
 
-        val hours = positiveIntegers().get()
+        Date result = Dates.hoursAhead(hours);
 
-        val left = now().minus(hours.toLong(), ChronoUnit.HOURS).toEpochMilli()
-        val right = now().toEpochMilli()
-
-        val result = Dates.hoursAgo(hours)
-
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
+        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
     @Test
-    fun testHoursAhead()
-    {
-        println("testHoursAhead")
+    void testMinutesAgo() {
+        int minutes = one(integers(1, 60 * 24)); // up to ~1 day
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedLeft = nowMillis - (long) minutes * MINUTES.getDuration().toMillis();
 
-        val hours = positiveIntegers().get()
+        Date result = Dates.minutesAgo(minutes);
 
-        val left = Instant.now().toEpochMilli()
-
-        val result = Dates.hoursAhead(hours)
-        val right = Instant.now().plus(hours.toLong(), ChronoUnit.HOURS).toEpochMilli()
-
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
-
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
+        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
     @Test
-    fun testMinutesAgo()
-    {
-        println("testMinutesAgo")
+    void testMinutesAhead() {
+        int minutes = one(integers(1, 60 * 24));
+        long nowMillis = Instant.now().toEpochMilli();
+        long expectedRight = nowMillis + (long) minutes * MINUTES.getDuration().toMillis();
 
-        val minutes = positiveIntegers().get()
+        Date result = Dates.minutesAhead(minutes);
 
-        val left = now().minus(minutes.toLong(), MINUTES).toEpochMilli()
-        val right = now().toEpochMilli()
+        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
+    }
 
-        val result = Dates.minutesAgo(minutes)
+    // ────────────────────────────────────────────────────────────────────
 
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
+    @Test
+    void testIsNow_Date() {
+        Date now = Dates.now();
+        assertThat(Dates.isNow(now), is(true));
+
+        Date notNow = Dates.daysAgo(1);
+        assertThat(Dates.isNow(notNow), is(false));
+
+        assertThrowsJ5(NullPointerException.class, () -> Dates.isNow(null));
     }
 
     @Test
-    fun testMinutesAhead()
-    {
-        println("testMinutesAhead")
+    void testIsNow_Date_long() {
+        // Negative tolerance → IllegalArgumentException
+        assertThrowsJ5(IllegalArgumentException.class,
+                       () -> Dates.isNow(new Date(), -1));
 
-        val minutes = positiveIntegers().get()
+        // Null input → NPE
+        assertThrowsJ5(NullPointerException.class, () -> Dates.isNow(null, 0));
 
-        val left = now().toEpochMilli()
+        Date now = Dates.now();
 
-        val result = Dates.minutesAhead(minutes)
-        val right = now().plus(minutes.toLong(), MINUTES).toEpochMilli()
+        // Tolerance of 10s should include `now`
+        assertThat(Dates.isNow(now, 10), is(true));
 
-        assertThat(result.time, greaterThanOrEqualTo(left))
-        assertThat(result.time, lessThanOrEqualTo(right))
+        // Zero tolerance: even a small delay makes it false
+        try {
+            Thread.sleep(1);
+            assertThat(Dates.isNow(now, 0), is(false));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    fun testIsNow_Date()
-    {
-        println("testIsNow_Date")
+    void testIsNow_Instant_long() {
+        assertThrowsJ5(NullPointerException.class,
+                       () -> Dates.isNow((Instant) null, 0));
 
-        val now = Dates.now()
-        assertThat(Dates.isNow(now), `is`(true))
+        assertThrowsJ5(IllegalArgumentException.class,
+                       () -> Dates.isNow(Instant.now(), one(negativeIntegers()).longValue()));
 
-        val notNow = Dates.daysAgo(1)
-        assertThat(Dates.isNow(notNow), `is`(false))
+        Instant now = Instant.now();
+        assertThat(Dates.isNow(now, 10), is(true));
 
-        assertThrows { Dates.isNow(null!! as Date) }
+        try {
+            Thread.sleep(1);
+            // 0 tolerance: `now` no longer matches
+            assertThat(Dates.isNow(now, 0), is(false));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    @Throws(InterruptedException::class)
-    fun testIsNow_Date_long()
-    {
-        println("testIsNow_Date_long")
+    void testIsNow_ToleranceBoundaries() {
+        // Verify tolerance window is symmetric ±tolerance seconds
+        long offset = 1_500; // 1.5s off
+        Date slightlyEarly = new Date(Instant.now().minusSeconds(2).toEpochMilli());
+        Date slightlyLate   = new Date(Instant.now().plusSeconds(2).toEpochMilli());
 
-        assertThrows { Dates.isNow(null as Date, 0) }
+        assertThat(Dates.isNow(slightlyEarly, 3), is(true)); // within ±3s
+        assertThat(Dates.isNow(slightlyEarly, 1), is(false)); // outside ±1s
 
-        val now = Dates.now()
-        assertThat(Dates.isNow(now, 10), `is`(true))
-        assertThrows { Dates.isNow(now, -1) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        Thread.sleep(1)
-        assertThat(Dates.isNow(now, 0), `is`(false))
-
+        assertThat(Dates.isNow(slightlyLate, 3), is(true));
+        assertThat(Dates.isNow(slightlyLate, 1), is(false));
     }
-
-    @Test
-    @Throws(Exception::class)
-    fun testIsNow_Instant_long()
-    {
-        println("testIsNow_Instant_long")
-
-        assertThrows { Dates.isNow(null as Instant, 0) }
-
-        assertThrows { Dates.isNow(Instant.now(), one(negativeIntegers()).toLong()) }
-                .isInstanceOf(IllegalArgumentException::class.java)
-
-        val now = Instant.now()
-        assertThat(Dates.isNow(now, 10), `is`(true))
-
-        Thread.sleep(1)
-        assertThat(Dates.isNow(now, 0), `is`(false))
-    }
-
 }
