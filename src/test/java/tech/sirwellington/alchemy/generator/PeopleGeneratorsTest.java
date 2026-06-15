@@ -13,259 +13,188 @@
  * limitations under the License.
  */
 
-package tech.sirwellington.alchemy.generator
+package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertThat
-import org.junit.Assert.fail
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings
-import tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.util.regex.Pattern
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.regex.Pattern;
 
-/**
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings;
+import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
- * @author SirWellington
- */
-@RunWith(MockitoJUnitRunner::class)
-class PeopleGeneratorsTest
-{
+class PeopleGeneratorsTest extends BaseGeneratorTest {
 
-    @Before
-    fun setUp()
-    {
-    }
+    static Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
 
+    @DisplayName("testCannotInstantiate")
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
-
-        assertThrows { PeopleGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+    void testCannotInstantiate() {
+        assertThrows(() -> PeopleGenerators.class.getDeclaredConstructor().newInstance())
+            .isInstanceOf(IllegalAccessException.class);
     }
 
-    @Test
-    fun testFirstNames()
-    {
-        println("testFirstNames")
-
-        val firstName = PeopleGenerators.firstNames()
-        testNameGenerator(firstName)
+    @DisplayName("testFirstNames")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testFirstNames() {
+        var firstName = PeopleGenerators.firstNames();
+        testNameGenerator(firstName);
     }
 
-    @Test
-    fun testLastNames()
-    {
-        println("testLastNames")
-
-        val lastNames = PeopleGenerators.lastNames()
-        testNameGenerator(lastNames)
+    @DisplayName("testLastNames")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testLastNames() {
+        var lastNames = PeopleGenerators.lastNames();
+        testNameGenerator(lastNames);
     }
 
-    @Test
-    fun testFullNames()
-    {
-        println("testFullNames")
+    @DisplayName("testFullNames")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testFullNames() {
+        var fullNames = PeopleGenerators.fullNames();
+        testNameGenerator(fullNames);
 
-        val fullNames = PeopleGenerators.fullNames()
-        testNameGenerator(fullNames)
-
-        repeatTest()
-        {
-            val name = fullNames.get()
-            assertThat(name, not(isEmptyString()))
-            val split = name.split(" ")
-            assertThat(split.size, greaterThanOrEqualTo(2))
-            assertThat(split.size, lessThanOrEqualTo(3))
-        }
+        var name = fullNames.get();
+        assertThat(name, not(isEmptyString()));
+        var split = name.split(" ");
+        assertThat(split.length, greaterThanOrEqualTo(2));
+        assertThat(split.length, lessThanOrEqualTo(3));
     }
 
-    private fun testNameGenerator(generator: AlchemyGenerator<String>)
-    {
-        assertThat(generator, notNullValue())
+    private void testNameGenerator(AlchemyGenerator<String> generator) {
+        assertThat(generator, notNullValue());
 
-        val titleCasePattern = Pattern.compile("[A-Z][a-z]+")
+        var titleCasePattern = Pattern.compile("[A-Z][a-z]+");
 
-        repeatTest()
-        {
-            val name = generator.get()
-            assertThat(name, not(isEmptyString()))
-            assertThat(name.length, greaterThanOrEqualTo(2))
-            assertThat(titleCasePattern.asPredicate().test(name), `is`(true))
-        }
+        var name = generator.get();
+        assertThat(name, not(isEmptyString()));
+        assertThat(name.length(), greaterThanOrEqualTo(2));
+        assertThat(titleCasePattern.asPredicate().test(name), is(true));
     }
 
-    @Test
-    fun testAges()
-    {
-        println("testAges")
+    @DisplayName("testAges")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAges() {
+        var generator = PeopleGenerators.ages();
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.ages()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val age = instance.get()
-            assertThat(age, greaterThanOrEqualTo(1))
-            assertThat(age, lessThanOrEqualTo(108))
-        }
+        var age = generator.get();
+        assertThat(age, greaterThanOrEqualTo(1));
+        assertThat(age, lessThanOrEqualTo(108));
     }
 
-    @Test
-    fun testAdultAges()
-    {
-        println("testAdultAges")
+    @DisplayName("testAdultAges")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAdultAges() {
+        var generator = PeopleGenerators.adultAges();
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.adultAges()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val age = instance.get()
-            assertThat(age, greaterThanOrEqualTo(18))
-            assertThat(age, lessThanOrEqualTo(108))
-        }
+        var age = generator.get();
+        assertThat(age, greaterThanOrEqualTo(18));
+        assertThat(age, lessThanOrEqualTo(108));
     }
 
-    @Test
-    fun testChildAges()
-    {
-        println("testChildAges")
+    @DisplayName("testChildAges")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testChildAges() {
+        var generator = PeopleGenerators.childAges();
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.childAges()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val age = instance.get()
-            assertThat(age, greaterThanOrEqualTo(1))
-            assertThat(age, lessThanOrEqualTo(17))
-        }
+        var age = generator.get();
+        assertThat(age, greaterThanOrEqualTo(1));
+        assertThat(age, lessThanOrEqualTo(17));
     }
 
-    @Test
-    fun testPhoneNumbers_NoCountryCode()
-    {
-        println("testPhoneNumbers_NoCountryCode")
+    @DisplayName("testPhoneNumbers_NoCountryCode")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testPhoneNumbers_NoCountryCode() {
+        var instance = PeopleGenerators.phoneNumbers();
+        assertThat(instance, notNullValue());
 
-        val instance = PeopleGenerators.phoneNumbers()
-        assertThat(instance, notNullValue())
-
-        val phoneNumberPattern = Pattern.compile("\\d{3}-\\d{3}-\\d{4}")
-        repeatTest()
-        {
-            val phoneNumber = instance.get()
-            assertThat(phoneNumber, not(isEmptyString()))
-            assertThat(phoneNumberPattern.asPredicate().test(phoneNumber), `is`(true))
-        }
+        var phoneNumber = instance.get();
+        assertThat(phoneNumber, not(isEmptyString()));
+        var matchesPattern = PHONE_NUMBER_PATTERN.asPredicate().test(phoneNumber);
+        assertThat(matchesPattern, is(true));
     }
 
-    @Test
-    fun testPhoneNumbers_USCountryCode()
-    {
-        println("testPhoneNumbers_USCountryCode")
+    @DisplayName("testPhoneNumbers_USCountryCode")
+    @RepeatedTest(20)
+    void testPhoneNumbers_USCountryCode() {
+        var phoneCountryCode = "+1";
+        var generator = PeopleGenerators.phoneNumbers(phoneCountryCode);
+        assertThat(generator, notNullValue());
 
-        val phoneCountryCode = "+1"
-        val instance = PeopleGenerators.phoneNumbers(phoneCountryCode)
-        assertThat(instance, notNullValue())
-
-        val phoneNumberPattern = Pattern.compile("\\+1 \\d{3}-\\d{3}-\\d{4}")
-
-        repeatTest()
-        {
-            val phoneNumber = instance.get()
-            assertThat(phoneNumber, not(isEmptyString()))
-            assertThat(phoneNumberPattern.asPredicate().test(phoneNumber), `is`(true))
-        }
+        var phoneNumber = generator.get();
+        assertThat(phoneNumber, not(isEmptyString()));
+        var matchesPattern = PHONE_NUMBER_PATTERN.asPredicate().test(phoneNumber);
+        assertThat(matchesPattern, is(true));
     }
 
-    @Test
-    fun testPopularEmailDomains()
-    {
-        println("testPopularEmailDomains")
+    @DisplayName("testPopularEmailDomains")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testPopularEmailDomains() {
+        var generator = PeopleGenerators.popularEmailDomains();
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.popularEmailDomains()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val domain = instance.get()
-            assertThat(domain, not(isEmptyString()))
-            assertThat(domain, either(endsWith(".com")).or(endsWith(".tech")))
-        }
+        var domain = generator.get();
+        assertThat(domain, not(isEmptyString()));
+        assertThat(domain, either(endsWith(".com")).or(endsWith(".tech")));
     }
 
-    @Test
-    fun testEmailAddresses()
-    {
-        println("testEmails")
+    @DisplayName("testEmailAddresses")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testEmailAddresses() {
+        var generator = PeopleGenerators.emailAddresses();
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.emailAddresses()
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val email = instance.get()
-            assertThat(email, not(isEmptyString()))
-            assertThat(email.contains("@"), `is`(true))
-        }
+        var email = generator.get();
+        assertThat(email, not(isEmptyString()));
+        assertThat(email.contains("@"), is(true));
     }
 
-    @Test
-    fun testEmailAddressesWithCustomDomains()
-    {
-        println("testEmailsWithCustomDomains")
+    @DisplayName("testEmailAddressesWithCustomDomains")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testEmailAddressesWithCustomDomains() {
+        var domains = CollectionGenerators.listOf(alphabeticStrings(), 10);
+        var domainGenerator = stringsFromFixedList(domains);
 
-        val domains = CollectionGenerators.listOf(alphabeticStrings(), 10)
-        val domainGenerator = stringsFromFixedList(domains)
+        var generator = PeopleGenerators.emailAddresses(domainGenerator);
+        assertThat(generator, notNullValue());
 
-        val instance = PeopleGenerators.emailAddresses(domainGenerator)
-        assertThat(instance, notNullValue())
-
-        repeatTest()
-        {
-            val email = instance.get()
-            assertThat(email, not(isEmptyString()))
-            assertEndsWithOneOfTheDomains(email, domains)
-        }
+        var email = generator.get();
+        assertThat(email, not(isEmptyString()));
+        assertEndsWithOneOfTheDomains(email, domains);
     }
 
-    private fun assertEndsWithOneOfTheDomains(email: String, domains: List<String>)
-    {
-        val anyMatch = domains.stream()
-                .anyMatch { domain -> email.endsWith(domain) }
+    private void assertEndsWithOneOfTheDomains(String email, List<String> domains) {
+        boolean anyMatch = domains.stream()
+                                  .anyMatch(email::endsWith);
 
-        if (!anyMatch)
-        {
-            fail("Expected email $email to end with one of these domains: $domains")
+        if (!anyMatch) {
+            throw new AssertionError("Expected email " + email + " to end with one of these domains: " + domains);
         }
 
     }
 
-    @Test
-    fun testEmailAddressesWithCustomDomainsEdgeCases()
-    {
-        assertThrows { PeopleGenerators.emailAddresses(AlchemyGenerator<String> { null }) }
-        assertThrows { PeopleGenerators.emailAddresses(AlchemyGenerator<String> { "" }) }
+    @DisplayName("testEmailAddressesWithCustomDomainsEdgeCases")
+    @RepeatedTest(1)
+    void testEmailAddressesWithCustomDomainsEdgeCases() {
+        assertThrows(() -> PeopleGenerators.emailAddresses(() -> null));
+        assertThrows(() -> PeopleGenerators.emailAddresses(() -> ""));
     }
 
-    @Test
-    fun testProfessions()
-    {
-        val generator = PeopleGenerators.professions()
+    @DisplayName("testProfessions")
+    @RepeatedTest(20)
+    void testProfessions() {
+        var generator = PeopleGenerators.professions();
 
-        repeatTest loop@
-        {
-            val result = generator.get()
-            assertThat(result, notNullValue())
-            assertThat(result, not(isEmptyString()))
-        }
-
+        var result = generator.get();
+        assertThat(result, notNullValue());
+        assertThat(result, not(isEmptyString()));
     }
 }
