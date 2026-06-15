@@ -1,269 +1,228 @@
-/*
- * Copyright © 2026. Sir Wellington.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- *
- * You may obtain a copy of the License at
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package tech.sirwellington.alchemy.generator;
 
-package tech.sirwellington.alchemy.generator
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.hamcrest.Matchers.*
-import org.junit.Assert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one
-import tech.sirwellington.alchemy.generator.Dates.isNow
-import tech.sirwellington.alchemy.generator.NumberGenerators.integers
-import tech.sirwellington.alchemy.generator.NumberGenerators.longs
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.Date
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
+
 
 /**
-
- * @author SirWellington
+ * Tests for {@link DateGenerators}.
+ *
  */
-@RunWith(MockitoJUnitRunner::class)
-class DateGeneratorsTest
-{
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Date Generators")
+class DateGeneratorsTest extends BaseGeneratorTest {
+    
+    @Test
+    void testCannotInstantiate() {
+        // Given
+        var constructors = DateGenerators.class.getDeclaredConstructors();
+        assertThat(constructors.length, is(1));
+        var constructor = constructors[0];
+        constructor.setAccessible(true);
 
-    private var iterations: Int = 0
-
-    @Before
-    fun setUp()
-    {
-        iterations = one(integers(100, 1000))
+        // Then
+        assertThrows(() -> constructor.newInstance())
+            .isInstanceOf(IllegalAccessError.class);
     }
 
     @Test
-    fun testCannotInstantiate()
-    {
-        println("testCannotInstantiate")
+    void testPresentDates() {
+        // Given
+        var instance = DateGenerators.presentDates();
 
-        assertThrows { DateGenerators::class.java.newInstance() }
-                .isInstanceOf(IllegalAccessException::class.java)
+        // When
+        repeatTest(() -> {
+            var date = instance.get();
+            assertThat(date, notNullValue());
+            assertThat(isNow(date), is(true));
+        });
     }
 
     @Test
-    fun testPresentDates()
-    {
-        println("testPresentDates")
+    void testPastDates() {
+        var instance = DateGenerators.pastDates();
 
-        val instance = DateGenerators.presentDates()
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(isNow(value, 30), `is`(true))
-        }
+        repeatTest(() -> {
+            var date = instance.get();
+            assertThat(date, notNullValue());
+            assertThat(date.before(Dates.now()), is(true));
+        });
     }
 
     @Test
-    fun testPastDates()
-    {
-        println("testPastDates")
+    void testFutureDates() {
+        var instance = DateGenerators.futureDates();
 
-        val instance = DateGenerators.pastDates()
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(value.before(Dates.now()), `is`(true))
-        }
+        repeatTest(() -> {
+            var date = instance.get();
+            assertThat(date, notNullValue());
+            assertThat(date.after(Dates.now()), is(true));
+        });
     }
 
     @Test
-    fun testFutureDates()
-    {
-        println("testFutureDates")
-
-        val instance = DateGenerators.futureDates()
-
-        repeatTest()
-        {
-            val value = instance.get()
-            assertThat(value, notNullValue())
-            assertThat(value.after(Dates.now()), `is`(true))
-        }
+    void testAnyTime() {
+        repeatTest(() -> {
+            var generator = DateGenerators.anyTime();
+            assertThat(generator, notNullValue());
+            assertThat(generator.get(), notNullValue());
+        });
     }
 
     @Test
-    fun testAnyTime()
-    {
-        println("testAnyTime")
+    void testBefore() {
+        var ref = Dates.now();
 
-        repeatTest()
-        {
-            val instance = DateGenerators.anyTime()
-            assertThat(instance, notNullValue())
-            assertThat(instance.get(), notNullValue())
-        }
+        var instance = DateGenerators.before(ref);
+        assertThat(instance, notNullValue());
 
+        repeatTest(() -> {
+            var date = instance.get();
+            assertThat(date, notNullValue());
+            assertThat(date.before(ref), is(true));
+        });
+
+        assertThrows(() -> DateGenerators.before(null))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    fun testBefore()
-    {
-        println("testBefore")
+    void testAfter() {
+        var ref = Dates.now();
 
-        repeatTest()
-        {
-            val referenceDate = Dates.now()
+        var instance = DateGenerators.after(ref);
+        assertThat(instance, notNullValue());
 
-            val instance = DateGenerators.before(referenceDate)
-            assertThat(instance, notNullValue())
+        repeatTest(() -> {
+            var date = instance.get();
+            assertThat(date, notNullValue());
+            assertThat(date.after(ref), is(true));
+        });
 
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.before(referenceDate), `is`(true))
-        }
-
-        //Edge case
-        assertThrows { DateGenerators.before(null!!) }
+        assertThrows(() -> DateGenerators.after(null))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    fun testAfter()
-    {
-        println("testAfter")
+    void testToDate() {
+        var now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        AlchemyGenerator<Instant> generator = () -> now;
 
-        repeatTest()
-        {
-            val referenceDate = Dates.now()
+        var instance = DateGenerators.toDate(generator);
+        assertThat(instance, notNullValue());
 
-            val instance = DateGenerators.after(referenceDate)
-            assertThat(instance, notNullValue())
+        repeatTest(() -> {
+            var instant = instance.get();
+            assertThat(instant, notNullValue());
+            assertThat(
+                instant.toInstant().truncatedTo(ChronoUnit.MILLIS),
+                is(now)
+            );
+        });
 
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.after(referenceDate), `is`(true))
-        }
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> DateGenerators.toDate(null)
+        );
 
-        //Edge case
-        assertThrows { DateGenerators.after(null!!) }
+        AlchemyGenerator<Instant> nullSupplier = () -> null;
+        assertThrows(IllegalStateException.class, () -> DateGenerators.toDate(nullSupplier));
     }
 
     @Test
-    fun testToDate()
-    {
-        println("testToDate")
+    void testDatesBetween() {
+        var startDate = Dates.daysAgo(4);
+        var endDate = Dates.daysAhead(5);
 
-        repeatTest()
-        {
-            val now = Instant.now()
-            val generator = AlchemyGenerator { now }
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> DateGenerators.datesBetween(null, endDate)
+        );
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> DateGenerators.datesBetween(startDate, null)
+        );
 
-            val instance = DateGenerators.toDate(generator)
-            assertThat(instance, notNullValue())
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> DateGenerators.datesBetween(endDate, startDate)
+        ).hasMessageContaining("before");
 
-            val result = instance.get()
-            assertThat(result, notNullValue())
-            assertThat(result.toInstant(), `is`(now.truncatedTo(ChronoUnit.MILLIS)))
-        }
+        repeatTest(() -> {
+            long begin = one(longs(1, Long.MAX_VALUE / 2));
+            long end = one(longs(begin + 1, Long.MAX_VALUE));
 
-        //Edge cases
-        assertThrows { DateGenerators.toDate(null!!) }
+            startDate.setTime(begin);
+            endDate.setTime(end);
 
-        assertThrows { DateGenerators.toDate(AlchemyGenerator<Instant> { null }) }
+            var generator = DateGenerators.datesBetween(startDate, endDate);
+            assertThat(generator, notNullValue());
+
+            var date = generator.get();
+            assertThat(date.getTime(), greaterThanOrEqualTo(startDate.getTime()));
+            assertThat(date.getTime(), lessThan(endDate.getTime()));
+        });
     }
 
     @Test
-    fun testDatesBetween()
-    {
-        println("testDatesBetween")
+    void testAsSqlDateGenerator() {
+        var date = one(DateGenerators.anyTime());
+        var generator = (AlchemyGenerator<Date>) () -> date;
+        var resultGen = DateGenerators.toSqlDateGenerator(generator);
 
-        val startDate = Dates.daysAgo(4)
-        val endDate = Dates.daysAhead(5)
+        java.sql.Date sqlDate = resultGen.get();
+        java.sql.Date expected = new java.sql.Date(date.getTime());
 
-        //Edge Cases
-        assertThrows { DateGenerators.datesBetween(null!!, endDate) }
-        assertThrows { DateGenerators.datesBetween(startDate, null!!) }
-        //Dates swapped
-        assertThrows { DateGenerators.datesBetween(endDate, startDate) }
-
-
-        repeatTest()
-        {
-            //Pick a start and end time
-            val begin = one(longs(1, Long.MAX_VALUE / 2))
-            val end = one(longs(begin + 1, java.lang.Long.MAX_VALUE))
-
-            startDate.time = begin
-            endDate.time = end
-
-            val instance = DateGenerators.datesBetween(startDate, endDate)
-            assertThat(instance, notNullValue())
-
-            //Check the resulting date
-            val result = instance.get()
-            assertThat(result.time, greaterThanOrEqualTo(startDate.time))
-            assertThat(result.time, lessThan(endDate.time))
-        }
-
+        assertThat(sqlDate, is(expected));
     }
 
     @Test
-    fun testAsSqlDateGenerator()
-    {
-        println("testAsSqlDateGenerator")
+    void testAsLocalDateGenerator() {
+        var date = one(DateGenerators.anyTime());
+        var gen = (AlchemyGenerator<java.util.Date>) () -> date;
+        var resultGen = DateGenerators.toLocalDateGenerator(gen);
 
-        repeatTest()
-        {
-            val date = one(DateGenerators.anyTime())
-
-            val generator = AlchemyGenerator<Date> { date }
-            val result = DateGenerators.toSqlDateGenerator(generator)
-            val sqlDate = result.get()
-            val expected = java.sql.Date(date.time)
-
-            assertThat(sqlDate, equalTo(expected))
-        }
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        assertThat(resultGen.get(), is(sqlDate.toLocalDate()));
     }
 
     @Test
-    fun testAsLocalDateGenerator()
-    {
-        println("testAsLocalDateGenerator")
+    void testAsSqlTimestampGenerator() {
+        var date = one(DateGenerators.anyTime());
+        AlchemyGenerator<Date> generator = () -> date;
 
-        repeatTest()
-        {
-            val date = one(DateGenerators.anyTime())
-            val generator = AlchemyGenerator<Date> { date }
-            val result = DateGenerators.toLocalDateGenerator(generator)
-            val expected = java.sql.Date(date.time).toLocalDate()
-            assertThat(result.get(), equalTo(expected))
-        }
+        var resultGen = DateGenerators.toSqlTimestampGenerator(generator);
+        java.sql.Timestamp sqlTimestamp = resultGen.get();
+
+        assertThat(sqlTimestamp, is(new java.sql.Timestamp(date.getTime())));
     }
 
-    @Test
-    fun testSqlSqlTimestampGenerator()
-    {
-        println("testSqlSqlTimestampGenerator")
+    // ────────────────────────────────────────────────────────────────
+    // Utilities
+    // ────────────────────────────────────────────────────────────────
 
-        repeatTest()
-        {
-            val date = one(DateGenerators.anyTime())
-            val generator = AlchemyGenerator { date }
-
-            val result = DateGenerators.toSqlTimestampGenerator(generator)
-            val sqlTimestamp = result.get()
-
-            assertThat(sqlTimestamp, equalTo(Timestamp(date.time)))
-        }
+    private boolean isNow(Date date) {
+        return isNow(date, 5);
     }
 
+    /**
+     * Returns true if {@code date} is within ±tolerance seconds of current time.
+     */
+    private boolean isNow(Date date, int toleranceSeconds) {
+        long now = System.currentTimeMillis();
+        long diff = Math.abs(date.getTime() - now);
+        return diff <= (long) toleranceSeconds * 1_000;
+    }
 }

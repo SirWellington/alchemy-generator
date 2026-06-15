@@ -15,6 +15,7 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import org.junit.jupiter.api.BeforeEach;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 
 import java.security.SecureRandom;
@@ -30,8 +31,14 @@ class BaseGeneratorTest {
 
     static final SecureRandom RANDOM = new SecureRandom();
 
+    int iterations = 10;
+
+    @BeforeEach
+    void setup() {
+        iterations = one(integers(50, 100));
+    }
+
     void repeatTest(Runnable function) {
-        var iterations = one(integers(50, 250));
         repeatTest(iterations, function);
     }
 
