@@ -15,6 +15,7 @@
 package tech.sirwellington.alchemy.generator;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  * Tests for {@link BooleanGenerators}.
@@ -37,10 +38,8 @@ class BooleanGeneratorsTest extends BaseGeneratorTest {
 
     @Test
     void testCannotInstantiate() throws Exception {
-        assertThrows(
-            IllegalAccessException.class,
-            () -> BooleanGenerators.class.getDeclaredConstructor().newInstance()
-        );
+        assertThrows(() -> BooleanGenerators.class.getDeclaredConstructor().newInstance())
+            .isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
@@ -57,11 +56,10 @@ class BooleanGeneratorsTest extends BaseGeneratorTest {
             values.add(value);
         });
 
-        // Ensure we got *both* boolean values (true & false)
         assertThat(values.size(), is(2));
     }
 
-    @Test
+    @RepeatedTest(20)
     void testAlternatingBooleans() {
         var instance = BooleanGenerators.alternatingBooleans();
         AtomicReference<Boolean> previous = new AtomicReference<>(false);

@@ -41,10 +41,6 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
         assertThrows(
             () -> BinaryGenerators.class.getDeclaredConstructor().newInstance()
         ).isInstanceOf(IllegalAccessException.class);
-
-        assertThrows(
-            () -> BinaryGenerators.class.getDeclaredConstructor().newInstance()
-        ).isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
