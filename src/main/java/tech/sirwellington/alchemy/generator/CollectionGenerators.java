@@ -23,9 +23,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
+import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -43,10 +46,12 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiv
  * @see NumberGenerators
  * @see BinaryGenerators
  */
+@NonInstantiable
+@StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class CollectionGenerators {
 
-    private CollectionGenerators() throws IllegalAccessError {
-        throw new IllegalAccessError("cannot directly instantiate");
+    private CollectionGenerators() throws IllegalAccessException {
+        throw new IllegalAccessException("Cannot instantiate this class");
     }
 
     /**

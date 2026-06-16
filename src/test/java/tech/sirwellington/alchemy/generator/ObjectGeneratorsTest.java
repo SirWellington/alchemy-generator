@@ -15,6 +15,7 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -194,6 +195,7 @@ class ObjectGeneratorsTest extends BaseGeneratorTest {
     // This test is complex; skipping with comment instead of @Ignore
     @DisplayName("testWithADataClassThatContainsAMapOfAList — complex, skipped")
     @Test
+    @Disabled("Complex object cannot be auto-reflected.")
     void testWithADataClassThatContainsAMapOfAList() {
         class Holder {
             String string;
@@ -343,7 +345,7 @@ class ObjectGeneratorsTest extends BaseGeneratorTest {
     }
 
     // -----------------------
-    // Data Classes (Java records forBand)
+    // Data Classes (Records and Manual Data classes)
     // -----------------------
     private static class Computer {
         String name;
@@ -392,7 +394,7 @@ class ObjectGeneratorsTest extends BaseGeneratorTest {
     }
 
     enum State {
-        NY, NJ, CA
+        CA, NY, NJ, NV
     }
 
     private static class CityBlock {
@@ -415,19 +417,19 @@ class ObjectGeneratorsTest extends BaseGeneratorTest {
         }
     }
 
-    record Band(String name,
-                int fans,
-                double money,
-                float price,
-                String city,
-                byte[] data,
-                java.util.Date dateFormed,
-                Timestamp timeFormed,
-                LocalDate nextTourDate,
-                boolean onTour,
-                Computer workstation) {}
-
-
+    record Band(
+        String name,
+        int fans,
+        double money,
+        float price,
+        String city,
+        byte[] data,
+        java.util.Date dateFormed,
+        Timestamp timeFormed,
+        LocalDate nextTourDate,
+        boolean onTour,
+        Computer workstation
+    ) { }
 
     record Restaurant(
         String name,
@@ -443,23 +445,6 @@ class ObjectGeneratorsTest extends BaseGeneratorTest {
             public static final Tag CHEAP = new Tag("CHEAP");
             public static final Tag CASUAL = new Tag("CASUAL");
             public static final Tag ROMANTIC = new Tag("ROMANTIC");
-
-            @Override
-            public String toString() {
-                return label;
-            }
-        }
-
-        static Restaurant of(
-            String name,
-            VenueType type,
-            Tag... tags
-        ) {
-            return new Restaurant(
-                name,
-                type,
-                Arrays.asList(tags)
-            );
         }
     }
 

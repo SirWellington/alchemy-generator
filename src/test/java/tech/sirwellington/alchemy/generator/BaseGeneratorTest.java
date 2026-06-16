@@ -15,6 +15,9 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 
 import java.security.SecureRandom;
@@ -27,6 +30,11 @@ class BaseGeneratorTest {
 
     static final SecureRandom RANDOM = new SecureRandom();
     static final int DEFAULT_ITERATIONS = 100;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     void repeatBlock(Runnable function) {
         repeatBlock(DEFAULT_ITERATIONS, function);

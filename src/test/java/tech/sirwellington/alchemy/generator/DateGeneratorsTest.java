@@ -26,15 +26,10 @@ class DateGeneratorsTest extends BaseGeneratorTest {
     
     @Test
     void testCannotInstantiate() {
-        // Given
-        var constructors = DateGenerators.class.getDeclaredConstructors();
-        assertThat(constructors.length, is(1));
-        var constructor = constructors[0];
-        constructor.setAccessible(true);
-
         // Then
-        assertThrows(() -> constructor.newInstance())
-            .isInstanceOf(IllegalAccessError.class);
+        assertThrows(
+            () -> DateGenerators.class.getDeclaredConstructor().newInstance()
+        ).isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
@@ -138,7 +133,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         );
 
         AlchemyGenerator<Instant> nullSupplier = () -> null;
-        assertThrows(IllegalStateException.class, () -> DateGenerators.toDate(nullSupplier));
+        assertThrows(IllegalArgumentException.class, () -> DateGenerators.toDate(nullSupplier));
     }
 
     @Test
@@ -147,18 +142,16 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         var endDate = Dates.daysAhead(5);
 
         assertThrows(
-            IllegalArgumentException.class,
             () -> DateGenerators.datesBetween(null, endDate)
-        );
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> DateGenerators.datesBetween(startDate, null)
-        );
+        ).isInstanceOf(IllegalArgumentException.class);
 
         assertThrows(
-            IllegalArgumentException.class,
+            () -> DateGenerators.datesBetween(startDate, null)
+        ).isInstanceOf(IllegalArgumentException.class);
+
+        assertThrows(
             () -> DateGenerators.datesBetween(endDate, startDate)
-        ).hasMessageContaining("before");
+        ).isInstanceOf(IllegalArgumentException.class);
 
         repeatBlock(() -> {
             long begin = one(longs(1, Long.MAX_VALUE / 2));

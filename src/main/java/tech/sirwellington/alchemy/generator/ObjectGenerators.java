@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.SingletonPattern;
-import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import java.lang.reflect.*;
 import java.net.URL;
@@ -32,8 +31,6 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -64,15 +61,22 @@ public final class ObjectGenerators {
     );
 
     static {
+        DEFAULT_GENERATOR_MAPPINGS.put(boolean.class, BooleanGenerators.booleans());
         DEFAULT_GENERATOR_MAPPINGS.put(Boolean.class, BooleanGenerators.booleans());
         DEFAULT_GENERATOR_MAPPINGS.put(Byte.class, BinaryGenerators.bytes());
         DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.byteBuffers(333));
-        DEFAULT_GENERATOR_MAPPINGS.put(Byte[].class, BinaryGenerators.binary(333));
+        DEFAULT_GENERATOR_MAPPINGS.put(byte[].class, BinaryGenerators.binary(333));
+        DEFAULT_GENERATOR_MAPPINGS.put(char.class, charGenerator);
         DEFAULT_GENERATOR_MAPPINGS.put(Character.class, charGenerator);
+        DEFAULT_GENERATOR_MAPPINGS.put(float.class, positiveFloats());
         DEFAULT_GENERATOR_MAPPINGS.put(Float.class, positiveFloats());
+        DEFAULT_GENERATOR_MAPPINGS.put(double.class, positiveDoubles());
         DEFAULT_GENERATOR_MAPPINGS.put(Double.class, positiveDoubles());
+        DEFAULT_GENERATOR_MAPPINGS.put(int.class, smallPositiveIntegers());
         DEFAULT_GENERATOR_MAPPINGS.put(Integer.class, smallPositiveIntegers());
+        DEFAULT_GENERATOR_MAPPINGS.put(long.class, positiveLongs());
         DEFAULT_GENERATOR_MAPPINGS.put(Long.class, positiveLongs());
+        DEFAULT_GENERATOR_MAPPINGS.put(short.class, shortGenerator);
         DEFAULT_GENERATOR_MAPPINGS.put(Short.class, shortGenerator);
         DEFAULT_GENERATOR_MAPPINGS.put(String.class, alphabeticStrings());
         DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anyTime());
@@ -353,6 +357,7 @@ public final class ObjectGenerators {
         if (generator != null) {
             //Already found it, now see if there's a more specialized version
             return tryToLoadSpecializedGenerator(
+                args.parameter.orElse(null),
                 field.orElse(null),
                 typeOfField,
                 generator
@@ -380,6 +385,7 @@ public final class ObjectGenerators {
 
     @SuppressWarnings("ReassignedVariable")
     private static AlchemyGenerator<?> tryToLoadSpecializedGenerator(
+        Parameter parameter,
         Field field,
         Class<?> typeOfField,
         AlchemyGenerator<?> generator
@@ -387,28 +393,31 @@ public final class ObjectGenerators {
         String fieldName = null;
         if (field != null) {
             fieldName = field.getName();
+        } else if (parameter != null) {
+            fieldName = parameter.getName();
         }
 
         return switch (typeOfField) {
             case Class<?> cls when cls == String.class -> switch (fieldName) {
                 case "firstName"        -> PeopleGenerators.firstNames();
+                case "middleName"       -> PeopleGenerators.middleNames();
                 case "lastName"         -> PeopleGenerators.lastNames();
                 case "name", "fullName" -> PeopleGenerators.fullNames();
                 case "email"            -> PeopleGenerators.emailAddresses();
                 case "city"             -> PlaceGenerators.cities();
                 case "country"          -> PlaceGenerators.countries();
-                default                 -> generator;
+                case null, default      -> generator;
             };
 
-            case Class<?> cls when cls == Double.class -> switch (fieldName) {
+            case Class<?> cls when cls == Double.class || cls == double.class -> switch (fieldName) {
                 case "latitude", "lat"  -> GeolocationGenerators.latitudes();
                 case "longitude", "lon" -> GeolocationGenerators.longitudes();
-                default                 -> generator;
+                case null, default      -> generator;
             };
 
-            case Class<?> cls when cls == Integer.class -> switch (fieldName) {
-                case "age" -> PeopleGenerators.adultAges();
-                default    -> generator;
+            case Class<?> cls when cls == Integer.class || cls == int.class -> switch (fieldName) {
+                case "age"         -> PeopleGenerators.adultAges();
+                case null, default -> generator;
             };
 
             default -> generator;
@@ -751,19 +760,34 @@ public final class ObjectGenerators {
                      .filter(ObjectGenerators::hasNoParameters)
                      .findFirst()
                      .or(() -> Arrays.stream(constructors).findFirst())
-                     .orElse(tryToGet(clazz::getDeclaredConstructor));
+                     .or(() -> tryToGet(clazz::getDeclaredConstructor))
+                     .or(() -> tryToGet(() -> getRecordConstructor(clazz)))
+                     .orElse(null);
     }
 
     private static boolean hasNoParameters(Constructor<?> constructor) {
         return constructor.getParameterCount() == 0;
     }
 
-    private static <T> T tryToGet(ThrowingSupplier<T, Throwable> supplier) {
+    private static <T> Optional<T> tryToGet(ThrowingSupplier<T, Throwable> supplier) {
         try {
-            return supplier.get();
+            var result = supplier.get();
+            return Optional.of(result);
         }
         catch (Throwable ex) {
-            return null;
+            return Optional.empty();
         }
+    }
+    private static Constructor<?> getRecordConstructor(Class<?> clazz) throws NoSuchMethodException {
+        if (!clazz.isRecord()) return null;
+
+        var components = clazz.getRecordComponents();
+        var params = Arrays.stream(components)
+            .map(RecordComponent::getType)
+            .toArray(Class<?>[]::new);
+
+        var constructor = clazz.getDeclaredConstructor(params);
+        constructor.setAccessible(true);
+        return constructor;
     }
 }

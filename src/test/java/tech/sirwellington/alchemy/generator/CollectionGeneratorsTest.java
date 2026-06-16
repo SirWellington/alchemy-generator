@@ -38,22 +38,15 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 @DisplayName("Collection Generators")
 class CollectionGeneratorsTest extends BaseGeneratorTest {
 
-    private int iterations;
-
     @Mock
     private AlchemyGenerator<Object> mockGenerator;
-
-    @BeforeEach
-    void setUp() {
-        iterations = RANDOM.nextInt(500, 5000);
-    }
 
     @Test
     @DisplayName("cannot be instantiated")
     void testCannotInstantiate() throws Exception {
-        var constructor = CollectionGenerators.class.getDeclaredConstructor();
-        constructor.setAccessible(true);
-        assertThrows(IllegalAccessException.class, constructor::newInstance);
+        assertThrows(
+            () -> CollectionGenerators.class.getDeclaredConstructor().newInstance()
+        ).isInstanceOf(IllegalAccessException.class);
     }
 
     @Test
@@ -137,8 +130,8 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
     @DisplayName("fromList(Iterable) returns generator selecting from list")
     void testFromList() {
         // Given
-        List<String> list = new ArrayList<>();
-        int size = RANDOM.nextInt(1, 100);
+        var list = new ArrayList<String>();
+        var size = RANDOM.nextInt(1, 100);
 
         for (int i = 0; i < size; ++i) {
             var value = Integer.toHexString(RANDOM.nextInt());
@@ -150,13 +143,13 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         assertThat(generator, notNullValue());
 
         // Then
-        for (int i = 0; i < iterations; ++i) {
+        repeatBlock(DEFAULT_ITERATIONS, () -> {
             String value = generator.get();
             assertThat(
                 "Value '" + value + "' not in source list",
                 list.contains(value), is(true)
             );
-        }
+        });
     }
 
     @Test

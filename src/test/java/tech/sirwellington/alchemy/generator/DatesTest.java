@@ -118,7 +118,7 @@ class DatesTest extends BaseGeneratorTest {
         Date notNow = Dates.daysAgo(1);
         assertThat(Dates.isNow(notNow), is(false));
 
-        assertThrows(NullPointerException.class, () -> Dates.isNow(null));
+        assertThrows(IllegalArgumentException.class, () -> Dates.isNow(null));
     }
 
     @Test
@@ -139,8 +139,8 @@ class DatesTest extends BaseGeneratorTest {
 
     @Test
     void testIsNow_Instant_long() throws Exception {
-        assertThrows(NullPointerException.class,
-                       () -> Dates.isNow((Instant) null, 0));
+        assertThrows(() -> Dates.isNow((Instant) null, 0))
+            .isInstanceOf(IllegalArgumentException.class);
 
         assertThrows(() -> {
             var now = Instant.now();
@@ -159,11 +159,13 @@ class DatesTest extends BaseGeneratorTest {
     void testIsNow_ToleranceBoundaries() {
         var slightlyEarly = new Date(Instant.now().minusSeconds(2).toEpochMilli());
         var slightlyLate   = new Date(Instant.now().plusSeconds(2).toEpochMilli());
+        var oneSecondDuration = Duration.ofSeconds(1).toMillis();
+        var fourSecondsDuration = Duration.ofSeconds(4).toMillis();
 
-        assertThat(Dates.isNow(slightlyEarly, 4), is(true)); // within ±4s
-        assertThat(Dates.isNow(slightlyEarly, 1), is(false)); // outside ±1s
+        assertThat(Dates.isNow(slightlyEarly, fourSecondsDuration), is(true)); // within ±4s
+        assertThat(Dates.isNow(slightlyEarly, oneSecondDuration), is(false)); // outside ±1s
 
-        assertThat(Dates.isNow(slightlyLate, 4), is(true));
-        assertThat(Dates.isNow(slightlyLate, 1), is(false));
+        assertThat(Dates.isNow(slightlyLate, fourSecondsDuration), is(true));
+        assertThat(Dates.isNow(slightlyLate, oneSecondDuration), is(false));
     }
 }

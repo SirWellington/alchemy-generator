@@ -32,8 +32,8 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  */
 public final class DateGenerators {
 
-    private DateGenerators() {
-        throw new IllegalAccessError("cannot instantiated");
+    private DateGenerators() throws IllegalAccessException {
+        throw new IllegalAccessException("cannot be instantiated");
     }
 
     /**
@@ -86,6 +86,7 @@ public final class DateGenerators {
      * @param referenceDate Dates produced will be after this date.
      */
     static AlchemyGenerator<Date> after(@Required Date referenceDate) {
+        checkNotNull(referenceDate);
         var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.after(instant));
     }
