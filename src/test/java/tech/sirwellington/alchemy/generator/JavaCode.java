@@ -29,50 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 final class JavaCode {
 
-    static class Computer {
-
-        private String name;
-        private String model;
-        private int year;
-        private String manufacturer;
-        private double cost;
-        private byte[] data;
-
-        static void check(Computer computer) {
-            assertThat(computer, notNullValue());
-            assertThat(computer.name, is(not(isEmptyOrNullString())));
-            assertThat(computer.model, not(isEmptyOrNullString()));
-            assertThat(computer.manufacturer, not(isEmptyOrNullString()));
-            assertThat(computer.year, greaterThan(0));
-            assertThat(computer.cost, greaterThan(0.0));
-            assertThat(computer.data, notNullValue());
-            assertThat(computer.data.length, greaterThan(0));
-        }
-    }
-
-    static class Person {
-
-        public String name;
-        public int age;
-        private double money;
-        private String middleName;
-        private Computer computer;
-        private URL website;
-
-
-        static void check(Person person) {
-            assertThat(person, notNullValue());
-            assertThat(person.name, is(not(isEmptyOrNullString())));
-            assertThat(person.age, greaterThan(0));
-            assertThat(person.money, greaterThan(0.0));
-            assertThat(person.middleName, not(isEmptyOrNullString()));
-            assertThat(person.computer, notNullValue());
-            assertThat(person.website, notNullValue());
-
-            Computer.check(person.computer);
-        }
-    }
-
     static Matcher<String> isEmptyOrNullString() {
         return new EmptyOrNullString();
     }
