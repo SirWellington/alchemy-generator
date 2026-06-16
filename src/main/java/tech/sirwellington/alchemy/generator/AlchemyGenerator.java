@@ -22,7 +22,7 @@ import java.util.function.Function;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 
 /**
- * An {@link AlchemyGenerator} generates Data or Objects, commonly used in testing scenarios.
+ * {@summary Generates Data or Objects, primarily used for testint scenarios.}
  * <br>
  * Common generators exist for:
  * <pre>
@@ -39,9 +39,9 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * + Lists of the above
  * + Maps of the above
  * </pre>
- * <p>
+ *
  * Examples:
- * <p>
+ *
  * <pre>
  * Get a positive integer:
  *

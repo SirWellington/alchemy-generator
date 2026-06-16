@@ -64,13 +64,13 @@ public class PlaceGenerators {
 
     /**
      * Returns a street address.
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 145 N Longwood Blvd}
      */
     public static AlchemyGenerator<String> streetAddresses() {
@@ -120,13 +120,13 @@ public class PlaceGenerators {
      * 3. City
      * 4. State
      * 5. Country
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 4592 E 2 St New York, United States}.
      */
     public static AlchemyGenerator<String> fullAddresses() {
@@ -140,13 +140,13 @@ public class PlaceGenerators {
      * 3. City
      * 4. State
      * 5. Country
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 4592 E 2 St New York, United States}.
      *
      * @param isUSAddress Whether to return a U.S. based address which includes a [state][states].

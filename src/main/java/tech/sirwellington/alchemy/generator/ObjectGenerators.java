@@ -111,7 +111,6 @@ public final class ObjectGenerators {
      * Object with randomly generated values.  Do not use this to generate Primitive types;
      * use instead the Alchemy Generators carefully designed and crafted for Primitives.
      *
-     *
      * The basic rules for the POJO are the following.
      * Each field must be:
      *
@@ -129,46 +128,38 @@ public final class ObjectGenerators {
      *  A [Map] with Type Parameters matching the above conditions.
      *
      *
-     *
      * Valid Examples:
      *
-     * ```
-     * private class Computer
-     * {
-     * private Date releaseDate;
-     * private String name;
-     * private String manufacturer;
-     * private double cost;
+     * <pre>{@code
+     * private class Computer {
+     *   private Date releaseDate;
+     *   private String name;
+     *   private String manufacturer;
+     *   private double cost;
      * }
      *
-     * private class Person
-     * {
-     * private String name;
-     * private int age;
-     * private double money;
-     * private Computer computer;
+     * private class Person {
+     *   private String name;
+     *   private int age;
+     *   private double money;
+     *   private Computer computer;
      * }
      *
-     * private class Company
-     * {
-     *
-     * private String name;
-     * private int numberOfEmployees;
-     * private List<Person> employees;
+     * private class Company {
+     *   private String name;
+     *   private int numberOfEmployees;
+     *   private List<Person> employees;
      * }
      *
-     * private class CompanyIndex
-     * {
-     * private String indexName;
-     * private Map<String, Company> index;
+     * private class CompanyIndex {
+     *   private String indexName;
+     *   private Map<String, Company> index;
      * }
-     * ```
+     * }</pre>
      *
-     * @param <T>
-     *
-     * @param classOfPojo
-     *
-     * @return
+     * @param <T> The type of the object to be generated. Inferred from the class.
+     * @param classOfPojo The class to be generated.
+     * @return An {@link AlchemyGenerator} that generates {@code T} types.
      *
      * @see StringGenerators
      * @see NumberGenerators

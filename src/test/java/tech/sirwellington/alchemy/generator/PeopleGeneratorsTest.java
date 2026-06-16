@@ -63,7 +63,11 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(name, not(isEmptyString()));
         var split = name.split(" ");
         assertThat(split.length, greaterThanOrEqualTo(2));
-        assertThat(split.length, lessThanOrEqualTo(3));
+        assertThat(
+            "name is too long: " + name,
+            split.length,
+            lessThanOrEqualTo(3)
+        );
     }
 
     private void testNameGenerator(AlchemyGenerator<String> generator) {
