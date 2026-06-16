@@ -108,11 +108,15 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         AlchemyGenerator<String> keyGen = mock();
         AlchemyGenerator<String> valueGen = mock();
 
-        when(keyGen.get()).thenReturn(UUID.randomUUID().toString());
-        when(valueGen.get()).thenReturn(String.valueOf(RANDOM.nextDouble()));
+        when(keyGen.get()).then(
+            _ -> UUID.randomUUID().toString()
+        );
+        when(valueGen.get()).then(
+            _ -> String.valueOf(RANDOM.nextDouble())
+        );
 
         // When
-        Map<String, String> result = CollectionGenerators.mapOf(keyGen, valueGen);
+        var result = CollectionGenerators.mapOf(keyGen, valueGen);
 
         // Then
         assertThat(result, notNullValue());
