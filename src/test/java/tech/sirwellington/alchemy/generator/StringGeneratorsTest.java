@@ -172,7 +172,7 @@ class StringGeneratorsTest extends BaseGeneratorTest {
     void testStringsFromFixedList() {
         ArrayList<String> values = new ArrayList<>();
 
-        repeatTest(20, () -> {
+        repeatBlock(20, () -> {
             var seed = RANDOM.nextInt(100, 10_000);
             var randomHexString = Integer.toHexString(seed);
             values.add(randomHexString);
@@ -241,7 +241,7 @@ class StringGeneratorsTest extends BaseGeneratorTest {
 
         final int iterations = 20;
 
-        repeatTest(iterations, () -> {
+        repeatBlock(iterations, () -> {
             var value = generator.get();
             assertThat(value, notNullValue());
             assertThat(value.isEmpty(), is(false));
@@ -269,7 +269,7 @@ class StringGeneratorsTest extends BaseGeneratorTest {
         assertThat(instance, notNullValue());
 
         AtomicInteger iterations = new AtomicInteger();
-        repeatTest(20, () -> {
+        repeatBlock(20, () -> {
             String result = instance.get();
             assertThat(result, not(isEmptyOrNullString()));
             var expectedInvocations = iterations.get() + 1;

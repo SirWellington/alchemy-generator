@@ -48,14 +48,9 @@ final class AlchemyResources {
     }
 
     private static String tryToLoadResource(String path) {
-        var classLoader = AlchemyGenerator.class.getClassLoader();
-        if (classLoader == null) {
-            return null;
-        }
-
-        var url = classLoader.getResource(path);
+        var url = AlchemyResources.class.getResource("/" + path);
         if (url == null) {
-            LOG.warn("Could not load resource at [$path]");
+            LOG.warn("Could not load resource at [{}]", path);
             return null;
         }
 

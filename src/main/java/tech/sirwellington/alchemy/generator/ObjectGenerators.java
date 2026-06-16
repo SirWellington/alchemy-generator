@@ -352,7 +352,7 @@ public final class ObjectGenerators {
 
         if (generator != null) {
             //Already found it, now see if there's a more specialized version
-            tryToLoadSpecializedGenerator(
+            return tryToLoadSpecializedGenerator(
                 field.orElse(null),
                 typeOfField,
                 generator

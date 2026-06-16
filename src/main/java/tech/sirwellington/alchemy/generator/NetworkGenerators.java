@@ -13,9 +13,11 @@ import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.PeopleGenerators.popularEmailDomains;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphanumericStrings;
 
 /**
@@ -77,20 +79,19 @@ public final class NetworkGenerators {
             MessageFormat.format("{0} is not a valid protocol [{1}]", protocol, VALID_PROTOCOLS)
         );
 
-        String cleanProtocol = protocol.replace("://", "");
+        var cleanProtocol = protocol.replace("://", "");
         try {
-            new URI(cleanProtocol + "://");
-        } catch (URISyntaxException  _) {
+            new URI(cleanProtocol + "://example.com");
+        } catch (URISyntaxException  ex) {
             throw new IllegalArgumentException("Unknown protocol: " + protocol);
         }
 
         return () -> {
-            String url = MessageFormat.format(
-                "{0}://{1}.{2}",
-                cleanProtocol,
-                alphanumericStrings().get(),
-                PeopleGenerators.popularEmailDomains().get()
-            );
+            var hostLength = one(integers(3, 40));
+            var host = alphanumericStrings(hostLength);
+            var domain = one(popularEmailDomains());
+            var url = MessageFormat.format("{0}://{1}.{2}", cleanProtocol, host, domain);
+
             try {
                 return new URI(url).toURL();
             } catch (URISyntaxException | MalformedURLException ex) {

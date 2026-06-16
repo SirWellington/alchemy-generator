@@ -53,21 +53,20 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
         var instance = BinaryGenerators.binary(bytes);
 
         assertNotNull(instance);
-        repeatTest(
-            3, () -> {
-                byte[] value = instance.get();
-                assertThat(value, notNullValue());
-                assertEquals(bytes, value.length);
-            }
-        );
+        repeatBlock(3, () -> {
+            var value = instance.get();
+            assertThat(value, notNullValue());
+            assertEquals(bytes, value.length);
+        });
     }
 
+    @DisplayName("BinaryGenerators.binary() should reject non positive number")
     @Test
     void testBinaryEdgeCases() {
         var instance = BinaryGenerators.binary(0);
         assertNotNull(instance);
 
-        byte[] result = instance.get();
+        var result = instance.get();
         assertNotNull(result);
         assertEquals(0, result.length);
 
@@ -84,7 +83,7 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
         var instance = BinaryGenerators.byteBuffers(size);
         assertNotNull(instance);
 
-        repeatTest(
+        repeatBlock(
             3, () -> {
                 ByteBuffer result = instance.get();
                 assertThat(result, notNullValue());
@@ -111,7 +110,7 @@ class BinaryGeneratorsTest extends BaseGeneratorTest {
         var generator = BinaryGenerators.bytes();
         assertNotNull(generator);
 
-        repeatTest(
+        repeatBlock(
             5, () -> {
                 var result = generator.get();
                 assertThat(result, notNullValue());

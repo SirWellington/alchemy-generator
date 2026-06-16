@@ -43,7 +43,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         var instance = DateGenerators.presentDates();
 
         // When
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var date = instance.get();
             assertThat(date, notNullValue());
             assertThat(isNow(date), is(true));
@@ -54,7 +54,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
     void testPastDates() {
         var instance = DateGenerators.pastDates();
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var date = instance.get();
             assertThat(date, notNullValue());
             assertThat(date.before(Dates.now()), is(true));
@@ -65,7 +65,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
     void testFutureDates() {
         var instance = DateGenerators.futureDates();
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var date = instance.get();
             assertThat(date, notNullValue());
             assertThat(date.after(Dates.now()), is(true));
@@ -74,7 +74,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
 
     @Test
     void testAnyTime() {
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var generator = DateGenerators.anyTime();
             assertThat(generator, notNullValue());
             assertThat(generator.get(), notNullValue());
@@ -88,7 +88,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         var instance = DateGenerators.before(ref);
         assertThat(instance, notNullValue());
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var date = instance.get();
             assertThat(date, notNullValue());
             assertThat(date.before(ref), is(true));
@@ -105,7 +105,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         var instance = DateGenerators.after(ref);
         assertThat(instance, notNullValue());
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var date = instance.get();
             assertThat(date, notNullValue());
             assertThat(date.after(ref), is(true));
@@ -123,7 +123,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
         var instance = DateGenerators.toDate(generator);
         assertThat(instance, notNullValue());
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var instant = instance.get();
             assertThat(instant, notNullValue());
             assertThat(
@@ -160,7 +160,7 @@ class DateGeneratorsTest extends BaseGeneratorTest {
             () -> DateGenerators.datesBetween(endDate, startDate)
         ).hasMessageContaining("before");
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
             long begin = one(longs(1, Long.MAX_VALUE / 2));
             long end = one(longs(begin + 1, Long.MAX_VALUE));
 

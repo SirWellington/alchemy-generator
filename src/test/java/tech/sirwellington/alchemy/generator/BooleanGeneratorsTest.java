@@ -51,7 +51,7 @@ class BooleanGeneratorsTest extends BaseGeneratorTest {
         Set<Boolean> values = new HashSet<>();
         int repetitions = 25; // enough to capture both true and false with high probability
 
-        repeatTest(repetitions, () -> {
+        repeatBlock(repetitions, () -> {
             Boolean value = instance.get();
             assertNotNull(value);
             values.add(value);
@@ -70,7 +70,7 @@ class BooleanGeneratorsTest extends BaseGeneratorTest {
         assertNotNull(previous.get());
 
         int repetitions = 20;
-        repeatTest(repetitions, () -> {
+        repeatBlock(repetitions, () -> {
             Boolean current = instance.get();
             assertNotNull(current);
             assertThat(current, is(not(previous.get())));

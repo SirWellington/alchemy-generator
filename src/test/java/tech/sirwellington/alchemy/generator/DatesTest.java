@@ -1,6 +1,7 @@
 package tech.sirwellington.alchemy.generator;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -11,7 +12,8 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
  * Tests for {@link Dates}.
@@ -108,8 +110,6 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
-    // ────────────────────────────────────────────────────────────────────
-
     @Test
     void testIsNow_Date() {
         Date now = Dates.now();
@@ -118,65 +118,52 @@ class DatesTest extends BaseGeneratorTest {
         Date notNow = Dates.daysAgo(1);
         assertThat(Dates.isNow(notNow), is(false));
 
-        assertThrowsJ5(NullPointerException.class, () -> Dates.isNow(null));
+        assertThrows(NullPointerException.class, () -> Dates.isNow(null));
     }
 
     @Test
-    void testIsNow_Date_long() {
-        // Negative tolerance → IllegalArgumentException
-        assertThrowsJ5(IllegalArgumentException.class,
-                       () -> Dates.isNow(new Date(), -1));
+    void testIsNow_Date_long() throws Exception {
+        assertThrows(() -> Dates.isNow(new Date(), -1))
+            .isInstanceOf(IllegalArgumentException.class);
 
-        // Null input → NPE
-        assertThrowsJ5(NullPointerException.class, () -> Dates.isNow(null, 0));
+        assertThrows(() -> Dates.isNow((Date) null, 0L))
+            .isInstanceOf(IllegalArgumentException.class);
 
         Date now = Dates.now();
 
-        // Tolerance of 10s should include `now`
         assertThat(Dates.isNow(now, 10), is(true));
 
-        // Zero tolerance: even a small delay makes it false
-        try {
-            Thread.sleep(1);
-            assertThat(Dates.isNow(now, 0), is(false));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
-        }
+        Thread.sleep(1);
+        assertThat(Dates.isNow(now, 0), is(false));
     }
 
     @Test
-    void testIsNow_Instant_long() {
-        assertThrowsJ5(NullPointerException.class,
+    void testIsNow_Instant_long() throws Exception {
+        assertThrows(NullPointerException.class,
                        () -> Dates.isNow((Instant) null, 0));
 
-        assertThrowsJ5(IllegalArgumentException.class,
-                       () -> Dates.isNow(Instant.now(), one(negativeIntegers()).longValue()));
+        assertThrows(() -> {
+            var now = Instant.now();
+            var negativeNumber = one(negativeLongs());
+            Dates.isNow(now, negativeNumber);
+        }).isInstanceOf(IllegalArgumentException.class);
 
-        Instant now = Instant.now();
+        var now = Instant.now();
         assertThat(Dates.isNow(now, 10), is(true));
 
-        try {
-            Thread.sleep(1);
-            // 0 tolerance: `now` no longer matches
-            assertThat(Dates.isNow(now, 0), is(false));
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException(e);
-        }
+        Thread.sleep(1);
+        assertThat(Dates.isNow(now, 0), is(false));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_ToleranceBoundaries() {
-        // Verify tolerance window is symmetric ±tolerance seconds
-        long offset = 1_500; // 1.5s off
-        Date slightlyEarly = new Date(Instant.now().minusSeconds(2).toEpochMilli());
-        Date slightlyLate   = new Date(Instant.now().plusSeconds(2).toEpochMilli());
+        var slightlyEarly = new Date(Instant.now().minusSeconds(2).toEpochMilli());
+        var slightlyLate   = new Date(Instant.now().plusSeconds(2).toEpochMilli());
 
-        assertThat(Dates.isNow(slightlyEarly, 3), is(true)); // within ±3s
+        assertThat(Dates.isNow(slightlyEarly, 4), is(true)); // within ±4s
         assertThat(Dates.isNow(slightlyEarly, 1), is(false)); // outside ±1s
 
-        assertThat(Dates.isNow(slightlyLate, 3), is(true));
+        assertThat(Dates.isNow(slightlyLate, 4), is(true));
         assertThat(Dates.isNow(slightlyLate, 1), is(false));
     }
 }

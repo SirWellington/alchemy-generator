@@ -53,7 +53,7 @@ class AlchemyGeneratorTest extends BaseGeneratorTest {
 
     @Test
     void testOne_shouldProduceValue() {
-        repeatTest(() -> {
+        repeatBlock(() -> {
             var string = StringGenerators.alphanumericStrings().get();
             AlchemyGenerator<String> generator =  () -> string;
 

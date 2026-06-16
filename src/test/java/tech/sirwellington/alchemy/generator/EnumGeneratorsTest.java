@@ -43,7 +43,7 @@ class EnumGeneratorsTest extends BaseGeneratorTest {
         var generator = EnumGenerators.enumValueOf(Fruit.class);
         assertThat(generator, notNullValue());
 
-        repeatTest(() -> {
+        repeatBlock(() -> {
            var fruit = generator.get();
            assertThat(fruit, notNullValue());
            assertThat(fruit, isA(Fruit.class));

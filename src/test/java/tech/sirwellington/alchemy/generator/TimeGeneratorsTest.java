@@ -17,55 +17,48 @@ package tech.sirwellington.alchemy.generator;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
-import tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-import tech.sirwellington.alchemy.generator.NumberGenerators.longs;
-import tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
-import tech.sirwellington.alchemy.generator.Throwables.assertThrows;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.concurrent.ThreadLocalRandom;
 
-import static com.natpryce.hamkrest.assertion.assertThat;
-import static com.natpryce.hamkrest.equalTo;
-import static com.natpryce.hamkrest.greaterThanOrEqualTo;
-import static com.natpryce.hamkrest.lessThan;
 import static java.time.temporal.ChronoUnit.DAYS;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
+import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
+import static tech.sirwellington.alchemy.generator.TimeGenerators.toZonedDateTimeGenerator;
 
-class TimeGeneratorsTest
-{
+class TimeGeneratorsTest extends BaseGeneratorTest {
 
     @DisplayName("testCannotInstantiate")
-    @RepeatedTest(1)
-    void testCannotInstantiate()
-    {
+    @Test
+    void testCannotInstantiate() {
         assertThrows(() -> TimeGenerators.class.getDeclaredConstructor().newInstance())
             .isInstanceOf(IllegalAccessException.class);
     }
 
     @DisplayName("testPresentInstants")
-    @RepeatedTest(20)
-    void testPresentInstants()
-    {
-        AlchemyGenerator<Instant> instance = TimeGenerators.presentInstants();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testPresentInstants() {
+        var instance = TimeGenerators.presentInstants();
         assertThat(instance, notNullValue());
 
-        Instant result = instance.get();
-        // Assuming Dates.isNow(Instant, int secondsThreshold) exists and is accessible
+        var result = instance.get();
         assertThat(Dates.isNow(result, 30), is(true));
     }
 
     @DisplayName("testPastInstants")
-    @RepeatedTest(20)
-    void testPastInstants()
-    {
-        AlchemyGenerator<Instant> instance = TimeGenerators.pastInstants();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testPastInstants() {
+        var instance = TimeGenerators.pastInstants();
         assertThat(instance, notNullValue());
 
-        Instant now = Instant.now();
-        Instant result = instance.get();
+        var now = Instant.now();
+        var result = instance.get();
 
         assertThat(result, notNullValue());
         assertThat(result.isBefore(now), is(true));
@@ -73,14 +66,13 @@ class TimeGeneratorsTest
     }
 
     @DisplayName("testFutureInstants")
-    @RepeatedTest(20)
-    void testFutureInstants()
-    {
-        AlchemyGenerator<Instant> instance = TimeGenerators.futureInstants();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testFutureInstants() {
+        var instance = TimeGenerators.futureInstants();
         assertThat(instance, notNullValue());
 
-        Instant now = Instant.now();
-        Instant result = instance.get();
+        var now = Instant.now();
+        var result = instance.get();
 
         assertThat(result, notNullValue());
         assertThat(result.isAfter(now), is(true));
@@ -88,116 +80,101 @@ class TimeGeneratorsTest
     }
 
     @DisplayName("testBefore")
-    @RepeatedTest(20)
-    void testBefore()
-    {
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testBefore() {
         int daysBefore = one(smallPositiveIntegers());
 
-        Instant referenceTime = Instant.now().minus(daysBefore, DAYS);
-        AlchemyGenerator<Instant> instance = TimeGenerators.before(referenceTime);
+        var referenceTime = Instant.now().minus(daysBefore, DAYS);
+        var instance = TimeGenerators.before(referenceTime);
 
         assertThat(instance, notNullValue());
 
-        Instant result = instance.get();
+        var result = instance.get();
         assertThat(result, notNullValue());
         assertThat(result.isBefore(referenceTime), is(true));
     }
 
     @DisplayName("testAfter")
-    @RepeatedTest(20)
-    void testAfter()
-    {
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAfter() {
         int daysAhead = one(smallPositiveIntegers());
 
-        Instant referenceTime = Instant.now().plus(daysAhead, DAYS);
-        AlchemyGenerator<Instant> instance = TimeGenerators.after(referenceTime);
+        var referenceTime = Instant.now().plus(daysAhead, DAYS);
+        var instance = TimeGenerators.after(referenceTime);
 
         assertThat(instance, notNullValue());
 
-        Instant result = instance.get();
+        var result = instance.get();
         assertThat(result, notNullValue());
         assertThat(result.isAfter(referenceTime), is(true));
     }
 
     @DisplayName("testAnyTime")
-    @RepeatedTest(20)
-    void testAnyTime()
-    {
-        AlchemyGenerator<Instant> instance = TimeGenerators.anyTime();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAnyTime() {
+        var instance = TimeGenerators.anyTime();
 
         assertThat(instance, notNullValue());
 
-        Instant result = instance.get();
+        var result = instance.get();
         assertThat(result, notNullValue());
     }
 
     @DisplayName("testTimesBetween")
-    @RepeatedTest(20)
-    void testTimesBetween()
-    {
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testTimesBetween() {
         // Edge cases
-        Instant now = Instant.now();
-        Instant later = now.plus(4, DAYS);
+        var now = Instant.now();
+        var later = now.plus(4, DAYS);
 
         assertThrows(() -> TimeGenerators.timesBetween(now, null));
         assertThrows(() -> TimeGenerators.timesBetween(null, now));
         assertThrows(() -> TimeGenerators.timesBetween(later, now));
 
         long startTimestamp = one(longs(1L, Long.MAX_VALUE / 2));
-        long endTimestamp   = one(longs(startTimestamp + 1, Long.MAX_VALUE));
+        long endTimestamp = one(longs(startTimestamp + 1, Long.MAX_VALUE));
 
-        Instant start = Instant.ofEpochMilli(startTimestamp);
-        Instant end   = Instant.ofEpochMilli(endTimestamp);
+        var start = Instant.ofEpochMilli(startTimestamp);
+        var end = Instant.ofEpochMilli(endTimestamp);
 
-        AlchemyGenerator<Instant> instance = TimeGenerators.timesBetween(start, end);
+        var instance = TimeGenerators.timesBetween(start, end);
         assertThat(instance, notNullValue());
 
-        Instant result = instance.get();
+        var result = instance.get();
         assertThat(result.toEpochMilli(), greaterThanOrEqualTo(start.toEpochMilli()));
         assertThat(result.toEpochMilli(), lessThan(end.toEpochMilli()));
     }
 
     @DisplayName("testAsZonedDateTimeGenerator")
-    @RepeatedTest(20)
-    void testAsZonedDateTimeGenerator()
-    {
-        ZoneId zone = anyZone();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAsZonedDateTimeGenerator() {
+        var zone = anyZone();
 
-        Instant time = TimeGenerators.anyTime().get();
-        ZonedDateTime expected = time.atZone(zone);
+        var time = TimeGenerators.anyTime().get();
+        var expected = time.atZone(zone);
 
-        AlchemyGenerator<Instant> fixedTimeGen = new AlchemyGenerator<>()
-        {
-            @Override
-            public Instant get()
-            {
-                return time;
-            }
-        };
-
-        ZonedDateTime result = TimeGenerators.toZonedDateTimeGenerator(fixedTimeGen, zone).get();
-
+        AlchemyGenerator<Instant> fixedTimeGen = () -> time;
+        var result = toZonedDateTimeGenerator(fixedTimeGen, zone).get();
         assertThat(result, equalTo(expected));
     }
 
     @DisplayName("testAsZonedDateTimeGeneratorWithPastGenerator")
-    @RepeatedTest(20)
-    void testAsZonedDateTimeGeneratorWithPastGenerator()
-    {
-        ZoneId zone = anyZone();
-        ZonedDateTime result = TimeGenerators
-            .toZonedDateTimeGenerator(TimeGenerators.pastInstants(), zone)
-            .get();
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testAsZonedDateTimeGeneratorWithPastGenerator() {
+        var zone = anyZone();
+        var result = toZonedDateTimeGenerator(
+            TimeGenerators.pastInstants(),
+            zone
+        ).get();
 
         assertThat(result, notNullValue());
         assertThat(result.isBefore(ZonedDateTime.now(zone)), is(true));
     }
 
-    private ZoneId anyZone()
-    {
-        String[] zoneIds = ZoneId.getAvailableZoneIds().toArray(new String[0]);
-        int idx = ThreadLocalRandom.current().nextInt(zoneIds.length);
-        return ZoneId.of(zoneIds[idx]);
+    private ZoneId anyZone() {
+        var zoneIds = ZoneId.getAvailableZoneIds().toArray(new String[0]);
+        int index = RANDOM.nextInt(0, zoneIds.length);
+        return ZoneId.of(zoneIds[index]);
     }
 
 }

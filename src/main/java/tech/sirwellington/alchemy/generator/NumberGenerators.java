@@ -67,41 +67,11 @@ public final class NumberGenerators {
         int inclusiveLowerBound,
         int exclusiveUpperBound
     ) throws IllegalArgumentException {
-        checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
-        
-        return () -> {
-          if (isNegativeLowerBound && isNegativeUpperBound) {
-              int min = -exclusiveUpperBound;
-              int max = -inclusiveLowerBound;
-              if (inclusiveLowerBound == MIN_VALUE) {
-                  max = Integer.MAX_VALUE;
-              }
-              int adjustedMin = safeIncrement(min);
-              int adjustedMax = safeIncrement(max);
-              return RANDOM.nextInt(adjustedMin, adjustedMax);
-          }
-          else if (isNegativeLowerBound) {
-              // Protect against overflowing the integer type.
-              int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : (-inclusiveLowerBound) - 1;
-              long totalSize = (long)negativeCount + (long)exclusiveUpperBound;
-              double positivePercent = (double) exclusiveUpperBound / (double) totalSize;
-              double seed = RANDOM.nextDouble(0.0, 1.0);
-              
-              if (seed <= positivePercent) {
-                  // Positive
-                  return RANDOM.nextInt(0, exclusiveUpperBound);
-              } else {
-                  // Negative
-                  int adjustedLowerBound = negativeCount;
-                  return -RANDOM.nextInt(0, safeIncrement(adjustedLowerBound));
-              }
-          }
-          else {
-              return RANDOM.nextInt(inclusiveLowerBound, exclusiveUpperBound);
-          }
-        };
+        checkThat(
+            inclusiveLowerBound < exclusiveUpperBound,
+            "inclusiveLowerBound must be > exclusiveUpperBound"
+        );
+        return () -> RANDOM.nextInt(inclusiveLowerBound, exclusiveUpperBound);
     }
     
     /**
@@ -152,39 +122,8 @@ public final class NumberGenerators {
      */
     static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException {
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
-        var isNegativeLowerBound = inclusiveLowerBound < 0;
-        var isNegativeUpperBound = exclusiveUpperBound <= 0;
 
-        return () -> {
-            if (isNegativeLowerBound && isNegativeUpperBound) {
-                var min = -exclusiveUpperBound;
-                var max = -inclusiveLowerBound;
-                if (inclusiveLowerBound == Long.MIN_VALUE) {
-                    max = Long.MAX_VALUE;
-                }
-                var adjustedMin = safeIncrement(min);
-                var adjustedMax = safeIncrement(max);
-                return -RANDOM.nextLong(adjustedMin, adjustedMax);
-            }
-            else if (isNegativeLowerBound) {
-                // Protect against a range overflow in the case the lower bound range overruns the long type.
-                var negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : (-inclusiveLowerBound) -1;
-                var totalSize = (double) negativeCount + (double) exclusiveUpperBound;
-                var positivePercent = (double) exclusiveUpperBound / totalSize;
-                var seed = RANDOM.nextDouble(0.0, 1.0);
-
-                if (seed <= positivePercent) {
-                    // Positive
-                    return RANDOM.nextLong(0, exclusiveUpperBound);
-                } else {
-                    // Negative
-                    return -RANDOM.nextLong(0L, safeIncrement(negativeCount));
-                }
-            }
-            else {
-                return RANDOM.nextLong(inclusiveLowerBound, exclusiveUpperBound);
-            }
-        };
+        return () -> RANDOM.nextLong(inclusiveLowerBound, exclusiveUpperBound);
     }
 
     /**
@@ -233,42 +172,12 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Double> doubles(double inclusiveLowerBound, double exclusiveUpperBound) {
+    static AlchemyGenerator<Double> doubles(
+        double inclusiveLowerBound,
+        double exclusiveUpperBound
+    ) {
         checkThat(inclusiveLowerBound <= exclusiveUpperBound, "upper bound must be > lower bound.");
-        var isNegativeLowerBound = inclusiveLowerBound < 0.0;
-        var isNegativeUpperBound = exclusiveUpperBound < 0.0;
-
-        return () -> {
-            if (isNegativeLowerBound && isNegativeUpperBound) {
-                var min = -exclusiveUpperBound;
-                var max = -inclusiveLowerBound;
-                if (inclusiveLowerBound == -Double.MAX_VALUE) {
-                    max = Double.MAX_VALUE;
-                }
-                var adjustedMin = safeIncrement(min);
-                var adjustedMax = safeIncrement(max);
-                return -RANDOM.nextDouble(adjustedMin, adjustedMax);
-            }
-            else if (isNegativeLowerBound) {
-                // Protect against a range overflow in the case the lower bound range overruns the long type.
-                var negativeCount = BigDecimal.valueOf(-(inclusiveLowerBound + 1.0));
-                var positiveCount = BigDecimal.valueOf(exclusiveUpperBound);
-                var totalSize = negativeCount.add(positiveCount);
-                var positivePercent = positiveCount.divide(totalSize, 15, RoundingMode.HALF_UP).doubleValue();
-                var seed = RANDOM.nextDouble(0.0, 1.0);
-
-                if (seed <= positivePercent) {
-                    // Positive
-                    return RANDOM.nextDouble(0.0, exclusiveUpperBound);
-                } else {
-                    // Negative
-                    return -RANDOM.nextDouble(0.0, -safeIncrement(inclusiveLowerBound));
-                }
-            }
-            else {
-                return RANDOM.nextDouble(inclusiveLowerBound, exclusiveUpperBound);
-            }
-        };
+        return () -> RANDOM.nextDouble(inclusiveLowerBound, exclusiveUpperBound);
     }
 
     /**

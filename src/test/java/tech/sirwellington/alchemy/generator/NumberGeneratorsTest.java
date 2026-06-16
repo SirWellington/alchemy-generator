@@ -57,9 +57,11 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
 
             var instance = integers(lowerBound, upperBound);
 
-            var value = instance.get();
-            assertThat(value, greaterThanOrEqualTo(lowerBound));
-            assertThat(value, lessThan(upperBound));
+            repeatBlock(() -> {
+                var value = instance.get();
+                assertThat(value, greaterThanOrEqualTo(lowerBound));
+                assertThat(value, lessThan(upperBound));
+            });
         }
 
         @RepeatedTest(DEFAULT_ITERATIONS)
@@ -70,9 +72,11 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
 
             var instance = integers(lowerBound, upperBound);
 
-            var value = instance.get();
-            assertThat(value, greaterThanOrEqualTo(lowerBound));
-            assertThat(value, lessThan(upperBound));
+            repeatBlock(() -> {
+                var value = instance.get();
+                assertThat(value, greaterThanOrEqualTo(lowerBound));
+                assertThat(value, lessThan(upperBound));
+            });
         }
 
         @Test
@@ -84,7 +88,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 int upperBound = 150;
                 var instance = integers(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -97,7 +101,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 int upperBound = -500;
                 var instance = integers(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -110,7 +114,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 int upperBound = -1;
                 var instance = integers(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -123,7 +127,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 int upperBound = -1;
                 var instance = integers(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -136,7 +140,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 int upperBound = 0;
                 var instance = integers(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -236,7 +240,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 long upperBound = 150_435_353_256_241L;
                 var instance = longs(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -249,7 +253,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 long upperBound = -500_000L;
                 var instance = longs(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -262,7 +266,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 long upperBound = -1L;
                 var instance = longs(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -275,7 +279,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 long upperBound = 0L;
                 var instance = longs(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThan(upperBound));
@@ -364,7 +368,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 double upperBound = 2_044_532.3;
                 var instance = doubles(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThanOrEqualTo(upperBound));
@@ -377,7 +381,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 double upperBound = -5_945.0;
                 var instance = doubles(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThanOrEqualTo(upperBound));
@@ -464,7 +468,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 float upperBound = 2_044_532.3f;
                 var instance = floats(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThanOrEqualTo(upperBound));
@@ -477,7 +481,7 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
                 float upperBound = -5_945.0f;
                 var instance = floats(lowerBound, upperBound);
 
-                repeatTest(() -> {
+                repeatBlock(() -> {
                     var value = instance.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThanOrEqualTo(upperBound));
