@@ -10,7 +10,7 @@ import static tech.sirwellington.alchemy.generator.AlchemyResources.*;
 import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 
 /**
- * Generators for Places and addresses.
+ * {@summary Generators for Places and addresses. }
  *
  * @author Wellington Moreno
  */

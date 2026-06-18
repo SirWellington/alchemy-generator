@@ -39,8 +39,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings;
 
 /**
- * Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).
- * Use at your own risk.
+ * {@summary Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).}
+ * These generators should work for most plain data objects.
  *
  * @author SirWellington
  */

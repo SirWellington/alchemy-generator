@@ -28,7 +28,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
- * {@link AlchemyGenerator Alchemy Generators} for raw binary (`byte[]`).
+ * {@summary Alchemy  for raw binary (`byte[]`). }
  * 
  * @author SirWellington
  */

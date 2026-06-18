@@ -21,7 +21,7 @@ import static tech.sirwellington.alchemy.generator.PeopleGenerators.popularEmail
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphanumericStrings;
 
 /**
- * Generators for Network-data, such as an IP Addresses.
+ * {@summary Generators for Network-data, such as an IP Addresses.}
  *
  * @author SirWellington
  */

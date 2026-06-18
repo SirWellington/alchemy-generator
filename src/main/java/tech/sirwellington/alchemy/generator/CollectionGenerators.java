@@ -37,8 +37,9 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 
 /**
- * {@link AlchemyGenerator Alchemy Generators} for Java Collections. These generators
- * are useful in conjunction with other {@link AlchemyGenerator},
+ * {@summary Alchemy Generators for Java Collections.}
+ * <p>
+ * These generators are useful in conjunction with other {@link AlchemyGenerator},
  * such as those in {@link StringGenerators} and {@link NumberGenerators}.
  *
  * @author SirWellington

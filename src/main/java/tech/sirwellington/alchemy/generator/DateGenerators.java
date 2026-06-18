@@ -26,7 +26,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
- * Generators for {@link Date} types.
+ * {@summary Alchemy Generators for Date and Time types }.
  *
  * @author SirWellington
  */

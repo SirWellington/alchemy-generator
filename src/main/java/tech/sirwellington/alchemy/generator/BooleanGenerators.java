@@ -28,7 +28,7 @@ import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 
 /**
- * Generators for {@link Boolean Booleans}.
+ * {@summary Alchemy Generators for Booleans}.
  * @author SirWellington
  */
 @NonInstantiable

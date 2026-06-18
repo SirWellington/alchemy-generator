@@ -3,7 +3,7 @@ package tech.sirwellington.alchemy.generator;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 /**
- * Generators for Enum Types.
+ * {@summary Alchemy Generators for Enum Types.}
  *
  * @author SirWellington
  */

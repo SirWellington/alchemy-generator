@@ -31,7 +31,7 @@ import static tech.sirwellington.alchemy.generator.Checks.*;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
- * {@link AlchemyGenerator} for {@link String Strings}.
+ * {@summary Alchemy Generators for Strings.}
  *
  * @author SirWellington
  */

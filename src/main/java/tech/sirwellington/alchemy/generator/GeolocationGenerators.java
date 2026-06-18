@@ -3,7 +3,9 @@ package tech.sirwellington.alchemy.generator;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 
 /**
- * Generators for creating Geo-Coordinates, aka longitudes and latitudes.
+ * {@summary  Generators for creating Geo-Coordinates, aka longitudes and latitudes.}
+ *
+ * @author SirWellington
  */
 @NonInstantiable
 public final class GeolocationGenerators {
