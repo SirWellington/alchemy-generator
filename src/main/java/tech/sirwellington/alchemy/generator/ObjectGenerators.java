@@ -57,15 +57,24 @@ public final class ObjectGenerators {
         .mapping(s -> s.charAt(0));
 
     private static final Map<Class<?>, AlchemyGenerator<?>> DEFAULT_GENERATOR_MAPPINGS = Map.ofEntries(
+        makeEntry(boolean.class, BooleanGenerators.booleans()),
         makeEntry(Boolean.class, BooleanGenerators.booleans()),
+        makeEntry(byte.class, BinaryGenerators.bytes()),
         makeEntry(Byte.class, BinaryGenerators.bytes()),
+        makeEntry(byte[].class, BinaryGenerators.binary(1_000)),
         makeEntry(Byte[].class, BinaryGenerators.binary(1_000)),
         makeEntry(ByteBuffer.class, BinaryGenerators.byteBuffers(333)),
+        makeEntry(char.class, charGenerator),
         makeEntry(Character.class, charGenerator),
+        makeEntry(float.class, positiveFloats()),
         makeEntry(Float.class, positiveFloats()),
+        makeEntry(double.class, positiveDoubles()),
         makeEntry(Double.class, positiveDoubles()),
+        makeEntry(int.class, smallPositiveIntegers()),
         makeEntry(Integer.class, smallPositiveIntegers()),
+        makeEntry(short.class, shortGenerator),
         makeEntry(Short.class, shortGenerator),
+        makeEntry(long.class, positiveLongs()),
         makeEntry(Long.class, positiveLongs()),
         makeEntry(String.class, alphabeticStrings()),
         makeEntry(Date.class, DateGenerators.anyTime()),
@@ -153,8 +162,8 @@ public final class ObjectGenerators {
      * @see DateGenerators
      * @see TimeGenerators
      */
-    public static <T> AlchemyGenerator<T> pojos(Class<T> classOfPojo) {
-        return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS);
+    public static <T> AlchemyGenerator<T> pojos(@Required Class<T> classOfPojo) {
+        return _pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS);
     }
 
     /**
@@ -168,13 +177,14 @@ public final class ObjectGenerators {
      * @see #pojos(Class) 
      */
     public static <T> AlchemyGenerator<T> pojos(
-        Class<T> classOfPojo, 
-        Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
+        @Required Class<T> classOfPojo,
+        @Required Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
     ) {
+        checkNotNull(classOfPojo, "classOfPojo is required");
+        checkNotNull(overrideTypeMappings, "overrideTypeMappings is required");
+
         var mappings = new HashMap<>(DEFAULT_GENERATOR_MAPPINGS);
-        var overrides = overrideTypeMappings;
-        if (overrides == null) overrides = Map.of();
-        mappings.putAll(overrides);
+        mappings.putAll(overrideTypeMappings);
         
         return _pojos(
             classOfPojo,
@@ -185,11 +195,15 @@ public final class ObjectGenerators {
     private static <T> AlchemyGenerator<T> _pojos(
         Class<T> classOfPojo,
         Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
+        Map<Class<?>, AlchemyGenerator<?>> generatorMappings
     ) {
         checkNotNull(classOfPojo, "missing class of POJO");
+        checkNotNull(generatorMappings, "generatorMappings is required");
 
         if (overrideTypeMappings.containsKey(classOfPojo)) {
             return (AlchemyGenerator<T>) overrideTypeMappings.get(classOfPojo);
+        if (generatorMappings.containsKey(classOfPojo)) {
+            return (AlchemyGenerator<T>) generatorMappings.get(classOfPojo);
         }
 
         checkThat(
@@ -210,6 +224,7 @@ public final class ObjectGenerators {
 
             validFields.forEach(f -> {
                 tryInjectField(instance, f, overrideTypeMappings);
+                tryInjectField(instance, f, generatorMappings);
             });
 
             return instance;
@@ -289,6 +304,7 @@ public final class ObjectGenerators {
             Optional.empty(),
             typeOfField,
             Optional.of(generatorMappings)
+            generatorMappings
         );
         var generator = determineGeneratorFor(args);
 
@@ -306,29 +322,12 @@ public final class ObjectGenerators {
         field.set(pojo, value);
     }
 
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
-      Boolean.TYPE, Boolean.class,
-      Byte.TYPE, Byte.class,
-      byte[].class, Byte[].class,
-      Character.TYPE, Character.class,
-      Short.TYPE, Short.class,
-      Integer.TYPE, Integer.class,
-      Long.TYPE, Long.class,
-      Float.TYPE, Float.class,
-      Double.TYPE, Double.class,
-      Void.TYPE, Void.class
-    );
-
-    private static Class<?> primitiveToWrapper(Class<?> primitiveType) {
-        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(primitiveType, primitiveType);
-    }
-
     private static <T> T getValueFor(Parameter parameter) {
         var args = new GeneratorFieldParameters(
             Optional.empty(),
             Optional.of(parameter),
             parameter.getType(),
-            Optional.of(DEFAULT_GENERATOR_MAPPINGS)
+            DEFAULT_GENERATOR_MAPPINGS
         );
         var generator = determineGeneratorFor(
             args
@@ -347,14 +346,19 @@ public final class ObjectGenerators {
     record GeneratorFieldParameters(
         Optional<Field> field,
         Optional<Parameter> parameter,
-        Class<?> typeOfField,
-        Optional<Map<Class<?>, AlchemyGenerator<?>>> generatorMappings
-    ) {}
+        @Required  Class<?> typeOfField,
+        @Required Map<Class<?>, AlchemyGenerator<?>> generatorMappings
+    ) {
+        GeneratorFieldParameters {
+            Checks.checkNotNull(typeOfField, "typeOfField is required");
+            Checks.checkNotNull(generatorMappings, "generatorMappings is required");
+        }
+    }
     private static AlchemyGenerator<?> determineGeneratorFor(
         @Required GeneratorFieldParameters args
     ) {
-        var generatorMappings = args.generatorMappings.orElse(Map.of());
-        var typeOfField = primitiveToWrapper(args.typeOfField);
+        var generatorMappings = args.generatorMappings;
+        var typeOfField = args.typeOfField;
         var generator = generatorMappings.get(typeOfField);
         var field = args.field;
 
@@ -480,7 +484,7 @@ public final class ObjectGenerators {
             return determineGeneratorForCollectionParameter(
                 parameter.orElse(null),
                 args.typeOfField,
-                args.generatorMappings.orElse(Map.of())
+                args.generatorMappings
             );
         }
         else {
@@ -624,7 +628,7 @@ public final class ObjectGenerators {
             Optional.empty(),
             Optional.empty(),
             valueType,
-            Optional.of(generatorMappings)
+            generatorMappings
         ));
         if (generator == null) return null;
 
@@ -659,13 +663,14 @@ public final class ObjectGenerators {
             Optional.of(mapField),
             Optional.empty(),
             keyType,
-            Optional.of(generatorMappings)
+            generatorMappings
         ));
         var valueGenerator = determineGeneratorFor(new GeneratorFieldParameters(
             Optional.of(mapField),
             Optional.empty(),
             valueType,
             Optional.of(generatorMappings)
+            generatorMappings
         ));
         
         if (keyGenerator == null || valueGenerator == null) {
@@ -697,6 +702,7 @@ public final class ObjectGenerators {
                 Optional.of(mapParameter),
                 keyType,
                 Optional.of(generatorMappings)
+                generatorMappings
             )
         );
         if (keyGenerator == null) return null;
@@ -707,6 +713,7 @@ public final class ObjectGenerators {
                 Optional.empty(),
                 valueType,
                 Optional.of(generatorMappings)
+                generatorMappings
             )
         );
         if (valueGenerator == null) return null;
