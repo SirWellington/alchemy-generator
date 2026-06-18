@@ -5,7 +5,7 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-[![Build Status](http://jenkins.redroma.tech/job/Alchemy%20Generator/badge/icon)](http://jenkins.redroma.tech/job/Alchemy%20Generator/)
+[![Maven Build](https://github.com/SirWellington/alchemy-generator/actions/workflows/maven-build.yml/badge.svg)](https://github.com/SirWellington/alchemy/actions/workflows/maven-build.yml) 
 ![Maven Central Version](http://img.shields.io/maven-central/v/tech.sirwellington.alchemy/alchemy-generator.svg)
 
 # Purpose
