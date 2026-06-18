@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 
 import static java.time.temporal.ChronoUnit.*;
@@ -167,5 +168,19 @@ class DatesTest extends BaseGeneratorTest {
 
         assertThat(Dates.isNow(slightlyLate, fourSecondsDuration), is(true));
         assertThat(Dates.isNow(slightlyLate, oneSecondDuration), is(false));
+    }
+
+    @RepeatedTest(20)
+    void testCurrentYear() {
+        // Given
+        var now = new Date();
+        var calendar = Calendar.getInstance();
+        var expectedYear = calendar.get(Calendar.YEAR);
+
+        // When
+        var result = Dates.currentYear();
+
+        // Then
+        assertThat(result, equalTo(expectedYear));
     }
 }

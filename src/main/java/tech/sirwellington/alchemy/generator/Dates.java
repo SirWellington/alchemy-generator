@@ -18,6 +18,8 @@ import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -156,5 +158,12 @@ public final class Dates {
         long timeOfDate = instant.toEpochMilli();
         long timeOfNow = now.toEpochMilli();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;
+    }
+
+    /**
+     * @return The current year.
+     */
+    public static int currentYear() {
+        return ZonedDateTime.now().getYear();
     }
 }

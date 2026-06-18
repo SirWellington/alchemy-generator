@@ -398,6 +398,8 @@ public final class ObjectGenerators {
             fieldName = parameter.getName();
         }
 
+        if (fieldName == null) return generator;
+
         return switch (typeOfField) {
             case Class<?> cls when cls == String.class -> switch (fieldName) {
                 case "firstName"        -> PeopleGenerators.firstNames();
@@ -407,18 +409,26 @@ public final class ObjectGenerators {
                 case "email"            -> PeopleGenerators.emailAddresses();
                 case "city"             -> PlaceGenerators.cities();
                 case "country"          -> PlaceGenerators.countries();
-                case null, default      -> generator;
+                default      -> generator;
             };
 
             case Class<?> cls when cls == Double.class || cls == double.class -> switch (fieldName) {
                 case "latitude", "lat"  -> GeolocationGenerators.latitudes();
                 case "longitude", "lon" -> GeolocationGenerators.longitudes();
-                case null, default      -> generator;
+                case "price"            -> NumberGenerators.doubles(10.0, 300_000.0);
+                default      -> generator;
+            };
+
+            case Class<?> cls when cls == Float.class || cls == float.class -> switch (fieldName) {
+                case "price", "cost" -> NumberGenerators.floats(10.0f, 300_000.0f);
+                case "temperature"   -> NumberGenerators.floats(-50f, 500f);
+                default      -> generator;
             };
 
             case Class<?> cls when cls == Integer.class || cls == int.class -> switch (fieldName) {
                 case "age"         -> PeopleGenerators.adultAges();
-                case null, default -> generator;
+                case "year"        -> NumberGenerators.integers(1996, 2026);
+                default -> generator;
             };
 
             default -> generator;
