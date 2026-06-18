@@ -86,7 +86,7 @@ public interface AlchemyGenerator<T> {
      * @return A new {@link AlchemyGenerator} that produces values of type {@code O}.
      * @param <O> The type of the output.
      */
-    default <O> AlchemyGenerator<O> map(@Required Function<T, O> function) {
+    default <O> AlchemyGenerator<O> mapping(@Required Function<T, O> function) {
         return () -> function.apply(get());
     }
 }

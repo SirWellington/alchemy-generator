@@ -108,7 +108,7 @@ public final class DateGenerators {
     ) {
         checkNotNull(generator);
         checkNotNull(generator.get(), "generator produced null");
-        return generator.map(Date::from);
+        return generator.mapping(Date::from);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class DateGenerators {
         @Required AlchemyGenerator<java.util.Date> generator
     ) {
         checkNotNull(generator);
-        return generator.map(
+        return generator.mapping(
             time -> new java.sql.Timestamp(time.getTime())
         );
     }
@@ -169,6 +169,6 @@ public final class DateGenerators {
     ) {
         checkNotNull(generator);
         var _generator = toSqlDateGenerator(generator);
-        return _generator.map(java.sql.Date::toLocalDate);
+        return _generator.mapping(java.sql.Date::toLocalDate);
     }
 }

@@ -77,6 +77,6 @@ public final class BinaryGenerators {
      */
     static AlchemyGenerator<Byte> bytes() {
         return binary(1)
-                .map(bytes -> bytes[0]);
+                .mapping(bytes -> bytes[0]);
     }
 }

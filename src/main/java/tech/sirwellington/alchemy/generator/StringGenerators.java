@@ -21,7 +21,6 @@ import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
 import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
-import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
@@ -200,7 +199,7 @@ public final class StringGenerators {
     ) {
         checkNotEmpty(values, "Values list empty");
         return integers(0, values.size())
-            .map(values::get);
+            .mapping(values::get);
     }
 
     /**

@@ -52,11 +52,11 @@ public final class ObjectGenerators {
 
     private static final Map<Class<?>, AlchemyGenerator<?>> DEFAULT_GENERATOR_MAPPINGS = new ConcurrentHashMap<>();
 
-    private static final AlchemyGenerator<Short> shortGenerator = positiveIntegers().map (
+    private static final AlchemyGenerator<Short> shortGenerator = positiveIntegers().mapping(
         Integer::shortValue
     );
 
-    private static final AlchemyGenerator<Character> charGenerator = alphabeticStrings().map( s ->
+    private static final AlchemyGenerator<Character> charGenerator = alphabeticStrings().mapping(s ->
         s.charAt(0)
     );
 
