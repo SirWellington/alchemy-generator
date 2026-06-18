@@ -17,12 +17,12 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 
 /**
- * Generators for common information about people: names, addresses, phone numbers,
- * social-security numbers, emails, etc.
+ * {@summary Generators for common information about people: names, addresses, phone numbers,
+ * social-security numbers, emails, etc.}
  */
 @NonInstantiable
 @StrategyPattern(role = StrategyPattern.Role.CONCRETE_BEHAVIOR)
-public class PeopleGenerators {
+public final class PeopleGenerators {
 
     private static final List<String> FIRST_NAMES = readLinesFromResource("names/first-names.txt");
     private static final List<String> MIDDLE_NAMES = readLinesFromResource("names/middle-names.txt");
@@ -43,6 +43,7 @@ public class PeopleGenerators {
     public static AlchemyGenerator<String> firstNames() {
         return stringsFromFixedList(FIRST_NAMES);
     }
+
     /**
      * Generates a "middle name".
      * <blockquote>
@@ -72,26 +73,26 @@ public class PeopleGenerators {
      * </blockquote>
      */
     public static AlchemyGenerator<String> fullNames() {
-        AlchemyGenerator<String> firstNames = firstNames();
-        AlchemyGenerator<String> middleNames = middleNames();
-        AlchemyGenerator<String> lastNames = lastNames();
-        AlchemyGenerator<Double> seeds = NumberGenerators.doubles(0.0, 1.0);
+        var firstNames = firstNames();
+        var middleNames = middleNames();
+        var lastNames = lastNames();
+        var seeds = NumberGenerators.doubles(0.0, 1.0);
 
         return () -> {
-          StringBuilder builder = new StringBuilder();
-          builder.append(one(firstNames));
+            var builder = new StringBuilder();
+            builder.append(one(firstNames));
 
-          double seed = one(seeds);
-          boolean includeMiddleName = seed <= 0.4;
-          if (includeMiddleName) {
-              builder.append(" ")
-                      .append(one(middleNames));
-          }
+            var seed = one(seeds);
+            var includeMiddleName = seed <= 0.4;
+            if (includeMiddleName) {
+                builder.append(" ")
+                       .append(one(middleNames));
+            }
 
-          return builder
-                  .append(" ")
-                  .append(one(lastNames))
-                  .toString();
+            return builder
+                .append(" ")
+                .append(one(lastNames))
+                .toString();
         };
     }
 
@@ -127,29 +128,31 @@ public class PeopleGenerators {
 
     /**
      * Returns a phone number with an optional phoneCountryCode that will be prefixed.
+     *
      * @param phoneCountryCode Optional. For example, {@code "+1", "+57"}, etc.
      *                         If {@code null}, no phone country prefix will be added.
      */
     public static AlchemyGenerator<String> phoneNumbers(
-            @Optional String phoneCountryCode
+        @Optional String phoneCountryCode
     ) {
-        AlchemyGenerator<Integer> threeDigits = integers(100, 1000);
-        AlchemyGenerator<Integer> fourDigits = integers(1_000, 10_000);
+        var threeDigits = integers(100, 1000);
+        var fourDigits = integers(1_000, 10_000);
 
         if (phoneCountryCode == null) {
             return () -> MessageFormat.format(
-                    "{0}-{1}-{2}",
-                    String.valueOf(one(threeDigits)),
-                    String.valueOf(one(threeDigits)),
-                    String.valueOf(one(fourDigits))
+                "{0}-{1}-{2}",
+                String.valueOf(one(threeDigits)),
+                String.valueOf(one(threeDigits)),
+                String.valueOf(one(fourDigits))
             );
-        } else {
+        }
+        else {
             return () -> MessageFormat.format(
-                    "{0} {1}-{2}-{3}",
-                    phoneCountryCode,
-                    String.valueOf(one(threeDigits)),
-                    String.valueOf(one(threeDigits)),
-                    String.valueOf(one(fourDigits))
+                "{0} {1}-{2}-{3}",
+                phoneCountryCode,
+                String.valueOf(one(threeDigits)),
+                String.valueOf(one(threeDigits)),
+                String.valueOf(one(fourDigits))
             );
         }
     }
@@ -174,18 +177,18 @@ public class PeopleGenerators {
      */
     public static AlchemyGenerator<String> popularEmailDomains() {
         return stringsFromFixedList(
-                "gmail.com",
-                "yahoo.com",
-                "outlook.com",
-                "hotmail.com",
-                "live.com",
-                "icloud.com",
-                "mail.com",
-                "yandex.com",
-                "protonmail.com",
-                "163.com",
-                "126.com",
-                "qq.com"
+            "gmail.com",
+            "yahoo.com",
+            "outlook.com",
+            "hotmail.com",
+            "live.com",
+            "icloud.com",
+            "mail.com",
+            "yandex.com",
+            "protonmail.com",
+            "163.com",
+            "126.com",
+            "qq.com"
         );
     }
 
@@ -202,39 +205,40 @@ public class PeopleGenerators {
 
     /**
      * Generates email addresses using the domains provided by the {@code domainGenerator}.
+     *
      * @param domainGenerator Used to create domains for the email addresses.
      *                        You can use the {@link #popularEmailDomains()}
      * @see #emailAddresses()
      */
     public static AlchemyGenerator<String> emailAddresses(
-            @Required AlchemyGenerator<String> domainGenerator
+        @Required AlchemyGenerator<String> domainGenerator
     ) {
         checkNotNull(domainGenerator, "missing domainGenerator");
         checkNotEmpty(domainGenerator.get(), "Domain Generator returned empty String");
 
-        AlchemyGenerator<Integer> numbers = integers(0, 999);
-        AlchemyGenerator<String> firstNames = firstNames();
-        AlchemyGenerator<String> lastNames = lastNames();
-        AlchemyGenerator<Double> seeds = doubles(0.0, 1.0);
+        var numbers = integers(0, 999);
+        var firstNames = firstNames();
+        var lastNames = lastNames();
+        var seeds = doubles(0.0, 1.0);
 
         return () -> {
-            double seed = one(seeds);
-            boolean includeLastname = seed >= 0.6;
+            var seed = one(seeds);
+            var includeLastname = seed >= 0.6;
 
             if (includeLastname) {
                 return MessageFormat.format(
-                        "{0}.{1}@{2}",
-                        one(firstNames),
-                        one(lastNames),
-                        one(domainGenerator)
+                    "{0}.{1}@{2}",
+                    one(firstNames),
+                    one(lastNames),
+                    one(domainGenerator)
                 );
             }
             else {
                 return MessageFormat.format(
-                        "{0}{1}@{2}",
-                        one(firstNames),
-                        one(numbers),
-                        one(domainGenerator)
+                    "{0}{1}@{2}",
+                    one(firstNames),
+                    one(numbers),
+                    one(domainGenerator)
                 );
             }
         };

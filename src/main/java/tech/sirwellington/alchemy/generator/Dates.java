@@ -1,9 +1,25 @@
+/*
+ * Copyright © 2026. Sir Wellington.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package tech.sirwellington.alchemy.generator;
 
 import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -11,7 +27,8 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
- * Functions that help working with Dates.
+ * {@summary Functions that help working with Dates.}
+ *
  * @author SirWellington
  */
 public final class Dates {
@@ -35,7 +52,7 @@ public final class Dates {
      */
     public static Date daysAgo(@Positive int days) {
         checkThat(days > 0, "days must be positive");
-        Instant instant = Instant.now().minus(days, ChronoUnit.DAYS);
+        var instant = Instant.now().minus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -47,7 +64,7 @@ public final class Dates {
      */
     public static Date daysAhead(@Positive int days) {
         checkThat(days > 0, "days must be positive");
-        Instant instant = Instant.now().plus(days, ChronoUnit.DAYS);
+        var instant = Instant.now().plus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -59,7 +76,7 @@ public final class Dates {
      */
     public static Date hoursAgo(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
-        Instant instant = Instant.now().minus(hours, ChronoUnit.HOURS);
+        var instant = Instant.now().minus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -71,7 +88,7 @@ public final class Dates {
      */
     public static Date hoursAhead(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
-        Instant instant = Instant.now().plus(hours, ChronoUnit.HOURS);
+        var instant = Instant.now().plus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
     }
 
@@ -83,7 +100,7 @@ public final class Dates {
      */
     public static Date minutesAgo(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
-        Instant instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
+        var instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
     }
 
@@ -95,7 +112,7 @@ public final class Dates {
      */
     public static Date minutesAhead(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
-        Instant instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
+        var instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
     }
 
@@ -119,7 +136,7 @@ public final class Dates {
         checkNotNull(date, "date cannot be null");
         checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0");
 
-        long delta = marginOfErrorMillis;
+        var delta = marginOfErrorMillis;
         long timeOfDate = date.getTime();
         long timeOfNow = now.getTime();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;
@@ -133,13 +150,20 @@ public final class Dates {
      * @return Whether the instant can be considered "now", using the specified margin of error.
      */
     public static boolean isNow(@Required Instant instant, long marginOfErrorMillis) {
-        Instant now = Instant.now();
+        var now = Instant.now();
         checkNotNull(instant, "instant cannot be null");
         checkThat(marginOfErrorMillis >= 0, "margin of error must be >= 0");
 
-        long delta = marginOfErrorMillis;
+        var delta = marginOfErrorMillis;
         long timeOfDate = instant.toEpochMilli();
         long timeOfNow = now.toEpochMilli();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;
+    }
+
+    /**
+     * @return The current year.
+     */
+    public static int currentYear() {
+        return ZonedDateTime.now().getYear();
     }
 }

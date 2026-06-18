@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019. Sir Wellington.
+ * Copyright © 2026. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -17,10 +17,12 @@ package tech.sirwellington.alchemy.generator;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
+import java.util.function.Function;
+
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 
 /**
- * An {@link AlchemyGenerator} generates Data or Objects, commonly used in testing scenarios.
+ * {@summary Generates Data or Objects, primarily used for testing scenarios.}
  * <br>
  * Common generators exist for:
  * <pre>
@@ -37,9 +39,9 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * + Lists of the above
  * + Maps of the above
  * </pre>
- * <p>
+ *
  * Examples:
- * <p>
+ *
  * <pre>
  * Get a positive integer:
  *
@@ -52,7 +54,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * @author SirWellington
  */
 @StrategyPattern(role = INTERFACE)
-public interface AlchemyGenerator<T>  {
+public interface AlchemyGenerator<T> {
 
     /**
      * Generate a non-null value of type {@code T}.
@@ -65,7 +67,7 @@ public interface AlchemyGenerator<T>  {
         /**
          * Calls the generator once to get the ones of its values.
          *
-         * @param <T> The type being generated.
+         * @param <T>       The type being generated.
          * @param generator Provides the value to get.
          * @return Only one value from the generator.
          */
@@ -76,6 +78,16 @@ public interface AlchemyGenerator<T>  {
 
             return generator.get();
         }
+    }
+
+    /**
+     * Creates a new generator by applying a function over the output of {@code this} {@link AlchemyGenerator}.
+     * @param function The mapping function.
+     * @return A new {@link AlchemyGenerator} that produces values of type {@code O}.
+     * @param <O> The type of the output.
+     */
+    default <O> AlchemyGenerator<O> mapping(@Required Function<T, O> function) {
+        return () -> function.apply(get());
     }
 }
 

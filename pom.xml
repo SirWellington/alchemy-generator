@@ -25,7 +25,6 @@
     </parent>
 
     <artifactId>alchemy-generator</artifactId>
-    <version>3.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
@@ -61,8 +60,8 @@
         <!-- UNIT TESTING -->
         <!--=======================-->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -73,27 +72,16 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.nhaarman</groupId>
-            <artifactId>mockito-kotlin</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.natpryce</groupId>
-            <artifactId>hamkrest</artifactId>
-        </dependency>
-
 
         <!--=======================-->
         <!--ALCHEMY-->
@@ -101,9 +89,8 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>alchemy-annotations</artifactId>
-            <version>3.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
-
 
         <!--=======================-->
         <!--LOGGING-->
@@ -112,37 +99,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
-
-        <!--=======================-->
-        <!--APACHE COMMONS-->
-        <!--=======================-->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.18.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--=======================-->
-        <!--KOTLIN-->
-        <!--=======================-->
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-jdk8</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test-junit</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 
@@ -160,18 +121,5 @@
             </snapshots>
         </repository>
     </repositories>
-
-    <build>
-        <!--Inherited from Parent-->
-        <plugins>
-
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-            </plugin>
-
-        </plugins>
-
-    </build>
 
 </project>

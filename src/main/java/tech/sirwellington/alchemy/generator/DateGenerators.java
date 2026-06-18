@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Wellington Moreno<jwellington.moreno@gmail.com>.
+ * Copyright © 2026 Wellington Moreno<jwellington.moreno@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,14 @@ import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
- * Generators for {@link Date} types.
+ * {@summary Alchemy Generators for Date and Time types }.
  *
  * @author SirWellington
  */
 public final class DateGenerators {
 
-    private DateGenerators() {
-        throw new IllegalAccessError("cannot instantiated");
+    private DateGenerators() throws IllegalAccessException {
+        throw new IllegalAccessException("cannot be instantiated");
     }
 
     /**
@@ -76,7 +76,7 @@ public final class DateGenerators {
      */
     static AlchemyGenerator<Date> before(@Required Date referenceDate) {
         checkNotNull(referenceDate);
-        Instant instant = referenceDate.toInstant();
+        var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.before(instant));
     }
 
@@ -86,7 +86,8 @@ public final class DateGenerators {
      * @param referenceDate Dates produced will be after this date.
      */
     static AlchemyGenerator<Date> after(@Required Date referenceDate) {
-        Instant instant = referenceDate.toInstant();
+        checkNotNull(referenceDate);
+        var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.after(instant));
     }
 
@@ -107,7 +108,7 @@ public final class DateGenerators {
     ) {
         checkNotNull(generator);
         checkNotNull(generator.get(), "generator produced null");
-        return () -> Date.from(generator.get());
+        return generator.mapping(Date::from);
     }
 
     /**
@@ -127,7 +128,7 @@ public final class DateGenerators {
 
         long startTimeMillis = startDate.getTime();
         long endTimeMillis = endDate.getTime();
-        AlchemyGenerator<Long> timestampGenerator = NumberGenerators.longs(startTimeMillis, endTimeMillis);
+        var timestampGenerator = NumberGenerators.longs(startTimeMillis, endTimeMillis);
 
         return () -> new Date(timestampGenerator.get());
     }
@@ -137,7 +138,9 @@ public final class DateGenerators {
      * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
      * of {@link java.sql.Date} objects.
      */
-    static AlchemyGenerator<java.sql.Date> toSqlDateGenerator(AlchemyGenerator<java.util.Date> generator) {
+    static AlchemyGenerator<java.sql.Date> toSqlDateGenerator(
+        @Required AlchemyGenerator<java.util.Date> generator
+    ) {
         checkNotNull(generator);
         return () -> new java.sql.Date(generator.get().getTime());
     }
@@ -147,13 +150,12 @@ public final class DateGenerators {
      * of {@link java.sql.Timestamp} objects.
      */
     static AlchemyGenerator<java.sql.Timestamp> toSqlTimestampGenerator(
-        AlchemyGenerator<java.util.Date> generator
+        @Required AlchemyGenerator<java.util.Date> generator
     ) {
         checkNotNull(generator);
-        return () -> {
-            long time = generator.get().getTime();
-            return new java.sql.Timestamp(time);
-        };
+        return generator.mapping(
+            time -> new java.sql.Timestamp(time.getTime())
+        );
     }
 
     /**
@@ -162,9 +164,11 @@ public final class DateGenerators {
      * @param generator Date generator to be converted.
      * @return Converted generator.
      */
-    static AlchemyGenerator<LocalDate> toLocalDateGenerator(AlchemyGenerator<Date> generator) {
+    static AlchemyGenerator<LocalDate> toLocalDateGenerator(
+        @Required AlchemyGenerator<Date> generator
+    ) {
         checkNotNull(generator);
-        AlchemyGenerator<java.sql.Date> _generator = toSqlDateGenerator(generator);
-        return () -> _generator.get().toLocalDate();
+        var _generator = toSqlDateGenerator(generator);
+        return _generator.mapping(java.sql.Date::toLocalDate);
     }
 }

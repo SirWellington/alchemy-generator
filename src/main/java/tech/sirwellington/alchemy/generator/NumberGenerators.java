@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Wellington Moreno<jwellington.moreno@gmail.com>.
+ * Copyright © 2026 Wellington Moreno<jwellington.moreno@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,19 @@
 package tech.sirwellington.alchemy.generator;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.List;
-
-import org.apache.commons.lang3.RandomUtils;
-import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
-import static java.lang.Integer.MIN_VALUE;
+import java.security.SecureRandom;
+import java.util.List;
+
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
- * Common {@link AlchemyGenerator Alchemy Generators} for Number Generators.
+ * {@summary Common Alchemy Generators for number types (Int, Double, Long.}
  * <p>
  * <b>Includes</b>:
  * <pre>
@@ -48,7 +44,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 @StrategyPattern(role = CONCRETE_BEHAVIOR)
 public final class NumberGenerators {
     
-    private static final RandomUtils RANDOM = RandomUtils.secure();
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private NumberGenerators() throws IllegalAccessError {
         throw new IllegalAccessError("cannot directly instantiate.");
@@ -63,42 +59,15 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Integer> integers(int inclusiveLowerBound, int exclusiveUpperBound) throws IllegalArgumentException {
-        checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
-        
-        return () -> {
-          if (isNegativeLowerBound && isNegativeUpperBound) {
-              int min = -exclusiveUpperBound;
-              int max = -inclusiveLowerBound;
-              if (inclusiveLowerBound == MIN_VALUE) {
-                  max = Integer.MAX_VALUE;
-              }
-              int adjustedMin = safeIncrement(min);
-              int adjustedMax = safeIncrement(max);
-              return -RANDOM.randomInt(adjustedMin, adjustedMax);
-          }
-          else if (isNegativeLowerBound) {
-              // Protect against overflowing the integer type.
-              int negativeCount = inclusiveLowerBound == MIN_VALUE ? Integer.MAX_VALUE : (-inclusiveLowerBound) - 1;
-              long totalSize = (long)negativeCount + (long)exclusiveUpperBound;
-              double positivePercent = (double) exclusiveUpperBound / (double) totalSize;
-              double seed = RANDOM.randomDouble(0.0, 1.0);
-              
-              if (seed <= positivePercent) {
-                  // Positive
-                  return RANDOM.randomInt(0, exclusiveUpperBound);
-              } else {
-                  // Negative
-                  int adjustedLowerBound = negativeCount;
-                  return -RANDOM.randomInt(0, safeIncrement(adjustedLowerBound));
-              }
-          }
-          else {
-              return RANDOM.randomInt(inclusiveLowerBound, exclusiveUpperBound);
-          }
-        };
+    static AlchemyGenerator<Integer> integers(
+        int inclusiveLowerBound,
+        int exclusiveUpperBound
+    ) throws IllegalArgumentException {
+        checkThat(
+            inclusiveLowerBound < exclusiveUpperBound,
+            "inclusiveLowerBound must be > exclusiveUpperBound"
+        );
+        return () -> RANDOM.nextInt(inclusiveLowerBound, exclusiveUpperBound);
     }
     
     /**
@@ -149,39 +118,8 @@ public final class NumberGenerators {
      */
     static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException {
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0;
-        boolean isNegativeUpperBound = exclusiveUpperBound <= 0;
 
-        return () -> {
-            if (isNegativeLowerBound && isNegativeUpperBound) {
-                long min = -exclusiveUpperBound;
-                long max = -inclusiveLowerBound;
-                if (inclusiveLowerBound == Long.MIN_VALUE) {
-                    max = Long.MAX_VALUE;
-                }
-                long adjustedMin = safeIncrement(min);
-                long adjustedMax = safeIncrement(max);
-                return -RANDOM.randomLong(adjustedMin, adjustedMax);
-            }
-            else if (isNegativeLowerBound) {
-                // Protect against a range overflow in the case the lower bound range overruns the long type.
-                long negativeCount = inclusiveLowerBound == Long.MIN_VALUE ? Long.MAX_VALUE : (-inclusiveLowerBound) -1;
-                double totalSize = (double) negativeCount + (double) exclusiveUpperBound;
-                double positivePercent = (double) exclusiveUpperBound / totalSize;
-                double seed = RANDOM.randomDouble(0.0, 1.0);
-
-                if (seed <= positivePercent) {
-                    // Positive
-                    return RANDOM.randomLong(0, exclusiveUpperBound);
-                } else {
-                    // Negative
-                    return -RANDOM.randomLong(0L, safeIncrement(negativeCount));
-                }
-            }
-            else {
-                return RANDOM.randomLong(inclusiveLowerBound, exclusiveUpperBound);
-            }
-        };
+        return () -> RANDOM.nextLong(inclusiveLowerBound, exclusiveUpperBound);
     }
 
     /**
@@ -230,42 +168,12 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Double> doubles(double inclusiveLowerBound, double exclusiveUpperBound) {
+    static AlchemyGenerator<Double> doubles(
+        double inclusiveLowerBound,
+        double exclusiveUpperBound
+    ) {
         checkThat(inclusiveLowerBound <= exclusiveUpperBound, "upper bound must be > lower bound.");
-        boolean isNegativeLowerBound = inclusiveLowerBound < 0.0;
-        boolean isNegativeUpperBound = exclusiveUpperBound < 0.0;
-
-        return () -> {
-            if (isNegativeLowerBound && isNegativeUpperBound) {
-                double min = -exclusiveUpperBound;
-                double max = -inclusiveLowerBound;
-                if (inclusiveLowerBound == -Double.MAX_VALUE) {
-                    max = Double.MAX_VALUE;
-                }
-                double adjustedMin = safeIncrement(min);
-                double adjustedMax = safeIncrement(max);
-                return -RANDOM.randomDouble(adjustedMin, adjustedMax);
-            }
-            else if (isNegativeLowerBound) {
-                // Protect against a range overflow in the case the lower bound range overruns the long type.
-                BigDecimal negativeCount = BigDecimal.valueOf(-(inclusiveLowerBound + 1.0));
-                BigDecimal positiveCount = BigDecimal.valueOf(exclusiveUpperBound);
-                BigDecimal totalSize = negativeCount.add(positiveCount);
-                double positivePercent = positiveCount.divide(totalSize, 15, RoundingMode.HALF_UP).doubleValue();
-                double seed = RANDOM.randomDouble(0.0, 1.0);
-
-                if (seed <= positivePercent) {
-                    // Positive
-                    return RANDOM.randomDouble(0.0, exclusiveUpperBound);
-                } else {
-                    // Negative
-                    return -RANDOM.randomDouble(0.0, -safeIncrement(inclusiveLowerBound));
-                }
-            }
-            else {
-                return RANDOM.randomDouble(inclusiveLowerBound, exclusiveUpperBound);
-            }
-        };
+        return () -> RANDOM.nextDouble(inclusiveLowerBound, exclusiveUpperBound);
     }
 
     /**
@@ -315,7 +223,7 @@ public final class NumberGenerators {
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
     static AlchemyGenerator<Float> floats(float inclusiveLowerBound, float exclusiveUpperBound) {
-        AlchemyGenerator<Double> doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
+        var doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
         return () -> doubles.get().floatValue();
     }
 
@@ -367,7 +275,7 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
     }
@@ -380,7 +288,7 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
     }
@@ -393,38 +301,8 @@ public final class NumberGenerators {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
-            int index = integers(0, values.size()).get();
+            var index = integers(0, values.size()).get();
             return values.get(index);
         };
-    }
-
-    //===========================================
-    // UTILITY FUNCTIONS
-    //===========================================
-    @Internal
-    static int safeIncrement(int num) {
-        if (num == Integer.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1;
-        }
-    }
-
-    @Internal
-    static long safeIncrement(long num) {
-        if (num == Long.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1;
-        }
-    }
-
-    @Internal
-    static double safeIncrement(double num) {
-        if (num == Double.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1.0;
-        }
     }
 }

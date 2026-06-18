@@ -1,6 +1,7 @@
 package tech.sirwellington.alchemy.generator;
 
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +10,8 @@ import static tech.sirwellington.alchemy.generator.AlchemyResources.*;
 import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 
 /**
- * Generators for Places and addresses.
+ * {@summary Generators for Places and addresses. }
+ *
  * @author Wellington Moreno
  */
 public class PlaceGenerators {
@@ -62,52 +64,51 @@ public class PlaceGenerators {
 
     /**
      * Returns a street address.
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 145 N Longwood Blvd}
      */
     public static AlchemyGenerator<String> streetAddresses() {
-        AlchemyGenerator<Boolean> booleans = BooleanGenerators.booleans();
-        AlchemyGenerator<String> streetNames = places();
-        AlchemyGenerator<Integer> streetNumbers = NumberGenerators.integers(1, 10_000);
-        AlchemyGenerator<Integer> lineTwoNumbers = NumberGenerators.integers(1, 100);
-        AlchemyGenerator<String> lineTwoDescs = stringsFromFixedList("Apt, Ste, Unit");
-        AlchemyGenerator<String> directions = stringsFromFixedList("N", "S", "E", "W");
-        AlchemyGenerator<String> endings = stringsFromFixedList("Blvd", "St", "Ave", "Pl", "Rd");
+        var booleans = BooleanGenerators.booleans();
+        var streetNames = places();
+        var streetNumbers = NumberGenerators.integers(1, 10_000);
+        var lineTwoNumbers = NumberGenerators.integers(1, 100);
+        var lineTwoDescs = stringsFromFixedList("Apt, Ste, Unit");
+        var directions = stringsFromFixedList("N", "S", "E", "W");
+        var endings = stringsFromFixedList("Blvd", "St", "Ave", "Pl", "Rd");
 
         return () -> {
-            int streetNumber = one(streetNumbers);
-            String direction = one(directions);
-            String streetName = one(streetNames);
-            String lineTwoDesc = one(lineTwoDescs);
-            int lineTwoNumber = one(lineTwoNumbers);
-            String streetEnding = one(endings);
-            boolean useDirection = one(booleans);
-            boolean useLineTwo = one(booleans);
-            
-            StringBuilder builder = new StringBuilder();
-            
+            var streetNumber = one(streetNumbers);
+            var direction = one(directions);
+            var streetName = one(streetNames);
+            var lineTwoDesc = one(lineTwoDescs);
+            var lineTwoNumber = one(lineTwoNumbers);
+            var streetEnding = one(endings);
+            var useDirection = one(booleans);
+            var useLineTwo = one(booleans);
+            var builder = new StringBuilder();
+
             builder.append(streetNumber).append(" ");
             if (useDirection) {
                 builder.append(direction).append(" ");
             }
-            
+
             builder.append(streetName)
-                .append(" ")
-                .append(streetEnding);
-            
+                   .append(" ")
+                   .append(streetEnding);
+
             if (useLineTwo) {
                 builder.append(" ")
-                    .append(lineTwoDesc)
-                    .append(" ")
-                    .append(lineTwoNumber);
+                       .append(lineTwoDesc)
+                       .append(" ")
+                       .append(lineTwoNumber);
             }
-            
+
             return builder.toString();
         };
     }
@@ -119,13 +120,13 @@ public class PlaceGenerators {
      * 3. City
      * 4. State
      * 5. Country
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 4592 E 2 St New York, United States}.
      */
     public static AlchemyGenerator<String> fullAddresses() {
@@ -139,41 +140,41 @@ public class PlaceGenerators {
      * 3. City
      * 4. State
      * 5. Country
-     * <p/>
+     *
      * <blockquote>
      * <strong>Note:</strong>
      * There are no guarantees as the validity of the addresses generated
      * or whether they actually exist in the real world.
      * </blockquote>
-     * <p/>
+     * <br>
      * For example: {@code 4592 E 2 St New York, United States}.
+     *
      * @param isUSAddress Whether to return a U.S. based address which includes a [state][states].
      */
     public static AlchemyGenerator<String> fullAddresses(boolean isUSAddress) {
-        AlchemyGenerator<String> streetAddresses = streetAddresses();
-        AlchemyGenerator<String> cities = cities();
-        AlchemyGenerator<String> states = states();
-        AlchemyGenerator<String> countries = countries();
-        
+        var streetAddresses = streetAddresses();
+        var cities = cities();
+        var states = states();
+        var countries = countries();
+
         return () -> {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder
                 .append(one(streetAddresses))
                 .append(" ")
                 .append(one(cities))
                 .append(" ")
-                .append(one(states))
-                ;
-            
+                .append(one(states));
+
             if (isUSAddress) {
                 builder.append(" United States");
-            } else {
+            }
+            else {
                 builder
                     .append(" ")
-                    .append(one(countries))
-                    ;
+                    .append(one(countries));
             }
-            
+
             return builder.toString();
         };
     }

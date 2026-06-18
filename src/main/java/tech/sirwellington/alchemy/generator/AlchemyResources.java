@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019. Sir Wellington.
+ * Copyright © 2026. Sir Wellington.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
@@ -15,14 +15,11 @@
 
 package tech.sirwellington.alchemy.generator;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-import kotlin.io.ByteStreamsKt;
-import kotlin.text.Charsets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.Internal;
@@ -38,7 +35,7 @@ final class AlchemyResources {
     // PRIVATE FUNCTIONS
     //===========================================
     static List<String> readLinesFromResource(String path) {
-        String file = tryToLoadResource(path);
+        var file = tryToLoadResource(path);
 
         if (file == null || file.isEmpty()) {
             return Collections.emptyList();
@@ -51,29 +48,23 @@ final class AlchemyResources {
     }
 
     private static String tryToLoadResource(String path) {
-        ClassLoader classLoader = AlchemyGenerator.class.getClassLoader();
-
-        if (classLoader == null) {
-            return null;
-        }
-
-        URL url = classLoader.getResource(path);
+        var url = AlchemyResources.class.getResource("/" + path);
         if (url == null) {
-            LOG.warn("Could not load resource at [$path]");
+            LOG.warn("Could not load resource at [{}]", path);
             return null;
         }
 
-        byte[] bytes = tryToReadBytes(url);
+        var bytes = tryToReadBytes(url);
         if (bytes == null) {
             return null;
         }
 
-        return new String(bytes, Charsets.UTF_8);
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 
     private static byte[] tryToReadBytes(URL url) {
-        try (InputStream istream = url.openStream()) {
-            return ByteStreamsKt.readBytes(istream);
+        try (var istream = url.openStream()) {
+            return istream.readAllBytes();
         } catch (IOException ex) {
             LOG.warn("Failed to read resource at {}", url, ex);
             return null;
