@@ -655,6 +655,7 @@ public final class ObjectGenerators {
             valueType,
             Optional.of(generatorMappings)
         ));
+        
         if (keyGenerator == null || valueGenerator == null) {
             return null;
         }
