@@ -5,7 +5,7 @@ Alchemy Generator
 
 ## "More Data => Better tests"
 
-[![Maven Build](https://github.com/SirWellington/alchemy-generator/actions/workflows/maven-build.yml/badge.svg)](https://github.com/SirWellington/alchemy/actions/workflows/maven-build.yml) 
+[![Maven Build](https://github.com/SirWellington/alchemy-generator/actions/workflows/maven-build.yml/badge.svg)](https://github.com/SirWellington/alchemy-generator/actions/workflows/maven-build.yml) 
 ![Maven Central Version](http://img.shields.io/maven-central/v/tech.sirwellington.alchemy/alchemy-generator.svg)
 
 # Purpose
