@@ -50,13 +50,10 @@ public final class ObjectGenerators {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectGenerators.class);
 
-    private static final AlchemyGenerator<Short> shortGenerator = positiveIntegers().mapping(
-        Integer::shortValue
-    );
-
-    private static final AlchemyGenerator<Character> charGenerator = alphabeticStrings().mapping(s ->
-        s.charAt(0)
-    );
+    private static final AlchemyGenerator<Short> shortGenerator = positiveIntegers()
+        .mapping(Integer::shortValue);
+    private static final AlchemyGenerator<Character> charGenerator = alphabeticStrings()
+        .mapping(s -> s.charAt(0));
 
     private static final Map<Class<?>, AlchemyGenerator<?>> DEFAULT_GENERATOR_MAPPINGS = Map.ofEntries(
         makeEntry(Boolean.class, BooleanGenerators.booleans()),
@@ -99,10 +96,10 @@ public final class ObjectGenerators {
      * Use at your own risk! This [AlchemyGenerator] Inflates a Basic POJO
      * Object with randomly generated values.  Do not use this to generate Primitive types;
      * use instead the Alchemy Generators carefully designed and crafted for Primitives.
-     *
+     * <p>
      * The basic rules for the POJO are the following.
      * Each field must be:
-     *
+     * <p>
      *  Non-Static
      *  Non-Final
      *  Primitive type: Integer, Double, etc
@@ -115,7 +112,7 @@ public final class ObjectGenerators {
      *  A [List] with a Type Parameter matching the above.
      *  A [Set] with a Type Parameter matching the above.
      *  A [Map] with Type Parameters matching the above conditions.
-     *
+     * <p>
      *
      * Valid Examples:
      *
@@ -505,19 +502,21 @@ public final class ObjectGenerators {
                 generatorMappings
             );
         }
+
         var genericType = collectionField.getGenericType();
         if (!(genericType instanceof ParameterizedType parameterizedType)) {
             return null;
         }
+
         var actualType = Arrays.stream(parameterizedType.getActualTypeArguments())
                                .findFirst()
                                .orElse(null);
+
         var valueType = (actualType instanceof Class<?> clazz) ?
             clazz :
             tryToDetermineClassFrom(actualType);
-        if (valueType == null) {
-            return null;
-        }
+
+        if (valueType == null) return null;
 
         return determineGeneratorForCollectionWithValueType(
             valueType,
@@ -540,17 +539,16 @@ public final class ObjectGenerators {
                 generatorMappings
             );
         }
-        if (collectionParameter == null) {
-            return null;
-        }
+
+        if (collectionParameter == null) return null;
+
         if (!(collectionParameter.getParameterizedType() instanceof ParameterizedType parameterizedType)) {
             return null;
         }
         var actualTypes = parameterizedType.getActualTypeArguments();
         var actualType = Arrays.stream(actualTypes).findFirst().orElse(null);
-        if (actualType == null) {
-            return null;
-        }
+        if (actualType == null) return null;
+
         Class<?> valueType;
         if ((actualType instanceof Class<?> v)) {
             valueType = v;
@@ -579,7 +577,7 @@ public final class ObjectGenerators {
                 var className = wildcardType.getTypeName().replaceFirst("\\? super", "");
                 yield tryToLoadClass(className);
             }
-            default -> null;
+            case null, default -> null;
         };
     }
 
@@ -602,11 +600,9 @@ public final class ObjectGenerators {
             valueType,
             Optional.of(generatorMappings)
         ));
-        if (generator == null) {
-            return null;
-        }
-        var size = one(integers(3, 25));
+        if (generator == null) return null;
 
+        var size = one(integers(3, 25));
         return () -> {
             var list = IntStream.range(0, size)
                 .mapToObj(_ -> generator.get())
@@ -623,11 +619,13 @@ public final class ObjectGenerators {
         if (!(genericType instanceof ParameterizedType parameterizedType)) {
             return null;
         }
+
         var typeParameters = parameterizedType.getActualTypeArguments();
         if (typeParameters.length != 2) {
             LOG.warn("Field {} is not a map field as it does not have two type parameters", mapField);
             return null;
         }
+
         var keyType = (Class<?>) typeParameters[0];
         var valueType = (Class<?>) typeParameters[1];
 
@@ -655,9 +653,8 @@ public final class ObjectGenerators {
         Parameter mapParameter,
         Map<Class<?>, AlchemyGenerator<?>> generatorMappings
     ) {
-        if (mapParameter == null) {
-            return null;
-        }
+        if (mapParameter == null) return null;
+
         if (!(mapParameter.getParameterizedType() instanceof ParameterizedType parameterizedType)) {
             return null;
         }
@@ -676,9 +673,7 @@ public final class ObjectGenerators {
                 Optional.of(generatorMappings)
             )
         );
-        if (keyGenerator == null) {
-            return null;
-        }
+        if (keyGenerator == null) return null;
 
         var valueGenerator = determineGeneratorFor(
             new GeneratorFieldParameters(
@@ -688,9 +683,7 @@ public final class ObjectGenerators {
                 Optional.of(generatorMappings)
             )
         );
-        if (valueGenerator == null) {
-            return null;
-        }
+        if (valueGenerator == null) return null;
 
         return makeMapGenerator(keyGenerator, valueGenerator);
     }
@@ -703,11 +696,11 @@ public final class ObjectGenerators {
             var map = new HashMap<>();
             var size = one(integers(3, 25));
 
-            for (int i = 0; i < size; ++i) {
+            IntStream.range(0, size).forEach(_ -> {
                 var key = keyGenerator.get();
                 var value = valueGenerator.get();
                 map.put(key, value);
-            }
+            });
 
             return map;
         };
