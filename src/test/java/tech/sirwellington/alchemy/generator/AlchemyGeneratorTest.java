@@ -14,18 +14,20 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
-
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.Mockito.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
 /**
  * Tests for {@link AlchemyGenerator}.
@@ -55,20 +57,36 @@ class AlchemyGeneratorTest extends BaseGeneratorTest {
     void testOne_shouldProduceValue() {
         repeatBlock(() -> {
             var string = StringGenerators.alphanumericStrings().get();
-            AlchemyGenerator<String> generator =  () -> string;
+            AlchemyGenerator<String> generator = () -> string;
 
             var result = one(generator);
             assertThat(result, equalTo(string));
         });
     }
 
-    @ParameterizedTest(name = "one should reject null input")
-    @ValueSource(classes = {Void.class, String.class})
-    void testOne_shouldRejectNull(Class<?> type) {
+    @Test
+    @DisplayName("one should reject null input")
+    void testOne_shouldRejectNull() {
         assertThrowsExactly(
             IllegalArgumentException.class,
             () -> one(null),
             "should reject null generator"
         );
+    }
+
+    @RepeatedTest(2)
+    void testMappingModifiesResult() {
+        repeatBlock(DEFAULT_ITERATIONS, () -> {
+            // Given
+            var number = one(integers(1, 100_000));
+            AlchemyGenerator<Integer> generator = () -> number;
+
+            // When
+            var mapped = generator.mapping(Object::toString);
+
+            // Then
+            var result = mapped.get();
+            assertThat(result, equalTo(number.toString()));
+        });
     }
 }
