@@ -82,12 +82,6 @@
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!--=======================-->
         <!--ALCHEMY-->
@@ -98,7 +92,6 @@
             <version>${parent.version}</version>
         </dependency>
 
-
         <!--=======================-->
         <!--LOGGING-->
         <!--=======================-->
@@ -106,10 +99,10 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
