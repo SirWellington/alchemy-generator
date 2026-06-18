@@ -194,14 +194,11 @@ public final class ObjectGenerators {
 
     private static <T> AlchemyGenerator<T> _pojos(
         Class<T> classOfPojo,
-        Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
         Map<Class<?>, AlchemyGenerator<?>> generatorMappings
     ) {
         checkNotNull(classOfPojo, "missing class of POJO");
         checkNotNull(generatorMappings, "generatorMappings is required");
 
-        if (overrideTypeMappings.containsKey(classOfPojo)) {
-            return (AlchemyGenerator<T>) overrideTypeMappings.get(classOfPojo);
         if (generatorMappings.containsKey(classOfPojo)) {
             return (AlchemyGenerator<T>) generatorMappings.get(classOfPojo);
         }
@@ -223,7 +220,6 @@ public final class ObjectGenerators {
             }
 
             validFields.forEach(f -> {
-                tryInjectField(instance, f, overrideTypeMappings);
                 tryInjectField(instance, f, generatorMappings);
             });
 
@@ -297,13 +293,10 @@ public final class ObjectGenerators {
         Map<Class<?>, AlchemyGenerator<?>> generatorMappings
     ) throws IllegalArgumentException, IllegalAccessException {
         var typeOfField = field.getType();
-        typeOfField = primitiveToWrapper(typeOfField);
-
         var args = new GeneratorFieldParameters(
             Optional.of(field),
             Optional.empty(),
             typeOfField,
-            Optional.of(generatorMappings)
             generatorMappings
         );
         var generator = determineGeneratorFor(args);
@@ -377,7 +370,7 @@ public final class ObjectGenerators {
                 field,
                 args.parameter,
                 typeOfField,
-                Optional.of(generatorMappings)
+                generatorMappings
             ));
         }
         else if (isEnumType(typeOfField)) {
@@ -462,7 +455,7 @@ public final class ObjectGenerators {
             }
 
             var typeOfField = args.typeOfField;
-            var generatorMappings = args.generatorMappings.orElse(Map.of());
+            var generatorMappings = args.generatorMappings;
             return determineGeneratorForCollectionField(
                 field.orElse(null),
                 typeOfField,
@@ -669,7 +662,6 @@ public final class ObjectGenerators {
             Optional.of(mapField),
             Optional.empty(),
             valueType,
-            Optional.of(generatorMappings)
             generatorMappings
         ));
         
@@ -701,7 +693,6 @@ public final class ObjectGenerators {
                 Optional.empty(),
                 Optional.of(mapParameter),
                 keyType,
-                Optional.of(generatorMappings)
                 generatorMappings
             )
         );
@@ -712,7 +703,6 @@ public final class ObjectGenerators {
                 Optional.empty(),
                 Optional.empty(),
                 valueType,
-                Optional.of(generatorMappings)
                 generatorMappings
             )
         );
