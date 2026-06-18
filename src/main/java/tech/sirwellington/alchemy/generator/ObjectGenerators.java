@@ -453,6 +453,9 @@ public final class ObjectGenerators {
     ) {
         var field = args.field;
         var parameter = args.parameter;
+        var generatorMappings = args.generatorMappings;
+        var typeOfField = args.typeOfField;
+
         if (field.isPresent()) {
             if (fieldLacksGenericTypeArguments(field.get())) {
                 LOG.warn(
@@ -464,20 +467,19 @@ public final class ObjectGenerators {
                 return null;
             }
 
-            var typeOfField = args.typeOfField;
-            var generatorMappings = args.generatorMappings;
             return determineGeneratorForCollectionField(
                 field.orElse(null),
                 typeOfField,
                 generatorMappings
             );
         }
-        else if (parameter.isPresent()) {
-            var parameterType = (ParameterizedType) parameter.get().getParameterizedType();
-            if (parameterType == null) {
+
+        if (parameter.isPresent()) {
+            // Check
+            if (!(parameter.get().getParameterizedType() instanceof ParameterizedType)) {
                 LOG.warn(
                     "POJO {} contains a Collection parameter {} which is not type-parameterized: [{}]. Cannot inject.",
-                    args.typeOfField,
+                    typeOfField,
                     parameter,
                     parameter.get().getParameterizedType()
                 );
@@ -486,16 +488,17 @@ public final class ObjectGenerators {
 
             return determineGeneratorForCollectionParameter(
                 parameter.orElse(null),
-                args.typeOfField,
-                args.generatorMappings
+                typeOfField,
+                generatorMappings
             );
         }
-        else {
-            LOG.warn(
-                "Cannot Instantiate: No generic information available in order to generate values for $typeOfField"
-            );
-            return null;
-        }
+
+        LOG.warn(
+            "Cannot Instantiate parameter {}: No generic information available in order to generate values for {}",
+            parameter,
+            typeOfField
+        );
+        return null;
 
     }
 
@@ -538,6 +541,7 @@ public final class ObjectGenerators {
 
         var genericType = collectionField.getGenericType();
         if (!(genericType instanceof ParameterizedType parameterizedType)) {
+            LOG.warn("Collection field {} does not have parameterized type.", collectionField);
             return null;
         }
 
@@ -549,7 +553,13 @@ public final class ObjectGenerators {
             clazz :
             tryToDetermineClassFrom(actualType);
 
-        if (valueType == null) return null;
+        if (valueType == null) {
+            LOG.warn(
+                "Could not determine parameterized type for collection values of [{}] ",
+                parameterizedType
+            );
+            return null;
+        }
 
         return determineGeneratorForCollectionWithValueType(
             valueType,
