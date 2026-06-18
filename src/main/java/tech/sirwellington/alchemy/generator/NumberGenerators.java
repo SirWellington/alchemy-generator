@@ -309,34 +309,4 @@ public final class NumberGenerators {
             return values.get(index);
         };
     }
-
-    //===========================================
-    // UTILITY FUNCTIONS
-    //===========================================
-    @Internal
-    static int safeIncrement(int num) {
-        if (num == Integer.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1;
-        }
-    }
-
-    @Internal
-    static long safeIncrement(long num) {
-        if (num == Long.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1;
-        }
-    }
-
-    @Internal
-    static double safeIncrement(double num) {
-        if (num == Double.MAX_VALUE) {
-            return num;
-        } else {
-            return num + 1.0;
-        }
-    }
 }

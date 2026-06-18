@@ -550,49 +550,4 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
             assertNotNull(value);
         }
     }
-
-    // ===================== Utilities =====================
-
-    @Nested
-    @DisplayName("Utility Function Tests")
-    class UtilityTests {
-
-        @RepeatedTest(DEFAULT_ITERATIONS)
-        @DisplayName("safeIncrement_long handles normal and edge cases")
-        void testSafeIncrement_long() {
-            long value = one(longs(-10_000L, 10_000L));
-            long expected = Math.addExact(value, 1);
-            long result = safeIncrement(value);
-            assertThat(result, equalTo(expected));
-
-            // Edge: Long.MAX_VALUE → stays
-            value = Long.MAX_VALUE;
-            result = safeIncrement(value);
-            assertThat(result, equalTo(Long.MAX_VALUE));
-
-            // Edge: Long.MIN_VALUE → MIN_VALUE + 1 (always valid)
-            value = Long.MIN_VALUE;
-            result = safeIncrement(value);
-            assertThat(result, equalTo(Long.MIN_VALUE + 1L));
-        }
-
-        @RepeatedTest(DEFAULT_ITERATIONS)
-        @DisplayName("safeIncrement_int handles normal and edge cases")
-        void testSafeIncrement_int() {
-            int value = one(NumberGenerators.integers(-10_000, 10_000));
-            int expected = Math.addExact(value, 1);
-            int result = safeIncrement(value);
-            assertThat(result, equalTo(expected));
-
-            // Edge: Integer.MAX_VALUE → stays
-            value = Integer.MAX_VALUE;
-            result = safeIncrement(value);
-            assertThat(result, equalTo(Integer.MAX_VALUE));
-
-            // Edge: Integer.MIN_VALUE → MIN_VALUE + 1 (always valid)
-            value = Integer.MIN_VALUE;
-            result = safeIncrement(value);
-            assertThat(result, equalTo(Integer.MIN_VALUE + 1));
-        }
-    }
 }
