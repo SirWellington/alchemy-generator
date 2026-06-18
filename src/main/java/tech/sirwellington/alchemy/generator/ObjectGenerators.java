@@ -30,8 +30,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
@@ -52,8 +50,6 @@ public final class ObjectGenerators {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectGenerators.class);
 
-    private static final Map<Class<?>, AlchemyGenerator<?>> DEFAULT_GENERATOR_MAPPINGS = new ConcurrentHashMap<>();
-
     private static final AlchemyGenerator<Short> shortGenerator = positiveIntegers().mapping(
         Integer::shortValue
     );
@@ -62,50 +58,41 @@ public final class ObjectGenerators {
         s.charAt(0)
     );
 
-    static {
-        DEFAULT_GENERATOR_MAPPINGS.put(boolean.class, BooleanGenerators.booleans());
-        DEFAULT_GENERATOR_MAPPINGS.put(Boolean.class, BooleanGenerators.booleans());
-        DEFAULT_GENERATOR_MAPPINGS.put(Byte.class, BinaryGenerators.bytes());
-        DEFAULT_GENERATOR_MAPPINGS.put(ByteBuffer.class, BinaryGenerators.byteBuffers(333));
-        DEFAULT_GENERATOR_MAPPINGS.put(byte[].class, BinaryGenerators.binary(333));
-        DEFAULT_GENERATOR_MAPPINGS.put(char.class, charGenerator);
-        DEFAULT_GENERATOR_MAPPINGS.put(Character.class, charGenerator);
-        DEFAULT_GENERATOR_MAPPINGS.put(float.class, positiveFloats());
-        DEFAULT_GENERATOR_MAPPINGS.put(Float.class, positiveFloats());
-        DEFAULT_GENERATOR_MAPPINGS.put(double.class, positiveDoubles());
-        DEFAULT_GENERATOR_MAPPINGS.put(Double.class, positiveDoubles());
-        DEFAULT_GENERATOR_MAPPINGS.put(int.class, smallPositiveIntegers());
-        DEFAULT_GENERATOR_MAPPINGS.put(Integer.class, smallPositiveIntegers());
-        DEFAULT_GENERATOR_MAPPINGS.put(long.class, positiveLongs());
-        DEFAULT_GENERATOR_MAPPINGS.put(Long.class, positiveLongs());
-        DEFAULT_GENERATOR_MAPPINGS.put(short.class, shortGenerator);
-        DEFAULT_GENERATOR_MAPPINGS.put(Short.class, shortGenerator);
-        DEFAULT_GENERATOR_MAPPINGS.put(String.class, alphabeticStrings());
-        DEFAULT_GENERATOR_MAPPINGS.put(Instant.class, TimeGenerators.anyTime());
-        DEFAULT_GENERATOR_MAPPINGS.put(
+    private static final Map<Class<?>, AlchemyGenerator<?>> DEFAULT_GENERATOR_MAPPINGS = Map.ofEntries(
+        makeEntry(Boolean.class, BooleanGenerators.booleans()),
+        makeEntry(Byte.class, BinaryGenerators.bytes()),
+        makeEntry(Byte[].class, BinaryGenerators.binary(1_000)),
+        makeEntry(ByteBuffer.class, BinaryGenerators.byteBuffers(333)),
+        makeEntry(Character.class, charGenerator),
+        makeEntry(Float.class, positiveFloats()),
+        makeEntry(Double.class, positiveDoubles()),
+        makeEntry(Integer.class, smallPositiveIntegers()),
+        makeEntry(Short.class, shortGenerator),
+        makeEntry(Long.class, positiveLongs()),
+        makeEntry(String.class, alphabeticStrings()),
+        makeEntry(Date.class, DateGenerators.anyTime()),
+        makeEntry(Instant.class, TimeGenerators.anyTime()),
+        makeEntry(
             ZonedDateTime.class,
             TimeGenerators.toZonedDateTimeGenerator(TimeGenerators.anyTime())
-        );
-        DEFAULT_GENERATOR_MAPPINGS.put(
+        ),
+        makeEntry(
             LocalDate.class,
             DateGenerators.toLocalDateGenerator(DateGenerators.anyTime())
-        );
-        DEFAULT_GENERATOR_MAPPINGS.put(
-            URL.class,
-            NetworkGenerators.httpURLs()
-        );
-        DEFAULT_GENERATOR_MAPPINGS.put(
-            Date.class,
-            DateGenerators.anyTime()
-        );
-        DEFAULT_GENERATOR_MAPPINGS.put(
+        ),
+        makeEntry(
             java.sql.Date.class,
             DateGenerators.toSqlDateGenerator(DateGenerators.anyTime())
-        );
-        DEFAULT_GENERATOR_MAPPINGS.put(
+        ),
+        makeEntry(
             Timestamp.class,
             DateGenerators.toSqlTimestampGenerator(DateGenerators.anyTime())
-        );
+        ),
+        makeEntry(URL.class, NetworkGenerators.httpsURLs())
+    );
+
+    private static <K, V> Map.Entry<K, V> makeEntry(K key, V value) {
+        return new AbstractMap.SimpleImmutableEntry<>(key, value);
     }
 
     /**
@@ -299,6 +286,7 @@ public final class ObjectGenerators {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
       Boolean.TYPE, Boolean.class,
       Byte.TYPE, Byte.class,
+      byte[].class, Byte[].class,
       Character.TYPE, Character.class,
       Short.TYPE, Short.class,
       Integer.TYPE, Integer.class,
@@ -343,7 +331,7 @@ public final class ObjectGenerators {
         @Required GeneratorFieldParameters args
     ) {
         var generatorMappings = args.generatorMappings.orElse(Map.of());
-        var typeOfField = args.typeOfField;
+        var typeOfField = primitiveToWrapper(args.typeOfField);
         var generator = generatorMappings.get(typeOfField);
         var field = args.field;
 
