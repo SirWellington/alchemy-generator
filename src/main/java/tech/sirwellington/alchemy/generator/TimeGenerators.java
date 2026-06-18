@@ -33,7 +33,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 
 /**
- * Generators for {@link Instant} types.
+ * {@summary Generators for Instant types }
  *
  * @author SirWellington
  */
@@ -127,11 +127,11 @@ public final class TimeGenerators {
     static AlchemyGenerator<Instant> anyTime() {
         return () -> {
             int choice = one(integers(0, 3));
-            switch(choice) {
-                case 0: return pastInstants().get();
-                case 1: return futureInstants().get();
-                default: return presentInstants().get();
-            }
+            return switch (choice) {
+                case 0 -> pastInstants().get();
+                case 1 -> futureInstants().get();
+                default -> presentInstants().get();
+            };
         };
     }
 
@@ -149,9 +149,9 @@ public final class TimeGenerators {
         checkNotNull(endTime, "endTime is null");
         checkThat(startTime.isBefore(endTime), "startTime must be before endTime");
 
-        long epochOfStart = startTime.toEpochMilli();
-        long epochOfEnd = endTime.toEpochMilli();
-        AlchemyGenerator<Long> timestampGenerator = longs(epochOfStart, epochOfEnd);
+        var epochOfStart = startTime.toEpochMilli();
+        var epochOfEnd = endTime.toEpochMilli();
+        var timestampGenerator = longs(epochOfStart, epochOfEnd);
 
         return () -> {
             long timestamp = timestampGenerator.get();
@@ -180,7 +180,7 @@ public final class TimeGenerators {
         checkNotNull(zone, "zone is missing");
 
         return () -> {
-            Instant instant = generator.get();
+            var instant = generator.get();
             checkNotNull(instant, "Instant produced is null");
             return ZonedDateTime.ofInstant(instant, zone);
         };

@@ -31,6 +31,8 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -547,7 +549,6 @@ public final class ObjectGenerators {
         if (isMapType(collectionType)) {
             return determineGeneratorForMapParameter(
                 collectionParameter,
-                collectionType,
                 generatorMappings
             );
         }
@@ -619,16 +620,10 @@ public final class ObjectGenerators {
         var size = one(integers(3, 25));
 
         return () -> {
-            var list = new ArrayList<>(size);
-            for (int i = 0; i < size; ++i) {
-                list.add(generator.get());
-            }
-
-            if (isSetType(collectionType)) {
-                return Set.copyOf(list);
-            } else {
-                return list;
-            }
+            var list = IntStream.range(0, size)
+                .mapToObj(_ -> generator.get())
+                .toList();
+            return isSetType(collectionType) ? Set.copyOf(list) : list;
         };
     }
 
@@ -669,7 +664,6 @@ public final class ObjectGenerators {
 
     private static AlchemyGenerator<?> determineGeneratorForMapParameter(
         Parameter mapParameter,
-        Class<?> collectionType,
         Map<Class<?>, AlchemyGenerator<?>> generatorMappings
     ) {
         if (mapParameter == null) {

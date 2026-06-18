@@ -17,8 +17,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 
 /**
- * Generators for common information about people: names, addresses, phone numbers,
- * social-security numbers, emails, etc.
+ * {@summary Generators for common information about people: names, addresses, phone numbers,
+ * social-security numbers, emails, etc.}
  */
 @NonInstantiable
 @StrategyPattern(role = StrategyPattern.Role.CONCRETE_BEHAVIOR)
