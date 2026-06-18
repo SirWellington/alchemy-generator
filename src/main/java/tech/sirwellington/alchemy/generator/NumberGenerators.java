@@ -213,8 +213,7 @@ public final class NumberGenerators {
      * @see #positiveDoubles()
      * @see #doubles(double, double) 
      */
-    @Deprecated
-    private static AlchemyGenerator<Double> negativeDoubles() {
+    static AlchemyGenerator<Double> negativeDoubles() {
         return doubles(-Double.MAX_VALUE, 0.0);
     }
 

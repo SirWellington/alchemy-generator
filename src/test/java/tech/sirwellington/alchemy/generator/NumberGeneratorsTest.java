@@ -366,10 +366,10 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
             {
                 double lowerBound = -1343.0;
                 double upperBound = 2_044_532.3;
-                var instance = doubles(lowerBound, upperBound);
+                var generator = doubles(lowerBound, upperBound);
 
                 repeatBlock(() -> {
-                    var value = instance.get();
+                    var value = generator.get();
                     assertThat(value, greaterThanOrEqualTo(lowerBound));
                     assertThat(value, lessThanOrEqualTo(upperBound));
                 });
@@ -400,35 +400,46 @@ class NumberGeneratorsTest extends BaseGeneratorTest {
         @RepeatedTest(DEFAULT_ITERATIONS)
         @DisplayName("doublesFromFixedList() only generates values from list")
         void testDoublesFromFixedList() {
-            ArrayList<Double> values = new ArrayList<>();
+            var values = new ArrayList<Double>();
+
             for (int i = 0; i < 15; i++) {
                 values.add(RANDOM.nextDouble(4.0, 365.0));
             }
 
-            var instance = doublesFromFixedList(values);
-            var value = instance.get();
+            var generator = doublesFromFixedList(values);
+            var value = generator.get();
             assertThat(value, isIn(values));
         }
 
         @RepeatedTest(DEFAULT_ITERATIONS)
         @DisplayName("positiveDoubles() returns values > 0.0")
         void testPositiveDoubles() {
-            var instance = positiveDoubles();
-            assertNotNull(instance);
+            var generator = positiveDoubles();
+            assertNotNull(generator);
 
-            var value = instance.get();
+            var value = generator.get();
             assertThat(value, greaterThan(0.0));
         }
 
         @RepeatedTest(DEFAULT_ITERATIONS)
         @DisplayName("smallPositiveDoubles() returns values in (0, 1000]")
         void testSmallPositiveDoubles() {
-            var instance = smallPositiveDoubles();
-            assertNotNull(instance);
+            var generator = smallPositiveDoubles();
+            assertNotNull(generator);
 
-            var value = instance.get();
+            var value = generator.get();
             assertThat(value, greaterThan(0.0));
             assertThat(value, lessThanOrEqualTo(1000.0));
+        }
+
+        @RepeatedTest(DEFAULT_ITERATIONS)
+        @DisplayName("negativeDoubles() returns values in (-Double.MAX, 0]")
+        void testNegativeDoubles() {
+            var generator = negativeDoubles();
+            assertNotNull(generator);
+            var value = generator.get();
+            assertNotNull(value);
+            assertThat(value, lessThan(0.0));
         }
 
         @RepeatedTest(5)
