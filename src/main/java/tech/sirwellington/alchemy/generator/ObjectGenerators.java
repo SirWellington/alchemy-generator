@@ -625,9 +625,11 @@ public final class ObjectGenerators {
     }
 
     private static Class<?> tryToLoadClass(String classname) {
+        Checks.checkNotBlank(classname, "classname cannot be blank");
         try {
             return ObjectGenerators.class.getClassLoader().loadClass(classname);
         } catch (Throwable _) {
+            LOG.warn("Could not load class {}", classname);
             return null;
         }
     }
