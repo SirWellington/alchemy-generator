@@ -453,6 +453,7 @@ public final class ObjectGenerators {
     ) {
         var field = args.field;
         var parameter = args.parameter;
+        
         if (field.isPresent()) {
             if (fieldLacksGenericTypeArguments(field.get())) {
                 LOG.warn(
