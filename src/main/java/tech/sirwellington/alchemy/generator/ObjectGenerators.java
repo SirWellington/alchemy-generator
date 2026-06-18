@@ -39,7 +39,8 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings;
 
 /**
- * {@summary Contains Convenience Generators for POJOs (Plain-Old-Java-Objects).}
+ * {@summary Contains Convenience Generators for a basic data object (an object whose purpose is to contain data.)}
+ *
  * These generators should work for most plain data objects.
  *
  * @author SirWellington
@@ -145,7 +146,7 @@ public final class ObjectGenerators {
      *
      * @param <T> The type of the object to be generated. Inferred from the class.
      * @param classOfPojo The class to be generated.
-     * @return An {@link AlchemyGenerator} that generates {@code T} types.
+     * @return An {@link AlchemyGenerator} capable of generating objects of the provided type.
      *
      * @see StringGenerators
      * @see NumberGenerators
@@ -156,14 +157,39 @@ public final class ObjectGenerators {
         return pojos(classOfPojo, DEFAULT_GENERATOR_MAPPINGS);
     }
 
+    /**
+     * A version of {@link #pojos(Class)} that allows you to provide your own custom
+     * type mappings.
+     *
+     * @param <T> Generic type of the object to be generated. This is inferred from the class.
+     * @param classOfPojo The class of the object to be generated.
+     * @param overrideTypeMappings Allows you to override type mappings by providing your own {@code Type -> AlchemyGenerator<Type>}.
+     * @return An {@link AlchemyGenerator} capable of generating objects of the provided type.
+     * @see #pojos(Class) 
+     */
     public static <T> AlchemyGenerator<T> pojos(
-        Class<T> classOfPojo, Map<Class<?>,
-        AlchemyGenerator<?>> customMappings
+        Class<T> classOfPojo, 
+        Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
+    ) {
+        var mappings = new HashMap<>(DEFAULT_GENERATOR_MAPPINGS);
+        var overrides = overrideTypeMappings;
+        if (overrides == null) overrides = Map.of();
+        mappings.putAll(overrides);
+        
+        return _pojos(
+            classOfPojo,
+            mappings
+        );
+    }
+
+    private static <T> AlchemyGenerator<T> _pojos(
+        Class<T> classOfPojo,
+        Map<Class<?>, AlchemyGenerator<?>> overrideTypeMappings
     ) {
         checkNotNull(classOfPojo, "missing class of POJO");
 
-        if (customMappings.containsKey(classOfPojo)) {
-            return (AlchemyGenerator<T>) customMappings.get(classOfPojo);
+        if (overrideTypeMappings.containsKey(classOfPojo)) {
+            return (AlchemyGenerator<T>) overrideTypeMappings.get(classOfPojo);
         }
 
         checkThat(
@@ -183,7 +209,7 @@ public final class ObjectGenerators {
             }
 
             validFields.forEach(f -> {
-                tryInjectField(instance, f, customMappings);
+                tryInjectField(instance, f, overrideTypeMappings);
             });
 
             return instance;
@@ -191,7 +217,7 @@ public final class ObjectGenerators {
 
     }
 
-    static <T> boolean canInstantiate(Class<T> classOfPojo) {
+    private static <T> boolean canInstantiate(Class<T> classOfPojo) {
         return tryToInstantiate(classOfPojo) != null;
     }
 
