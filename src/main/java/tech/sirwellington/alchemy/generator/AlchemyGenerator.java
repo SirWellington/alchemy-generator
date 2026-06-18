@@ -22,7 +22,7 @@ import java.util.function.Function;
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 
 /**
- * {@summary Generates Data or Objects, primarily used for testint scenarios.}
+ * {@summary Generates Data or Objects, primarily used for testing scenarios.}
  * <br>
  * Common generators exist for:
  * <pre>
