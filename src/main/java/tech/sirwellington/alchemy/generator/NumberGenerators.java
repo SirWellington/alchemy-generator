@@ -59,7 +59,7 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Integer> integers(
+    public static AlchemyGenerator<Integer> integers(
         int inclusiveLowerBound,
         int exclusiveUpperBound
     ) throws IllegalArgumentException {
@@ -74,7 +74,7 @@ public final class NumberGenerators {
      * Creates a series of integer values, negative and positive.
      * The range is {@code Integer.MIN_VALUE...Integer.MAX_VALUE}.
      */
-    static AlchemyGenerator<Integer> anyIntegers() {
+    public static AlchemyGenerator<Integer> anyIntegers() {
         return integers(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
     
@@ -84,7 +84,7 @@ public final class NumberGenerators {
      * @see #integers(int, int) 
      * @see #negativeIntegers() 
      */
-    static AlchemyGenerator<Integer> positiveIntegers() {
+    public static AlchemyGenerator<Integer> positiveIntegers() {
         return integers(1, Integer.MAX_VALUE);
     }
     
@@ -93,7 +93,7 @@ public final class NumberGenerators {
      * @see #positiveIntegers()
      * @see #integers(int, int) 
      */
-    static AlchemyGenerator<Integer> smallPositiveIntegers() {
+    public static AlchemyGenerator<Integer> smallPositiveIntegers() {
         return integers(1, 1000);
     }
     
@@ -102,7 +102,7 @@ public final class NumberGenerators {
      * @see #positiveIntegers()
      * @see #integers(int, int) 
      */
-    static AlchemyGenerator<Integer> negativeIntegers() {
+    public static AlchemyGenerator<Integer> negativeIntegers() {
         return integers(Integer.MIN_VALUE, 0);
     }
 
@@ -116,7 +116,7 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException {
+    public static AlchemyGenerator<Long> longs(long inclusiveLowerBound, long exclusiveUpperBound) throws IllegalArgumentException {
         checkThat(inclusiveLowerBound < exclusiveUpperBound, "inclusiveLowerBound must be > exclusiveUpperBound");
 
         return () -> RANDOM.nextLong(inclusiveLowerBound, exclusiveUpperBound);
@@ -127,7 +127,7 @@ public final class NumberGenerators {
      * The range is {@code Long.MIN_VALUE...Long.MAX_VALUE}.
      * @see #longs(long, long) 
      */
-    static AlchemyGenerator<Long> anyLongs() {
+    public static AlchemyGenerator<Long> anyLongs() {
         return longs(Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
@@ -137,7 +137,7 @@ public final class NumberGenerators {
      * @see #longs(long, long)
      * @see #negativeLongs() 
      */
-    static AlchemyGenerator<Long> positiveLongs() {
+    public static AlchemyGenerator<Long> positiveLongs() {
         return longs(1L, Long.MAX_VALUE);
     }
 
@@ -146,7 +146,7 @@ public final class NumberGenerators {
      * @see #positiveLongs() ()
      * @see #longs(long, long) 
      */
-    static AlchemyGenerator<Long> smallPositiveLongs() {
+    public static AlchemyGenerator<Long> smallPositiveLongs() {
         return longs(1L, 1000L);
     }
 
@@ -155,7 +155,7 @@ public final class NumberGenerators {
      * @see #positiveLongs() 
      * @see #longs(long, long) 
      */
-    static AlchemyGenerator<Long> negativeLongs() {
+    public static AlchemyGenerator<Long> negativeLongs() {
         return longs(Long.MIN_VALUE, 0L);
     }
 
@@ -168,7 +168,7 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Double> doubles(
+    public static AlchemyGenerator<Double> doubles(
         double inclusiveLowerBound,
         double exclusiveUpperBound
     ) {
@@ -181,7 +181,7 @@ public final class NumberGenerators {
      * The range is {@code -Double.MAX_VALUE...Double.MAX_VALUE}.
      * @see #doubles(double, double)
      */
-    static AlchemyGenerator<Double> anyDoubles() {
+    public static AlchemyGenerator<Double> anyDoubles() {
         return doubles(-Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
@@ -191,7 +191,7 @@ public final class NumberGenerators {
      * @see #doubles(double, double) 
      * @see #negativeDoubles() 
      */
-    static AlchemyGenerator<Double> positiveDoubles() {
+    public static AlchemyGenerator<Double> positiveDoubles() {
         return doubles(1.0, Double.MAX_VALUE);
     }
 
@@ -200,7 +200,7 @@ public final class NumberGenerators {
      * @see #positiveDoubles() 
      * @see #doubles(double, double) 
      */
-    static AlchemyGenerator<Double> smallPositiveDoubles() {
+    public static AlchemyGenerator<Double> smallPositiveDoubles() {
         return doubles(1.0, 1000.0);
     }
 
@@ -209,7 +209,7 @@ public final class NumberGenerators {
      * @see #positiveDoubles()
      * @see #doubles(double, double) 
      */
-    static AlchemyGenerator<Double> negativeDoubles() {
+    public static AlchemyGenerator<Double> negativeDoubles() {
         return doubles(-Double.MAX_VALUE, 0.0);
     }
 
@@ -222,7 +222,7 @@ public final class NumberGenerators {
      * @param exclusiveUpperBound Can be negative, must be {@code > inclusiveLowerBound}.
      * @throws IllegalArgumentException If {@code inclusiveLowerBound >= exclusiveUpperBound}.
      */
-    static AlchemyGenerator<Float> floats(float inclusiveLowerBound, float exclusiveUpperBound) {
+    public static AlchemyGenerator<Float> floats(float inclusiveLowerBound, float exclusiveUpperBound) {
         var doubles = doubles(inclusiveLowerBound, exclusiveUpperBound);
         return () -> doubles.get().floatValue();
     }
@@ -232,7 +232,7 @@ public final class NumberGenerators {
      * The range is {@code -Float.MAX_VALUE...Float.MAX_VALUE}.
      * @see #floats(float, float)
      */
-    static AlchemyGenerator<Float> anyFloats() {
+    public static AlchemyGenerator<Float> anyFloats() {
         return floats(-Float.MAX_VALUE, Float.MAX_VALUE);
     }
 
@@ -242,7 +242,7 @@ public final class NumberGenerators {
      * @see #floats(float, float)
      * @see #negativeFloats()
      */
-    static AlchemyGenerator<Float> positiveFloats() {
+    public static AlchemyGenerator<Float> positiveFloats() {
         return floats(1.0f, Float.MAX_VALUE);
     }
 
@@ -251,7 +251,7 @@ public final class NumberGenerators {
      * @see #positiveFloats()
      * @see #floats(float, float)
      */
-    static AlchemyGenerator<Float> smallPositiveFloats() {
+    public static AlchemyGenerator<Float> smallPositiveFloats() {
         return floats(1.0f, 1000.0f);
     }
 
@@ -260,7 +260,7 @@ public final class NumberGenerators {
      * @see #positiveFloats()
      * @see #floats(float, float)
      */
-    static AlchemyGenerator<Float> negativeFloats() {
+    public static AlchemyGenerator<Float> negativeFloats() {
         return floats(-Float.MAX_VALUE, 0.0f);
     }
 
@@ -271,7 +271,7 @@ public final class NumberGenerators {
      * Generates an integer value from the specified set.
      * @param values The list to pull the values from.
      */
-    static AlchemyGenerator<Integer> integersFromFixedList(@Required List<Integer> values) {
+    public static AlchemyGenerator<Integer> integersFromFixedList(@Required List<Integer> values) {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
@@ -284,7 +284,7 @@ public final class NumberGenerators {
      * Generates a double value from the specified List.
      * @param values The list to pull values from.
      */
-    static AlchemyGenerator<Double> doublesFromFixedList(List<Double> values) {
+    public static AlchemyGenerator<Double> doublesFromFixedList(List<Double> values) {
         checkNotEmpty(values, "No values specified");
 
         return () -> {
@@ -297,7 +297,7 @@ public final class NumberGenerators {
      * Generates a float value from the specified set.
      * @param values The list to pull values from.
      */
-    static AlchemyGenerator<Float> floatsFromFixedList(List<Float> values) {
+    public static AlchemyGenerator<Float> floatsFromFixedList(List<Float> values) {
         checkNotEmpty(values, "No values specified");
 
         return () -> {

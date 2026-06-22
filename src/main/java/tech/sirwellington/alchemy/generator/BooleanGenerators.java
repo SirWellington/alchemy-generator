@@ -45,7 +45,7 @@ public final class BooleanGenerators {
      * Generates a series of randomly selected booleans.
      * @see #alternatingBooleans()
      */
-    static AlchemyGenerator<Boolean> booleans() {
+    public static AlchemyGenerator<Boolean> booleans() {
         return RANDOM::nextBoolean;
     }
     
@@ -53,7 +53,7 @@ public final class BooleanGenerators {
      * Generates a series of alternating boolean. In other words, `true, false, true, false, etc`.
      * @see #booleans()
      */
-    static AlchemyGenerator<Boolean> alternatingBooleans() {
+    public static AlchemyGenerator<Boolean> alternatingBooleans() {
         AtomicInteger count = new AtomicInteger();
         return () -> isEven(count.incrementAndGet());
     }

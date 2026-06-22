@@ -66,7 +66,7 @@ public final class StringGenerators {
      * Generates a random string of a random length. Characters can include ASCII, Unicode, or
      * International Characters.
      */
-    static AlchemyGenerator<String> strings() {
+    public static AlchemyGenerator<String> strings() {
         return () -> {
             var size = one(integers(5, 1000));
             return randomStringFrom(ALPHANUMERIC, size);
@@ -78,7 +78,7 @@ public final class StringGenerators {
      *
      * @param length The length of the String, must be at least 1.
      */
-    static AlchemyGenerator<String> strings(int length) {
+    public static AlchemyGenerator<String> strings(int length) {
         checkThat(length > 0, "Length must be at least 1");
         return () -> randomStringFrom(ALPHANUMERIC, length);
     }
@@ -88,18 +88,18 @@ public final class StringGenerators {
      *
      * @param length The length of the String, must be at least 1.
      */
-    static AlchemyGenerator<String> hexadecimalString(@Positive int length) {
+    public static AlchemyGenerator<String> hexadecimalString(@Positive int length) {
         checkThat(length > 0, "Length must be at least 1");
         return () -> randomStringFrom(HEXADECIMAL, length);
     }
 
     /**
-     * Generates a random alphabetic string anywhere between `10 - 100` characters. Well suited for the case when
+     * Generates a random alphabetic string anywhere between {@code 10 - 100} characters. Well suited for the case when
      * you don't really care for the size of the string returned.
      *
      * @see #alphabeticStrings(int)
      */
-    static AlchemyGenerator<String> alphabeticStrings() {
+    public static AlchemyGenerator<String> alphabeticStrings() {
         int length = one(integers(10, 100));
         return alphabeticStrings(length);
     }
@@ -108,21 +108,21 @@ public final class StringGenerators {
      * Generates a random alphabetic string.
      *
      * @param length The length of the String, must be at least 1.
-     * @throws IllegalArgumentException If `length < 0`
+     * @throws IllegalArgumentException If {@code length < 0}
      * @see #alphabeticStrings()
      */
-    static AlchemyGenerator<String> alphabeticStrings(@Positive int length) {
+    public static AlchemyGenerator<String> alphabeticStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
         return () -> randomStringFrom(ALPHABETIC, length);
     }
 
     /**
-     * Generates a random alphanumeric string anywhere between `10 - 100` characters. Well suited for the case
+     * Generates a random alphanumeric string anywhere between {@code 10 - 100} characters. Well suited for the case
      * when you don't really care what the size of the string returned.
      *
      * @see #alphanumericStrings(int)
      */
-    static AlchemyGenerator<String> alphanumericStrings() {
+    public static AlchemyGenerator<String> alphanumericStrings() {
         int length = one(integers(10, 100));
         return alphanumericStrings(length);
     }
@@ -131,10 +131,10 @@ public final class StringGenerators {
      * Generates a random alphanumeric string of the specified length.
      *
      * @param length The length of the Generated Strings.
-     * @throws IllegalArgumentException If `length < 0`
+     * @throws IllegalArgumentException If {@code length < 0}.
      * @see #alphanumericStrings()
      */
-    static AlchemyGenerator<String> alphanumericStrings(@Positive int length) {
+    public static AlchemyGenerator<String> alphanumericStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
         return () -> randomStringFrom(ALPHANUMERIC, length);
     }
@@ -145,7 +145,7 @@ public final class StringGenerators {
      *
      * @see #numericStrings(int)
      */
-    static AlchemyGenerator<String> numericStrings() {
+    public static AlchemyGenerator<String> numericStrings() {
         int length = one(integers(4, 25));
         return numericStrings(length);
     }
@@ -162,7 +162,7 @@ public final class StringGenerators {
      * @throws IllegalArgumentException If {@code length <= 0}.
      * @see #numericStrings()
      */
-    static AlchemyGenerator<String> numericStrings(@Positive int length) {
+    public static AlchemyGenerator<String> numericStrings(@Positive int length) {
         checkThat(length > 0, "length must be > 0");
         return () -> randomStringFrom(NUMERIC, length);
 
@@ -175,12 +175,12 @@ public final class StringGenerators {
     /**
      * Generates random [UUIDs][UUID].
      */
-    static final AlchemyGenerator<String> UUIDS = () -> UUID.randomUUID().toString();
+    public static final AlchemyGenerator<String> UUIDS = () -> UUID.randomUUID().toString();
 
     /**
      * Just returns {@link StringGenerators#UUIDS}. This exists for convenience.
      */
-    static AlchemyGenerator<String> uuids() {
+    public static AlchemyGenerator<String> uuids() {
         return UUIDS;
     }
 
@@ -194,7 +194,7 @@ public final class StringGenerators {
      * @param values Must be non-empty, produces the values for the generator.
      * @see #stringsFromFixedList(String...)
      */
-    static AlchemyGenerator<String> stringsFromFixedList(
+    public static AlchemyGenerator<String> stringsFromFixedList(
         @NonEmpty List<String> values
     ) {
         checkNotEmpty(values, "Values list empty");
@@ -208,7 +208,7 @@ public final class StringGenerators {
      * @param args Must be non-empty, produces the values for the generator.
      * @see #stringsFromFixedList(List)
      */
-    static AlchemyGenerator<String> stringsFromFixedList(String... args) {
+    public static AlchemyGenerator<String> stringsFromFixedList(String... args) {
         checkNotNull(args);
         var values = Arrays.asList(args);
         checkNotEmpty(values, "no values specified");
@@ -223,7 +223,7 @@ public final class StringGenerators {
      * @param generator The underlying Alchemy Generator to convert values for.
      * @throws IllegalArgumentException If the Generator is null.
      */
-    static <T> AlchemyGenerator<String> toString(
+    public static <T> AlchemyGenerator<String> toString(
         @Required AlchemyGenerator<T> generator
     ) {
         checkNotNull(generator, "generator missing");

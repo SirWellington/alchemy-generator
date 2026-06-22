@@ -49,7 +49,7 @@ public final class BinaryGenerators {
      * @throws IllegalArgumentException If `length < 0`.
      * @see #byteBuffers(int) 
      */
-    static AlchemyGenerator<byte[]> binary(int length) {
+    public static AlchemyGenerator<byte[]> binary(int length) {
         checkThat(length >= 0, "length must be >= 0");
         var bytes = new byte[length];
         return () -> {
@@ -65,7 +65,7 @@ public final class BinaryGenerators {
      * @throws IllegalArgumentException If `length < 0`.
      * @see #binary(int) 
      */
-    static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException {
+    public static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException {
         checkThat(size >= 0, "length must be >= 0");
         AlchemyGenerator<byte[]> delegate = binary(size);
         return () -> ByteBuffer.wrap(delegate.get());
@@ -75,7 +75,7 @@ public final class BinaryGenerators {
      * Generates a single `byte`.
      * @return A {@link AlchemyGenerator} that produces a single byte.
      */
-    static AlchemyGenerator<Byte> bytes() {
+    public static AlchemyGenerator<Byte> bytes() {
         return binary(1)
                 .mapping(bytes -> bytes[0]);
     }

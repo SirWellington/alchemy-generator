@@ -38,34 +38,34 @@ public final class DateGenerators {
 
     /**
      * Always returns the current time, i.e. the present.
-     * <br></br>
+     * <br>
      * <pre>
      * Note that the current time depends on when it is called.
      * </pre>
      */
-    static AlchemyGenerator<Date> presentDates() {
+    public static AlchemyGenerator<Date> presentDates() {
         return Date::new;
     }
 
     /**
      * Returns Dates from the past, i.e. before now.
-     * <br></br>
+     * <br>
      * <pre>
      * Note that the current time depends on when it is called.
      * </pre>
      */
-    static AlchemyGenerator<Date> pastDates() {
+    public static AlchemyGenerator<Date> pastDates() {
         return toDate(TimeGenerators.pastInstants());
     }
 
     /**
      * Returns Dates in the future, i.e. after now.
-     * <br></br>
+     * <br>
      * <pre>
      * Note that the current time depends on when it is called.
      * </pre>
      */
-    static AlchemyGenerator<Date> futureDates() {
+    public static AlchemyGenerator<Date> futureDates() {
         return toDate(TimeGenerators.futureInstants());
     }
 
@@ -74,7 +74,7 @@ public final class DateGenerators {
      *
      * @param referenceDate Dates produced will be before this date.
      */
-    static AlchemyGenerator<Date> before(@Required Date referenceDate) {
+    public static AlchemyGenerator<Date> before(@Required Date referenceDate) {
         checkNotNull(referenceDate);
         var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.before(instant));
@@ -85,7 +85,7 @@ public final class DateGenerators {
      *
      * @param referenceDate Dates produced will be after this date.
      */
-    static AlchemyGenerator<Date> after(@Required Date referenceDate) {
+    public static AlchemyGenerator<Date> after(@Required Date referenceDate) {
         checkNotNull(referenceDate);
         var instant = referenceDate.toInstant();
         return toDate(TimeGenerators.after(instant));
@@ -94,7 +94,7 @@ public final class DateGenerators {
     /**
      * Returns any date, can be in the futureInstants, pastInstants, or presentDate.
      */
-    static AlchemyGenerator<Date> anyTime() {
+    public static AlchemyGenerator<Date> anyTime() {
         return toDate(TimeGenerators.anyTime());
     }
 
@@ -103,7 +103,7 @@ public final class DateGenerators {
      *
      * @param generator The underlying generator.
      */
-    static AlchemyGenerator<Date> toDate(
+    public static AlchemyGenerator<Date> toDate(
         @Required AlchemyGenerator<Instant> generator
     ) {
         checkNotNull(generator);
@@ -118,7 +118,7 @@ public final class DateGenerators {
      * @param endDate   Dates produced will be before this date.
      * @throws IllegalArgumentException If either date is null, or startDate is not before endDate
      */
-    static AlchemyGenerator<Date> datesBetween(
+    public static AlchemyGenerator<Date> datesBetween(
         @Required Date startDate,
         @Required Date endDate
     ) {
@@ -138,7 +138,7 @@ public final class DateGenerators {
      * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
      * of {@link java.sql.Date} objects.
      */
-    static AlchemyGenerator<java.sql.Date> toSqlDateGenerator(
+    public static AlchemyGenerator<java.sql.Date> toSqlDateGenerator(
         @Required AlchemyGenerator<java.util.Date> generator
     ) {
         checkNotNull(generator);
@@ -149,7 +149,7 @@ public final class DateGenerators {
      * Converts a {@link AlchemyGenerator Generator} of {@link Date} objects to a {@link AlchemyGenerator Generator}
      * of {@link java.sql.Timestamp} objects.
      */
-    static AlchemyGenerator<java.sql.Timestamp> toSqlTimestampGenerator(
+    public static AlchemyGenerator<java.sql.Timestamp> toSqlTimestampGenerator(
         @Required AlchemyGenerator<java.util.Date> generator
     ) {
         checkNotNull(generator);
@@ -164,7 +164,7 @@ public final class DateGenerators {
      * @param generator Date generator to be converted.
      * @return Converted generator.
      */
-    static AlchemyGenerator<LocalDate> toLocalDateGenerator(
+    public static AlchemyGenerator<LocalDate> toLocalDateGenerator(
         @Required AlchemyGenerator<Date> generator
     ) {
         checkNotNull(generator);

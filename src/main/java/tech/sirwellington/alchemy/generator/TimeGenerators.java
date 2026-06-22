@@ -47,14 +47,14 @@ public final class TimeGenerators {
      * the 'present'.
      * depends on when the Generator is {@link AlchemyGenerator#get() called}.
      */
-    static AlchemyGenerator<Instant> presentInstants() {
+    public static AlchemyGenerator<Instant> presentInstants() {
         return Instant::now;
     }
 
     /**
      * Produces {@link Instant Instants} that are always in the past, i.e. before the present.
      */
-    static AlchemyGenerator<Instant> pastInstants() {
+    public static AlchemyGenerator<Instant> pastInstants() {
         /*
          * There is no need to recalculate the present instant per-call. We simply capture the present Instant, and
          * supply dates before that reference point. They will always be in the past.
@@ -65,7 +65,7 @@ public final class TimeGenerators {
     /**
      * Produces {@link Instant Instants} that are always in the future, i.e. after the present.
      */
-    static AlchemyGenerator<Instant> futureInstants() {
+    public static AlchemyGenerator<Instant> futureInstants() {
         // In order to stay in the future, the "present" must be continuously recalculated.
         return () -> {
             Instant present = Instant.now();
@@ -77,7 +77,7 @@ public final class TimeGenerators {
      * Produces {@link Instant Instants} that are always before the specified time.
      * @param instant Dates produced will be before this instant.
      */
-    static AlchemyGenerator<Instant> before(@Required Instant instant) {
+    public static AlchemyGenerator<Instant> before(@Required Instant instant) {
         checkNotNull(instant, "instant cannot be null");
 
         return () -> {
@@ -101,7 +101,7 @@ public final class TimeGenerators {
      *
      * @param instant Dates produced will be after this instant.
      */
-    static AlchemyGenerator<Instant> after(@Required Instant instant) {
+    public static AlchemyGenerator<Instant> after(@Required Instant instant) {
         checkNotNull(instant, "instant cannot be null");
 
         return () -> {
@@ -124,7 +124,7 @@ public final class TimeGenerators {
     /**
      * Produces {@link Instant Instants} from any time, past, present, or future.
      */
-    static AlchemyGenerator<Instant> anyTime() {
+    public static AlchemyGenerator<Instant> anyTime() {
         return () -> {
             int choice = one(integers(0, 3));
             return switch (choice) {
@@ -141,7 +141,7 @@ public final class TimeGenerators {
      * @param endTime Times produced will come before this time.
      * @throws IllegalArgumentException If either time is null, or if the startTime is not before the endTime.
      */
-    static AlchemyGenerator<Instant> timesBetween(
+    public static AlchemyGenerator<Instant> timesBetween(
         @Required Instant startTime,
         @Required Instant endTime
     ) {
@@ -162,7 +162,7 @@ public final class TimeGenerators {
      * Converts this {@link Instant} generator into a {@link ZonedDateTime} generator. ZoneId Defaults to UTC.
      * @param generator The underlying generator to convert.
      */
-    static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
+    public static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
         @Required  AlchemyGenerator<Instant> generator
     ) {
        return toZonedDateTimeGenerator(generator, ZoneOffset.UTC);
@@ -172,7 +172,7 @@ public final class TimeGenerators {
      * @param generator The underlying generator to convert.
      * @param zone  The {@link ZoneId} to the generate times in. Defaults to {@link ZoneOffset#UTC}.
      */
-    static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
+    public static AlchemyGenerator<ZonedDateTime> toZonedDateTimeGenerator(
         @Required  AlchemyGenerator<Instant> generator,
         @Required  ZoneId zone
     ) {

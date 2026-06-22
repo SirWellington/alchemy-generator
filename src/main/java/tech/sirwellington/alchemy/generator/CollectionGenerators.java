@@ -62,7 +62,7 @@ public final class CollectionGenerators {
      * @param generator The underlying generator that produces the values for the list.
      * @return A generator -> A list of random values, the length of which will vary.
      */
-    static <T> List<T> listOf(@Required AlchemyGenerator<T> generator) {
+    public static <T> List<T> listOf(@Required AlchemyGenerator<T> generator) {
         int size = one(integers(5, 200));
         return listOf(generator, size);
     }
@@ -75,7 +75,7 @@ public final class CollectionGenerators {
      * @param size      The size of the lists produced by the generator.
      * @return A generator -> A list of random values, the length of which will vary.
      */
-    static <T> List<T> listOf(
+    public static <T> List<T> listOf(
         @Required AlchemyGenerator<T> generator,
         int size
     ) {
@@ -94,7 +94,7 @@ public final class CollectionGenerators {
      * @param list Must be nonempty.
      * @return A generator -> A of one of the values provided.
      */
-    static <T> AlchemyGenerator<T> fromList(
+    public static <T> AlchemyGenerator<T> fromList(
         @Required @NonEmpty List<T> list
     ) {
         checkNotEmpty(list);
@@ -114,7 +114,7 @@ public final class CollectionGenerators {
      * @param values Generates the values for the Map.
      * @return A {@link Map} generated from the parameters specified.
      */
-    static <K, V> Map<K, V> mapOf(
+    public static <K, V> Map<K, V> mapOf(
         @Required AlchemyGenerator<K> keys,
         @Required AlchemyGenerator<V> values
     ) {
@@ -132,7 +132,7 @@ public final class CollectionGenerators {
      * @param size   The exact size of the created Map.
      * @return A {@link Map} generated from the parameters specified.
      */
-    static <K, V> Map<K, V> mapOf(
+    public static <K, V> Map<K, V> mapOf(
         @Required AlchemyGenerator<K> keys,
         @Required AlchemyGenerator<V> values,
         int size
