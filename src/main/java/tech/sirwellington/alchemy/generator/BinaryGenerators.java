@@ -46,7 +46,7 @@ public final class BinaryGenerators {
      * Generates binary of the specified length.
      * @param length The size of the byte arrays created.
      * @return A binary generator.
-     * @throws IllegalArgumentException If `length < 0`.
+     * @throws IllegalArgumentException If {@code length < 0}.
      * @see #byteBuffers(int) 
      */
     public static AlchemyGenerator<byte[]> binary(int length) {
@@ -62,7 +62,7 @@ public final class BinaryGenerators {
      * Generates a {@link ByteBuffer} of the specified size.
      * @param size The size of the byte buffers produced.
      * @return A {@link ByteBuffer} of the specified size.
-     * @throws IllegalArgumentException If `length < 0`.
+     * @throws IllegalArgumentException If {@code length < 0}.
      * @see #binary(int) 
      */
     public static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException {
