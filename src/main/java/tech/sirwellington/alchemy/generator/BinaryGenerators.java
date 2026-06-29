@@ -63,7 +63,7 @@ public final class BinaryGenerators {
      * @param size The size of the byte buffers produced.
      * @return A {@link ByteBuffer} of the specified size.
      * @throws IllegalArgumentException If {@code length < 0}.
-     * @see #binary(int) 
+     * @see #binary(int)
      */
     public static AlchemyGenerator<ByteBuffer> byteBuffers(int size) throws IllegalArgumentException {
         checkThat(size >= 0, "length must be >= 0");
