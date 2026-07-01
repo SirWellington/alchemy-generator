@@ -6,6 +6,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
@@ -23,7 +24,7 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromF
 @NonInstantiable
 @StrategyPattern(role = StrategyPattern.Role.CONCRETE_BEHAVIOR)
 public final class PeopleGenerators {
-
+    private static final String SPACE = " ";
     private static final List<String> FIRST_NAMES = readLinesFromResource("names/first-names.txt");
     private static final List<String> MIDDLE_NAMES = readLinesFromResource("names/middle-names.txt");
     private static final List<String> LAST_NAMES = readLinesFromResource("names/last-names.txt");
@@ -69,7 +70,8 @@ public final class PeopleGenerators {
     /**
      * Generates a "full name", including a first name and a last name.
      * <blockquote>
-     * The name may or may not include a middle name.
+     * - The name may or may not include a middle name.
+     * - The name will be comprised of at most 4 names.
      * </blockquote>
      */
     public static AlchemyGenerator<String> fullNames() {
@@ -83,16 +85,21 @@ public final class PeopleGenerators {
             builder.append(one(firstNames));
 
             var seed = one(seeds);
-            var includeMiddleName = seed <= 0.4;
+            // 35% chance of having a middle name
+            var includeMiddleName = seed <= 0.35;
             if (includeMiddleName) {
-                builder.append(" ")
+                builder.append(SPACE)
                        .append(one(middleNames));
             }
 
-            return builder
-                .append(" ")
+            var name = builder
+                .append(SPACE)
                 .append(one(lastNames))
                 .toString();
+            var names = name.split(SPACE);
+            var size = Math.min(names.length, 4);
+            var newString = Arrays.copyOf(names, size);
+            return String.join(SPACE, newString);
         };
     }
 

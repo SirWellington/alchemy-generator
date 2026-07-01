@@ -66,7 +66,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(
             "name is too long: " + name,
             split.length,
-            lessThanOrEqualTo(3)
+            lessThanOrEqualTo(4)
         );
     }
 
