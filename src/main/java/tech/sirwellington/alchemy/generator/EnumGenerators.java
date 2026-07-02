@@ -5,6 +5,13 @@ import tech.sirwellington.alchemy.annotations.arguments.Required;
 /**
  * {@summary Alchemy Generators for Enum Types.}
  *
+ * {@snippet :
+ * enum Fruits {
+ *   APPLE, PEAR, BANANA, ORANGE
+ * }
+ * var fruit = EnumGenerators.enumValueOf(Fruits.class).get();
+ * }
+ *
  * @author SirWellington
  */
 public final class EnumGenerators {

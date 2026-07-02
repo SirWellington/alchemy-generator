@@ -11,7 +11,10 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromF
 
 /**
  * {@summary Generators for Places and addresses. }
- *
+ * {@snippet :
+ * var state = PlaceGenerators.states().get();
+ * var country = PlaceGenerators.countries().get();
+ * }
  * @author Wellington Moreno
  */
 public class PlaceGenerators {

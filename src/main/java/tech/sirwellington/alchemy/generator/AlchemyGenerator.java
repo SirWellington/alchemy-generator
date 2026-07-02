@@ -45,7 +45,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * <pre>
  * Get a positive integer:
  *
- * {@code
+ * {@snippet :
  *  int positive = one(positiveIntegers());
  * }
  * </pre>

@@ -22,6 +22,10 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.alphanumeric
 
 /**
  * {@summary Generators for Network-data, such as an IP Addresses.}
+ * {@snippet :
+ * var generator = NetworkGenerators.httpsURLs();
+ * var website = generator.get();
+ * }
  *
  * @author SirWellington
  */

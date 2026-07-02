@@ -19,7 +19,6 @@ import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
@@ -29,6 +28,10 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 /**
  * {@summary Functions that help working with Dates.}
  *
+ * {@snippet :
+ * var tenDaysAgo = Dates.daysBeforeNow(10);
+ * var isRightNow = Dates.isNow(tenDaysAgo) // false
+ * }
  * @author SirWellington
  */
 public final class Dates {
@@ -48,9 +51,9 @@ public final class Dates {
      * Returns a date that is {@code days} in the past.
      * @param days The number of days before today the date should be.
      * @return {@code today - days}.
-     * @see #daysAhead(int)
+     * @see #daysAfterNow(int)
      */
-    public static Date daysAgo(@Positive int days) {
+    public static Date daysBeforeNow(@Positive int days) {
         checkThat(days > 0, "days must be positive");
         var instant = Instant.now().minus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
@@ -60,9 +63,9 @@ public final class Dates {
      * Returns a date that is {@code days} in the future.
      * @param days The number of days after today the date should be.
      * @return {@code today + days}.
-     * @see #daysAgo(int)
+     * @see #daysBeforeNow(int)
      */
-    public static Date daysAhead(@Positive int days) {
+    public static Date daysAfterNow(@Positive int days) {
         checkThat(days > 0, "days must be positive");
         var instant = Instant.now().plus(days, ChronoUnit.DAYS);
         return new Date(instant.toEpochMilli());
@@ -72,9 +75,9 @@ public final class Dates {
      * Returns a date that is {@code hours} in the past.
      * @param hours The number of hours before now the date should be.
      * @return {@code now - hours}.
-     * @see #hoursAhead(int)
+     * @see #hoursAfterNow(int)
      */
-    public static Date hoursAgo(@Positive int hours) {
+    public static Date hoursBeforeNow(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
         var instant = Instant.now().minus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
@@ -84,9 +87,9 @@ public final class Dates {
      * Returns a date that is {@code hours} ahead of right now.
      * @param hours The number of hours after right now the date should be.
      * @return {@code now + hours}.
-     * @see #hoursAgo(int)
+     * @see #hoursBeforeNow(int)
      */
-    public static Date hoursAhead(@Positive int hours) {
+    public static Date hoursAfterNow(@Positive int hours) {
         checkThat(hours > 0, "hours must be positive");
         var instant = Instant.now().plus(hours, ChronoUnit.HOURS);
         return new Date(instant.toEpochMilli());
@@ -96,9 +99,9 @@ public final class Dates {
      * Returns a date that is {@code minutes} in the past.
      * @param minutes The number of minutes before now the date should be.
      * @return {@code now - minutes}.
-     * @see #minutesAhead(int)
+     * @see #minutesAfterNow(int)
      */
-    public static Date minutesAgo(@Positive int minutes) {
+    public static Date minutesBeforeNow(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
         var instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
@@ -108,9 +111,9 @@ public final class Dates {
      * Returns a date that is {@code minutes} ahead of right now.
      * @param minutes The number of minutes after right now the date should be.
      * @return {@code now + minutes}.
-     * @see #minutesAgo(int)
+     * @see #minutesBeforeNow(int)
      */
-    public static Date minutesAhead(@Positive int minutes) {
+    public static Date minutesAfterNow(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
         var instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
         return new Date(instant.toEpochMilli());
@@ -125,6 +128,7 @@ public final class Dates {
     public static boolean isNow(@Required Date date) {
         return isNow(date, 5L);
     }
+
     /**
      * Checks to see if the date is now, up to the provided {@code marginOfErrorMillis}.
      * @param date The date to check, must be non-null.
@@ -141,7 +145,6 @@ public final class Dates {
         long timeOfNow = now.getTime();
         return timeOfDate >= timeOfNow - delta && timeOfDate <= timeOfNow + delta;
     }
-
 
     /**
      * Checks to see if the instant is considered now, up to the provided {@code marginOfErrorMillis}.

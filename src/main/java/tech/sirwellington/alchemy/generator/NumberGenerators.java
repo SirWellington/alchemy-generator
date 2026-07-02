@@ -38,6 +38,16 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  * + Longs
  * + Doubles
  * </pre>
+ *
+ * {@snippet :
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ *
+ * var age = one(NumberGenerators.integers(18, 100));
+ * var price = one(NumberGenerators.doubles(10.00, 10_000.00));
+ * var alpha = one(NumberGenerators.floats(0.0, 1.0));
+ * var numberOfPeople = one(NumberGenerators.longs(1_000_000, 1_000_000_000));
+ * }
+ *
  * @author SirWellington
  */
 @NonInstantiable
