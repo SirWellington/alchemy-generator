@@ -17,6 +17,7 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -25,6 +26,7 @@ import java.util.stream.IntStream;
 
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
+import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
@@ -109,6 +111,39 @@ public final class CollectionGenerators {
         return () -> {
             int index = one(integers(0, list.size()));
             return list.get(index);
+        };
+    }
+
+    /**
+     * Creates an {@link AlchemyGenerator} that produces {@link Map Maps}
+     * using the Keys and Values generators by the supplied generators.
+     * Convenience method for {@link #mapOf(tech.sirwellington.alchemy.generator.AlchemyGenerator, tech.sirwellington.alchemy.generator.AlchemyGenerator, int) }.
+     *
+     * @param <K>    Type of the Key values.
+     * @param <V>    Type of the Value values.
+     * @param keys   Generates the keys for the Map.
+     * @param values Generates the values for the Map.
+     * @return A {@link Map} generated from the parameters specified.
+     */
+    public static <K, V> AlchemyGenerator<Map<K, V>> mapGenerator(
+        @Required AlchemyGenerator<K> keys,
+        @Required AlchemyGenerator<V> values,
+        @Positive int size
+    ) {
+        checkThat(size > 0, "size must be > 0");
+        checkNotNull(keys, "keys cannot be null");
+        checkNotNull(values, "values cannot be null");
+
+        return () -> {
+            var map = new HashMap<K, V>();
+            IntStream.range(0, size)
+                     .forEach(i -> {
+                         var key = keys.get();
+                         var value = values.get();
+                         map.put(key, value);
+                     });
+
+            return map;
         };
     }
 
