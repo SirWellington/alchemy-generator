@@ -5,6 +5,14 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 /**
  * {@summary  Generators for creating Geo-Coordinates, aka longitudes and latitudes.}
  *
+ * {@snippet :
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ *
+ * var latitude = one(GeolocationGenerators.latitudes());
+ * var longitude = one(GeolocationGenerators.longitudes());
+ * var point = new Point(latitude, longitude);
+ * }
+ *
  * @author SirWellington
  */
 @NonInstantiable

@@ -29,7 +29,11 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * {@summary Alchemy  for raw binary (`byte[]`). }
- * 
+ * {@snippet :
+ * var generator = BinaryGenerators.binary(1024);
+ * var bytes = generator.get();
+ * var moreBytes = AlchemyGenerator.Get.one(generator);
+ *}
  * @author SirWellington
  */
 @NonInstantiable

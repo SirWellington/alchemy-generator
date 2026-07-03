@@ -42,6 +42,14 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiv
  * These generators are useful in conjunction with other {@link AlchemyGenerator},
  * such as those in {@link StringGenerators} and {@link NumberGenerators}.
  *
+ * {@snippet :
+ * var list = List.of(1, 2, 3, 4);
+ * var generator = CollectionGenerators.fromList(list);
+ * var value = generator.get(); // One of [1, 2, 3, 4]
+ *
+ * var uniqueIds = CollectionGenerators.listOf(StringGenerators.UUIDS, 25);
+ * }
+ *
  * @author SirWellington
  * @see StringGenerators
  * @see NumberGenerators

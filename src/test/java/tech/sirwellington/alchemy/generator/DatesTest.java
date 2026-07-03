@@ -37,14 +37,14 @@ class DatesTest extends BaseGeneratorTest {
     }
 
     @Test
-    void testDaysAgo() {
+    void testDaysBeforeNow() {
         // Given
         int daysAgo = one(integers(1, 3650));
         long nowMillis = Instant.now().toEpochMilli();
         long expectedLeft = nowMillis - Duration.ofDays(daysAgo).toMillis();
 
         // When
-        Date result = Dates.daysAgo(daysAgo);
+        Date result = Dates.daysBeforeNow(daysAgo);
 
         // Then
         assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
@@ -52,60 +52,60 @@ class DatesTest extends BaseGeneratorTest {
     }
 
     @Test
-    void testDaysAhead() {
+    void testDaysAfterNow() {
         int days = one(integers(1, 3650));
         long nowMillis = Instant.now().toEpochMilli();
         long expectedRight = nowMillis + (long) days * DAYS.getDuration().toMillis();
 
-        Date result = Dates.daysAhead(days);
+        Date result = Dates.daysAfterNow(days);
 
         assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
     @Test
-    void testHoursAgo() {
+    void testHoursBeforeNow() {
         int hours = one(integers(1, 24 * 365)); // up to ~1 year
         long nowMillis = Instant.now().toEpochMilli();
         long expectedLeft = nowMillis - (long) hours * HOURS.getDuration().toMillis();
 
-        Date result = Dates.hoursAgo(hours);
+        Date result = Dates.hoursBeforeNow(hours);
 
         assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
         assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
     @Test
-    void testHoursAhead() {
+    void testHoursAfterNow() {
         int hours = one(integers(1, 24 * 365));
         long nowMillis = Instant.now().toEpochMilli();
         long expectedRight = nowMillis + (long) hours * HOURS.getDuration().toMillis();
 
-        Date result = Dates.hoursAhead(hours);
+        Date result = Dates.hoursAfterNow(hours);
 
         assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
     @Test
-    void testMinutesAgo() {
+    void testMinutesBeforeNow() {
         int minutes = one(integers(1, 60 * 24)); // up to ~1 day
         long nowMillis = Instant.now().toEpochMilli();
         long expectedLeft = nowMillis - (long) minutes * MINUTES.getDuration().toMillis();
 
-        Date result = Dates.minutesAgo(minutes);
+        Date result = Dates.minutesBeforeNow(minutes);
 
         assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
         assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
     @Test
-    void testMinutesAhead() {
+    void testMinutesAfterNow() {
         int minutes = one(integers(1, 60 * 24));
         long nowMillis = Instant.now().toEpochMilli();
         long expectedRight = nowMillis + (long) minutes * MINUTES.getDuration().toMillis();
 
-        Date result = Dates.minutesAhead(minutes);
+        Date result = Dates.minutesAfterNow(minutes);
 
         assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
@@ -116,7 +116,7 @@ class DatesTest extends BaseGeneratorTest {
         Date now = Dates.now();
         assertThat(Dates.isNow(now), is(true));
 
-        Date notNow = Dates.daysAgo(1);
+        Date notNow = Dates.daysBeforeNow(1);
         assertThat(Dates.isNow(notNow), is(false));
 
         assertThrows(IllegalArgumentException.class, () -> Dates.isNow(null));

@@ -27,6 +27,9 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 
 /**
  * {@summary Alchemy Generators for Date and Time types }.
+ * {@snippet :
+ * var transactionDate = DateGenerators.pastDates();
+ * }
  *
  * @author SirWellington
  */

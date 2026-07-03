@@ -33,6 +33,14 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 /**
  * {@summary Alchemy Generators for Strings.}
  *
+ * {@snippet :
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ *
+ * var code = one(StringGenerators.hexadecimalString(1024));
+ * var id = one(StringGenerators.uuids());
+ * var password = one(StringGenerators.alphanumericStrings(100));
+ * }
+ *
  * @author SirWellington
  */
 public final class StringGenerators {

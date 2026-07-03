@@ -20,6 +20,12 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromF
 /**
  * {@summary Generators for common information about people: names, addresses, phone numbers,
  * social-security numbers, emails, etc.}
+ *
+ * {@snippet :
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * var personName =  one(PeopleGenerators.fullNames());
+ * var age = one(PeopleGenerators.adultAges());
+ * }
  */
 @NonInstantiable
 @StrategyPattern(role = StrategyPattern.Role.CONCRETE_BEHAVIOR)

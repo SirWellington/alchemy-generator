@@ -18,6 +18,7 @@ package tech.sirwellington.alchemy.generator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.Internal;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.SingletonPattern;
@@ -42,6 +43,37 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticSt
  * {@summary Contains Convenience Generators for a basic data object (an object whose purpose is to contain data.)}
  *
  * These generators should work for most plain data objects.
+ * Valid Examples:
+ * <br>
+ * {@snippet :
+ * private class Computer {
+ *   private Date releaseDate;
+ *   private String name;
+ *   private String manufacturer;
+ *   private double cost;
+ * }
+ *
+ * private class Person {
+ *   private String name;
+ *   private int age;
+ *   private double money;
+ *   private Computer computer;
+ * }
+ *
+ * private class Company {
+ *   private String name;
+ *   private int numberOfEmployees;
+ *   private List<Person> employees;
+ * }
+ *
+ * private class CompanyIndex {
+ *   private String indexName;
+ *   private Map<String, Company> index;
+ * }
+ *
+ * var generator = ObjectGenerators._pojos(CompanyIndex.class);
+ * var companyIndex = generator.get();
+ * }
  *
  * @author SirWellington
  */
@@ -123,35 +155,6 @@ public final class ObjectGenerators {
      *  A [Set] with a Type Parameter matching the above.
      *  A [Map] with Type Parameters matching the above conditions.
      * <p>
-     *
-     * Valid Examples:
-     *
-     * <pre>{@code
-     * private class Computer {
-     *   private Date releaseDate;
-     *   private String name;
-     *   private String manufacturer;
-     *   private double cost;
-     * }
-     *
-     * private class Person {
-     *   private String name;
-     *   private int age;
-     *   private double money;
-     *   private Computer computer;
-     * }
-     *
-     * private class Company {
-     *   private String name;
-     *   private int numberOfEmployees;
-     *   private List<Person> employees;
-     * }
-     *
-     * private class CompanyIndex {
-     *   private String indexName;
-     *   private Map<String, Company> index;
-     * }
-     * }</pre>
      *
      * @param <T> The type of the object to be generated. Inferred from the class.
      * @param classOfPojo The class to be generated.
@@ -802,4 +805,17 @@ public final class ObjectGenerators {
         constructor.setAccessible(true);
         return constructor;
     }
+
+    /**
+     * A variation of a {@link java.util.function.Supplier} that allows throwing exceptions.
+     *
+     * @param <T> The type of value returned.
+     * @param <E> The type of the exception thrown.
+     */
+    @FunctionalInterface
+    @Internal
+    interface ThrowingSupplier<T, E extends Throwable> {
+        T get() throws E;
+    }
+
 }

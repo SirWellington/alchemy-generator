@@ -138,8 +138,8 @@ class DateGeneratorsTest extends BaseGeneratorTest {
 
     @Test
     void testDatesBetween() {
-        var startDate = Dates.daysAgo(4);
-        var endDate = Dates.daysAhead(5);
+        var startDate = Dates.daysBeforeNow(4);
+        var endDate = Dates.daysAfterNow(5);
 
         assertThrows(
             () -> DateGenerators.datesBetween(null, endDate)

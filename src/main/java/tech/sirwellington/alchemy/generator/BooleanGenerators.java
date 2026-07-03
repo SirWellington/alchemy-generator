@@ -29,6 +29,11 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
 
 /**
  * {@summary Alchemy Generators for Booleans}.
+ * {@snippet :
+ * var generator = BooleanGenerators.booleans();
+ * var shouldGoTravel = generator.get();
+ * var shouldContinueGambling = generator.get();
+ * }
  * @author SirWellington
  */
 @NonInstantiable
