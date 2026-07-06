@@ -206,10 +206,13 @@ public final class ObjectGenerators {
             return (AlchemyGenerator<T>) generatorMappings.get(classOfPojo);
         }
 
-        checkThat(
-            canInstantiate(classOfPojo),
-            "cannot instantiate class: " + classOfPojo
-        );
+        try {
+            var _ = instantiate(classOfPojo);
+        } catch (Throwable ex) {
+            throw new IllegalArgumentException(
+              "Cannot instantiate class: " + classOfPojo, ex
+            );
+        }
 
         var validFields = Arrays.stream(classOfPojo.getDeclaredFields())
             .filter(f -> !isFinal(f))

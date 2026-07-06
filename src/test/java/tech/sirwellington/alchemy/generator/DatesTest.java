@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 @DisplayName("Dates Utilities")
 class DatesTest extends BaseGeneratorTest {
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testNow() {
         // Given
         Date result = Dates.now();
@@ -36,7 +37,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(System.currentTimeMillis() - result.getTime(), lessThan(100L));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testDaysBeforeNow() {
         // Given
         int daysAgo = one(integers(1, 3650));
@@ -51,7 +52,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testDaysAfterNow() {
         int days = one(integers(1, 3650));
         long nowMillis = Instant.now().toEpochMilli();
@@ -63,7 +64,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testHoursBeforeNow() {
         int hours = one(integers(1, 24 * 365)); // up to ~1 year
         long nowMillis = Instant.now().toEpochMilli();
@@ -75,7 +76,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testHoursAfterNow() {
         int hours = one(integers(1, 24 * 365));
         long nowMillis = Instant.now().toEpochMilli();
@@ -87,7 +88,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testMinutesBeforeNow() {
         int minutes = one(integers(1, 60 * 24)); // up to ~1 day
         long nowMillis = Instant.now().toEpochMilli();
@@ -99,19 +100,22 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testMinutesAfterNow() {
+        // Given
         int minutes = one(integers(1, 60 * 24));
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedRight = nowMillis + (long) minutes * MINUTES.getDuration().toMillis();
+        // When
+        var now = Instant.now();
+        var result = Dates.minutesAfterNow(minutes);
 
-        Date result = Dates.minutesAfterNow(minutes);
+        // Then
+        var future = now.plus(Duration.ofMinutes(minutes));
 
-        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
-        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
+        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), lessThanOrEqualTo(future.toEpochMilli()));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_Date() {
         Date now = Dates.now();
         assertThat(Dates.isNow(now), is(true));
@@ -122,7 +126,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThrows(IllegalArgumentException.class, () -> Dates.isNow(null));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_Date_long() throws Exception {
         assertThrows(() -> Dates.isNow(new Date(), -1))
             .isInstanceOf(IllegalArgumentException.class);
@@ -138,7 +142,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThat(Dates.isNow(now, 0), is(false));
     }
 
-    @Test
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_Instant_long() throws Exception {
         assertThrows(() -> Dates.isNow((Instant) null, 0))
             .isInstanceOf(IllegalArgumentException.class);
