@@ -17,6 +17,7 @@ package tech.sirwellington.alchemy.generator;
 import tech.sirwellington.alchemy.annotations.arguments.Positive;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -115,7 +116,7 @@ public final class Dates {
      */
     public static Date minutesAfterNow(@Positive int minutes) {
         checkThat(minutes > 0, "minutes must be positive");
-        var instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
+        var instant = Instant.now().plus(Duration.ofMinutes(minutes));
         return new Date(instant.toEpochMilli());
     }
 

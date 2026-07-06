@@ -4,12 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.text.MessageFormat.format;
 import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -28,8 +30,8 @@ class DatesTest extends BaseGeneratorTest {
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testNow() {
         // Given
-        Date result = Dates.now();
-        Date after = new Date();
+        var result = Dates.now();
+        var after = new Date();
 
         // Then
         assertThat(result, notNullValue());
@@ -40,9 +42,9 @@ class DatesTest extends BaseGeneratorTest {
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testDaysBeforeNow() {
         // Given
-        int daysAgo = one(integers(1, 3650));
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedLeft = nowMillis - Duration.ofDays(daysAgo).toMillis();
+        var daysAgo = one(integers(1, 3650));
+        var nowMillis = Instant.now().toEpochMilli();
+        var expectedLeft = nowMillis - Duration.ofDays(daysAgo).toMillis();
 
         // When
         Date result = Dates.daysBeforeNow(daysAgo);
@@ -54,9 +56,9 @@ class DatesTest extends BaseGeneratorTest {
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testDaysAfterNow() {
-        int days = one(integers(1, 3650));
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedRight = nowMillis + (long) days * DAYS.getDuration().toMillis();
+        var days = one(integers(1, 3650));
+        var nowMillis = Instant.now().toEpochMilli();
+        var expectedRight = nowMillis + (long) days * DAYS.getDuration().toMillis();
 
         Date result = Dates.daysAfterNow(days);
 
@@ -78,14 +80,17 @@ class DatesTest extends BaseGeneratorTest {
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testHoursAfterNow() {
-        int hours = one(integers(1, 24 * 365));
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedRight = nowMillis + (long) hours * HOURS.getDuration().toMillis();
+        // Given
+        var hours = one(integers(1, 24 * 365));
+        // When
+        var result = Dates.hoursAfterNow(hours);
+        var now = Instant.now();
 
-        Date result = Dates.hoursAfterNow(hours);
+        // Then
+        var future = now.plus(Duration.ofHours(hours));
 
-        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
-        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
+        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), lessThanOrEqualTo(future.toEpochMilli()));
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
@@ -112,6 +117,12 @@ class DatesTest extends BaseGeneratorTest {
         var future = now.plus(Duration.ofMinutes(minutes));
 
         assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
+
+        if (result.getTime() >= future.toEpochMilli()) {
+            System.out.println(
+                format("minutes: {0}, result: {1}, future: {2}", minutes, result, future)
+            );
+        }
         assertThat(result.getTime(), lessThanOrEqualTo(future.toEpochMilli()));
     }
 
