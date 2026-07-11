@@ -9,7 +9,7 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
@@ -22,7 +22,7 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromF
  * social-security numbers, emails, etc.}
  *
  * {@snippet :
- * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
  * var personName =  one(PeopleGenerators.fullNames());
  * var age = one(PeopleGenerators.adultAges());
  * }

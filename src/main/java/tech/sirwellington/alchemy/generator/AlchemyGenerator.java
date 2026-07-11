@@ -40,7 +40,7 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  * + Lists of the above
  * + Maps of the above
  * </pre>
- *
+ * <p>
  * Examples:
  *
  * <pre>
@@ -56,43 +56,53 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  */
 @StrategyPattern(role = INTERFACE)
 public interface AlchemyGenerator<T> {
-
-    static <T> AlchemyGenerator<T> of(@Required Supplier<T> supplier) {
-        return supplier::get;
-    }
-
     /**
      * Generate a non-null value of type {@code T}.
      */
     @Required
     T get();
 
-    final class Get {
-
-        /**
-         * Calls the generator once to get the ones of its values.
-         *
-         * @param <T>       The type being generated.
-         * @param generator Provides the value to get.
-         * @return Only one value from the generator.
-         */
-        public static <T> T one(@Required AlchemyGenerator<T> generator) {
-            if (generator == null) {
-                throw new IllegalArgumentException("Generator cannot be null");
-            }
-
-            return generator.get();
-        }
-    }
-
     /**
      * Creates a new generator by applying a function over the output of {@code this} {@link AlchemyGenerator}.
+     *
      * @param function The mapping function.
+     * @param <O>      The type of the output.
      * @return A new {@link AlchemyGenerator} that produces values of type {@code O}.
-     * @param <O> The type of the output.
      */
     default <O> AlchemyGenerator<O> mapping(@Required Function<T, O> function) {
         return () -> function.apply(get());
     }
+
+    /**
+     * A bridge which allows turning a {@link Supplier} into an {@link AlchemyGenerator}.
+     * It also conveniently allows a generator on the spot using a lambda:
+     * {@snippet :
+     * var idGenerators = AlchemyGenerator.of(
+     *   () -> uuid() + ".myapplication"
+     * );
+     *
+     * var keyId = idGenerators.get();
+     *}
+     *
+     * @param supplier The supplier to wrap in a {@link AlchemyGenerator}.
+     * @param <T>      The type of value being generated.
+     * @return A new {@link AlchemyGenerator} that wraps the {@link Supplier}.
+     */
+    static <T> AlchemyGenerator<T> of(@Required Supplier<T> supplier) {
+        return supplier::get;
+    }
+
+    /**
+     * Calls the generator once to get the ones of its values.
+     *
+     * @param <T>       The type being generated.
+     * @param generator Provides the value to get.
+     * @return Only one value from the generator.
+     */
+    static <T> T one(@Required AlchemyGenerator<T> generator) {
+        Checks.checkNotNull(generator, "Generator cannot be null");
+        return generator.get();
+    }
+
 }
 

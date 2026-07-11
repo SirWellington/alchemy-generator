@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.*;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 
@@ -34,7 +34,7 @@ import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
  * {@summary Alchemy Generators for Strings.}
  *
  * {@snippet :
- * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
  *
  * var code = one(StringGenerators.hexadecimalString(1024));
  * var id = one(StringGenerators.uuids());

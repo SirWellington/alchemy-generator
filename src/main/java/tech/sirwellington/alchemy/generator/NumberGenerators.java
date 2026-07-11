@@ -40,7 +40,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  * </pre>
  *
  * {@snippet :
- * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
  *
  * var age = one(NumberGenerators.integers(18, 100));
  * var price = one(NumberGenerators.doubles(10.00, 10_000.00));

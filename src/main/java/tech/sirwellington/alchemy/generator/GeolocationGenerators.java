@@ -6,7 +6,7 @@ import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
  * {@summary  Generators for creating Geo-Coordinates, aka longitudes and latitudes.}
  *
  * {@snippet :
- * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
  *
  * var latitude = one(GeolocationGenerators.latitudes());
  * var longitude = one(GeolocationGenerators.longitudes());
