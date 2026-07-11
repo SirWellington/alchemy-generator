@@ -18,6 +18,7 @@ import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 
@@ -55,6 +56,10 @@ import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPa
  */
 @StrategyPattern(role = INTERFACE)
 public interface AlchemyGenerator<T> {
+
+    static <T> AlchemyGenerator<T> of(@Required Supplier<T> supplier) {
+        return supplier::get;
+    }
 
     /**
      * Generate a non-null value of type {@code T}.
