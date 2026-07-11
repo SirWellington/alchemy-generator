@@ -17,6 +17,12 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
+import tech.sirwellington.alchemy.annotations.arguments.Positive;
+import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,17 +30,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
-import tech.sirwellington.alchemy.annotations.arguments.NonEmpty;
-import tech.sirwellington.alchemy.annotations.arguments.Positive;
-import tech.sirwellington.alchemy.annotations.arguments.Required;
-import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
-import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
-import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
-import static tech.sirwellington.alchemy.generator.Checks.checkThat;
+import static tech.sirwellington.alchemy.generator.Checks.*;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.smallPositiveIntegers;
 

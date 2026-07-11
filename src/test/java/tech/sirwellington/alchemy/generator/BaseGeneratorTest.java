@@ -16,7 +16,6 @@
 package tech.sirwellington.alchemy.generator;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import tech.sirwellington.alchemy.annotations.access.Internal;
 
