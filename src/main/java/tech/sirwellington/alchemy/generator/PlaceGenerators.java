@@ -1,9 +1,9 @@
 package tech.sirwellington.alchemy.generator;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource;

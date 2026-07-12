@@ -14,11 +14,11 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import tech.sirwellington.alchemy.annotations.arguments.Required;
-import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.INTERFACE;
 

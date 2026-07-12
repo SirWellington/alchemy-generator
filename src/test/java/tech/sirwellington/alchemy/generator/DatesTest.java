@@ -1,15 +1,13 @@
 package tech.sirwellington.alchemy.generator;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 
-import static java.text.MessageFormat.format;
-import static java.time.temporal.ChronoUnit.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;

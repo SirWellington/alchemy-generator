@@ -18,12 +18,12 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.security.SecureRandom;
+import java.util.List;
+
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
-import java.security.SecureRandom;
-import java.util.List;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;

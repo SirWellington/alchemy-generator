@@ -18,12 +18,12 @@
 package tech.sirwellington.alchemy.generator;
 
 
-import tech.sirwellington.alchemy.annotations.arguments.Required;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+
+import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import static java.time.temporal.ChronoUnit.*;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;

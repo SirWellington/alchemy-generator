@@ -14,9 +14,9 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import org.hamcrest.Matchers;
-
 import java.util.Objects;
+
+import org.hamcrest.Matchers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

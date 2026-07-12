@@ -17,10 +17,10 @@
 
 package tech.sirwellington.alchemy.generator;
 
-import tech.sirwellington.alchemy.annotations.access.Internal;
-
 import java.util.List;
 import java.util.function.BooleanSupplier;
+
+import tech.sirwellington.alchemy.annotations.access.Internal;
 
 /**
  * Used internally to perform argument checks.

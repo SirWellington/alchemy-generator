@@ -1,13 +1,13 @@
 package tech.sirwellington.alchemy.generator;
 
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.List;
+
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Optional;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.List;
 
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.AlchemyResources.readLinesFromResource;

@@ -18,11 +18,11 @@
 package tech.sirwellington.alchemy.generator;
 
 
-import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
-import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
+
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;

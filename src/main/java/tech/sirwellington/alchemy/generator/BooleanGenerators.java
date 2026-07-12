@@ -18,13 +18,13 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
-import java.security.SecureRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 
