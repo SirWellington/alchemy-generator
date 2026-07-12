@@ -94,6 +94,12 @@ public interface AlchemyGenerator<T> {
 
     /**
      * Calls the generator once to get the ones of its values.
+     * This allows a shorthand way to get a single value.
+     * <br>
+     * For example:
+     * {@snippet :
+     * var userId = one(StringGenerators.uuids());
+     * }
      *
      * @param <T>       The type being generated.
      * @param generator Provides the value to get.
