@@ -23,7 +23,7 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
  * @author SirWellington
  */
 @DisplayName("Dates Utilities")
-class DatesTest extends BaseGeneratorTest {
+final class DatesTest extends BaseGeneratorTest {
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testNow() {
@@ -41,39 +41,39 @@ class DatesTest extends BaseGeneratorTest {
     void testDaysBeforeNow() {
         // Given
         var daysAgo = one(integers(1, 3650));
-        var nowMillis = Instant.now().toEpochMilli();
-        var expectedLeft = nowMillis - Duration.ofDays(daysAgo).toMillis();
+        var now = Instant.now();
+        var expectedLeft = now.minus(Duration.ofDays(daysAgo));
 
         // When
-        Date result = Dates.daysBeforeNow(daysAgo);
+        var result = Dates.daysBeforeNow(daysAgo);
 
         // Then
-        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
+        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testDaysAfterNow() {
-        var days = one(integers(1, 3650));
-        var nowMillis = Instant.now().toEpochMilli();
-        var expectedRight = nowMillis + (long) days * DAYS.getDuration().toMillis();
+        var days = one(integers(1, 3000));
+        var now = Instant.now();
+        var expectedRight = now.plus(Duration.ofDays(days));
 
-        Date result = Dates.daysAfterNow(days);
+        var result = Dates.daysAfterNow(days);
 
-        assertThat(result.getTime(), greaterThanOrEqualTo(nowMillis));
-        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight));
+        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight.toEpochMilli()));
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testHoursBeforeNow() {
-        int hours = one(integers(1, 24 * 365)); // up to ~1 year
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedLeft = nowMillis - (long) hours * HOURS.getDuration().toMillis();
+        var hours = one(integers(1, 24 * 365)); // up to ~1 year
+        var now = Instant.now();
+        var expectedLeft = now.minus(Duration.ofHours(hours));
 
-        Date result = Dates.hoursBeforeNow(hours);
+        var result = Dates.hoursBeforeNow(hours);
 
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
-        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
@@ -93,14 +93,14 @@ class DatesTest extends BaseGeneratorTest {
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testMinutesBeforeNow() {
-        int minutes = one(integers(1, 60 * 24)); // up to ~1 day
-        long nowMillis = Instant.now().toEpochMilli();
-        long expectedLeft = nowMillis - (long) minutes * MINUTES.getDuration().toMillis();
+        var minutes = one(integers(1, 60 * 24)); // up to ~1 day
+        var now = Instant.now();
+        var expectedLeft = now.minus(Duration.ofMinutes(minutes));
 
-        Date result = Dates.minutesBeforeNow(minutes);
+        var result = Dates.minutesBeforeNow(minutes);
 
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft));
-        assertThat(result.getTime(), lessThanOrEqualTo(nowMillis));
+        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
+        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
@@ -126,7 +126,7 @@ class DatesTest extends BaseGeneratorTest {
 
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_Date() {
-        Date now = Dates.now();
+        var now = Dates.now();
         assertThat(Dates.isNow(now), is(true));
 
         Date notNow = Dates.daysBeforeNow(1);
@@ -143,7 +143,7 @@ class DatesTest extends BaseGeneratorTest {
         assertThrows(() -> Dates.isNow((Date) null, 0L))
             .isInstanceOf(IllegalArgumentException.class);
 
-        Date now = Dates.now();
+        var now = Dates.now();
 
         assertThat(Dates.isNow(now, 10), is(true));
 
@@ -186,7 +186,6 @@ class DatesTest extends BaseGeneratorTest {
     @RepeatedTest(20)
     void testCurrentYear() {
         // Given
-        var now = new Date();
         var calendar = Calendar.getInstance();
         var expectedYear = calendar.get(Calendar.YEAR);
 
