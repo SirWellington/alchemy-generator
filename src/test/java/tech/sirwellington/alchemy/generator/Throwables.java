@@ -91,6 +91,10 @@ final class Throwables {
             return this;
         }
 
+        Assertion isIllegalArgumentException() {
+            return isInstanceOf(IllegalArgumentException.class);
+        }
+
         Assertion hasSomeMessage() {
             assertThat(
                 "exception message empty",

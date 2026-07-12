@@ -15,17 +15,22 @@
 package tech.sirwellington.alchemy.generator;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.NumberGenerators.positiveIntegers;
+import static tech.sirwellington.alchemy.generator.StringGenerators.*;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
 /**
@@ -34,26 +39,26 @@ import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
  * @author SirWellington
  */
 @DisplayName("Collection Generators")
-class CollectionGeneratorsTest extends BaseGeneratorTest {
+final class CollectionGeneratorsTest extends BaseGeneratorTest {
 
     @Mock
     private AlchemyGenerator<Object> mockGenerator;
 
-    @Test
     @DisplayName("cannot be instantiated")
+    @Test
     void testCannotInstantiate() throws Exception {
         assertThrows(
             () -> CollectionGenerators.class.getDeclaredConstructor().newInstance()
         ).isInstanceOf(IllegalAccessException.class);
     }
 
-    @Test
     @DisplayName("listOf(AlchemyGenerator) produces non-empty list")
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testListOf_AlchemyGenerator() {
         var expectedValue = new Object();
         when(mockGenerator.get()).thenReturn(expectedValue);
 
-        List<?> result = CollectionGenerators.listOf(mockGenerator);
+        var result = CollectionGenerators.listOf(mockGenerator);
 
         assertThat(result, notNullValue());
         assertThat(result.isEmpty(), is(false));
@@ -61,29 +66,31 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         result.forEach(item -> assertThat(item, is(equalTo(expectedValue))));
     }
 
-    @Test
     @DisplayName("listOf(AlchemyGenerator, int) produces list of specified size")
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testListOf_AlchemyGenerator_int() {
-        var expectedValue = new Object();
-        int size = 50;
-        when(mockGenerator.get()).thenReturn(expectedValue);
+        // Given
+        AlchemyGenerator<String> valueGenerator = mock(
+            AdditionalAnswers.delegatesTo(alphabeticStrings())
+        );
+        var size = one(integers(10, 100));
+        // When
+        var result = CollectionGenerators.listOf(valueGenerator, size);
 
-        List<?> result = CollectionGenerators.listOf(mockGenerator, size);
-
+        // Then
         assertThat(result, notNullValue());
         assertThat(result.size(), is(size));
-
-        result.forEach(item -> assertThat(item, is(equalTo(expectedValue))));
+        verify(valueGenerator, times(size)).get();
     }
 
-    @Test
     @DisplayName("mapOf(String, String) produces map with UUID keys")
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testMapOfWithInt() {
-        String expectedValue = "fixed-string-for-test";
-        AlchemyGenerator<String> valueGenerator = () -> expectedValue;
-        int size = 10;
+        var expectedValue = "fixed-string-for-test";
+        var valueGenerator = AlchemyGenerator.of(() -> expectedValue);
+        var size = 10;
 
-        Map<String, String> result = CollectionGenerators.mapOf(
+        var result = CollectionGenerators.mapOf(
             StringGenerators.UUIDS,
             valueGenerator,
             size
@@ -92,26 +99,19 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         assertThat(result, notNullValue());
         assertThat(result.size(), is(size));
 
-        for (Map.Entry<String, String> entry : result.entrySet()) {
+        for (var entry : result.entrySet()) {
             var uuid = UUID.fromString(entry.getKey());
             assertThat(uuid, notNullValue());
             assertThat(entry.getValue(), is(expectedValue));
         }
     }
 
-    @Test
     @DisplayName("mapOf(AlchemyGenerator, AlchemyGenerator) produces non-empty map")
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testConvenienceMapOf() {
         // Given
-        AlchemyGenerator<String> keyGen = mock();
-        AlchemyGenerator<String> valueGen = mock();
-
-        when(keyGen.get()).then(
-            _ -> UUID.randomUUID().toString()
-        );
-        when(valueGen.get()).then(
-            _ -> String.valueOf(RANDOM.nextDouble())
-        );
+        AlchemyGenerator<String> keyGen = mock(AdditionalAnswers.delegatesTo(uuids()));
+        AlchemyGenerator<String> valueGen = mock(AdditionalAnswers.delegatesTo(strings()));
 
         // When
         var result = CollectionGenerators.mapOf(keyGen, valueGen);
@@ -120,16 +120,14 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         assertThat(result, notNullValue());
         assertThat(result.isEmpty(), is(false));
 
-        int callsToKeys = mockingDetails(keyGen).getInvocations().size();
-        int callsToValues = mockingDetails(valueGen).getInvocations().size();
-
-        // TODO: Check if equal works over >=
-        assertThat(callsToKeys, equalTo(result.size()));
-        assertThat(callsToValues, equalTo(result.size()));
+        // Given
+        var size = result.size();
+        verify(keyGen, times(size)).get();
+        verify(valueGen, times(size)).get();
     }
 
-    @Test
     @DisplayName("fromList(Iterable) returns generator selecting from list")
+    @Test
     void testFromList() {
         // Given
         var list = new ArrayList<String>();
@@ -141,12 +139,12 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         }
 
         // When
-        AlchemyGenerator<String> generator = CollectionGenerators.fromList(list);
+        var generator = CollectionGenerators.fromList(list);
         assertThat(generator, notNullValue());
 
         // Then
         repeatBlock(DEFAULT_ITERATIONS, () -> {
-            String value = generator.get();
+            var value = generator.get();
             assertThat(
                 "Value '" + value + "' not in source list",
                 list.contains(value), is(true)
@@ -154,12 +152,12 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
         });
     }
 
-    @Test
     @DisplayName("listOf handles edge cases")
+    @RepeatedTest(DEFAULT_ITERATIONS)
     void testListOfEdgeCases() {
         // Given
-        int badSize = -5;
-        var generator = StringGenerators.uuids();
+        var badSize = -5;
+        var generator = uuids();
 
         // When, Then
         assertThrows(() -> CollectionGenerators.listOf(generator, badSize))
@@ -167,8 +165,57 @@ class CollectionGeneratorsTest extends BaseGeneratorTest {
             .hasSomeMessage();
 
         // Then
-        List<String> result = CollectionGenerators.listOf(generator, 0);
+        var result = CollectionGenerators.listOf(generator, 0);
         assertThat(result, notNullValue());
         assertThat(result, is(empty()));
+    }
+
+    @DisplayName("mapGeneratorOf returns generator from parameters")
+    @RepeatedTest(DEFAULT_ITERATIONS)
+    void testMapGeneratorOf() {
+        // Given
+        AlchemyGenerator<String> keys = mock(AdditionalAnswers.delegatesTo(uuids()));
+        AlchemyGenerator<Integer> values = mock(AdditionalAnswers.delegatesTo(positiveIntegers()));
+        var size = one(integers(10, 100));
+
+        // When
+        var generator = CollectionGenerators.mapGeneratorOf(keys, values, size);
+
+        // Then
+        assertThat(generator, notNullValue());
+        var map = generator.get();
+        for (var entry : map.entrySet()) {
+            assertThat(UUID.fromString(entry.getKey()), notNullValue());
+            assertThat(entry.getValue(), notNullValue());
+        }
+        verify(keys, times(size)).get();
+        verify(values, times(size)).get();
+    }
+
+    @DisplayName("mapGeneratorOf - edge cases")
+    @Test
+    void testMapGenerator_EdgeCase() {
+        assertThrows(
+            () -> CollectionGenerators.mapGeneratorOf(
+                null,
+                strings(),
+                10
+            )
+        ).isIllegalArgumentException();
+        assertThrows(
+            () -> CollectionGenerators.mapGeneratorOf(
+                strings(),
+                null,
+                10
+            )
+        ).isIllegalArgumentException();
+        assertThrows(
+            () -> CollectionGenerators.mapGeneratorOf(
+                strings(),
+                strings(),
+                -10
+            )
+        ).isIllegalArgumentException();
+
     }
 }

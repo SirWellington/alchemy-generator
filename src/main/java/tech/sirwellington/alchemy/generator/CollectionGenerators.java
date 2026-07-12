@@ -123,7 +123,7 @@ public final class CollectionGenerators {
      * @param values Generates the values for the Map.
      * @return A {@link Map} generated from the parameters specified.
      */
-    public static <K, V> AlchemyGenerator<Map<K, V>> mapGenerator(
+    public static <K, V> AlchemyGenerator<Map<K, V>> mapGeneratorOf(
         @Required AlchemyGenerator<K> keys,
         @Required AlchemyGenerator<V> values,
         @Positive int size
