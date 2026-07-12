@@ -49,78 +49,6 @@ public final class Dates {
     }
 
     /**
-     * Returns a date that is {@code days} in the past.
-     * @param days The number of days before today the date should be.
-     * @return {@code today - days}.
-     * @see #daysAfterNow(int)
-     */
-    public static Date daysBeforeNow(@Positive int days) {
-        checkThat(days > 0, "days must be positive");
-        var instant = Instant.now().minus(days, ChronoUnit.DAYS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code days} in the future.
-     * @param days The number of days after today the date should be.
-     * @return {@code today + days}.
-     * @see #daysBeforeNow(int)
-     */
-    public static Date daysAfterNow(@Positive int days) {
-        checkThat(days > 0, "days must be positive");
-        var instant = Instant.now().plus(days, ChronoUnit.DAYS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code hours} in the past.
-     * @param hours The number of hours before now the date should be.
-     * @return {@code now - hours}.
-     * @see #hoursAfterNow(int)
-     */
-    public static Date hoursBeforeNow(@Positive int hours) {
-        checkThat(hours > 0, "hours must be positive");
-        var instant = Instant.now().minus(hours, ChronoUnit.HOURS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code hours} ahead of right now.
-     * @param hours The number of hours after right now the date should be.
-     * @return {@code now + hours}.
-     * @see #hoursBeforeNow(int)
-     */
-    public static Date hoursAfterNow(@Positive int hours) {
-        checkThat(hours > 0, "hours must be positive");
-        var instant = Instant.now().plus(hours, ChronoUnit.HOURS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code minutes} in the past.
-     * @param minutes The number of minutes before now the date should be.
-     * @return {@code now - minutes}.
-     * @see #minutesAfterNow(int)
-     */
-    public static Date minutesBeforeNow(@Positive int minutes) {
-        checkThat(minutes > 0, "minutes must be positive");
-        var instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code minutes} ahead of right now.
-     * @param minutes The number of minutes after right now the date should be.
-     * @return {@code now + minutes}.
-     * @see #minutesBeforeNow(int)
-     */
-    public static Date minutesAfterNow(@Positive int minutes) {
-        checkThat(minutes > 0, "minutes must be positive");
-        var instant = Instant.now().plus(Duration.ofMinutes(minutes));
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
      * Convenience method of {@link #isNow(Date, long)} with a default margin of error of 5 milliseconds
      * (can be updated in a future release).
      * @param date The date to check, must be non-null.
@@ -169,5 +97,14 @@ public final class Dates {
      */
     public static int currentYear() {
         return ZonedDateTime.now().getYear();
+    }
+
+    /**
+     * Converts the {@link Instant} to a {@link Date} using {@link Instant#toEpochMilli()};
+     */
+    @Required
+    public static Date from(@Required Instant instant) {
+        checkNotNull(instant, "instant cannot be null");
+        return new Date(instant.toEpochMilli());
     }
 }

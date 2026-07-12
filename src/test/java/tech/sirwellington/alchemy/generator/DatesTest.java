@@ -38,98 +38,12 @@ final class DatesTest extends BaseGeneratorTest {
     }
 
     @RepeatedTest(DEFAULT_ITERATIONS)
-    void testDaysBeforeNow() {
-        // Given
-        var daysAgo = one(integers(1, 3650));
-        var now = Instant.now();
-        var expectedLeft = now.minus(Duration.ofDays(daysAgo));
-
-        // When
-        var result = Dates.daysBeforeNow(daysAgo);
-
-        // Then
-        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
-    void testDaysAfterNow() {
-        var days = one(integers(1, 3000));
-        var now = Instant.now();
-        var expectedRight = now.plus(Duration.ofDays(days));
-
-        var result = Dates.daysAfterNow(days);
-
-        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
-        assertThat(result.getTime(), lessThanOrEqualTo(expectedRight.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
-    void testHoursBeforeNow() {
-        var hours = one(integers(1, 24 * 365)); // up to ~1 year
-        var now = Instant.now();
-        var expectedLeft = now.minus(Duration.ofHours(hours));
-
-        var result = Dates.hoursBeforeNow(hours);
-
-        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
-    void testHoursAfterNow() {
-        // Given
-        var hours = one(integers(1, 24 * 365));
-        // When
-        var result = Dates.hoursAfterNow(hours);
-        var now = Instant.now();
-
-        // Then
-        var future = now.plus(Duration.ofHours(hours));
-
-        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
-        assertThat(result.getTime(), lessThanOrEqualTo(future.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
-    void testMinutesBeforeNow() {
-        var minutes = one(integers(1, 60 * 24)); // up to ~1 day
-        var now = Instant.now();
-        var expectedLeft = now.minus(Duration.ofMinutes(minutes));
-
-        var result = Dates.minutesBeforeNow(minutes);
-
-        assertThat(result.getTime(), lessThanOrEqualTo(now.toEpochMilli()));
-        assertThat(result.getTime(), greaterThanOrEqualTo(expectedLeft.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
-    void testMinutesAfterNow() {
-        // Given
-        int minutes = one(integers(1, 60 * 24));
-        // When
-        var now = Instant.now();
-        var result = Dates.minutesAfterNow(minutes);
-
-        // Then
-        var future = now.plus(Duration.ofMinutes(minutes));
-
-        assertThat(result.getTime(), greaterThanOrEqualTo(now.toEpochMilli()));
-
-        if (result.getTime() >= future.toEpochMilli()) {
-            System.out.println(
-                format("minutes: {0}, result: {1}, future: {2}", minutes, result, future)
-            );
-        }
-        assertThat(result.getTime(), lessThanOrEqualTo(future.toEpochMilli()));
-    }
-
-    @RepeatedTest(DEFAULT_ITERATIONS)
     void testIsNow_Date() {
         var now = Dates.now();
         assertThat(Dates.isNow(now), is(true));
 
-        Date notNow = Dates.daysBeforeNow(1);
+        var yesterday = Instant.now().minus(Duration.ofDays(1));
+        var notNow = new Date(yesterday.toEpochMilli());
         assertThat(Dates.isNow(notNow), is(false));
 
         assertThrows(IllegalArgumentException.class, () -> Dates.isNow(null));
@@ -194,5 +108,18 @@ final class DatesTest extends BaseGeneratorTest {
 
         // Then
         assertThat(result, equalTo(expectedYear));
+    }
+
+    @RepeatedTest(20)
+    void testFromInstant() {
+        // Given
+        var daysAhead = one(integers(0, 365));
+        var instant = Instant.now().plus(Duration.ofDays(daysAhead));
+
+        // When
+        var date = Dates.from(instant);
+
+        // Then
+        assertThat(date.getTime(), equalTo(instant.toEpochMilli()));
     }
 }
