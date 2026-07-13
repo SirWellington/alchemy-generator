@@ -14,20 +14,25 @@
  */
 package tech.sirwellington.alchemy.generator;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.Mockito.*;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
+import static tech.sirwellington.alchemy.generator.StringGenerators.strings;
 
 /**
  * Tests for {@link AlchemyGenerator}.
@@ -41,12 +46,12 @@ class AlchemyGeneratorTest extends BaseGeneratorTest {
     @Test
     void testGet_shouldReturnWrappedValue() {
         // Given
-        Object expected = mock(Object.class);
+        var expected = mock(Object.class);
         AlchemyGenerator<Object> generator = mock();
         when(generator.get()).thenReturn(expected);
 
         // When
-        Object result = one(generator);
+        var result = one(generator);
 
         // Then
         assertEquals(expected, result);
@@ -72,6 +77,23 @@ class AlchemyGeneratorTest extends BaseGeneratorTest {
             () -> one(null),
             "should reject null generator"
         );
+    }
+
+    @Test
+    void testOfSupplier() {
+        // Given
+        Supplier<String> supplier = mock();
+        when(supplier.get()).thenReturn(one(strings()));
+        var generator = AlchemyGenerator.of(supplier);
+        var i = new AtomicInteger();
+
+        repeatBlock(DEFAULT_ITERATIONS, () -> {
+            // When
+            var string = generator.get();
+            // Then
+            assertThat(string, not(emptyOrNullString()));
+            verify(supplier, times(i.incrementAndGet())).get();
+        });
     }
 
     @RepeatedTest(2)

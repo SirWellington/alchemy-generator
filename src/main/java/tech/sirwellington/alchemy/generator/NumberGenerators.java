@@ -18,12 +18,12 @@
 package tech.sirwellington.alchemy.generator;
 
 
+import java.security.SecureRandom;
+import java.util.List;
+
 import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
 import tech.sirwellington.alchemy.annotations.arguments.Required;
 import tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern;
-
-import java.security.SecureRandom;
-import java.util.List;
 
 import static tech.sirwellington.alchemy.annotations.designs.patterns.StrategyPattern.Role.CONCRETE_BEHAVIOR;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotEmpty;
@@ -40,7 +40,7 @@ import static tech.sirwellington.alchemy.generator.Checks.checkThat;
  * </pre>
  *
  * {@snippet :
- * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+ * import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
  *
  * var age = one(NumberGenerators.integers(18, 100));
  * var price = one(NumberGenerators.doubles(10.00, 10_000.00));

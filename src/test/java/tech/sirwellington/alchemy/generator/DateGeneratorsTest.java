@@ -1,17 +1,18 @@
 package tech.sirwellington.alchemy.generator;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.longs;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
@@ -138,8 +139,9 @@ class DateGeneratorsTest extends BaseGeneratorTest {
 
     @Test
     void testDatesBetween() {
-        var startDate = Dates.daysBeforeNow(4);
-        var endDate = Dates.daysAfterNow(5);
+        var now = Instant.now();
+        var startDate = Dates.from(now.minus(Duration.ofDays(4)));
+        var endDate = Dates.from(now.plus(Duration.ofDays(5)));
 
         assertThrows(
             () -> DateGenerators.datesBetween(null, endDate)

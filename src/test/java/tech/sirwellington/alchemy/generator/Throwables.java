@@ -14,14 +14,13 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import net.bytebuddy.implementation.bytecode.Throw;
+import java.util.Objects;
+
 import org.hamcrest.Matchers;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.Objects;
 
 /**
  * Utility for asserting exception throwing behavior.
@@ -90,6 +89,10 @@ final class Throwables {
             Objects.requireNonNull(expectedType, "expectedType must not be null");
             assertThat(ex, instanceOf(expectedType));
             return this;
+        }
+
+        Assertion isIllegalArgumentException() {
+            return isInstanceOf(IllegalArgumentException.class);
         }
 
         Assertion hasSomeMessage() {

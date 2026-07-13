@@ -16,13 +16,6 @@
 package tech.sirwellington.alchemy.generator;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tech.sirwellington.alchemy.annotations.access.Internal;
-import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
-import tech.sirwellington.alchemy.annotations.arguments.Required;
-import tech.sirwellington.alchemy.annotations.designs.patterns.SingletonPattern;
-
 import java.lang.reflect.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -33,9 +26,15 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import tech.sirwellington.alchemy.annotations.access.Internal;
+import tech.sirwellington.alchemy.annotations.access.NonInstantiable;
+import tech.sirwellington.alchemy.annotations.arguments.Required;
+import tech.sirwellington.alchemy.annotations.designs.patterns.SingletonPattern;
+
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
-import static tech.sirwellington.alchemy.generator.Checks.checkThat;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.*;
 import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticStrings;
 
@@ -206,10 +205,13 @@ public final class ObjectGenerators {
             return (AlchemyGenerator<T>) generatorMappings.get(classOfPojo);
         }
 
-        checkThat(
-            canInstantiate(classOfPojo),
-            "cannot instantiate class: " + classOfPojo
-        );
+        try {
+            var _ = instantiate(classOfPojo);
+        } catch (Throwable ex) {
+            throw new IllegalArgumentException(
+              "Cannot instantiate class: " + classOfPojo, ex
+            );
+        }
 
         var validFields = Arrays.stream(classOfPojo.getDeclaredFields())
             .filter(f -> !isFinal(f))

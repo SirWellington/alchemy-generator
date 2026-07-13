@@ -14,13 +14,11 @@
  */
 package tech.sirwellington.alchemy.generator;
 
-import tech.sirwellington.alchemy.annotations.arguments.Positive;
-import tech.sirwellington.alchemy.annotations.arguments.Required;
-
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import tech.sirwellington.alchemy.annotations.arguments.Required;
 
 import static tech.sirwellington.alchemy.generator.Checks.checkNotNull;
 import static tech.sirwellington.alchemy.generator.Checks.checkThat;
@@ -45,78 +43,6 @@ public final class Dates {
      */
     public static Date now() {
         return new Date();
-    }
-
-    /**
-     * Returns a date that is {@code days} in the past.
-     * @param days The number of days before today the date should be.
-     * @return {@code today - days}.
-     * @see #daysAfterNow(int)
-     */
-    public static Date daysBeforeNow(@Positive int days) {
-        checkThat(days > 0, "days must be positive");
-        var instant = Instant.now().minus(days, ChronoUnit.DAYS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code days} in the future.
-     * @param days The number of days after today the date should be.
-     * @return {@code today + days}.
-     * @see #daysBeforeNow(int)
-     */
-    public static Date daysAfterNow(@Positive int days) {
-        checkThat(days > 0, "days must be positive");
-        var instant = Instant.now().plus(days, ChronoUnit.DAYS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code hours} in the past.
-     * @param hours The number of hours before now the date should be.
-     * @return {@code now - hours}.
-     * @see #hoursAfterNow(int)
-     */
-    public static Date hoursBeforeNow(@Positive int hours) {
-        checkThat(hours > 0, "hours must be positive");
-        var instant = Instant.now().minus(hours, ChronoUnit.HOURS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code hours} ahead of right now.
-     * @param hours The number of hours after right now the date should be.
-     * @return {@code now + hours}.
-     * @see #hoursBeforeNow(int)
-     */
-    public static Date hoursAfterNow(@Positive int hours) {
-        checkThat(hours > 0, "hours must be positive");
-        var instant = Instant.now().plus(hours, ChronoUnit.HOURS);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code minutes} in the past.
-     * @param minutes The number of minutes before now the date should be.
-     * @return {@code now - minutes}.
-     * @see #minutesAfterNow(int)
-     */
-    public static Date minutesBeforeNow(@Positive int minutes) {
-        checkThat(minutes > 0, "minutes must be positive");
-        var instant = Instant.now().minus(minutes, ChronoUnit.MINUTES);
-        return new Date(instant.toEpochMilli());
-    }
-
-    /**
-     * Returns a date that is {@code minutes} ahead of right now.
-     * @param minutes The number of minutes after right now the date should be.
-     * @return {@code now + minutes}.
-     * @see #minutesBeforeNow(int)
-     */
-    public static Date minutesAfterNow(@Positive int minutes) {
-        checkThat(minutes > 0, "minutes must be positive");
-        var instant = Instant.now().plus(minutes, ChronoUnit.MINUTES);
-        return new Date(instant.toEpochMilli());
     }
 
     /**
@@ -168,5 +94,14 @@ public final class Dates {
      */
     public static int currentYear() {
         return ZonedDateTime.now().getYear();
+    }
+
+    /**
+     * Converts the {@link Instant} to a {@link Date} using {@link Instant#toEpochMilli()};
+     */
+    @Required
+    public static Date from(@Required Instant instant) {
+        checkNotNull(instant, "instant cannot be null");
+        return new Date(instant.toEpochMilli());
     }
 }

@@ -15,12 +15,11 @@
 
 package tech.sirwellington.alchemy.generator;
 
+import java.security.SecureRandom;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import tech.sirwellington.alchemy.annotations.access.Internal;
-
-import java.security.SecureRandom;
 
 /**
  * @author SirWellington

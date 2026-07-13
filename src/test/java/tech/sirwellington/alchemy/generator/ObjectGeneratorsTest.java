@@ -15,11 +15,6 @@
 
 package tech.sirwellington.alchemy.generator;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
-
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
@@ -28,10 +23,15 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.*;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static tech.sirwellington.alchemy.generator.AlchemyGenerator.Get.one;
+import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 
 class ObjectGeneratorsTest extends BaseGeneratorTest {
 
