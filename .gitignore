@@ -1,5 +1,6 @@
-/target/
-nbactions.xml
-/nbproject/
-.idea/
 alchemy-generator.iml
+nbactions.xml
+
+.idea/
+/nbproject/
+/target/
