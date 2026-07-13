@@ -20,11 +20,11 @@ import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Mockito.*;
 import static tech.sirwellington.alchemy.generator.AlchemyGenerator.one;
 import static tech.sirwellington.alchemy.generator.NumberGenerators.integers;
@@ -69,9 +69,7 @@ final class CollectionGeneratorsTest extends BaseGeneratorTest {
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testListOf_AlchemyGenerator_int() {
         // Given
-        AlchemyGenerator<String> valueGenerator = mock(
-            AdditionalAnswers.delegatesTo(alphabeticStrings())
-        );
+        AlchemyGenerator<String> valueGenerator = mock(delegatesTo(alphabeticStrings()));
         var size = one(integers(10, 100));
         // When
         var result = CollectionGenerators.listOf(valueGenerator, size);
@@ -109,8 +107,8 @@ final class CollectionGeneratorsTest extends BaseGeneratorTest {
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testConvenienceMapOf() {
         // Given
-        AlchemyGenerator<String> keyGen = mock(AdditionalAnswers.delegatesTo(uuids()));
-        AlchemyGenerator<String> valueGen = mock(AdditionalAnswers.delegatesTo(strings()));
+        AlchemyGenerator<String> keyGen = mock(delegatesTo(uuids()));
+        AlchemyGenerator<String> valueGen = mock(delegatesTo(strings()));
 
         // When
         var result = CollectionGenerators.mapOf(keyGen, valueGen);
@@ -173,8 +171,8 @@ final class CollectionGeneratorsTest extends BaseGeneratorTest {
     @RepeatedTest(DEFAULT_ITERATIONS)
     void testMapGeneratorOf() {
         // Given
-        AlchemyGenerator<String> keys = mock(AdditionalAnswers.delegatesTo(uuids()));
-        AlchemyGenerator<Integer> values = mock(AdditionalAnswers.delegatesTo(positiveIntegers()));
+        AlchemyGenerator<String> keys = mock(delegatesTo(uuids()));
+        AlchemyGenerator<Integer> values = mock(delegatesTo(positiveIntegers()));
         var size = one(integers(10, 100));
 
         // When
