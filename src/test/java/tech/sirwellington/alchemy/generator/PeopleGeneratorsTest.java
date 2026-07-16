@@ -60,7 +60,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         testNameGenerator(fullNames);
 
         var name = fullNames.get();
-        assertThat(name, not(isEmptyString()));
+        assertThat(name, not(emptyOrNullString()));
         var split = name.split(" ");
         assertThat(split.length, greaterThanOrEqualTo(2));
         assertThat(
@@ -76,7 +76,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         var titleCasePattern = Pattern.compile("[A-Z][a-z]+");
 
         var name = generator.get();
-        assertThat(name, not(isEmptyString()));
+        assertThat(name, not(emptyOrNullString()));
         assertThat(name.length(), greaterThanOrEqualTo(2));
         assertThat(titleCasePattern.asPredicate().test(name), is(true));
     }
@@ -121,7 +121,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(instance, notNullValue());
 
         var phoneNumber = instance.get();
-        assertThat(phoneNumber, not(isEmptyString()));
+        assertThat(phoneNumber, not(emptyOrNullString()));
         var matchesPattern = PHONE_NUMBER_PATTERN.asPredicate().test(phoneNumber);
         assertThat(matchesPattern, is(true));
     }
@@ -134,7 +134,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(generator, notNullValue());
 
         var phoneNumber = generator.get();
-        assertThat(phoneNumber, not(isEmptyString()));
+        assertThat(phoneNumber, not(emptyOrNullString()));
         var matchesPattern = PHONE_NUMBER_PATTERN.asPredicate().test(phoneNumber);
         assertThat(matchesPattern, is(true));
     }
@@ -146,7 +146,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(generator, notNullValue());
 
         var domain = generator.get();
-        assertThat(domain, not(isEmptyString()));
+        assertThat(domain, not(emptyOrNullString()));
         assertThat(domain, either(endsWith(".com")).or(endsWith(".tech")));
     }
 
@@ -157,7 +157,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(generator, notNullValue());
 
         var email = generator.get();
-        assertThat(email, not(isEmptyString()));
+        assertThat(email, not(emptyOrNullString()));
         assertThat(email.contains("@"), is(true));
     }
 
@@ -171,7 +171,7 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         assertThat(generator, notNullValue());
 
         var email = generator.get();
-        assertThat(email, not(isEmptyString()));
+        assertThat(email, not(emptyOrNullString()));
         assertEndsWithOneOfTheDomains(email, domains);
     }
 
@@ -199,6 +199,6 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
 
         var result = generator.get();
         assertThat(result, notNullValue());
-        assertThat(result, not(isEmptyString()));
+        assertThat(result, not(emptyOrNullString()));
     }
 }
