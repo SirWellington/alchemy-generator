@@ -18,6 +18,7 @@ package tech.sirwellington.alchemy.generator;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ import static tech.sirwellington.alchemy.generator.StringGenerators.alphabeticSt
 import static tech.sirwellington.alchemy.generator.StringGenerators.stringsFromFixedList;
 import static tech.sirwellington.alchemy.generator.Throwables.assertThrows;
 
-class PeopleGeneratorsTest extends BaseGeneratorTest {
+final class PeopleGeneratorsTest extends BaseGeneratorTest {
 
     static Pattern PHONE_NUMBER_PATTERN = Pattern.compile("\\d{3}-\\d{3}-\\d{4}");
 
@@ -173,6 +174,12 @@ class PeopleGeneratorsTest extends BaseGeneratorTest {
         var email = generator.get();
         assertThat(email, not(emptyOrNullString()));
         assertEndsWithOneOfTheDomains(email, domains);
+        assertStringDoesNotHaveWhitespace(email);
+    }
+
+    private void assertStringDoesNotHaveWhitespace(String string) {
+        var anyWhitespace = string.chars().anyMatch(Character::isWhitespace);
+        Assertions.assertFalse(anyWhitespace, "Should not have whitespace, but: " + string);
     }
 
     private void assertEndsWithOneOfTheDomains(String email, List<String> domains) {
