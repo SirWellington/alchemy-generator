@@ -46,7 +46,9 @@ final class AlchemyResources {
         String[] lines = file.split(System.lineSeparator());
 
         LOG.trace("Successfully read [{}] lines from resource [{}]", lines.length, path);
-        return Arrays.asList(lines);
+        return Arrays.stream(lines)
+            .map(String::trim)
+            .toList();
     }
 
     private static String tryToLoadResource(String path) {

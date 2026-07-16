@@ -236,9 +236,9 @@ public final class PeopleGenerators {
 
         return () -> {
             var seed = one(seeds);
-            var includeLastname = seed >= 0.6;
+            var includeLastName = seed >= 0.6;
 
-            if (includeLastname) {
+            if (includeLastName) {
                 return MessageFormat.format(
                     "{0}.{1}@{2}",
                     one(firstNames),
